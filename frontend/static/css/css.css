@@ -136,11 +136,8 @@ a {
 /* Info Reserva */
 
 .info {
-<<<<<<<<< Temporary merge branch 1
+
     background-color: var(--pink-very-light);
-=========
-    background-color: #f56aa28c;
->>>>>>>>> Temporary merge branch 2
     padding: 20px;
     border-radius: 40px;
     box-shadow: 0 8px 10px rgba(0, 0, 0, 0.233);
