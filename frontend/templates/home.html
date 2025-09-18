@@ -12,13 +12,13 @@
 
     <link rel="stylesheet" href="{% static 'css/css.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Great+Vibes&family=Dancing+Script&display=swap" rel="stylesheet">
 </head>
 
 <body>
     <div class="main-content">
         <!-- Barra de navegación rectangular -->
-        <nav class="navbar navbar-expand-lg shadow-sm sticky-top"
-            style="background: linear-gradient(90deg, #E6007E 0%, #6F5570 100%); z-index: 1020;">
+        <nav class="navbar navbar-expand-lg shadow-sm sticky-top">
             <div class="container-fluid">
                 <a class="navbar-brand d-flex align-items-center" href="#">
                     <img src="{% static 'img/Logo gisel-nails.png' %}" alt="Logo" width="50" height="50"
@@ -32,29 +32,38 @@
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link text-white fw-bold" href="{% url 'home' %}"><i class="bi bi-house-door"></i>
+                            <a class="nav-link text-white fw-bold" href="{% url 'home' %}"><i
+                                    class="bi bi-house-door"></i>
                                 Inicio</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white fw-bold" href="#"><i class="bi bi-calendar-check"></i> Reserva</a>
+                            <a class="nav-link text-white fw-bold" href="{% url 'reserva' %}"><i
+                                    class="bi bi-calendar-check"></i>
+                                Reserva</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white fw-bold" href="#"><i class="bi bi-people"></i> Nosotros</a>
+                            <a class="nav-link text-white fw-bold" href="{% url 'nosotros' %}"><i
+                                    class="bi bi-people"></i> Nosotros</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white fw-bold" href="#"><i class="bi bi-bag-heart"></i> Productos</a>
+                            <a class="nav-link text-white fw-bold" href="#"><i class="bi bi-bag-heart"></i>
+                                Productos</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white fw-bold" href="#"><i class="bi bi-star"></i> Servicios</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white fw-bold" href="#"><i class="bi bi-person-circle"></i> Inicia sesion</a>
+                            <a class="nav-link text-white fw-bold" href="#"><i class="bi bi-person-circle"></i> Inicia
+                                sesion</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
-
+        <div class="container-fluid">
+            {% block content %}
+            {% endblock %}
+        </div>
         <!-- Línea divisoria blanca -->
         <hr style="border-top: 3px solid #fff; margin: 0 40px;">
 
@@ -82,23 +91,23 @@
                             <h5>Nuestros servicios</h5>
                             <ul class="list-unstyled">
                                 <li><a href="#"><i class="bi bi-suit-heart-fill"></i>
-                                        Manicure
-                                        tradicional</a></li>
+                                        Manicure tradicional</a></li>
                                 <li><a href="#"><i class="bi bi-suit-heart-fill"></i>
-                                        Semipermanente</a></li>
+                                        Manicure Semipermanente</a></li>
                                 <li><a href="#"><i class="bi bi-suit-heart-fill"></i>
-                                        Pedicure</a>
-                                </li>
+                                        Dipping</a></li>
                                 <li><a href="#"><i class="bi bi-suit-heart-fill"></i>
-                                        PolyGel /
-                                        Acrigel</a></li>
+                                        Biulder gel</a></li>
                                 <li><a href="#"><i class="bi bi-suit-heart-fill"></i>
-                                        Depilación
-                                        con cera</a></li>
+                                        Press on</a></li>
                                 <li><a href="#"><i class="bi bi-suit-heart-fill"></i>
-                                        Extensión
-                                        de
-                                        uñas acrílicas</a></li>
+                                        Poligel</a></li>
+                                <li><a href="#"><i class="bi bi-suit-heart-fill"></i>
+                                        Pedicure tradicional</a></li>
+                                <li><a href="#"><i class="bi bi-suit-heart-fill"></i>
+                                        Pedicure Semipermanente</a></li>
+                                <li><a href="#"><i class="bi bi-suit-heart-fill"></i>
+                                        Estructura de uña en pie</a></li>
                             </ul>
                         </div>
 

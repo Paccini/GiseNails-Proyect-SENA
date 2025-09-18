@@ -1,7 +1,75 @@
 :root {
     --rosa-briyante: #E6007E;
     --letra-pie: #FFFFF7;
+    --morado-color: #ec2bcc;
+    --rosado-claro: #fa55de;
+
+    /* Paleta de colores */
+
+
+    /* Rosados */
+    --pink-very-light: #FFE4EC;
+    --pink-light: #FAD2E1;
+    --pink-pastel: #F7A8B8;
+    --pink-medium: #F06292;
+    --pink-strong: #EC407A;
+    --pink-dark: #C2185B;
+    --pink-vivid: #FF69B4;
+    --pink-hot: #FF1493;
+    --pink-coral: #FF6F91;
+    --pink-blush: #FFC1CC;
+    --pink-salmon: #FFB7B2;
+    --pink-fuchsia: #FF00FF;
+    --pink-flamingo: #FC8EAC;
+    --pink-bubblegum: #FFB6C1;
+    --pink-mauve: #E0B0FF;
+
+    /* Morados */
+    --purple-very-light: #F3E5F5;
+    --purple-light: #E0BBE4;
+    --purple-pastel: #CBAACB;
+    --purple-medium: #BA68C8;
+    --purple: #9C27B0;
+    --purple-dark: #6A1B9A;
+    --purple-vivid: #8e24aa;
+    --purple-deep: #4A148C;
+    --purple-lavender: #B57EDC;
+    --purple-amethyst: #9966CC;
+    --purple-indigo: #6F00FF;
+    --purple-plum: #8E4585;
+    --purple-eggplant: #614051;
+    --purple-orchid: #DA70D6;
+    --purple-heliotrope: #DF73FF;
+
+    /* Violetas */
+    --violet-light: #D1C4E9;
+    --violet: #7E57C2;
+    --violet-dark: #512DA8;
+
+    /* Azules */
+    --blue-very-light: #E3F2FD;
+    --blue-light: #BBDEFB;
+    --blue-pastel: #90CAF9;
+    --blue-sky: #64B5F6;
+    --blue-medium: #2196F3;
+    --blue-cornflower: #6495ED;
+    --blue-strong: #1565C0;
+    --blue-dark: #0D47A1;
+    --blue-navy: #001F54;
+    --blue-royal: #4169E1;
+    --blue-steel: #4682B4;
+    --blue-cobalt: #0047AB;
+    --blue-azure: #007FFF;
+    --blue-cyan: #00BFFF;
+    --blue-electric: #7DF9FF;
+    --blue-deep: #003366;
+
+    /* Tonos de apoyo */
+    --white: #FFFFFF;
+    --black-soft: #333333;
+    --gray-light: #F5F5F5;
 }
+
 
 html,
 body {
@@ -9,6 +77,7 @@ body {
     margin: 0;
     padding: 0;
 }
+
 
 body {
     min-height: 100vh;
@@ -25,10 +94,15 @@ a {
     text-decoration: none;
 }
 
+.container-fluid {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
 /* Navbar */
 .navbar {
-    background: linear-gradient(90deg, #E6007E 0%, #6F5570 100%) !important;
-    box-shadow: 0 4px 16px rgba(111,85,112,0.15);
+    background: linear-gradient(90deg, var(--pink-medium) 0%, var(--pink-dark) 100%) !important;
+    box-shadow: 0 4px 16px rgba(111, 85, 112, 0.15);
     border-bottom: 2px solid #fff;
 }
 
@@ -36,7 +110,7 @@ a {
     border-radius: 20px;
     margin: 0 8px;
     padding: 8px 18px;
-    box-shadow: 0 2px 8px rgba(230,0,126,0.12);
+    box-shadow: 0 2px 8px rgba(230, 0, 126, 0.12);
     transition: background 0.3s, color 0.3s, transform 0.3s;
 }
 
@@ -54,8 +128,59 @@ a {
 .navbar-brand img {
     transition: transform 0.4s;
 }
+
 .navbar-brand img:hover {
     transform: rotate(-10deg) scale(1.1);
+}
+
+/* Info Reserva */
+
+.info {
+    background-color: var(--pink-very-light);
+    padding: 20px;
+    border-radius: 40px;
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.233);
+    color: var(--blue-cornflower);
+}
+
+.info h2 {
+    font-family: 'Pacifico', cursive;
+    color: var(--purple-amethyst);
+}
+
+/* valor corporatibo */
+.val-corpo {
+    /* position: absolute; */
+    padding: 0 100px 0 100px;
+    background-color: #F0F8FF;
+    width: 100%;
+
+}
+
+.val-corpo h2 {
+    color: var(--rosa-briyante);
+    text-align: center;
+    padding: 20px;
+    font-family: Great Vibes;
+    /* Dancing Script */
+}
+
+/* circulos */
+.circulo {
+
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: var(--rosa-briyante);
+}
+
+.circulo>h6 {
+    display: flexbox;
+    text-align: center;
+    align-items: center;
+    justify-items: center;
+    color: var(--letra-pie);
+
 }
 
 /* Footer */
@@ -63,30 +188,30 @@ a {
     text-align: center;
 }
 
-.pierna > div > h5 {
-    color: var(--rosa-briyante);
+.pierna>div>h5 {
+    color: var(--pink-strong);
     text-align: center;
     font-weight: bold;
 }
 
-.pierna > div > ul > li > a {
+.pierna>div>ul>li>a {
     color: #6F5570;
+    font-size: 20px;    
+    text-decoration: none;
+}
+
+.pierna>div>ul>li>a:hover {
+    color: var(--pink-strong);
     font-size: 20px;
     text-decoration: none;
 }
 
-.pierna > div > ul > li > a:hover {
-    color: var(--rosa-briyante);
-    font-size: 20px;
-    text-decoration: none;
-}
-
-.pierna > div > ul > li > a > i {
-    color: var(--rosa-briyante);
+.pierna>div>ul>li>a>i {
+    color: var(--pink-strong);
     font-size: 20px;
 }
 
-.icono_social > ul {
+.icono_social>ul {
     position: relative;
     width: 300px;
     height: 200px;
@@ -94,21 +219,21 @@ a {
     margin-right: auto;
 }
 
-.icono_social > ul > li > a > i {
+.icono_social>ul>li>a>i {
     border-radius: 10px;
     text-align: center;
     padding: 10px 15px 10px 15px;
     margin: 12px 12px;
-    border: solid 1px var(--rosa-briyante);
+    border: solid 1px var(--pink-medium);
 }
 
-.icono_social > ul > li a i:hover {
+.icono_social>ul>li a i:hover {
     border-radius: 10px;
     text-align: center;
     padding: 10px 15px 10px 15px;
     margin: 12px 12px;
     color: var(--letra-pie);
-    background-color: var(--rosa-briyante);
+    background-color: var(--pink-strong);
 }
 
 .social_1 {
@@ -116,28 +241,31 @@ a {
     top: 20px;
     right: 20px;
 }
+
 .social_2 {
     position: absolute;
     top: 20px;
     left: 20px;
 }
+
 .social_3 {
     position: absolute;
     bottom: 20px;
     left: 20px;
 }
+
 .social_4 {
     position: absolute;
     bottom: 20px;
     right: 20px;
 }
 
-.pie > .pie-2 {
+.pie>.pie-2 {
     color: var(--letra-pie);
-    background-color: var(--rosa-briyante);
+    background-color: var(--pink-strong);
 }
 
-.pie > .pie-2 img {
+.pie>.pie-2 img {
     width: 100px;
     border-radius: 22px;
     box-shadow: 4px 3px 4px var(--letra-pie);
