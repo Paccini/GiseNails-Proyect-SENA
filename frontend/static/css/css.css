@@ -47,10 +47,22 @@
     --violet-dark: #512DA8;
 
     /* Azules */
+    --blue-very-light: #E3F2FD;
     --blue-light: #BBDEFB;
     --blue-pastel: #90CAF9;
-    --blue: #2196F3;
-    --blue-dark: #1565C0;
+    --blue-sky: #64B5F6;
+    --blue-medium: #2196F3;
+    --blue-cornflower: #6495ED;
+    --blue-strong: #1565C0;
+    --blue-dark: #0D47A1;
+    --blue-navy: #001F54;
+    --blue-royal: #4169E1;
+    --blue-steel: #4682B4;
+    --blue-cobalt: #0047AB;
+    --blue-azure: #007FFF;
+    --blue-cyan: #00BFFF;
+    --blue-electric: #7DF9FF;
+    --blue-deep: #003366;
 
     /* Tonos de apoyo */
     --white: #FFFFFF;
@@ -124,15 +136,16 @@ a {
 /* Info Reserva */
 
 .info {
-    background-color: var(--pink-light);
+    background-color: var(--pink-very-light);
     padding: 20px;
     border-radius: 40px;
     box-shadow: 0 8px 10px rgba(0, 0, 0, 0.233);
+    color: var(--blue-cornflower);
 }
 
 .info h2 {
     font-family: 'Pacifico', cursive;
-    color: var(--purple);
+    color: var(--purple-amethyst);
 }
 
 /* valor corporatibo */
@@ -183,7 +196,7 @@ a {
 
 .pierna>div>ul>li>a {
     color: #6F5570;
-    font-size: 20px;
+    font-size: 20px;    
     text-decoration: none;
 }
 
