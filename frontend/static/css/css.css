@@ -1,8 +1,63 @@
 :root {
     --rosa-briyante: #E6007E;
     --letra-pie: #FFFFF7;
-    --morado-color: #f070f0;
+    --morado-color: #ec2bcc;
+    --rosado-claro: #fa55de;
+
+    /* Paleta de colores */
+
+
+    /* Rosados */
+    --pink-very-light: #FFE4EC;
+    --pink-light: #FAD2E1;
+    --pink-pastel: #F7A8B8;
+    --pink-medium: #F06292;
+    --pink-strong: #EC407A;
+    --pink-dark: #C2185B;
+    --pink-vivid: #FF69B4;
+    --pink-hot: #FF1493;
+    --pink-coral: #FF6F91;
+    --pink-blush: #FFC1CC;
+    --pink-salmon: #FFB7B2;
+    --pink-fuchsia: #FF00FF;
+    --pink-flamingo: #FC8EAC;
+    --pink-bubblegum: #FFB6C1;
+    --pink-mauve: #E0B0FF;
+
+    /* Morados */
+    --purple-very-light: #F3E5F5;
+    --purple-light: #E0BBE4;
+    --purple-pastel: #CBAACB;
+    --purple-medium: #BA68C8;
+    --purple: #9C27B0;
+    --purple-dark: #6A1B9A;
+    --purple-vivid: #8e24aa;
+    --purple-deep: #4A148C;
+    --purple-lavender: #B57EDC;
+    --purple-amethyst: #9966CC;
+    --purple-indigo: #6F00FF;
+    --purple-plum: #8E4585;
+    --purple-eggplant: #614051;
+    --purple-orchid: #DA70D6;
+    --purple-heliotrope: #DF73FF;
+
+    /* Violetas */
+    --violet-light: #D1C4E9;
+    --violet: #7E57C2;
+    --violet-dark: #512DA8;
+
+    /* Azules */
+    --blue-light: #BBDEFB;
+    --blue-pastel: #90CAF9;
+    --blue: #2196F3;
+    --blue-dark: #1565C0;
+
+    /* Tonos de apoyo */
+    --white: #FFFFFF;
+    --black-soft: #333333;
+    --gray-light: #F5F5F5;
 }
+
 
 html,
 body {
@@ -34,7 +89,7 @@ a {
 
 /* Navbar */
 .navbar {
-    background: linear-gradient(90deg, #E6007E 0%, #6F5570 100%) !important;
+    background: linear-gradient(90deg, var(--pink-medium) 0%, var(--pink-dark) 100%) !important;
     box-shadow: 0 4px 16px rgba(111, 85, 112, 0.15);
     border-bottom: 2px solid #fff;
 }
@@ -69,14 +124,15 @@ a {
 /* Info Reserva */
 
 .info {
-    background-color: #f56aa28c;
-    padding: 20px; 
-    border-radius: 40px; 
+    background-color: var(--pink-light);
+    padding: 20px;
+    border-radius: 40px;
     box-shadow: 0 8px 10px rgba(0, 0, 0, 0.233);
 }
-.info h2{
+
+.info h2 {
     font-family: 'Pacifico', cursive;
-    color: var(--rosa-briyante);
+    color: var(--purple);
 }
 
 /* valor corporatibo */
@@ -120,7 +176,7 @@ a {
 }
 
 .pierna>div>h5 {
-    color: var(--rosa-briyante);
+    color: var(--pink-strong);
     text-align: center;
     font-weight: bold;
 }
@@ -132,13 +188,13 @@ a {
 }
 
 .pierna>div>ul>li>a:hover {
-    color: var(--rosa-briyante);
+    color: var(--pink-strong);
     font-size: 20px;
     text-decoration: none;
 }
 
 .pierna>div>ul>li>a>i {
-    color: var(--rosa-briyante);
+    color: var(--pink-strong);
     font-size: 20px;
 }
 
@@ -155,7 +211,7 @@ a {
     text-align: center;
     padding: 10px 15px 10px 15px;
     margin: 12px 12px;
-    border: solid 1px var(--rosa-briyante);
+    border: solid 1px var(--pink-medium);
 }
 
 .icono_social>ul>li a i:hover {
@@ -164,7 +220,7 @@ a {
     padding: 10px 15px 10px 15px;
     margin: 12px 12px;
     color: var(--letra-pie);
-    background-color: var(--rosa-briyante);
+    background-color: var(--pink-strong);
 }
 
 .social_1 {
@@ -193,7 +249,7 @@ a {
 
 .pie>.pie-2 {
     color: var(--letra-pie);
-    background-color: var(--rosa-briyante);
+    background-color: var(--pink-strong);
 }
 
 .pie>.pie-2 img {
