@@ -135,17 +135,82 @@ a {
 
 /* Info Reserva */
 
-.info {
-    background-color: var(--pink-very-light);
-    padding: 20px;
+/* Panel de información de reserva bonito */
+.info-reserva {
+    background: var(--pink-very-light);
     border-radius: 40px;
-    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.233);
-    color: var(--blue-cornflower);
+    box-shadow: 0 8px 24px rgba(111, 85, 112, 0.10);
+    padding: 32px 24px;
+    margin-top: 32px;
+    margin-bottom: 32px;
 }
 
-.info h2 {
+.info-panel {
+    color: var(--purple-dark);
+    padding: 16px 24px;
+}
+
+.titulo-reserva {
     font-family: 'Pacifico', cursive;
     color: var(--purple-amethyst);
+    font-size: 2.2rem;
+    margin-bottom: 8px;
+}
+
+.direccion {
+    font-size: 1.1rem;
+    color: var(--purple-medium);
+    margin-bottom: 12px;
+    font-weight: 500;
+}
+
+.contact-link {
+    color: var(--blue-medium);
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.contact-link:hover {
+    color: var(--pink-strong);
+    text-decoration: underline;
+}
+
+.btn-reserva {
+    background: var(--pink-strong);
+    color: #fff;
+    border-radius: 25px;
+    padding: 10px 28px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    box-shadow: 0 2px 8px rgba(236, 64, 122, 0.12);
+    border: none;
+    transition: background 0.2s, transform 0.2s;
+    margin-right: 10px;
+}
+
+.btn-reserva:hover {
+    background: var(--pink-dark);
+    color: #fff;
+    transform: scale(1.05);
+}
+
+.btn-comollegar {
+    background: var(--blue-medium);
+    color: #fff;
+    border-radius: 25px;
+    padding: 10px 28px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    box-shadow: 0 2px 8px rgba(33, 150, 243, 0.12);
+    border: none;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.btn-comollegar:hover {
+    background: var(--blue-dark);
+    color: #fff;
+    transform: scale(1.05);
 }
 
 /* valor corporatibo */
@@ -196,7 +261,7 @@ a {
 
 .pierna>div>ul>li>a {
     color: #6F5570;
-    font-size: 20px;    
+    font-size: 20px;
     text-decoration: none;
 }
 
