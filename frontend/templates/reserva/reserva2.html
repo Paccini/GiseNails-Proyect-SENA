@@ -1,0 +1,72 @@
+{% extends 'basereserva.html' %}
+{% load static %}
+{% block title %}Reserva - Selecciona tus Servicios{% endblock %}
+{% block content %}
+<div class="container-fluid fondo-blanco">
+    <div class="reserva-contenedor">
+        <div class="row justify-content-center mt-4">
+            <!-- Panel Izquierdo -->
+            <div class="col-md-5 panel-izquierdo">
+                <div class="d-flex justify-content-between mb-4">
+                    <a href="{% url 'reserva:reserva' %}" class="btn btn-outline-secondary btn-regresar">&#8592; REGRESAR</a>
+                    <button id="btn-continuar" class="btn btn-continuar">CONTINUAR</button>
+                </div>
+                <div class="text-center mb-4">
+                    <h4 class="sucursal">IBAGUÉ</h4>
+                    <p>Cra. 9a #42-44</p>
+                </div>
+                <div class="mb-4">
+                    <h5 class="text-center pregunta-fecha">¿CUÁNDO QUIERES TU RESERVA?</h5>
+                    
+                </div>
+            </div>
+            <!-- Panel Derecho -->
+            <div class="col-md-7">
+                <div class="mb-4">
+                    <p class="text-center instruccion-persona">Ingresa el nombre de la persona que asistirá a la cita</p>
+                    <div class="text-center mb-3">
+                        <span class="persona-label" id="persona-label">
+                            <i class="bi bi-star-fill"></i> <span id="persona-nombre">PERSONA 1</span>
+                        </span>
+                        <div class="linea-persona"></div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-md-8 mb-3">
+                            <label class="label-campo">NOMBRE</label>
+                            <div class="input-group">
+                                <input id="input-nombre" type="text" class="form-control campo-persona" placeholder="Nombre">
+                                <span class="input-group-text"><i class="bi bi-pencil icono-input"></i></span>
+                            </div>
+                        </div>
+                        <div class="col-md-8 mb-3">
+                            <label class="label-campo">APELLIDO</label>
+                            <div class="input-group">
+                                <input id="input-apellido" type="text" class="form-control campo-persona" placeholder="Apellido">
+                                <span class="input-group-text"><i class="bi bi-pencil icono-input"></i></span>
+                            </div>
+                        </div>
+                        <div class="col-md-8 mb-3">
+                            <label class="label-campo">CELULAR</label>
+                            <div class="input-group">
+                                <input id="input-celular" type="text" class="form-control campo-persona" placeholder="Celular">
+                                <span class="input-group-text"><i class="bi bi-pencil icono-input"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de alerta -->
+<div id="alerta-modal" class="alerta-modal" style="display:none;">
+    <div class="alerta-box">
+        <div class="icono"><i class="bi bi-exclamation-triangle-fill"></i></div>
+        <h4 class="fw-bold">Advertencia</h4>
+        <div id="alerta-mensaje" class="mb-3">Debes diligenciar todos los campos de las personas a reservar.</div>
+        <button onclick="document.getElementById('alerta-modal').style.display='none'">Aceptar</button>
+    </div>
+</div>
+<script src="{% static 'js/reserva2.js' %}"></script>
+{% endblock %}
