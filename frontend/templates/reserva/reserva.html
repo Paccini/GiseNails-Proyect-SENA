@@ -1,0 +1,39 @@
+{% extends 'home.html' %}
+{% block title %}reserva{% endblock %}
+{% block content %}
+{% load static %}
+
+
+<!-- Panel Informacion -->
+<br>
+<div class="container-fluid">
+    
+    <!-- Contenedor info -->
+    <div class="container text-center info">
+        <div class="row">
+            <!-- imagen local -->
+            <div class="col-md-4">
+                <img src="{% static 'img/foto-local.jpg' %}" alt="" width="125%" style="border-radius: 40px;">
+            </div>
+
+            <div class="col-md-8">
+                <h2><strong>Gise-Nails</strong></h2>
+                <p>Cra 9a #42-44 B/calarca</p>
+                <ul class="list-unstyled">
+                    <li><i class="bi bi-envelope-at"></i> <a href="mailto:giselav489@gmail.com">giselav489@gmail.com</a>
+                    </li>
+                    <li><i class="bi bi-telephone"></i> <a href="https://wa.me/3002040538">300 204 0538</a></li>
+                </ul>
+                <h5>Horario de Atención</h5>
+                <p>7:00 AM a 12:00 PM | 2:00 PM a 6:00 PM</p>
+                <div class="mt-3">
+                    <a href="#" class="btn btn-custom"><i class="bi bi-calendar-check"></i> Reserva tu cita</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+
+
+{% endblock %}

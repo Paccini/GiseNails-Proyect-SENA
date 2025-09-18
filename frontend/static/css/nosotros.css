@@ -1,0 +1,324 @@
+:root {
+    --rosa-briyante: #E6007E;
+    --letra-pie: #FFFFF7;
+}
+
+/* toda la pagina */
+.todo {
+    display: flex;
+    width: 100%;
+    height: auto;
+
+}
+
+/* nav */
+
+.navbar-pink {
+    background-color: #ffffff !important;
+    /* Rosado principal */
+}
+
+.nav {
+    position: relative;
+
+    height: 100px;
+    width: 900px;
+    right: 30px;
+
+}
+
+.navbar-collapse>.navbar-nav>.nav-item>.nav-link {
+    display: inline-block;
+    color: black;
+    width: 120px;
+    text-align: center;
+    border-radius: 22px;
+    margin: 0px 10px 0px 10px;
+    padding: 10px 10px;
+    transition: all 1s;
+
+
+}
+
+/* efectos de barra de nabegasion */
+.navbar-collapse>.navbar-nav>.nav-item>.nav-link:hover {
+    background-color: #E6007E;
+    padding: 13px 13px;
+    transform: scale(1.1);
+    border-radius: 22px;
+    color: var(--letra-pie);
+    text-decoration: underline;
+}
+
+.nav>nav {
+    width: 110%;
+    border-radius: 34px;
+    box-shadow: 4px 6px 6px black;
+}
+
+
+/* boton de */
+.navbar-nav>li {
+    color: aquamarine;
+}
+
+/* imagen 1 */
+.carrusel2>.justify-content-center>.con-imagen1>img {
+    /* position: relative; */
+    display: inline-block;
+    width: 100%;
+    height: 500px;
+    border: solid 1px rebeccapurple;
+}
+
+/* extructura > imagen*/
+.expertos>.mx-auto>img {
+    padding: 70px;
+}
+
+
+
+/* contenedor de expertos */
+.expertos {
+    width: 100%;
+    padding: 50px 110px 50px 110px;
+    font-size: 30px;
+}
+
+/* lista de expertos */
+.li_expertos {
+    list-style: none;
+}
+
+/* apartado de quienes somos */
+.somos>img {
+    width: 100px;
+}
+
+.somos {
+    align-items: center;
+
+}
+
+.somos>img p {
+    align-items: center center;
+    justify-items: center;
+    text-align: center;
+}
+
+/* valor corporatibo */
+.val2 {
+    /* position: absolute; */
+    padding: 0 100px 0 100px;
+    background-color: #F0F8FF;
+    width: 100%;
+
+}
+
+.val2>.val-corpo h2 {
+    color: var(--rosa-briyante);
+    padding: 60px 0px;
+    font-family: Great Vibes;
+    /* Dancing Script */
+}
+
+/* circulos */
+.circulo {
+    
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: var(--rosa-briyante);
+}
+
+.circulo>h6 {
+    display: flexbox;
+    text-align: center;
+    align-items: center;
+    justify-items: center;
+    color: var(--letra-pie);
+
+}
+
+/* .pierna {
+    
+} */
+.pierna {
+    text-align: center;
+}
+
+.pierna>div>h5 {
+    color: var(--rosa-briyante);
+    text-align: center;
+    font-weight: bold;
+}
+
+.pierna>div>ul>li>a {
+    color: #6F5570;
+    font-size: 20px;
+    text-decoration: none;
+
+
+}
+
+.pierna>div>ul>li>a:hover {
+    color: var(--rosa-briyante);
+    font-size: 20px;
+    text-decoration: none;
+}
+
+.pierna>div>ul>li>a>i {
+    color: var(--rosa-briyante);
+    font-size: 20px;
+}
+
+
+.icono_social>ul {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.icono_social>ul>li>a>i {
+    border-radius: 10px;
+    text-align: center;
+    padding: 10px 15px 10px 15px;
+    margin: 12px 12px;
+    border: solid 1px var(--rosa-briyante);
+}
+
+.icono_social>ul>li a i:hover {
+    border-radius: 10px;
+    text-align: center;
+    padding: 10px 15px 10px 15px;
+    margin: 12px 12px;
+    /* border: solid 1px var(--letra-pie); */
+    color: var(--letra-pie);
+    background-color: var(--rosa-briyante);
+}
+
+/* .icono_social>ul>li>a i */
+
+.social_1 {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.social_2 {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.social_3 {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+}
+
+.social_4 {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+
+/* {{{------------ */
+.pie>.pie-2 {
+    color: var(--letra-pie);
+    background-color: var(--rosa-briyante);
+}
+
+.pie>.pie-2 img {
+    width: 100px;
+    /* border: solid 1px saddlebrown; */
+    border-radius: 22px;
+    box-shadow: 4px 3px 4px var(--letra-pie);
+}
+
+
+
+
+@media screen and (max-width: 768px) {
+    /* Aquí van los estilos CSS que se aplicarán solo en pantallas de 768px o menos (como una tableta o celular) */
+
+    .nav {
+        position: relative;
+        height: 100px;
+        width: 900px;
+        left: 12px;
+
+    }
+
+    .nav>nav {
+        border-radius: 60px;
+        box-shadow: 4px 6px 6px;
+    }
+
+    /* Estilo por defecto del botón (cuando el menú está colapsado) */
+    .nav>nav>div>.navbar-toggler {
+        border: solid 1px var(--rosa-brillante);
+        position: absolute;
+        /* Es importante que tenga position para que el top/right funcionen */
+        top: 30px;
+
+        /* Posición inicial superior */
+        right: 15px;
+        /* Posición inicial derecha */
+        transition: top 0.4s ease-out, right 0.4s ease-out, transform 0.4s ease-out;
+        /* Animación de 0.4s para la transición */
+        z-index: 1030;
+        /* Asegúrate de que esté por encima del menú desplegado si es necesario */
+    }
+
+    /* Estilo para el botón cuando el menú está desplegado */
+    .nav>nav>div>.navbar-toggler.is-expanded {
+        /* No necesitamos left/right complejos si lo quieres centrado verticalmente a la derecha */
+        top: 50%;
+        /* Mueve el borde superior del botón al 50% de la altura del contenedor padre */
+        right: 10px;
+        /* Mantenerlo a la derecha (puedes ajustar el valor) */
+        transform: translateY(-50%);
+        /* Centra verticalmente el botón basado en su propia altura */
+    }
+
+    /* Estilos para el navbar principal cuando se abre el menú */
+    .nav>nav {
+        border-radius: 60px;
+        /* Ya lo tenías */
+        box-shadow: 4px 6px 6px;
+        /* Ya lo tenías */
+        /* Asegúrate de que el contenedor de la navbar tenga un alto definido o que el collapseElement lo tenga */
+        height: auto;
+        /* O un min-height si es necesario, para que el 50% de top sea significativo */
+        overflow: hidden;
+        /* Para que el contenido no se salga mientras se anima */
+    }
+
+    /* #lis_nav > li >a{
+        font-size: 20px;
+        
+    } */
+
+    .menu-centrado {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%); /* Centra el menú horizontal y verticalmente */
+        width: 90%; /* Ancho del menú desplegable */
+        background-color: white; /* O el color que uses, para que no sea transparente */
+        border-radius: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        display: flex; /* Usa flexbox para centrar los elementos de la lista */
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        z-index: 1020; /* Asegura que el menú esté por encima del resto del contenido */
+    }
+
+
+
+}

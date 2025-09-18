@@ -1,6 +1,7 @@
 :root {
     --rosa-briyante: #E6007E;
     --letra-pie: #FFFFF7;
+    --morado-color: #f070f0;
 }
 
 html,
@@ -64,8 +65,53 @@ a {
     transform: rotate(-10deg) scale(1.1);
 }
 
+/* Info Reserva */
 
+.info {
+    background-color: #f56aa28c;
+    padding: 20px; 
+    border-radius: 40px; 
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.233);
+}
+.info h2{
+    font-family: 'Pacifico', cursive;
+    color: var(--rosa-briyante);
+}
 
+/* valor corporatibo */
+.val-corpo {
+    /* position: absolute; */
+    padding: 0 100px 0 100px;
+    background-color: #F0F8FF;
+    width: 100%;
+
+}
+
+.val-corpo h2 {
+    color: var(--rosa-briyante);
+    text-align: center;
+    padding: 20px;
+    font-family: Great Vibes;
+    /* Dancing Script */
+}
+
+/* circulos */
+.circulo {
+
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: var(--rosa-briyante);
+}
+
+.circulo>h6 {
+    display: flexbox;
+    text-align: center;
+    align-items: center;
+    justify-items: center;
+    color: var(--letra-pie);
+
+}
 
 /* Footer */
 .pierna {
