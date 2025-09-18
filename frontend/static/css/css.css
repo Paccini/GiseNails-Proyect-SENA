@@ -190,7 +190,7 @@ a {
 }
 
 .pierna>div>h5 {
-    color: var(--pink-strong);
+    color: var(--pink-dark);
     text-align: center;
     font-weight: bold;
 }
@@ -202,13 +202,13 @@ a {
 }
 
 .pierna>div>ul>li>a:hover {
-    color: var(--pink-strong);
+    color: var(--pink-dark);
     font-size: 20px;
     text-decoration: none;
 }
 
 .pierna>div>ul>li>a>i {
-    color: var(--pink-strong);
+    color: var(--pink-dark);
     font-size: 20px;
 }
 
@@ -225,7 +225,7 @@ a {
     text-align: center;
     padding: 10px 15px 10px 15px;
     margin: 12px 12px;
-    border: solid 1px var(--pink-medium);
+    border: solid 1px var(--pink-dark);
 }
 
 .icono_social>ul>li a i:hover {
@@ -234,7 +234,7 @@ a {
     padding: 10px 15px 10px 15px;
     margin: 12px 12px;
     color: var(--letra-pie);
-    background-color: var(--pink-strong);
+    background-color: var(--pink-dark);
 }
 
 .social_1 {
