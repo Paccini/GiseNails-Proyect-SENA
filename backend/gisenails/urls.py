@@ -27,6 +27,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
     path('nosotros/', include('nosotros.urls')),
+    path('reserva/', include('reserva.urls')),
 ]
 
 if settings.DEBUG:
