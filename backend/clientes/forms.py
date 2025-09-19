@@ -2,18 +2,13 @@ from django import forms
 from django.contrib.auth.models import User
 from .models import Cliente
 
-class ClienteForm(forms.ModelForm):
-    class Meta:
-        model = Cliente
-        fields = '__all__'
-
 class RegistroClienteForm(forms.ModelForm):
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={
             'placeholder': 'Contraseña',
             'autocomplete': 'new-password',
             'type': 'password',
-            'style': 'background:transparent;color:#fff;'
+            'style': 'background:transparent;color:#232c36;'
         })
     )
     nombre = forms.CharField(
@@ -21,7 +16,7 @@ class RegistroClienteForm(forms.ModelForm):
             'placeholder': 'Nombre',
             'autocomplete': 'name',
             'type': 'text',
-            'style': 'background:transparent;color:#fff;'
+            'style': 'background:transparent;color:#232c36;;'
         })
     )
     correo = forms.EmailField(
@@ -29,7 +24,7 @@ class RegistroClienteForm(forms.ModelForm):
             'placeholder': 'Correo',
             'autocomplete': 'email',
             'type': 'email',
-            'style': 'background:transparent;color:#fff;'
+            'style': 'background:transparent;color:#232c36;;'
         })
     )
     telefono = forms.CharField(
@@ -37,7 +32,7 @@ class RegistroClienteForm(forms.ModelForm):
             'placeholder': 'Teléfono',
             'autocomplete': 'tel',
             'type': 'tel',
-            'style': 'background:transparent;color:#fff;'
+            'style': 'background:transparent;color:#232c36;;'
         })
     )
 
