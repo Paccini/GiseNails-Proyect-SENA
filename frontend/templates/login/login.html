@@ -19,7 +19,11 @@
                 <input type="password" name="password" placeholder="Contraseña" required>
             </div>
             <button type="submit" class="login-btn">Entrar</button>
-            
+            {% if error %}
+            <div class="login-alert">
+                {{ error }}
+            </div>
+            {% endif %}
         </form>
         <p>¿No tienes una cuenta? <a href="{% url 'clientes:registro' %}" class="login-link">Regístrate</a></p>
     </section>
