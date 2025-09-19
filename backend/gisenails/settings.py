@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'inicio',
     'nosotros',
     'reserva',
+    'login',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
