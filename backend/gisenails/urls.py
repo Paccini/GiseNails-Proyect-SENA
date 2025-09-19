@@ -28,6 +28,7 @@ urlpatterns = [
     path('', include('inicio.urls')),
     path('nosotros/', include('nosotros.urls')),
     path('reserva/', include(('reserva.urls', 'reserva'), namespace='reserva')),
+    path('login/', include('login.urls')),
     
 ]
 
