@@ -1,89 +1,51 @@
+/* ==========================================================
+   GISE NAILS - CSS LIMPIO Y DOCUMENTADO
+   Paleta, variables, estilos generales, navbar, reserva, footer, etc.
+   ========================================================== */
+
+/* =========================
+   1. VARIABLES DE COLOR
+   ========================= */
 :root {
-    --rosa-briyante: #E6007E;
+    /* Colores principales */
+    --rosa-principal: #E6007E;
+    --rosado-claro: #FAD2E1;
+    --rosado-muy-claro: #FFE4EC;
+    --rosado-pastel: #F7A8B8;
+    --rosado-fuerte: #EC407A;
+    --rosado-oscuro: #C2185B;
+
+    --morado-principal: #9C27B0;
+    --morado-medio: #BA68C8;
+    --morado-oscuro: #6A1B9A;
+    --morado-amethyst: #9966CC;
+
+    --azul-medio: #2196F3;
+    --azul-fuerte: #1565C0;
+    --azul-oscuro: #0D47A1;
+
+    --blanco: #FFF;
+    --negro-suave: #333;
+    --gris-claro: #F5F5F5;
+
     --letra-pie: #FFFFF7;
-    --morado-color: #ec2bcc;
-    --rosado-claro: #fa55de;
-
-    /* Paleta de colores */
-
-
-    /* Rosados */
-    --pink-very-light: #FFE4EC;
-    --pink-light: #FAD2E1;
-    --pink-pastel: #F7A8B8;
-    --pink-medium: #F06292;
-    --pink-strong: #EC407A;
-    --pink-dark: #C2185B;
-    --pink-vivid: #FF69B4;
-    --pink-hot: #FF1493;
-    --pink-coral: #FF6F91;
-    --pink-blush: #FFC1CC;
-    --pink-salmon: #FFB7B2;
-    --pink-fuchsia: #FF00FF;
-    --pink-flamingo: #FC8EAC;
-    --pink-bubblegum: #FFB6C1;
-    --pink-mauve: #E0B0FF;
-
-    /* Morados */
-    --purple-very-light: #F3E5F5;
-    --purple-light: #E0BBE4;
-    --purple-pastel: #CBAACB;
-    --purple-medium: #BA68C8;
-    --purple: #9C27B0;
-    --purple-dark: #6A1B9A;
-    --purple-vivid: #8e24aa;
-    --purple-deep: #4A148C;
-    --purple-lavender: #B57EDC;
-    --purple-amethyst: #9966CC;
-    --purple-indigo: #6F00FF;
-    --purple-plum: #8E4585;
-    --purple-eggplant: #614051;
-    --purple-orchid: #DA70D6;
-    --purple-heliotrope: #DF73FF;
-
-    /* Violetas */
-    --violet-light: #D1C4E9;
-    --violet: #7E57C2;
-    --violet-dark: #512DA8;
-
-    /* Azules */
-    --blue-very-light: #E3F2FD;
-    --blue-light: #BBDEFB;
-    --blue-pastel: #90CAF9;
-    --blue-sky: #64B5F6;
-    --blue-medium: #2196F3;
-    --blue-cornflower: #6495ED;
-    --blue-strong: #1565C0;
-    --blue-dark: #0D47A1;
-    --blue-navy: #001F54;
-    --blue-royal: #4169E1;
-    --blue-steel: #4682B4;
-    --blue-cobalt: #0047AB;
-    --blue-azure: #007FFF;
-    --blue-cyan: #00BFFF;
-    --blue-electric: #7DF9FF;
-    --blue-deep: #003366;
-
-    /* Tonos de apoyo */
-    --white: #FFFFFF;
-    --black-soft: #333333;
-    --gray-light: #F5F5F5;
 }
 
-
-html,
-body {
+/* =========================
+   2. ESTILOS GENERALES
+   ========================= */
+html, body {
     height: 100%;
     margin: 0;
     padding: 0;
 }
-
 
 body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     font-family: "Century Gothic", 'Lato', sans-serif;
+    background: var(--blanco);
 }
 
 .main-content {
@@ -94,16 +56,21 @@ a {
     text-decoration: none;
 }
 
+/* =========================
+   3. CONTAINERS
+   ========================= */
 .container-fluid {
     padding-left: 0 !important;
     padding-right: 0 !important;
 }
 
-/* Navbar */
+/* =========================
+   4. NAVBAR
+   ========================= */
 .navbar {
-    background: linear-gradient(90deg, var(--pink-medium) 0%, var(--pink-dark) 100%) !important;
+    background: linear-gradient(90deg, var(--rosado-pastel) 0%, var(--rosado-oscuro) 100%) !important;
     box-shadow: 0 4px 16px rgba(111, 85, 112, 0.15);
-    border-bottom: 2px solid #fff;
+    border-bottom: 2px solid var(--blanco);
 }
 
 .navbar-nav .nav-link {
@@ -115,71 +82,61 @@ a {
 }
 
 .navbar-nav .nav-link:hover {
-    background: #fff;
-    color: #E6007E !important;
+    background: var(--blanco);
+    color: var(--rosa-principal) !important;
     transform: scale(1.08);
-    text-decoration: none;
-}
-
-.navbar-nav .nav-item:not(:last-child) {
-    border-right: 1px solid #fff2;
 }
 
 .navbar-brand img {
     transition: transform 0.4s;
 }
-
 .navbar-brand img:hover {
     transform: rotate(-10deg) scale(1.1);
 }
 
-/* Info Reserva */
-
-/* Panel de información de reserva bonito */
+/* =========================
+   5. PANEL DE INFORMACIÓN DE RESERVA
+   ========================= */
 .info-reserva {
-
-    background: var(--pink-very-light);
+    background: var(--rosado-muy-claro);
     border-radius: 40px;
     box-shadow: 0 8px 24px rgba(111, 85, 112, 0.10);
     padding: 32px 24px;
-    margin-top: 32px;
-    margin-bottom: 32px;
+    margin: 32px 0;
 }
 
 .info-panel {
-    color: var(--purple-dark);
+    color: var(--morado-oscuro);
     padding: 16px 24px;
 }
 
 .titulo-reserva {
     font-family: 'Pacifico', cursive;
-    color: var(--purple-amethyst);
+    color: var(--morado-amethyst);
     font-size: 2.2rem;
     margin-bottom: 8px;
 }
 
 .direccion {
     font-size: 1.1rem;
-    color: var(--purple-medium);
+    color: var(--morado-medio);
     margin-bottom: 12px;
     font-weight: 500;
 }
 
 .contact-link {
-    color: var(--blue-medium);
+    color: var(--azul-medio);
     font-weight: 500;
-    text-decoration: none;
     transition: color 0.2s;
 }
-
 .contact-link:hover {
-    color: var(--pink-strong);
+    color: var(--rosado-fuerte);
     text-decoration: underline;
 }
 
 .btn-reserva {
-    background: var(--pink-strong);
-    color: #fff;
+    background: var(--rosado-fuerte);
+    color: var(--blanco);
     border-radius: 25px;
     padding: 10px 28px;
     font-weight: bold;
@@ -189,16 +146,15 @@ a {
     transition: background 0.2s, transform 0.2s;
     margin-right: 10px;
 }
-
 .btn-reserva:hover {
-    background: var(--pink-dark);
-    color: #fff;
+    background: var(--rosado-oscuro);
+    color: var(--blanco);
     transform: scale(1.05);
 }
 
 .btn-comollegar {
-    background: var(--blue-medium);
-    color: #fff;
+    background: var(--azul-medio);
+    color: var(--blanco);
     border-radius: 25px;
     padding: 10px 28px;
     font-weight: bold;
@@ -207,168 +163,114 @@ a {
     border: none;
     transition: background 0.2s, transform 0.2s;
 }
-
 .btn-comollegar:hover {
-    background: var(--blue-dark);
-    color: #fff;
+    background: var(--azul-oscuro);
+    color: var(--blanco);
     transform: scale(1.05);
 }
 
-/* valor corporatibo */
+/* =========================
+   6. VALORES CORPORATIVOS
+   ========================= */
 .val-corpo {
-    /* position: absolute; */
-    padding: 0 100px 0 100px;
+    padding: 0 100px;
     background-color: #F0F8FF;
     width: 100%;
-
 }
-
 .val-corpo h2 {
-    color: var(--rosa-briyante);
+    color: var(--rosa-principal);
     text-align: center;
     padding: 20px;
-    font-family: Great Vibes;
-    /* Dancing Script */
+    font-family: 'Great Vibes', cursive;
 }
 
-/* circulos */
+/* =========================
+   7. CÍRCULOS DECORATIVOS
+   ========================= */
 .circulo {
-
     width: 25px;
     height: 25px;
     border-radius: 50%;
-    background-color: var(--rosa-briyante);
+    background-color: var(--rosa-principal);
 }
-
-.circulo>h6 {
-    display: flexbox;
+.circulo > h6 {
     text-align: center;
-    align-items: center;
-    justify-items: center;
     color: var(--letra-pie);
-
 }
 
-/* Footer */
+/* =========================
+   8. FOOTER
+   ========================= */
 .pierna {
     text-align: center;
 }
-
 .pierna>div>h5 {
-    color: var(--pink-dark);
-    text-align: center;
+    color: var(--rosado-oscuro);
     font-weight: bold;
 }
-
 .pierna>div>ul>li>a {
     color: #6F5570;
     font-size: 20px;
-    text-decoration: none;
 }
-
-.pierna>div>ul>li>a:hover {
-    color: var(--pink-dark);
-    font-size: 20px;
-    text-decoration: none;
-}
-
+.pierna>div>ul>li>a:hover,
 .pierna>div>ul>li>a>i {
-    color: var(--pink-dark);
-    font-size: 20px;
+    color: var(--rosado-oscuro);
 }
-
 .icono_social>ul {
     position: relative;
     width: 300px;
     height: 200px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 auto;
 }
-
 .icono_social>ul>li>a>i {
     border-radius: 10px;
-    text-align: center;
-    padding: 10px 15px 10px 15px;
-    margin: 12px 12px;
-    border: solid 1px var(--pink-dark);
+    padding: 10px 15px;
+    margin: 12px;
+    border: solid 1px var(--rosado-oscuro);
 }
-
 .icono_social>ul>li a i:hover {
-    border-radius: 10px;
-    text-align: center;
-    padding: 10px 15px 10px 15px;
-    margin: 12px 12px;
     color: var(--letra-pie);
-    background-color: var(--pink-dark);
+    background-color: var(--rosado-oscuro);
 }
-
-.social_1 {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-}
-
-.social_2 {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-}
-
-.social_3 {
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-}
-
-.social_4 {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-}
-
+.social_1 { position: absolute; top: 20px; right: 20px; }
+.social_2 { position: absolute; top: 20px; left: 20px; }
+.social_3 { position: absolute; bottom: 20px; left: 20px; }
+.social_4 { position: absolute; bottom: 20px; right: 20px; }
 .pie>.pie-2 {
     color: var(--letra-pie);
-    background-color: var(--pink-strong);
+    background-color: var(--rosado-fuerte);
 }
-
 .pie>.pie-2 img {
     width: 100px;
     border-radius: 22px;
     box-shadow: 4px 3px 4px var(--letra-pie);
 }
 
-/* Reserva2 personalizados */
+/* =========================
+   9. RESERVA2 - PERSONALIZADOS
+   ========================= */
 .fondo-blanco {
-    background: #fff;
-    padding: 40px 0 40px 0;
+    background: #a0a0a08e;
+    padding: 40px 0;
 }
-
 @media (max-width: 991px) {
-    .fondo-blanco {
-        padding: 20px 0;
-    }
+    .fondo-blanco { padding: 20px 0; }
 }
-
 .reserva-contenedor {
-    background: #fff;
+    background: var(--blanco);
     border-radius: 32px;
     box-shadow: 0 8px 32px rgba(230, 0, 126, 0.08), 0 1.5px 8px #e6007e22;
     padding: 40px 48px;
     margin: 0 auto;
     max-width: 1200px;
 }
-
 @media (max-width: 991px) {
-    .reserva-contenedor {
-        padding: 20px 10px;
-    }
+    .reserva-contenedor { padding: 20px 10px; }
 }
-
 .panel-izquierdo {
     border-right: 2px solid #f5e3eb;
     padding-right: 32px;
 }
-
 @media (max-width: 991px) {
     .panel-izquierdo {
         border-right: none;
@@ -377,50 +279,42 @@ a {
         margin-bottom: 30px;
     }
 }
-
-.btn-regresar,
-.btn-continuar {
+.btn-regresar, .btn-continuar {
     border-radius: 40px;
     font-size: 1.2em;
     padding: 16px 60px;
     font-weight: bold;
     box-shadow: 0 4px 16px #e6007e22;
-    border: 2px solid #e6007e;
+    border: 2px solid var(--rosa-principal);
     transition: background 0.2s, color 0.2s, box-shadow 0.2s;
 }
-
 .btn-regresar {
     color: #7d6fa7;
     border-color: #7d6fa7;
-    background: #fff;
+    background: var(--blanco);
 }
-
 .btn-regresar:hover {
     background: #edeaff;
-    color: #e6007e;
-    border-color: #e6007e;
+    color: var(--rosa-principal);
+    border-color: var(--rosa-principal);
 }
-
 .btn-continuar {
-    background: #e6007e;
-    color: #fff;
+    background: var(--rosa-principal);
+    color: var(--blanco);
     border: none;
 }
-
 .btn-continuar:hover {
-    background: #fff;
-    color: #e6007e;
-    border: 2px solid #e6007e;
+    background: var(--blanco);
+    color: var(--rosa-principal);
+    border: 2px solid var(--rosa-principal);
 }
-
 .sucursal {
-    color: #e6007e;
+    color: var(--rosa-principal);
     font-weight: bold;
     font-size: 2em;
     letter-spacing: 1px;
     margin-bottom: 0;
 }
-
 .pregunta-fecha {
     font-family: 'Comic Sans MS', cursive;
     font-weight: bold;
@@ -428,7 +322,6 @@ a {
     color: #222;
     margin-bottom: 24px;
 }
-
 .btn-fecha {
     box-shadow: 0 4px 16px #e6007e22;
     border-radius: 20px;
@@ -437,159 +330,196 @@ a {
     padding: 18px 32px;
     margin: 0 10px;
     border: none;
-    color: #e6007e;
-    background: #fff;
+    color: var(--rosa-principal);
+    background: var(--blanco);
     transition: background 0.2s, color 0.2s, box-shadow 0.2s;
     display: flex;
     align-items: center;
     gap: 8px;
 }
-
 .btn-fecha.selected,
 .btn-fecha:focus,
 .btn-fecha:hover {
-    background: #e6007e;
-    color: #fff;
+    background: var(--rosa-principal);
+    color: var(--blanco);
     box-shadow: 0 8px 32px #e6007e33;
 }
-
-.icono-hoy,
-.icono-manana,
-.icono-otra {
-    font-size: 1.3em;
-}
-
-.icono-hoy {
-    color: #7ec6e3;
-}
-
-.icono-manana,
-.icono-otra {
-    color: #fff;
-}
-
+.icono-hoy { color: #7ec6e3; font-size: 1.3em; }
+.icono-manana, .icono-otra { color: var(--blanco); font-size: 1.3em; }
 .label-fecha {
-    color: #e6007e;
+    color: var(--rosa-principal);
     font-weight: bold;
     margin-left: 10px;
     font-size: 1.1em;
 }
-
 .fecha-input {
     width: 180px;
     border-radius: 20px;
-    border: 2px solid #e6007e;
+    border: 2px solid var(--rosa-principal);
     text-align: center;
     font-weight: bold;
     font-size: 1.2em;
     margin-left: 10px;
-    background: #fff;
-    color: #e6007e;
+    background: var(--blanco);
+    color: var(--rosa-principal);
 }
-
 .horarios-btn {
     margin: 2px;
     border-radius: 20px;
-    border: 1.5px solid #e6007e;
-    color: #e6007e;
-    background: #fff;
+    border: 1.5px solid var(--rosa-principal);
+    color: var(--rosa-principal);
+    background: var(--blanco);
     padding: 8px 22px;
     font-weight: bold;
     font-size: 1.1em;
     transition: background 0.2s, color 0.2s;
     margin-top: 10px;
 }
-
 .horarios-btn.selected,
 .horarios-btn:hover {
-    background: #e6007e;
-    color: #fff;
+    background: var(--rosa-principal);
+    color: var(--blanco);
 }
 
+/* =========================
+   10. FORMULARIO DE PERSONA
+   ========================= */
 .instruccion-persona {
     font-size: 1.2em;
     margin-top: 30px;
     color: #444;
 }
-
 .persona-label {
-    color: #e6007e;
+    color: var(--rosa-principal);
     font-size: 2em;
     font-family: 'Comic Sans MS', cursive;
     font-weight: bold;
 }
-
 .linea-persona {
-    border-bottom: 3px solid #e6007e;
+    border-bottom: 3px solid var(--rosa-principal);
     width: 180px;
     margin: auto;
     margin-top: 5px;
 }
-
 .label-campo {
     font-family: 'Comic Sans MS', cursive;
     font-size: 1.2em;
-    color: #e6007e;
+    color: var(--rosa-principal);
     font-weight: bold;
     margin-bottom: 6px;
 }
-
 .campo-persona {
     font-size: 1.2em;
     border-radius: 18px;
-    border: 2px solid #e6007e;
-    background: #fff;
+    border: 2px solid var(--rosa-principal);
+    background: var(--blanco);
     color: #222;
     padding: 12px 18px;
     margin-bottom: 8px;
 }
-
 .input-group-text {
-    background: #fff;
-    border: 2px solid #e6007e;
+    background: var(--blanco);
+    border: 2px solid var(--rosa-principal);
     border-left: none;
     border-radius: 0 18px 18px 0;
 }
-
 .icono-input {
-    color: #e6007e;
+    color: var(--rosa-principal);
     font-size: 1.3em;
 }
 
+/* =========================
+   11. ALERTA MODAL
+   ========================= */
 .alerta-modal {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    top: 0; left: 0; right: 0; bottom: 0;
     background: rgba(0, 0, 0, 0.3);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 9999;
 }
-
 .alerta-box {
-    background: #fff;
+    background: var(--blanco);
     border-radius: 20px;
     padding: 30px 40px;
     text-align: center;
     max-width: 350px;
     box-shadow: 0 0 20px #ed3e88aa;
 }
-
 .alerta-box .icono {
     font-size: 3em;
     color: #ed3e88;
     margin-bottom: 10px;
 }
-
 .alerta-box button {
     background: #8d8edb;
-    color: #fff;
+    color: var(--blanco);
     border: none;
     border-radius: 20px;
     padding: 8px 30px;
     font-size: 1.1em;
     margin-top: 15px;
 }
+
+/* =========================
+   12. MENÚ DE SERVICIOS
+   ========================= */
+.servicios-menu {
+    background: var(--rosado-claro);
+    border-radius: 32px;
+    box-shadow: 0 4px 16px #e6007e22;
+    padding: 32px 24px;
+    margin-top: 40px;
+    text-align: center;
+}
+.servicios-titulo {
+    font-family: 'Pacifico', cursive;
+    color: var(--rosado-fuerte);
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 24px;
+}
+.servicio-card {
+    background: var(--blanco);
+    border-radius: 24px;
+    box-shadow: 0 2px 8px #e6007e22;
+    padding: 24px 0 16px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: box-shadow 0.2s, transform 0.2s;
+    cursor: pointer;
+}
+.servicio-card:hover {
+    box-shadow: 0 8px 24px #e6007e44;
+    transform: scale(1.05);
+    background: var(--rosado-pastel);
+}
+.servicio-icon {
+    font-size: 2.5rem;
+    color: var(--rosado-fuerte);
+    margin-bottom: 12px;
+}
+
+/* =========================
+   13. BOTÓN CONFIRMAR CITA
+   ========================= */
+.btn-confirmar-cita {
+    background: var(--rosado-fuerte);
+    color: var(--blanco);
+    border-radius: 30px;
+    padding: 14px 40px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    box-shadow: 0 4px 16px #e6007e22;
+    border: none;
+    transition: background 0.2s, transform 0.2s;
+    margin-top: 10px;
+}
+.btn-confirmar-cita:hover {
+    background: var(--rosado-oscuro);
+    color: var(--blanco);
+    transform: scale(1.05);
+}   
