@@ -17,27 +17,10 @@
                 </header>
                 <section class="mb-4">
                     <h5 class="text-center pregunta-fecha">¿CUÁNDO QUIERES TU RESERVA?</h5>
-                    <div class="d-flex justify-content-center mb-3">
-                        <button id="btn-hoy" class="btn btn-light mx-2 btn-fecha">
-                            <i class="bi bi-star-fill icono-hoy"></i> HOY
-                        </button>
-                        <button id="btn-manana" class="btn btn-light mx-2 btn-fecha">
-                            <i class="bi bi-star-fill icono-manana"></i> MAÑANA
-                        </button>
-                        <button id="btn-otra" class="btn btn-light mx-2 btn-fecha">
-                            <i class="bi bi-star-fill icono-otra"></i> OTRA FECHA
-                        </button>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-center mb-2">
-                        <i class="bi bi-calendar icono-calendario"></i>
-                        <span class="label-fecha">Fecha</span>
-                        <input id="fecha-input" type="text" class="form-control fecha-input"
-                            value="{{ today|default:'18/9/2025' }}" readonly>
-                        <input id="fecha-calendario" type="date" class="form-control fecha-input" style="display:none;">
-                    </div>
-                    <div id="horarios-disponibles" class="text-center mt-3"></div>
+                    
                 </section>
             </aside>
+
             <!-- Panel Derecho: Datos de la persona -->
             <section class="col-md-7" aria-label="Datos de la persona">
                 <form>
