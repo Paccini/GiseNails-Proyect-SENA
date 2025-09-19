@@ -106,6 +106,28 @@ a {
     border-bottom: 2px solid #fff;
 }
 
+/* Imágenes de servicios con tamaño uniforme */
+.servicio-img {
+    width: 300px;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* Solo para las imágenes de la sección 'Conoce nuestros servicios' */
+.servicio-img-lista {
+    margin: 0px;
+}
+
+/* Espaciado uniforme entre imágenes de servicios */
+.servicios-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 48px 32px; /* vertical horizontal */
+    justify-content: center;
+}
+
+
 .navbar-nav .nav-link {
     border-radius: 20px;
     margin: 0 8px;
