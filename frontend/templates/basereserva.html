@@ -4,10 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Reserva{% endblock %}</title>
+    <!-- CSS principal y dependencias -->
     <link rel="stylesheet" href="{% static 'css/css.css' %}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <style>
+        /* Header de la reserva */
         .header-reserva {
             display: flex;
             align-items: center;
@@ -40,10 +42,10 @@
     {% block extra_head %}{% endblock %}
 </head>
 <body style="background:#fff;">
-    <div class="header-reserva">
+    <header class="header-reserva">
         <img src="{% static 'img/Logo gisel-nails.png' %}" alt="Logo Gise-Nails">
-        <h2>Reserva - Selecciona tus Servicios</h2>
-    </div>
+        <h1 class="h2 m-0">Reserva - Selecciona tus Servicios</h1>
+    </header>
     <main>
         {% block content %}{% endblock %}
     </main>

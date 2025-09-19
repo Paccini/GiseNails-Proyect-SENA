@@ -2,27 +2,28 @@
 {% load static %}
 {% block title %}Reserva - Selecciona tus Servicios{% endblock %}
 {% block content %}
-<div class="container-fluid fondo-blanco">
-    <div class="reserva-contenedor">
+
+<main class="container-fluid fondo-blanco">
+    <section class="reserva-contenedor">
         <div class="row justify-content-center mt-4">
-            <!-- Panel Izquierdo -->
-            <div class="col-md-5 panel-izquierdo">
-                <div class="d-flex justify-content-between mb-4">
+            <!-- Panel Izquierdo: Selección de fecha y horario -->
+            <aside class="col-md-5 panel-izquierdo">
+                <nav class="d-flex justify-content-between mb-4">
                     <a href="{% url 'reserva:reserva' %}" class="btn btn-outline-secondary btn-regresar">&#8592; REGRESAR</a>
-                    <button id="btn-continuar" class="btn btn-continuar">CONTINUAR</button>
-                </div>
-                <div class="text-center mb-4">
+                </nav>
+                <header class="text-center mb-4">
                     <h4 class="sucursal">IBAGUÉ</h4>
                     <p>Cra. 9a #42-44</p>
-                </div>
-                <div class="mb-4">
+                </header>
+                <section class="mb-4">
                     <h5 class="text-center pregunta-fecha">¿CUÁNDO QUIERES TU RESERVA?</h5>
                     
-                </div>
-            </div>
-            <!-- Panel Derecho -->
-            <div class="col-md-7">
-                <div class="mb-4">
+                </section>
+            </aside>
+
+            <!-- Panel Derecho: Datos de la persona -->
+            <section class="col-md-7" aria-label="Datos de la persona">
+                <form>
                     <p class="text-center instruccion-persona">Ingresa el nombre de la persona que asistirá a la cita</p>
                     <div class="text-center mb-3">
                         <span class="persona-label" id="persona-label">
@@ -32,32 +33,96 @@
                     </div>
                     <div class="row justify-content-center">
                         <div class="col-md-8 mb-3">
-                            <label class="label-campo">NOMBRE</label>
+                            <label class="label-campo" for="input-nombre">NOMBRE</label>
                             <div class="input-group">
                                 <input id="input-nombre" type="text" class="form-control campo-persona" placeholder="Nombre">
                                 <span class="input-group-text"><i class="bi bi-pencil icono-input"></i></span>
                             </div>
                         </div>
                         <div class="col-md-8 mb-3">
-                            <label class="label-campo">APELLIDO</label>
+                            <label class="label-campo" for="input-apellido">APELLIDO</label>
                             <div class="input-group">
                                 <input id="input-apellido" type="text" class="form-control campo-persona" placeholder="Apellido">
                                 <span class="input-group-text"><i class="bi bi-pencil icono-input"></i></span>
                             </div>
                         </div>
                         <div class="col-md-8 mb-3">
-                            <label class="label-campo">CELULAR</label>
+                            <label class="label-campo" for="input-celular">CELULAR</label>
                             <div class="input-group">
                                 <input id="input-celular" type="text" class="form-control campo-persona" placeholder="Celular">
                                 <span class="input-group-text"><i class="bi bi-pencil icono-input"></i></span>
                             </div>
                         </div>
                     </div>
+                </form>
+            </section>
+        </div>
+
+        <!-- Menú de Servicios -->
+        <section class="servicios-menu mt-5" aria-label="Servicios">
+            <h3 class="servicios-titulo mb-4"><i class="bi bi-star"></i> Servicios</h3>
+            <div class="row justify-content-center">
+                <div class="col-md-3 col-6 mb-3">
+                    <div class="servicio-card">
+                        <i class="bi bi-brush servicio-icon"></i>
+                        <span>Manicure</span>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-3">
+                    <div class="servicio-card">
+                        <i class="bi bi-droplet servicio-icon"></i>
+                        <span>Pedicure</span>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-3">
+                    <div class="servicio-card">
+                        <i class="bi bi-gem servicio-icon"></i>
+                        <span>Uñas Acrílicas</span>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-3">
+                    <div class="servicio-card">
+                        <i class="bi bi-stars servicio-icon"></i>
+                        <span>Decoración</span>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-3">
+                    <div class="servicio-card">
+                        <i class="bi bi-stars servicio-icon"></i>
+                        <span>Epilacion</span>
+                    </div>
                 </div>
             </div>
+        </section>
+
+        <!-- Gestoras -->
+        <section class="gestoras-menu mt-5 text-align-center" aria-label="Gestoras">
+            <h3 class="gestoras-titulo mb-4"><i class="bi bi-person-heart"></i> Gestoras</h3>
+            <div class="row justify-content-center">
+                <div class="col-md-3 col-6 mb-3">
+                    <div class="gestora-card">
+                        <span class="gestora-nombre">Gisela Vargas</span>
+                        <span class="gestora-rol">Gestora Principal</span>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-3">
+                    <div class="gestora-card">
+                        <span class="gestora-nombre">María López</span>
+                        <span class="gestora-rol">Gestora de Servicios</span>
+                    </div>
+                </div>
+                <!-- Agrega más gestoras si lo necesitas -->
+            </div>
+        </section>
+
+        <!-- Botón Confirmar Cita -->
+        <div class="text-center mt-4">
+            <button class="btn btn-confirmar-cita">
+                <i class="bi bi-check-circle"></i> Confirmar cita
+            </button>
         </div>
-    </div>
-</div>
+    </section>
+</main>
 
 <!-- Modal de alerta -->
 <div id="alerta-modal" class="alerta-modal" style="display:none;">

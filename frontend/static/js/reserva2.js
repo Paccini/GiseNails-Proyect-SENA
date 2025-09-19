@@ -1,25 +1,14 @@
 // Horarios de ejemplo
-const horariosHoy = ["09:00", "10:00", "11:00", "14:00", "16:00"];
-const horariosManana = ["10:00", "12:00", "15:00", "17:00"];
 
-function mostrarHorarios(horarios) {
-    const cont = document.getElementById('horarios-disponibles');
-    cont.innerHTML = '';
-    horarios.forEach(hora => {
-        const btn = document.createElement('button');
-        btn.className = 'horarios-btn';
-        btn.innerText = hora;
-        btn.onclick = function () {
-            document.querySelectorAll('.horarios-btn').forEach(b => b.classList.remove('selected'));
-            btn.classList.add('selected');
-        };
-        cont.appendChild(btn);
-    });
-}
 
 function seleccionarBtnFecha(btnId) {
     document.querySelectorAll('.btn-fecha').forEach(b => b.classList.remove('selected'));
     document.getElementById(btnId).classList.add('selected');
+}
+
+function getFechaISO(date) {
+    // Devuelve la fecha en formato YYYY-MM-DD
+    return date.toISOString().split('T')[0];
 }
 
 // Botones de fecha
@@ -27,8 +16,10 @@ document.getElementById('btn-hoy').onclick = function () {
     seleccionarBtnFecha('btn-hoy');
     document.getElementById('fecha-input').style.display = '';
     document.getElementById('fecha-calendario').style.display = 'none';
-    document.getElementById('fecha-input').value = new Date().toLocaleDateString('es-CO');
-    mostrarHorarios(horariosHoy);
+    let hoy = new Date();
+    let fechaISO = getFechaISO(hoy);
+    document.getElementById('fecha-input').value = fechaISO;
+    cargarHorariosDisponibles(fechaISO);
 };
 document.getElementById('btn-manana').onclick = function () {
     seleccionarBtnFecha('btn-manana');
@@ -36,8 +27,9 @@ document.getElementById('btn-manana').onclick = function () {
     document.getElementById('fecha-calendario').style.display = 'none';
     let manana = new Date();
     manana.setDate(manana.getDate() + 1);
-    document.getElementById('fecha-input').value = manana.toLocaleDateString('es-CO');
-    mostrarHorarios(horariosManana);
+    let fechaISO = getFechaISO(manana);
+    document.getElementById('fecha-input').value = fechaISO;
+    cargarHorariosDisponibles(fechaISO);
 };
 document.getElementById('btn-otra').onclick = function () {
     seleccionarBtnFecha('btn-otra');
@@ -46,8 +38,8 @@ document.getElementById('btn-otra').onclick = function () {
     document.getElementById('horarios-disponibles').innerHTML = '';
 };
 document.getElementById('fecha-calendario').onchange = function () {
-    // Puedes cambiar los horarios según la fecha seleccionada
-    mostrarHorarios(["09:00", "11:00", "13:00", "15:00"]);
+    let fecha = this.value;
+    cargarHorariosDisponibles(fecha);
 };
 
 // Cambiar PERSONA 1 por el nombre
@@ -74,3 +66,27 @@ document.getElementById('btn-continuar').onclick = function (e) {
     // Aquí puedes enviar el formulario o redirigir
     alert("¡Reserva lista para " + nombre + "!");
 };
+
+function cargarHorariosDisponibles(fecha) {
+    fetch(`/reserva/horarios-disponibles/?fecha=${fecha}`)
+        .then(response => response.json())
+        .then(data => {
+            const contenedor = document.getElementById('horarios-disponibles');
+            contenedor.innerHTML = '';
+            if (data.horarios && data.horarios.length > 0) {
+                data.horarios.forEach(hora => {
+                    const btn = document.createElement('button');
+                    btn.className = 'horarios-btn';
+                    btn.textContent = hora;
+                    contenedor.appendChild(btn);
+                });
+            } else {
+                contenedor.innerHTML = '<div class="alert alert-warning mt-2">No hay horarios disponibles para esta fecha.</div>';
+            }
+        });
+}
+
+// Ejemplo: llama esta función cuando el usuario seleccione una fecha
+document.getElementById('fecha-input').addEventListener('change', function () {
+    cargarHorariosDisponibles(this.value);
+});
