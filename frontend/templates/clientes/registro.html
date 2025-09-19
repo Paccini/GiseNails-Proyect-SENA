@@ -27,11 +27,7 @@
                 {{ form.password }}
             </div>
             <button type="submit" class="login-btn">Registrarme</button>
-            {% if form.errors %}
-            <div class="login-alert">
-                Por favor revisa los datos ingresados.
-            </div>
-            {% endif %}
+            
         
         </form>
         <p>¿Ya tienes una cuenta? <a href="{% url 'login:login' %}" class="login-link">Inicia sesión</a></p>
