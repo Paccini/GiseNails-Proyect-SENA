@@ -1,0 +1,155 @@
+
+
+{% extends 'home.html' %}
+{% load static %}
+
+{% block content %}
+<div id="carouselExample" class="carousel slide">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="{% static 'img\Carrusel.webp' %}" class="d-block w-100" alt="Carrusel" height="500">
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid py-5" style="background-color: #ffe6f0;">
+    <div class="row justify-content-around">
+        <div class="col-md-2 text-center">
+            <div class="rounded-circle bg-white shadow-sm mx-auto" style="width: 120px; height: 120px;">
+                <img src="{% static 'img/barra1.png' %}" alt="" style="max-width: 80%; max-height: 80%; margin-top: 10%;">
+            </div>
+            <p class="mt-3 fw-bold">Profesionales apasionadas por el arte de embellecer tus uñas con precisión y estilo.</p>
+        </div>
+        <div class="col-md-2 text-center">
+            <div class="rounded-circle bg-white shadow-sm mx-auto" style="width: 120px; height: 120px;">
+                <img src="{% static 'img/barra.png' %}" alt="" style="max-width: 80%; max-height: 80%; margin-top: 10%;">
+            </div>
+            <p class="mt-3 fw-bold">Reserva tu cita fácilmente en el horario que más te convenga.</p>
+        </div>
+        <div class="col-md-2 text-center">
+            <div class="rounded-circle bg-white shadow-sm mx-auto" style="width: 120px; height: 120px;">
+                <img src="{% static 'img/barra3.png' %}" alt="" style="max-width: 80%; max-height: 80%; margin-top: 10%;">
+            </div>
+            <p class="mt-3 fw-bold">Un servicio cálido y personalizado para ti</p>
+        </div>
+        <div class="col-md-2 text-center">
+            <div class="rounded-circle bg-white shadow-sm mx-auto" style="width: 120px; height: 120px;">
+                <img src="{% static 'img/barra4.png' %}" alt="" style="max-width: 80%; max-height: 80%; margin-top: 10%;">
+            </div>
+            <p class="mt-3 fw-bold">Libres de tóxicos y manejando estándares de calidad premium</p>
+        </div>
+        <div class="col-md-2 text-center">
+            <div class="rounded-circle bg-white shadow-sm mx-auto" style="width: 120px; height: 120px;">
+                <img src="{% static 'img/barra5.png' %}" alt="" style="max-width: 80%; max-height: 80%; margin-top: 10%;">
+            </div>
+            <p class="mt-3 fw-bold">Cumplimos con estrictos protocolos de limpieza y esterilización</p>
+        </div>
+    </div>
+</div> 
+
+<br>
+
+<div class="container my-5">
+    <h2 class="text-center mb-4 text-danger" style="font-family: 'Comic Sans MS', cursive;">
+      ¡TUS UÑAS SIEMPRE A LA MODA CON NUESTROS EFECTOS!
+    </h2>
+  
+    <div id="carouselUñas" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <div class="d-flex justify-content-center gap-4 flex-wrap">
+            <img src="{% static 'img/njknl.jfif' %}" class="servicio-img">
+            <img src="{% static 'img/pilygel.jfif' %}" class="servicio-img">
+            <img src="{% static 'img/semi.jfif' %}" class="servicio-img">
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center gap-4 flex-wrap">
+            <img src="{% static 'img/semi.jfif' %}" class="servicio-img">
+            <img src="{% static 'img/images.jfif' %}" class="servicio-img">
+            <img src="{% static 'img/tradicional.jfif' %}" class="servicio-img">
+          </div>
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselUñas" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon bg-dark rounded-circle"></span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselUñas" data-bs-slide="next">
+        <span class="carousel-control-next-icon bg-dark rounded-circle"></span>
+      </button>
+      <div class="carousel-indicators mt-3">
+        <button type="button" data-bs-target="#carouselUñas" data-bs-slide-to="0" class="active bg-danger"></button>
+        <button type="button" data-bs-target="#carouselUñas" data-bs-slide-to="1" class="bg-danger"></button>
+      </div>
+    </div>
+
+     <div class="text-center mt-4">
+      <a href="#" class="btn btn-danger rounded-pill px-5 py-2 fs-5">RESERVA AHORA</a>
+    </div>
+</div>
+
+<hr>
+
+<section class="container my-5 text-center">
+  <h2 class="mb-4 text-danger" style="font-family: 'Comic Sans MS', cursive;">
+    Conoce nuestros servicios
+  </h2>
+
+  <div class="row servicios-row">
+    
+    <!-- Servicio 1 -->
+    <div class="col-6 col-md-4 col-lg-3">
+      <a href="servicios.html" style="text-decoration: none;">
+  <img src="{% static 'img/tradicional.jfif' %}" alt="Uñas tradicionales" class="servicio-img servicio-img-lista">
+        <p class="mt-2 text-danger fw-bold">Uñas tradicionales</p>
+      </a>
+    </div>
+
+    <!-- Servicio 2 -->
+    <div class="col-6 col-md-4 col-lg-3">
+      <a href="servicios.html" style="text-decoration: none;">
+  <img src="{% static 'img/semi.jfif' %}" alt="Uñas semipermanente" class="servicio-img servicio-img-lista">
+        <p class="mt-2 text-danger fw-bold">Uñas semipermanente</p>
+      </a>
+    </div>
+
+    <!-- Servicio 3 -->
+    <div class="col-6 col-md-4 col-lg-3">
+      <a href="servicios.html" style="text-decoration: none;">
+  <img src="{% static 'img/acrilicas.jfif' %}" alt="Uñas acrílicas" class="servicio-img servicio-img-lista">
+        <p class="mt-2 text-danger fw-bold">Uñas acrílicas</p>
+      </a>
+    </div>
+
+    <!-- Servicio 4 -->
+    <div class="col-6 col-md-4 col-lg-3">
+      <a href="servicios.html" style="text-decoration: none; ">
+  <img src="{% static 'img/pilygel.jfif' %}" alt="Poly gel" class="servicio-img servicio-img-lista ">
+        <p class="mt-2 text-danger fw-bold">Poly gel</p>
+      </a>
+    </div>
+
+    <!-- Servicio 5 -->
+    <div class="col-6 col-md-4 col-lg-3">
+      <a href="servicios.html" style="text-decoration: none; ">
+  <img src="{% static 'img/ruber.jfif' %}" alt="Rubber permanente" class="servicio-img servicio-img-lista">
+        <p class="mt-2 text-danger fw-bold">Rubber permanente</p>
+      </a>
+    </div>
+
+    <!-- Servicio 6 -->
+    <div class="col-6 col-md-4 col-lg-3">
+      <a href="servicios.html" style="text-decoration: none;">
+  <img src="{% static 'img/tratamientos.jfif' %}" alt="Tratamientos" class="servicio-img servicio-img-lista">
+        <p class="mt-2 text-danger fw-bold">Tratamientos</p>
+      </a>
+    </div>  
+
+  </div>
+
+  <!-- Botón de ver más -->
+  <div class="mt-4">
+    <a href="servicios.html" class="btn btn-danger rounded-pill px-4 py-2">VER MAS SERVICIOS</a>
+  </div>
+</section>
+{% endblock %}
