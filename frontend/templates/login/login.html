@@ -19,17 +19,15 @@
                 <input type="password" name="password" placeholder="Contraseña" required>
             </div>
             <button type="submit" class="login-btn">Entrar</button>
-            {% if form.errors %}
-            <div class="login-alert">
-                Usuario o contraseña incorrectos.
-            </div>
-            {% endif %}
+            
         </form>
-            <p>¿No tienes una cuenta? <a href="{% url 'clientes:registro' %}" class="login-link">Regístrate</a></p>
+        <p>¿No tienes una cuenta? <a href="{% url 'clientes:registro' %}" class="login-link">Regístrate</a></p>
     </section>
 </main>
 
 <style>
-    footer { display: none !important; }
+    footer {
+        display: none !important;
+    }
 </style>
 {% endblock %}
