@@ -1,0 +1,33 @@
+{% extends 'home.html' %}
+{% block title %}Reserva{% endblock %}
+{% block content %}
+{% load static %}
+
+<main class="login-main">
+    <section class="login-card">
+        <header>
+            <h1>Iniciar sesión</h1>
+        </header>
+        <form method="post" autocomplete="off">
+            {% csrf_token %}
+            <div class="login-input-group">
+                <span class="login-icon"><i class="bi bi-person"></i></span>
+                <input type="text" name="username" placeholder="Usuario" required autofocus>
+            </div>
+            <div class="login-input-group">
+                <span class="login-icon"><i class="bi bi-lock"></i></span>
+                <input type="password" name="password" placeholder="Contraseña" required>
+            </div>
+            <button type="submit" class="login-btn">Entrar</button>
+            
+        </form>
+        <p>¿No tienes una cuenta? <a href="{% url 'clientes:registro' %}" class="login-link">Regístrate</a></p>
+    </section>
+</main>
+
+<style>
+    footer {
+        display: none !important;
+    }
+</style>
+{% endblock %}

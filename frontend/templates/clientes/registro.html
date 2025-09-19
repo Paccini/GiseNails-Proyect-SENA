@@ -1,0 +1,39 @@
+{% extends 'home.html' %}
+{% block title %}Registro{% endblock %}
+{% block content %}
+{% load static %}
+
+<main class="login-main">
+    <section class="login-card">
+        <header>
+            <h1>Registro</h1>
+        </header>
+        <form method="post" autocomplete="off">
+            {% csrf_token %}
+            <div class="login-input-group">
+                <span class="login-icon"><i class="bi bi-person"></i></span>
+                {{ form.nombre }}
+            </div>
+            <div class="login-input-group">
+                <span class="login-icon"><i class="bi bi-envelope"></i></span>
+                {{ form.correo }}
+            </div>
+            <div class="login-input-group">
+                <span class="login-icon"><i class="bi bi-telephone"></i></span>
+                {{ form.telefono }}
+            </div>
+            <div class="login-input-group">
+                <span class="login-icon"><i class="bi bi-lock"></i></span>
+                {{ form.password }}
+            </div>
+            <button type="submit" class="login-btn">Registrarme</button>
+            
+        
+        </form>
+        <p>¿Ya tienes una cuenta? <a href="{% url 'login:login' %}" class="login-link">Inicia sesión</a></p>
+    </section>
+</main>
+<style>
+    footer { display: none !important; }
+</style>
+{% endblock %}

@@ -70,7 +70,11 @@
     --gray-light: #F5F5F5;
 }
 
+}
 
+/* =========================
+   2. ESTILOS GENERALES
+   ========================= */
 html,
 body {
     height: 100%;
@@ -103,7 +107,31 @@ a {
 .navbar {
     background: linear-gradient(90deg, var(--pink-medium) 0%, var(--pink-dark) 100%) !important;
     box-shadow: 0 4px 16px rgba(111, 85, 112, 0.15);
+
     border-bottom: 2px solid #fff;
+
+}
+
+/* Imágenes de servicios con tamaño uniforme */
+.servicio-img {
+    width: 300px;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* Solo para las imágenes de la sección 'Conoce nuestros servicios' */
+.servicio-img-lista {
+    margin: 0px;
+}
+
+/* Espaciado uniforme entre imágenes de servicios */
+.servicios-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 48px 32px;
+    /* vertical horizontal */
+    justify-content: center;
 }
 
 .navbar-nav .nav-link {
@@ -196,8 +224,79 @@ a {
     width: 24px;
     height: 22px;
     background-color: #e91e63;
+.contact-link {
+    color: var(--azul-medio);
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.contact-link:hover {
+    color: var(--rosado-fuerte);
+    text-decoration: underline;
+}
+
+.btn-reserva {
+    background: var(--rosado-fuerte);
+    color: var(--blanco);
+    border-radius: 25px;
+    padding: 10px 28px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    box-shadow: 0 2px 8px rgba(236, 64, 122, 0.12);
+    border: none;
+    transition: background 0.2s, transform 0.2s;
+    margin-right: 10px;
+}
+
+.btn-reserva:hover {
+    background: var(--rosado-oscuro);
+    color: var(--blanco);
+    transform: scale(1.05);
+}
+
+.btn-comollegar {
+    background: var(--azul-medio);
+    color: var(--blanco);
+    border-radius: 25px;
+    padding: 10px 28px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    box-shadow: 0 2px 8px rgba(33, 150, 243, 0.12);
+    border: none;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.btn-comollegar:hover {
+    background: var(--azul-oscuro);
+    color: var(--blanco);
+    transform: scale(1.05);
+}
+
+/* =========================
+   6. VALORES CORPORATIVOS PAGINA DE NOSOTROS
+   ========================= */
+.val-corpo {
+    padding: 0 100px;
+    background-color: #F0F8FF;
+    width: 100%;
+}
+
+.val-corpo h2 {
+    color: var(--rosa-principal);
+    text-align: center;
+    padding: 20px;
+    font-family: 'Great Vibes', cursive;
+}
+
+/* =========================
+   7. CÍRCULOS DECORATIVOS PAGINA DE NOSOTROS
+   ========================= */
+.circulo {
+    width: 25px;
+    height: 25px;
     border-radius: 50%;
 }
+
 
 .corazon::before {
     top: -15px;
@@ -217,6 +316,10 @@ a {
     font-weight: bold;
     font-size: 13px;
     z-index: 2;
+
+.circulo>h6 {
+    text-align: center;
+    color: var(--letra-pie);
 }
 
 /* Footer */
@@ -241,6 +344,7 @@ a {
     font-size: 20px;
     text-decoration: none;
 }
+
 
 .pierna>div>ul>li>a>i {
     color: var(--pink-dark);
@@ -305,4 +409,463 @@ a {
     width: 100px;
     border-radius: 22px;
     box-shadow: 4px 3px 4px var(--letra-pie);
+
+}
+
+/* =========================
+   9. RESERVA2 - PERSONALIZADOS
+   ========================= */
+.fondo-blanco {
+    background: #a0a0a08e;
+    padding: 40px 0;
+}
+
+@media (max-width: 991px) {
+    .fondo-blanco {
+        padding: 20px 0;
+    }
+}
+
+.reserva-contenedor {
+    background: var(--blanco);
+    border-radius: 32px;
+    box-shadow: 0 8px 32px rgba(230, 0, 126, 0.08), 0 1.5px 8px #e6007e22;
+    padding: 40px 48px;
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+@media (max-width: 991px) {
+    .reserva-contenedor {
+        padding: 20px 10px;
+    }
+}
+
+.panel-izquierdo {
+    border-right: 2px solid #f5e3eb;
+    padding-right: 32px;
+}
+
+@media (max-width: 991px) {
+    .panel-izquierdo {
+        border-right: none;
+        padding-right: 0;
+        border-bottom: 2px solid #f5e3eb;
+        margin-bottom: 30px;
+    }
+}
+
+.btn-regresar,
+.btn-continuar {
+    border-radius: 40px;
+    font-size: 1.2em;
+    padding: 16px 60px;
+    font-weight: bold;
+    box-shadow: 0 4px 16px #e6007e22;
+    border: 2px solid var(--rosa-principal);
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.btn-regresar {
+    color: #7d6fa7;
+    border-color: #7d6fa7;
+    background: var(--blanco);
+}
+
+.btn-regresar:hover {
+    background: #edeaff;
+    color: var(--rosa-principal);
+    border-color: var(--rosa-principal);
+}
+
+.btn-continuar {
+    background: var(--rosa-principal);
+    color: var(--blanco);
+    border: none;
+}
+
+.btn-continuar:hover {
+    background: var(--blanco);
+    color: var(--rosa-principal);
+    border: 2px solid var(--rosa-principal);
+}
+
+.sucursal {
+    color: var(--rosa-principal);
+    font-weight: bold;
+    font-size: 2em;
+    letter-spacing: 1px;
+    margin-bottom: 0;
+}
+
+.pregunta-fecha {
+    font-family: 'Comic Sans MS', cursive;
+    font-weight: bold;
+    font-size: 1.5em;
+    color: #222;
+    margin-bottom: 24px;
+}
+
+.btn-fecha {
+    box-shadow: 0 4px 16px #e6007e22;
+    border-radius: 20px;
+    font-size: 1.1em;
+    font-weight: bold;
+    padding: 18px 32px;
+    margin: 0 10px;
+    border: none;
+    color: var(--rosa-principal);
+    background: var(--blanco);
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-fecha.selected,
+.btn-fecha:focus,
+.btn-fecha:hover {
+    background: var(--rosa-principal);
+    color: var(--blanco);
+    box-shadow: 0 8px 32px #e6007e33;
+}
+
+.icono-hoy {
+    color: #7ec6e3;
+    font-size: 1.3em;
+}
+
+.icono-manana,
+.icono-otra {
+    color: var(--blanco);
+    font-size: 1.3em;
+}
+
+.label-fecha {
+    color: var(--rosa-principal);
+    font-weight: bold;
+    margin-left: 10px;
+    font-size: 1.1em;
+}
+
+.fecha-input {
+    width: 180px;
+    border-radius: 20px;
+    border: 2px solid var(--rosa-principal);
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-left: 10px;
+    background: var(--blanco);
+    color: var(--rosa-principal);
+}
+
+.horarios-btn {
+    margin: 2px;
+    border-radius: 20px;
+    border: 1.5px solid var(--rosa-principal);
+    color: var(--rosa-principal);
+    background: var(--blanco);
+    padding: 8px 22px;
+    font-weight: bold;
+    font-size: 1.1em;
+    transition: background 0.2s, color 0.2s;
+    margin-top: 10px;
+}
+
+.horarios-btn.selected,
+.horarios-btn:hover {
+    background: var(--rosa-principal);
+    color: var(--blanco);
+}
+
+/* =========================
+   10. FORMULARIO DE PERSONA
+   ========================= */
+.instruccion-persona {
+    font-size: 1.2em;
+    margin-top: 30px;
+    color: #444;
+}
+
+.persona-label {
+    color: var(--rosa-principal);
+    font-size: 2em;
+    font-family: 'Comic Sans MS', cursive;
+    font-weight: bold;
+}
+
+.linea-persona {
+    border-bottom: 3px solid var(--rosa-principal);
+    width: 180px;
+    margin: auto;
+    margin-top: 5px;
+}
+
+.label-campo {
+    font-family: 'Comic Sans MS', cursive;
+    font-size: 1.2em;
+    color: var(--rosa-principal);
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.campo-persona {
+    font-size: 1.2em;
+    border-radius: 18px;
+    border: 2px solid var(--rosa-principal);
+    background: var(--blanco);
+    color: #222;
+    padding: 12px 18px;
+    margin-bottom: 8px;
+}
+
+.input-group-text {
+    background: var(--blanco);
+    border: 2px solid var(--rosa-principal);
+    border-left: none;
+    border-radius: 0 18px 18px 0;
+}
+
+.icono-input {
+    color: var(--rosa-principal);
+    font-size: 1.3em;
+}
+
+/* =========================
+   11. ALERTA MODAL
+   ========================= */
+.alerta-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.alerta-box {
+    background: var(--blanco);
+    border-radius: 20px;
+    padding: 30px 40px;
+    text-align: center;
+    max-width: 350px;
+    box-shadow: 0 0 20px #ed3e88aa;
+}
+
+.alerta-box .icono {
+    font-size: 3em;
+    color: #ed3e88;
+    margin-bottom: 10px;
+}
+
+.alerta-box button {
+    background: #8d8edb;
+    color: var(--blanco);
+    border: none;
+    border-radius: 20px;
+    padding: 8px 30px;
+    font-size: 1.1em;
+    margin-top: 15px;
+}
+
+/* =========================
+   12. MENÚ DE SERVICIOS
+   ========================= */
+.servicios-menu {
+    background: var(--rosado-claro);
+    border-radius: 32px;
+    box-shadow: 0 4px 16px #e6007e22;
+    padding: 32px 24px;
+    margin-top: 40px;
+    text-align: center;
+}
+
+.servicios-titulo {
+    font-family: 'Pacifico', cursive;
+    color: var(--rosado-fuerte);
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 24px;
+}
+
+.servicio-card {
+    background: var(--blanco);
+    border-radius: 24px;
+    box-shadow: 0 2px 8px #e6007e22;
+    padding: 24px 0 16px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: box-shadow 0.2s, transform 0.2s;
+    cursor: pointer;
+}
+
+.servicio-card:hover {
+    box-shadow: 0 8px 24px #e6007e44;
+    transform: scale(1.05);
+    background: var(--rosado-pastel);
+}
+
+.servicio-icon {
+    font-size: 2.5rem;
+    color: var(--rosado-fuerte);
+    margin-bottom: 12px;
+}
+
+/* =========================
+   13. BOTÓN CONFIRMAR CITA
+   ========================= */
+.btn-confirmar-cita {
+    background: var(--rosado-fuerte);
+    color: var(--blanco);
+    border-radius: 30px;
+    padding: 14px 40px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    box-shadow: 0 4px 16px #e6007e22;
+    border: none;
+    transition: background 0.2s, transform 0.2s;
+    margin-top: 10px;
+}
+
+.btn-confirmar-cita:hover {
+    background: var(--rosado-oscuro);
+    color: var(--blanco);
+    transform: scale(1.05);
+}
+
+/* =========================
+   LOGIN - ESTILO PERSONALIZADO
+   ========================= */
+.login-main {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--rosado-claro);
+}
+
+.login-card {
+    background: var(--blanco);
+    border-radius: 18px;
+    box-shadow: 0 8px 32px 0 rgba(230, 0, 126, 0.10);
+    padding: 40px 32px 32px 32px;
+    width: 100%;
+    max-width: 370px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-logo {
+    width: 70px;
+    margin-bottom: 10px;
+}
+
+.login-card h1 {
+    color: var(--rosa-principal);
+    font-size: 2rem;
+    margin-bottom: 24px;
+    font-family: 'Pacifico', cursive, sans-serif;
+    text-align: center;
+}
+
+.login-input-group {
+    display: flex;
+    align-items: center;
+    background: var(--rosado-muy-claro);
+    border: 1.5px solid var(--rosado-pastel);
+    border-radius: 10px;
+    margin-bottom: 18px;
+    padding: 0 12px;
+}
+
+.login-icon {
+    color: var(--rosa-principal);
+    font-size: 1.3em;
+    margin-right: 8px;
+}
+
+.login-input-group input {
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 1.1em;
+    padding: 12px 0;
+    width: 100%;
+    color: var(--negro-suave);
+}
+
+.login-btn {
+    width: 100%;
+    background: var(--rosa-principal);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 0;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+    box-shadow: 0 2px 8px rgba(230, 0, 126, 0.10);
+}
+
+.login-btn:hover {
+    background: var(--rosado-oscuro);
+}
+
+.login-alert {
+    background: #ef4444;
+    color: #fff;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    margin-top: 16px;
+    font-size: 1em;
+}
+
+.login-link {
+    color: var(--rosa-principal);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.login-link:hover {
+    text-decoration: underline;
+}
+
+.login-card footer {
+    margin-top: 18px;
+    text-align: center;
+    font-size: 0.97em;
+    color: #555;
+}
+
+@media (max-width: 600px) {
+    .login-card {
+        padding: 20px 6px 16px 6px;
+        max-width: 98vw;
+        border-radius: 10px;
+    }
+
+    .login-card h1 {
+        font-size: 1.3rem;
+        margin-bottom: 12px;
+    }
+
+    .login-input-group {
+        padding: 0 4px;
+        font-size: 1em;
+    }
+
+    .login-btn {
+        padding: 10px 0;
+        font-size: 1em;
+    }
 }
