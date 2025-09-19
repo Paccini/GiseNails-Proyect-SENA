@@ -5,7 +5,7 @@ app_name = 'clientes'
 
 urlpatterns = [
     path('registro/', views.registro_cliente, name='registro'),
-    # path('panel/', views.panel_cliente, name='panel'),
+    path('panel/', views.panel_cliente, name='panel'),
     # path('agendar/', views.agendar_cita, name='agendar'),
     # path('cancelar/<int:pk>/', views.cancelar_cita, name='cancelar'),
 
