@@ -18,7 +18,7 @@
 <body>
     <header>
         <!-- Barra de navegación principal -->
-        <nav class="navbar navbar-expand-lg shadow-sm sticky-top">
+        <nav class="navbar navbar-expand-lg shadow-sm">
             <div class="container-fluid">
                 <a class="navbar-brand d-flex align-items-center" href="{% url 'inicio' %}">
                     <img src="{% static 'img/Logo gisel-nails.png' %}" alt="Logo" width="50" height="50" class="me-2">
@@ -48,7 +48,7 @@
                             <a class="nav-link text-white fw-bold" href="#"><i class="bi bi-star"></i> Servicios</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white fw-bold" href="#"><i class="bi bi-person-circle"></i> Inicia sesión</a>
+                            <a class="nav-link text-white fw-bold" href="{% url 'login:login' %}"><i class="bi bi-person-circle"></i> Inicia sesión</a>
                         </li>
                     </ul>
                 </div>
