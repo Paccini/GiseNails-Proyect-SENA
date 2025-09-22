@@ -18,6 +18,10 @@
             <div class="card-body">
                 <h3 class="card-title fw-bold" style="color:#ff4081;">{{ servicio.nombre }}</h3>
                 <div class="badge bg-light text-dark fs-6 mb-2">${{ servicio.precio }}</div>
+                <p class="card-text">{{ servicio.descripcion }}</p>
+                {% if servicio.recomendaciones %}
+                <div class="text-secondary mb-2">Recomendaciones: {{ servicio.recomendaciones }}</div>
+                {% endif %}
             </div>
         </div>
     </div>
