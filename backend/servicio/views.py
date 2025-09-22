@@ -14,8 +14,6 @@ def detalle_servicio(request, pk):
 	servicio = get_object_or_404(Servicio, pk=pk)
 	return render(request, 'servicios/detalle_servicio.html', {'servicio': servicio})
 
-@require_GET
-def inicio(request):
-	return render(request, 'servicios/inicio.html')
+
 
 # Create your views here.
