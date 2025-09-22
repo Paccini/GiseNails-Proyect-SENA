@@ -28,6 +28,7 @@ urlpatterns = [
     path('', include('inicio.urls')),
     path('nosotros/', include('nosotros.urls')),
     path('reserva/', include(('reserva.urls', 'reserva'), namespace='reserva')),
+    path('servicio/', include(('servicio.urls', 'servicio'), namespace='servicio')),
     path('login/', include('login.urls')),
     path('clientes/', include(('clientes.urls', 'clientes'), namespace='clientes')),
     path('paneladmin/', views.panel_admin, name='paneladmin'),

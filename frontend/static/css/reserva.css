@@ -391,3 +391,14 @@
     color: var(--blanco);
     transform: scale(1.05);
 }
+
+h1, h2, h3, h4, h5, h6, .servicios-titulo, .gestoras-titulo, .pregunta-fecha, .sucursal, .persona-label, .instruccion-persona, .label-campo, .alerta-box h4 {
+    font-family: 'Pacifico', cursive, 'Century Gothic', 'Lato', Arial, sans-serif !important;
+    font-weight: bold;
+    color: #E6007E;
+    letter-spacing: 1px;
+}
+
+body, p, span, li, a, input, label, button, .campo-persona, .gestora-nombre, .gestora-rol {
+    font-family: 'Century Gothic', 'Lato', Arial, sans-serif !important;
+}
