@@ -1,0 +1,27 @@
+:root {
+    --rosa-principal: #E6007E;
+    --rosado-claro: #FAD2E1;
+    --rosado-muy-claro: #FFE4EC;
+    --rosado-pastel: #F7A8B8;
+    --rosado-fuerte: #EC407A;
+    --rosado-oscuro: #C2185B;
+    --morado-amethyst: #9966CC;
+    --azul-medio: #2196F3;
+    --azul-fuerte: #1565C0;
+    --azul-oscuro: #0D47A1;
+    --blanco: #FFFFFF;
+    --negro-suave: #333333;
+    --letra-pie: #FFFFF7;
+    --gris-claro: #F5F5F5;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: "Century Gothic", 'Lato', sans-serif;
+}
+
+a {
+    text-decoration: none;
+}
