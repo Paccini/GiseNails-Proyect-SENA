@@ -18,6 +18,18 @@
     --letra-pie: #FFFFF7;
     --gris-claro: #F5F5F5;
 }
+h1, h2, h3, h4 {
+  font-family: 'Tinos', serif;
+  font-weight: 700; /* Negrita para resaltar */
+  color: #E6A6B0;   /* Un rosado empolvado de la paleta */
+}
+body, p, li, a {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    color: #444;  /* gris oscuro para buena lectura */
+    line-height: 1.6;
+}
+
 
 /* =========================
    2. ESTILOS GENERALES
