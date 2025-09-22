@@ -782,25 +782,31 @@ a {
     font-size: 0.97em;
     color: #555;
 }
-@media (max-width: 600px) {
-    .login-card {
-        padding: 20px 6px 16px 6px;
-        max-width: 98vw;
-        border-radius: 10px;
-    }
 
-    .login-card h1 {
-        font-size: 1.3rem;
-        margin-bottom: 12px;
-    }
+/* Redes sociales en una sola fila y menos separación */
+.social-icons-list {
+    display: flex !important;
+    flex-direction: row;
+    justify-content: center;
+    gap: 16px;
+    padding-left: 0;
+    margin-top: 18px;
+}
 
-    .login-input-group {
-        padding: 0 4px;
-        font-size: 1em;
-    }
+.social-icons-list .list-inline-item {
+    margin: 0;
+}
 
-    .login-btn {
-        padding: 10px 0;
-        font-size: 1em;
-    }
+.social-icon-link i {
+    border-radius: 10px;
+    text-align: center;
+    padding: 10px 15px;
+    font-size: 24px;
+    border: solid 1px var(--rosado-oscuro);
+    transition: background 0.2s, color 0.2s;
+}
+
+.social-icon-link i:hover {
+    color: var(--letra-pie);
+    background-color: var(--rosado-oscuro);
 }
