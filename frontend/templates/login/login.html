@@ -2,7 +2,8 @@
 {% block title %}Reserva{% endblock %}
 {% block content %}
 {% load static %}
-
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
 <main class="login-main">
     <section class="login-card">
         <header>
@@ -23,7 +24,7 @@
             <div class="login-alert">
                 {{ error }}
             </div>
-            {% endif %}
+            {% endif %}
         </form>
         <p>¿No tienes una cuenta? <a href="{% url 'clientes:registro' %}" class="login-link">Regístrate</a></p>
     </section>

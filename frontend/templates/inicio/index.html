@@ -3,6 +3,9 @@
 {% load static %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/inicio.css' %}">
+
+
 <div id="carouselExample" class="carousel slide">
   <div class="carousel-inner">
     <div class="carousel-item active">
@@ -83,7 +86,7 @@
     </div>
 
      <div class="text-center mt-4">
-      <a href="#" class="btn btn-danger rounded-pill px-5 py-2 fs-5">RESERVA AHORA</a>
+      <a href="{% url 'reserva:reserva' %}" class="btn btn-danger rounded-pill px-5 py-2 fs-5">RESERVA AHORA</a>
     </div>
 </div>
 
