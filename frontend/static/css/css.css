@@ -1,13 +1,5 @@
-/* ==========================================================
-   GISE NAILS - CSS LIMPIO Y DOCUMENTADO
-   Paleta, variables, estilos generales, navbar, reserva, footer, etc.
-   ========================================================== */
-
-/* =========================
-   1. VARIABLES DE COLOR
-   ========================= */
 :root {
-    /* Colores principales */
+    /* Paleta principal */
     --rosa-principal: #E6007E;
     --rosado-claro: #FAD2E1;
     --rosado-muy-claro: #FFE4EC;
@@ -15,20 +7,16 @@
     --rosado-fuerte: #EC407A;
     --rosado-oscuro: #C2185B;
 
-    --morado-principal: #9C27B0;
-    --morado-medio: #BA68C8;
-    --morado-oscuro: #6A1B9A;
     --morado-amethyst: #9966CC;
 
     --azul-medio: #2196F3;
     --azul-fuerte: #1565C0;
     --azul-oscuro: #0D47A1;
 
-    --blanco: #FFF;
-    --negro-suave: #333;
-    --gris-claro: #F5F5F5;
-
+    --blanco: #FFFFFF;
+    --negro-suave: #333333;
     --letra-pie: #FFFFF7;
+    --gris-claro: #F5F5F5;
 }
 
 /* =========================
@@ -46,7 +34,6 @@ body {
     display: flex;
     flex-direction: column;
     font-family: "Century Gothic", 'Lato', sans-serif;
-    background: var(--blanco);
 }
 
 .main-content {
@@ -57,45 +44,17 @@ a {
     text-decoration: none;
 }
 
-/* =========================
-   3. CONTAINERS
-   ========================= */
 .container-fluid {
     padding-left: 0 !important;
     padding-right: 0 !important;
 }
 
-/* =========================
-   4. NAVBAR
-   ========================= */
+/* Navbar */
 .navbar {
     background: linear-gradient(90deg, var(--rosado-pastel) 0%, var(--rosado-oscuro) 100%) !important;
     box-shadow: 0 4px 16px rgba(111, 85, 112, 0.15);
     border-bottom: 2px solid var(--blanco);
 }
-
-/* Imágenes de servicios con tamaño uniforme */
-.servicio-img {
-    width: 300px;
-    height: 220px;
-    object-fit: cover;
-    border-radius: 10px;
-}
-
-/* Solo para las imágenes de la sección 'Conoce nuestros servicios' */
-.servicio-img-lista {
-    margin: 0px;
-}
-
-/* Espaciado uniforme entre imágenes de servicios */
-.servicios-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 48px 32px;
-    /* vertical horizontal */
-    justify-content: center;
-}
-
 
 .navbar-nav .nav-link {
     border-radius: 20px;
@@ -109,6 +68,11 @@ a {
     background: var(--blanco);
     color: var(--rosa-principal) !important;
     transform: scale(1.08);
+    text-decoration: none;
+}
+
+.navbar-nav .nav-item:not(:last-child) {
+    border-right: 1px solid #fff2;
 }
 
 .navbar-brand img {
@@ -119,34 +83,84 @@ a {
     transform: rotate(-10deg) scale(1.1);
 }
 
-/* =========================
-   5. PANEL DE INFORMACIÓN DE RESERVA
-   ========================= */
-.info-reserva {
-    background: var(--rosado-muy-claro);
+/* Imágenes de servicios con tamaño uniforme */
+.servicio-img {
+    width: 300px;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.servicio-img-lista {
+    margin: 0px;
+}
+
+.servicios-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 48px 32px;
+    justify-content: center;
+}
+
+/* Info Reserva */
+.info {
+    background-color: var(--rosado-muy-claro);
+    padding: 20px;
     border-radius: 40px;
-    box-shadow: 0 8px 24px rgba(111, 85, 112, 0.10);
-    padding: 32px 24px;
-    margin: 32px 0;
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.233);
+    color: var(--azul-medio);
 }
 
-.info-panel {
-    color: var(--morado-oscuro);
-    padding: 16px 24px;
-}
-
-.titulo-reserva {
+.info h2 {
     font-family: 'Pacifico', cursive;
     color: var(--morado-amethyst);
-    font-size: 2.2rem;
-    margin-bottom: 8px;
 }
 
-.direccion {
-    font-size: 1.1rem;
-    color: var(--morado-medio);
-    margin-bottom: 12px;
-    font-weight: 500;
+/* valor corporativo */
+.val-corpo {
+    background-color: #eaf7fd96;
+    padding: 40px 80px;
+    width: 100%;
+}
+
+.val-corpo h2 {
+    color: var(--rosa-principal);
+    text-align: center;
+    font-family: 'Great Vibes', cursive;
+    font-size: 3rem;
+    margin-bottom: 30px;
+}
+
+.rosa {
+    color: var(--rosa-principal);
+}
+
+.val-corpo p {
+    text-align: justify;
+    font-size: 15px;
+    margin: 0;
+    padding-left: 10px;
+}
+
+.corazon {
+    position: relative;
+    width: 24px;
+    height: 22px;
+    background-color: var(--rosa-principal);
+    transform: rotate(-45deg);
+    margin-right: 12px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.corazon::after {
+    content: "";
+    position: absolute;
+    width: 24px;
+    height: 22px;
+    background-color: var(--rosa-principal);
 }
 
 .contact-link {
@@ -220,7 +234,25 @@ a {
     width: 25px;
     height: 25px;
     border-radius: 50%;
-    background-color: var(--rosa-principal);
+}
+
+.corazon::before {
+    top: -15px;
+    left: 0;
+}
+
+.corazon::after {
+    left: 15px;
+    top: 0;
+}
+
+.corazon span {
+    position: relative;
+    transform: rotate(45deg);
+    color: #fff;
+    font-weight: bold;
+    font-size: 13px;
+    z-index: 2;
 }
 
 .circulo>h6 {
@@ -228,43 +260,55 @@ a {
     color: var(--letra-pie);
 }
 
-/* =========================
-   8. FOOTER
-   ========================= */
+/* Footer */
 .pierna {
     text-align: center;
 }
 
 .pierna>div>h5 {
     color: var(--rosado-oscuro);
+    text-align: center;
     font-weight: bold;
 }
 
 .pierna>div>ul>li>a {
     color: #6F5570;
     font-size: 20px;
+    text-decoration: none;
 }
 
-.pierna>div>ul>li>a:hover,
+.pierna>div>ul>li>a:hover {
+    color: var(--rosado-oscuro);
+    font-size: 20px;
+    text-decoration: none;
+}
+
 .pierna>div>ul>li>a>i {
     color: var(--rosado-oscuro);
+    font-size: 20px;
 }
 
 .icono_social>ul {
     position: relative;
     width: 300px;
     height: 200px;
-    margin: 0 auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .icono_social>ul>li>a>i {
     border-radius: 10px;
-    padding: 10px 15px;
-    margin: 12px;
+    text-align: center;
+    padding: 10px 15px 10px 15px;
+    margin: 12px 12px;
     border: solid 1px var(--rosado-oscuro);
 }
 
 .icono_social>ul>li a i:hover {
+    border-radius: 10px;
+    text-align: center;
+    padding: 10px 15px 10px 15px;
+    margin: 12px 12px;
     color: var(--letra-pie);
     background-color: var(--rosado-oscuro);
 }
@@ -738,7 +782,6 @@ a {
     font-size: 0.97em;
     color: #555;
 }
-
 @media (max-width: 600px) {
     .login-card {
         padding: 20px 6px 16px 6px;

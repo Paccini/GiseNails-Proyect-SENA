@@ -30,6 +30,7 @@ urlpatterns = [
     path('reserva/', include(('reserva.urls', 'reserva'), namespace='reserva')),
     path('login/', include('login.urls')),
     path('clientes/', include(('clientes.urls', 'clientes'), namespace='clientes')),
+    path('paneladmin/', views.panel_admin, name='paneladmin'),
     
 ]
 

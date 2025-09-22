@@ -1,0 +1,85 @@
+/* =========================
+   NOSOTROS - nosotros.css
+   ========================= */
+
+/* Valores corporativos */
+.val-corpo {
+    background-color: #eaf7fd96;
+    padding: 40px 80px;
+    width: 100%;
+}
+
+.val-corpo h2 {
+    color: var(--rosa-principal);
+    text-align: center;
+    font-family: 'Great Vibes', cursive;
+    font-size: 3rem;
+    margin-bottom: 30px;
+    padding: 20px;
+}
+
+.rosa {
+    color: var(--rosa-principal);
+}
+
+.val-corpo p {
+    text-align: justify;
+    font-size: 15px;
+    margin: 0;
+    padding-left: 10px;
+}
+
+/* Círculos decorativos */
+.circulo {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+}
+
+.circulo > h6 {
+    text-align: center;
+    color: var(--letra-pie);
+}
+
+/* Corazón decorativo */
+.corazon {
+    position: relative;
+    width: 24px;
+    height: 22px;
+    background-color: var(--rosa-principal);
+    transform: rotate(-45deg);
+    margin-right: 12px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.corazon::after {
+    content: "";
+    position: absolute;
+    width: 24px;
+    height: 22px;
+    background-color: var(--rosa-principal);
+    left: 15px;
+    top: 0;
+}
+
+.corazon::before {
+    content: "";
+    position: absolute;
+    width: 24px;
+    height: 22px;
+    background-color: var(--rosa-principal);
+    top: -15px;
+    left: 0;
+}
+
+.corazon span {
+    position: relative;
+    transform: rotate(45deg);
+    color: #fff;
+    font-weight: bold;
+    font-size: 13px;
+    z-index: 2;
+}

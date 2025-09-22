@@ -1,0 +1,32 @@
+.pierna {
+    text-align: center;
+}
+
+.pierna>div>h5 {
+    color: var(--rosado-oscuro);
+    text-align: center;
+    font-weight: bold;
+}
+
+.pierna>div>ul>li>a {
+    color: #6F5570;
+    font-size: 20px;
+    text-decoration: none;
+}
+
+.pierna>div>ul>li>a:hover {
+    color: var(--rosado-oscuro);
+    font-size: 20px;
+    text-decoration: none;
+}
+
+.pie>.pie-2 {
+    color: var(--letra-pie);
+    background-color: var(--rosado-fuerte);
+}
+
+.pie>.pie-2 img {
+    width: 100px;
+    border-radius: 22px;
+    box-shadow: 4px 3px 4px var(--letra-pie);
+}

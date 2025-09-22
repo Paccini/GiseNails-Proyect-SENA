@@ -1,0 +1,111 @@
+/* =========================
+   INICIO - home/index.css
+   ========================= */
+
+/* Banner principal */
+.banner-principal {
+    background: linear-gradient(90deg, var(--rosado-pastel) 0%, var(--rosado-oscuro) 100%);
+    color: var(--blanco);
+    padding: 60px 0 40px 0;
+    text-align: center;
+    border-radius: 0 0 40px 40px;
+    box-shadow: 0 8px 32px rgba(230, 0, 126, 0.10);
+}
+
+.banner-principal h1 {
+    font-family: 'Pacifico', cursive;
+    font-size: 3rem;
+    margin-bottom: 16px;
+    color: var(--rosa-principal);
+}
+
+.banner-principal p {
+    font-size: 1.3rem;
+    margin-bottom: 24px;
+    color: var(--blanco);
+}
+
+.banner-btn {
+    background: var(--rosa-principal);
+    color: var(--blanco);
+    border: none;
+    border-radius: 25px;
+    padding: 12px 36px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(236, 64, 122, 0.12);
+    transition: background 0.2s, transform 0.2s;
+}
+
+.banner-btn:hover {
+    background: var(--rosado-oscuro);
+    transform: scale(1.05);
+}
+
+/* Carrusel de imágenes */
+.carousel-inner img {
+    object-fit: cover;
+    border-radius: 18px;
+}
+
+/* Iconos y textos destacados */
+.rounded-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 3px solid var(--rosado-pastel);
+}
+
+.fw-bold {
+    font-weight: bold !important;
+}
+
+/* Sección de servicios destacados */
+.servicios-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 48px 32px;
+    justify-content: center;
+}
+
+.servicio-img {
+    width: 300px;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.servicio-img-lista {
+    margin: 0px;
+}
+
+/* Botón de reserva ahora y ver más servicios */
+.btn-danger.rounded-pill {
+    background: var(--rosado-fuerte);
+    border: none;
+    font-weight: bold;
+    font-size: 1.1rem;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.btn-danger.rounded-pill:hover {
+    background: var(--rosado-oscuro);
+    transform: scale(1.05);
+}
+
+/* Responsive ajustes */
+@media (max-width: 991px) {
+    .banner-principal {
+        padding: 40px 0 24px 0;
+        border-radius: 0 0 20px 20px;
+    }
+    .servicios-row {
+        gap: 16px;
+    }
+    .servicio-img {
+        width: 98vw;
+        max-width: 340px;
+        padding: 18px 8px;
+    }
+}
