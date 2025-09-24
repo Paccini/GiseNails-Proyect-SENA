@@ -29,7 +29,17 @@
     font-size: 20px;
 }
 
+.pierna > .separador{
+    border-left: 2px solid var(--rosado-oscuro);
+    border-right: 2px solid var(--rosado-oscuro);
+}
+
 .icono_social > ul {
+    justify-items: space-between !important;
+    display: flex;
+    padding-left: 0px;
+    padding-top: 30px;
+
     position: relative;
     width: 300px;
     height: 200px;
