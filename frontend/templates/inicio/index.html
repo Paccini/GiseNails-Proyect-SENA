@@ -1,61 +1,59 @@
-
 {% extends 'home.html' %}
 {% load static %}
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/inicio.css' %}">
 
-
-<div id="carouselExample" class="carousel slide">
-  <div class="carousel-inner">
-    <div class="carousel-item active">
-      <img src="{% static 'img\Carrusel.webp' %}" class="d-block w-100" alt="Carrusel" height="500">
+<main>
+  <section>
+    <div id="carouselExample" class="carousel slide">
+      <div class="carousel-inner carousel-img-container">
+        <div class="carousel-item active">
+          <img src="{% static 'img/banner_inicio.png' %}" class="d-block w-100 carousel-img">
+        </div>
+      </div>
     </div>
-  </div>
-</div>
+  </section>
 
-<div class="container-fluid py-5" style="background-color: #ffe6f0;">
+  <section class="container-fluid py-5" style="background-color: #ffe6f0;">
     <div class="row justify-content-around">
-        <div class="col-md-2 text-center">
-            <div class="rounded-circle bg-white shadow-sm mx-auto" style="width: 120px; height: 120px;">
-                <img src="{% static 'img/barra1.png' %}" alt="" style="max-width: 80%; max-height: 80%; margin-top: 10%;">
-            </div>
-            <p class="mt-3 font-family: 'Poppins', sans-serif; ">Profesionales apasionadas por el arte de embellecer tus uñas con precisión y estilo.</p>
+
+      <div class="col-md-2 text-center">
+        <div class="rounded-circle">
+          <img src="{% static 'img/barra1.png' %}" alt="Profesionales">
+        <p class="mt-3">Profesionales apasionadas por el arte de embellecer tus uñas con precisión y estilo.</p>
+      </div>
+      <div class="col-md-2 text-center">
+        <div class="rounded-circle">
+          <img src="{% static 'img/barra.png' %}" alt="Reserva tu cita">
         </div>
-        <div class="col-md-2 text-center">
-            <div class="rounded-circle bg-white shadow-sm mx-auto" style="width: 120px; height: 120px;">
-                <img src="{% static 'img/barra.png' %}" alt="" style="max-width: 80%; max-height: 80%; margin-top: 10%;">
-            </div>
-            <p class="mt-3 font-family: 'Poppins', sans-serif;">Reserva tu cita fácilmente en el horario que más te convenga.</p>
+        <p class="mt-3">Reserva tu cita fácilmente en el horario que más te convenga.</p>
+      </div>
+      <div class="col-md-2 text-center">
+        <div class="rounded-circle">
+          <img src="{% static 'img/barra3.png' %}" alt="Servicio cálido">
         </div>
-        <div class="col-md-2 text-center">
-            <div class="rounded-circle bg-white shadow-sm mx-auto" style="width: 120px; height: 120px;">
-                <img src="{% static 'img/barra3.png' %}" alt="" style="max-width: 80%; max-height: 80%; margin-top: 10%;">
-            </div>
-            <p class="mt-3 font-family: 'Poppins', sans-serif;">Un servicio cálido y personalizado para ti</p>
+        <p class="mt-3">Un servicio cálido y personalizado para ti</p>
+      </div>
+      <div class="col-md-2 text-center">
+        <div class="rounded-circle">
+          <img src="{% static 'img/barra4.png' %}" alt="Libres de tóxicos">
         </div>
-        <div class="col-md-2 text-center">
-            <div class="rounded-circle bg-white shadow-sm mx-auto" style="width: 120px; height: 120px;">
-                <img src="{% static 'img/barra4.png' %}" alt="" style="max-width: 80%; max-height: 80%; margin-top: 10%;">
-            </div>
-            <p class="mt-3 font-family: 'Poppins', sans-serif;">Libres de tóxicos y manejando estándares de calidad premium</p>
+        <p class="mt-3">Libres de tóxicos y manejando estándares de calidad premium</p>
+      </div>
+      <div class="col-md-2 text-center">
+        <div class="rounded-circle">
+          <img src="{% static 'img/barra5.png' %}" alt="Protocolos de limpieza">
         </div>
-        <div class="col-md-2 text-center">
-            <div class="rounded-circle bg-white shadow-sm mx-auto" style="width: 120px; height: 120px;">
-                <img src="{% static 'img/barra5.png' %}" alt="" style="max-width: 80%; max-height: 80%; margin-top: 10%;">
-            </div>
-            <p class="mt-3 font-family: 'Poppins', sans-serif;">Cumplimos con estrictos protocolos de limpieza y esterilización</p>
-        </div>
+        <p class="mt-3">Cumplimos con estrictos protocolos de limpieza y esterilización</p>
+      </div>
     </div>
-</div> 
+  </section>
 
-<br>
-
-<div class="container my-5">
+  <section class="container my-5">
     <h2 class="text-center mb-4 text-danger" style="font-family: 'Tinos', serif">
       ¡TUS UÑAS SIEMPRE A LA MODA CON NUESTROS EFECTOS!
     </h2>
-  
     <div id="carouselUñas" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
         <div class="carousel-item active">
@@ -67,9 +65,11 @@
         </div>
         <div class="carousel-item">
           <div class="d-flex justify-content-center gap-4 flex-wrap">
+
             <img src="{% static 'img/uñas tradicionales.jpg' %}" class="servicio-img">
             <img src="{% static 'img/uñas dipping.jpg' %}" class="servicio-img">
             <img src="{% static 'img/pies semipermanentes.jpg' %}" class="servicio-img">
+
           </div>
         </div>
       </div>
@@ -84,9 +84,60 @@
         <button type="button" data-bs-target="#carouselUñas" data-bs-slide-to="1" class="bg-danger"></button>
       </div>
     </div>
-
-     <div class="text-center mt-4">
+    <div class="text-center mt-4">
       <a href="{% url 'reserva:reserva' %}" class="btn btn-danger rounded-pill px-5 py-2 fs-5">RESERVA AHORA</a>
     </div>
-</div>
+  </section>
+
+  <hr>
+
+  <section class="container my-5 text-center">
+    <h2 class="mb-4 text-danger" style="font-family: 'Tinos', serif">
+      Conoce nuestros servicios
+    </h2>
+    <div class="row servicios-row">
+      <div class="col-6 col-md-4 col-lg-3">
+        <a href="servicios.html" style="text-decoration: none;">
+          <img src="{% static 'img/tradicional.jfif' %}" alt="Uñas tradicionales"
+            class="servicio-img servicio-img-lista">
+          <p class="mt-2 text-danger" style="font-family: 'Tinos', serif;">Uñas tradicionales</p>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <a href="servicios.html" style="text-decoration: none;">
+          <img src="{% static 'img/semi.jfif' %}" alt="Uñas semipermanente" class="servicio-img servicio-img-lista">
+          <p class="mt-2 text-danger" style="font-family: 'Tinos', serif;">Uñas semipermanente</p>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <a href="servicios.html" style="text-decoration: none;">
+          <img src="{% static 'img/acrilicas.jfif' %}" alt="Uñas acrílicas" class="servicio-img servicio-img-lista">
+          <p class="mt-2 text-danger" style="font-family: 'Tinos', serif;">Uñas acrílicas</p>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <a href="servicios.html" style="text-decoration: none;">
+          <img src="{% static 'img/pilygel.jfif' %}" alt="Poly gel" class="servicio-img servicio-img-lista">
+          <p class="mt-2 text-danger" style="font-family: 'Tinos', serif;">Poly gel</p>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <a href="servicios.html" style="text-decoration: none;">
+          <img src="{% static 'img/ruber.jfif' %}" alt="Rubber permanente" class="servicio-img servicio-img-lista">
+          <p class="mt-2 text-danger" style="font-family: 'Tinos', serif;">Rubber permanente</p>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <a href="servicios.html" style="text-decoration: none;">
+          <img src="{% static 'img/tratamientos.jfif' %}" alt="Tratamientos" class="servicio-img servicio-img-lista">
+          <p class="mt-2 text-danger" style="font-family: 'Tinos', serif;">Tratamientos</p>
+        </a>
+      </div>
+    </div>
+    <div class="mt-4">
+      <a href="servicios.html" class="btn btn-danger rounded-pill px-4 py-2">VER MAS SERVICIOS</a>
+    </div>
+  </section>
+</main>
 {% endblock %}
+

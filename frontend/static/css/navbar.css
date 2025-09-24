@@ -1,10 +1,17 @@
 .navbar {
-    background: linear-gradient(90deg, var(--rosado-pastel) 0%, var(--rosado-oscuro) 100%) !important;
-    box-shadow: 0 4px 16px rgba(111, 85, 112, 0.15);
+    background: var(--rosado-muy-claro);
     border-bottom: 2px solid var(--blanco);
+    padding: 20px;
+    
+}
+
+.navbar-brand span {
+    font-size: 1.8rem;
 }
 
 .navbar-nav .nav-link {
+    background-color: var(--rosado-claro) !important;
+    color: var(--negro-suave);
     border-radius: 20px;
     margin: 0 8px;
     padding: 8px 18px;
@@ -14,7 +21,6 @@
 
 .navbar-nav .nav-link:hover {
     background: var(--blanco);
-    color: var(--rosa-principal) !important;
     transform: scale(1.08);
     text-decoration: none;
 }
@@ -23,10 +29,3 @@
     border-right: 1px solid #fff2;
 }
 
-.navbar-brand img {
-    transition: transform 0.4s;
-}
-
-.navbar-brand img:hover {
-    transform: rotate(-10deg) scale(1.1);
-}
