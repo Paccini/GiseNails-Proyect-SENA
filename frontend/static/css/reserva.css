@@ -1,6 +1,7 @@
 /* =========================
-   RESERVA Y RESERVA2 - PERSONALIZADOS
+   reserva.css - Estilos para las páginas de reserva
    ========================= */
+
 .fondo-blanco {
     background: #a0a0a08e;
     padding: 40px 0;
@@ -315,90 +316,4 @@
     background: var(--rosado-oscuro);
     color: var(--blanco);
     transform: scale(1.05);
-}
-
-.info-reserva {
-    background: var(--rosado-muy-claro);
-    border-radius: 40px;
-    box-shadow: 0 8px 24px rgba(111, 85, 112, 0.10);
-    padding: 32px 24px;
-    margin: 32px 0;
-}
-
-.info-panel {
-    color: var(--morado-oscuro);
-    padding: 16px 24px;
-}
-
-.titulo-reserva {
-    font-family: 'Pacifico', cursive;
-    color: var(--morado-amethyst);
-    font-size: 2.2rem;
-    margin-bottom: 8px;
-}
-
-.direccion {
-    font-size: 1.1rem;
-    color: var(--morado-medio);
-    margin-bottom: 12px;
-    font-weight: 500;
-}
-
-.contact-link {
-    color: var(--azul-medio);
-    font-weight: 500;
-    transition: color 0.2s;
-}
-
-.contact-link:hover {
-    color: var(--rosado-fuerte);
-    text-decoration: underline;
-}
-
-.btn-reserva {
-    background: var(--rosado-fuerte);
-    color: var(--blanco);
-    border-radius: 25px;
-    padding: 10px 28px;
-    font-weight: bold;
-    font-size: 1.1rem;
-    box-shadow: 0 2px 8px rgba(236, 64, 122, 0.12);
-    border: none;
-    transition: background 0.2s, transform 0.2s;
-    margin-right: 10px;
-}
-
-.btn-reserva:hover {
-    background: var(--rosado-oscuro);
-    color: var(--blanco);
-    transform: scale(1.05);
-}
-
-.btn-comollegar {
-    background: var(--azul-medio);
-    color: var(--blanco);
-    border-radius: 25px;
-    padding: 10px 28px;
-    font-weight: bold;
-    font-size: 1.1rem;
-    box-shadow: 0 2px 8px rgba(33, 150, 243, 0.12);
-    border: none;
-    transition: background 0.2s, transform 0.2s;
-}
-
-.btn-comollegar:hover {
-    background: var(--azul-oscuro);
-    color: var(--blanco);
-    transform: scale(1.05);
-}
-
-h1, h2, h3, h4, h5, h6, .servicios-titulo, .gestoras-titulo, .pregunta-fecha, .sucursal, .persona-label, .instruccion-persona, .label-campo, .alerta-box h4 {
-    font-family: 'Pacifico', cursive, 'Century Gothic', 'Lato', Arial, sans-serif !important;
-    font-weight: bold;
-    color: #E6007E;
-    letter-spacing: 1px;
-}
-
-body, p, span, li, a, input, label, button, .campo-persona, .gestora-nombre, .gestora-rol {
-    font-family: 'Century Gothic', 'Lato', Arial, sans-serif !important;
 }

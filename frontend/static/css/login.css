@@ -1,92 +1,111 @@
-.login-main {
-    min-height: 100vh;
+/* =========================
+   inicio.css - Estilos específicos para la página de inicio
+   ========================= */
+
+/* Banner principal */
+.banner-principal {
+    background: linear-gradient(90deg, var(--rosado-pastel) 0%, var(--rosado-oscuro) 100%);
+    color: var(--blanco);
+    padding: 60px 0 40px 0;
+    text-align: center;
+    border-radius: 0 0 40px 40px;
+    box-shadow: 0 8px 32px rgba(230, 0, 126, 0.10);
+}
+
+.banner-principal h1 {
+    font-family: 'Pacifico', cursive;
+    font-size: 3rem;
+    margin-bottom: 16px;
+    color: var(--rosa-principal);
+}
+
+.banner-principal p {
+    font-size: 1.3rem;
+    margin-bottom: 24px;
+    color: var(--blanco);
+}
+
+.banner-btn {
+    background: var(--rosa-principal);
+    color: var(--blanco);
+    border: none;
+    border-radius: 25px;
+    padding: 12px 36px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(236, 64, 122, 0.12);
+    transition: background 0.2s, transform 0.2s;
+}
+
+.banner-btn:hover {
+    background: var(--rosado-oscuro);
+    transform: scale(1.05);
+}
+
+/* Carrusel de imágenes */
+.carousel-inner img {
+    object-fit: cover;
+    border-radius: 18px;
+}
+
+/* Iconos y textos destacados */
+.rounded-circle {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--rosado-claro);
+    overflow: hidden;
+    border: 3px solid var(--rosado-pastel);
 }
 
-.login-card {
-    background: var(--blanco);
-    border-radius: 18px;
-    box-shadow: 0 8px 32px 0 rgba(230, 0, 126, 0.10);
-    padding: 40px 32px 32px 32px;
-    width: 100%;
-    max-width: 370px;
+.fw-bold {
+    font-weight: bold !important;
+}
+
+/* Sección de servicios destacados */
+.servicios-row {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-wrap: wrap;
+    gap: 48px 32px;
+    justify-content: center;
 }
 
-.login-card h1 {
-    color: var(--rosa-principal);
-    font-size: 2rem;
-    margin-bottom: 24px;
-    font-family: 'Pacifico', cursive, sans-serif;
-    text-align: center;
-}
-
-.login-input-group {
-    display: flex;
-    align-items: center;
-    background: var(--rosado-muy-claro);
-    border: 1.5px solid var(--rosado-pastel);
+.servicio-img {
+    width: 300px;
+    height: 220px;
+    object-fit: cover;
     border-radius: 10px;
-    margin-bottom: 18px;
-    padding: 0 12px;
 }
 
-.login-icon {
-    color: var(--rosa-principal);
-    font-size: 1.3em;
-    margin-right: 8px;
+.servicio-img-lista {
+    margin: 0px;
 }
 
-.login-input-group input {
+/* Botón de reserva ahora y ver más servicios */
+.btn-danger.rounded-pill {
+    background: var(--rosado-fuerte);
     border: none;
-    background: transparent;
-    outline: none;
-    font-size: 1.1em;
-    padding: 12px 0;
-    width: 100%;
-    color: var(--negro-suave);
-}
-
-.login-btn {
-    width: 100%;
-    background: var(--rosa-principal);
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    padding: 12px 0;
-    font-size: 1.1em;
     font-weight: bold;
-    margin-top: 10px;
-    cursor: pointer;
-    transition: background 0.2s;
-    box-shadow: 0 2px 8px rgba(230, 0, 126, 0.10);
+    font-size: 1.1rem;
+    transition: background 0.2s, transform 0.2s;
 }
 
-.login-btn:hover {
+.btn-danger.rounded-pill:hover {
     background: var(--rosado-oscuro);
+    transform: scale(1.05);
 }
 
-.login-alert {
-    background: #ef4444;
-    color: #fff;
-    border-radius: 8px;
-    padding: 10px;
-    text-align: center;
-    margin-top: 16px;
-    font-size: 1em;
-}
-
-.login-link {
-    color: var(--rosa-principal);
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.login-link:hover {
-    text-decoration: underline;
+/* Responsive ajustes */
+@media (max-width: 991px) {
+    .banner-principal {
+        padding: 40px 0 24px 0;
+        border-radius: 0 0 20px 20px;
+    }
+    .servicios-row {
+        gap: 16px;
+    }
+    .servicio-img {
+        width: 98vw;
+        max-width: 340px;
+        padding: 18px 8px;
+    }
 }
