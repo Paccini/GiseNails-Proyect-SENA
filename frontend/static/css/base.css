@@ -1,4 +1,9 @@
+/* =========================
+   base.css - Variables, resets y estilos generales
+   ========================= */
+
 :root {
+    /* Paleta principal */
     --rosa-principal: #E6007E;
     --rosado-claro: #FAD2E1;
     --rosado-muy-claro: #FFE4EC;
@@ -15,6 +20,7 @@
     --gris-claro: #F5F5F5;
 }
 
+/* Reset y estilos generales */
 html, body {
     height: 100%;
     margin: 0;
@@ -22,16 +28,27 @@ html, body {
     font-family: "Century Gothic", 'Lato', sans-serif;
 }
 
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-content {
+    flex: 1;
+}
+
 a {
     text-decoration: none;
 }
 
-body, p, span, li, a, input, label, button {
-    font-family: 'Century Gothic', 'Lato', Arial, sans-serif;
+.container-fluid {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    font-family: 'Pacifico', cursive, 'Century Gothic', 'Lato', Arial, sans-serif;
-    font-weight: bold;
-    letter-spacing: 1px;
+h1, h2, h3, h4 {
+    font-family: 'Pacifico', cursive, 'Century Gothic', 'Lato', sans-serif;
+    font-weight: 700;
+    color: var(--rosa-principal);
 }

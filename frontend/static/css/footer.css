@@ -1,31 +1,89 @@
+/* =========================
+   footer.css - Estilos del pie de página y redes sociales
+   ========================= */
+
 .pierna {
     text-align: center;
 }
 
-.pierna>div>h5 {
+.pierna > div > h5 {
     color: var(--rosado-oscuro);
     text-align: center;
     font-weight: bold;
 }
 
-.pierna>div>ul>li>a {
+.pierna > div > ul > li > a {
     color: #6F5570;
     font-size: 20px;
     text-decoration: none;
 }
 
-.pierna>div>ul>li>a:hover {
+.pierna > div > ul > li > a:hover {
     color: var(--rosado-oscuro);
     font-size: 20px;
     text-decoration: none;
 }
 
-.pie>.pie-2 {
+.pierna > div > ul > li > a > i {
+    color: var(--rosado-oscuro);
+    font-size: 20px;
+}
+
+.icono_social > ul {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.icono_social > ul > li > a > i {
+    border-radius: 10px;
+    text-align: center;
+    padding: 10px 15px 10px 15px;
+    margin: 12px 12px;
+    border: solid 1px var(--rosado-oscuro);
+}
+
+.icono_social > ul > li a i:hover {
+    border-radius: 10px;
+    text-align: center;
+    padding: 10px 15px 10px 15px;
+    margin: 12px 12px;
+    color: var(--letra-pie);
+    background-color: var(--rosado-oscuro);
+}
+
+.social_1 {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.social_2 {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.social_3 {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+}
+
+.social_4 {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+
+.pie > .pie-2 {
     color: var(--letra-pie);
     background-color: var(--rosado-fuerte);
 }
 
-.pie>.pie-2 img {
+.pie > .pie-2 img {
     width: 100px;
     border-radius: 22px;
     box-shadow: 4px 3px 4px var(--letra-pie);
