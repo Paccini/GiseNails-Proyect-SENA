@@ -4,22 +4,24 @@
 {% endblock %}
 {% block content %}
   {% load static %}
+  <link rel="stylesheet" href="{% static 'css/producto.css' %}">
 <h1 class="text-center fw-bold mb-4" style="color:#ff4081;font-size:2.5em;font-family: 'Comic Sans MS', cursive;">¡CONOCE TODOS NUESTROS PRODUCTOS!</h1>
 <p class="text-center fs-5 mb-4">Descubre nuestra variedad de productos para el cuidado de uñas y belleza, seleccionados para ti con la mejor calidad y seguridad.</p>
 <div class="row justify-content-center g-4">
     {% for producto in productos %}
     <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-        <div class="card h-100 shadow-sm text-center">
-            {% if producto.imagen %}
-                <a href="#">
-                    <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="card-img-top rounded" style="height:180px;object-fit:cover;">
-                </a>
-            {% endif %}
-            <div class="card-body">
-                <h3 class="card-title fw-bold" style="color:#ff4081;">{{ producto.nombre }}</h3>
-                <div class="badge bg-light text-dark fs-6 mb-2">${{ producto.precio }}</div>
-                <div class="text-secondary mb-2">Cantidad: {{ producto.cantidad }}</div>
-                <p class="card-text">{{ producto.descripcion }}</p>
+        <div class="flip-card">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    {% if producto.imagen %}
+                        <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="card-img-top rounded" style="height:100%;width:100%;object-fit:cover;">
+                    {% endif %}
+                </div>
+                <div class="flip-card-back d-flex flex-column justify-content-center align-items-center h-100 w-100 text-center">
+                    <h3 class="card-title fw-bold mb-2" style="color:#ff4081;">{{ producto.nombre }}</h3>
+                    <p class="card-text mb-2">{{ producto.descripcion }}</p>
+                    <span class="badge bg-light text-dark fs-6 mb-2 mt-2" style="width:100%;">${{ producto.precio }}</span>
+                </div>
             </div>
         </div>
     </div>
