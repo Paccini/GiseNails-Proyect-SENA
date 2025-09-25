@@ -12,21 +12,24 @@
     font-weight: bold;
 }
 
+
 .pierna > div > ul > li > a {
-    color: #6F5570;
-    font-size: 20px;
+    color: #222 !important; /* negro suave */
+    font-size: 20px !important;
     text-decoration: none;
+    transition: color 0.2s;
 }
 
 .pierna > div > ul > li > a:hover {
-    color: var(--rosado-oscuro);
-    font-size: 20px;
+    color: var(--rosado-oscuro) !important;
+    font-size: 20px !important;
     text-decoration: none;
 }
 
-.pierna > div > ul > li > a > i {
-    color: var(--rosado-oscuro);
-    font-size: 20px;
+.pierna .footer-column.separador ul.list-unstyled li a {
+    color: #222 !important; /* o var(--negro-suave) */
+    font-size: 16px;
+    text-decoration: none;
 }
 
 .pierna > .separador{

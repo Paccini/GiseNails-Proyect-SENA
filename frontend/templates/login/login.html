@@ -13,7 +13,7 @@
             {% csrf_token %}
             <div class="login-input-group">
                 <span class="login-icon"><i class="bi bi-person"></i></span>
-                <input type="text" name="username" placeholder="Usuario" required autofocus>
+                <input type="text" name="username" placeholder="Correo" required autofocus>
             </div>
             <div class="login-input-group">
                 <span class="login-icon"><i class="bi bi-lock"></i></span>
@@ -35,4 +35,26 @@
         display: none !important;
     }
 </style>
+<head>
+    <!-- ...otros tags... -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+</head>
+<body>
+    <!-- ...contenido... -->
+    <script>
+        if (window.history && window.history.replaceState) {
+            window.history.replaceState(null, '', window.location.href);
+        }
+        window.onload = function() {
+            if (window.history && window.history.pushState) {
+                window.history.pushState(null, '', window.location.href);
+                window.onpopstate = function() {
+                    window.location.href = "/login/";
+                };
+            }
+        };
+    </script>
+</body>
 {% endblock %}

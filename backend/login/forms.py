@@ -4,10 +4,11 @@ class LoginForm(forms.Form):
     username = forms.CharField(
         label='',
         widget=forms.TextInput(attrs={
-            'placeholder': 'Usuario',
-            'autocomplete': 'username',
-            'type': 'text',
-            'style': 'background:transparent;color:#fff;'
+            'placeholder': 'Correo',
+            'autocomplete': 'email',
+            'type': 'email',
+            'class': 'login-input',  # <--- agrega esta clase
+            'style': 'background:transparent;color:#232c36;'
         })
     )
     password = forms.CharField(
@@ -16,6 +17,7 @@ class LoginForm(forms.Form):
             'placeholder': 'Contraseña',
             'autocomplete': 'current-password',
             'type': 'password',
-            'style': 'background:transparent;color:#fff;'
+            'class': 'login-input',
+            'style': 'background:transparent;color:#232c36;'
         })
     )
