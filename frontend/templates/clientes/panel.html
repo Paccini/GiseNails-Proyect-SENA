@@ -1,9 +1,9 @@
-<!-- filepath: c:\Users\juanv\Desktop\Juan-Django\templates\clientes\panel.html -->
 {% extends 'base_usuario.html' %}
 {% block content %}
 <div class="usuario-topbar">
-    <span>Panel de Cliente</span>
-    <span class="usuario-nombre">{{ user.get_full_name|default:user.username }}</span>
+    <span class="usuario-nombre">
+        Bienvenido, {{ cliente.nombre }} <span style="font-size:1.2em;">🌸</span>
+    </span>
     <form action="{% url 'logout' %}" method="post" style="display:inline;">
         {% csrf_token %}
         <button type="submit" class="usuario-btn-cerrar">
@@ -11,41 +11,47 @@
         </button>
     </form>
 </div>
-<div class="usuario-card">
-    <h2><i class="bi bi-calendar-heart"></i> Mis Citas</h2>
+
+<div id="citas" class="usuario-card" style="margin-top:0;">
+    <h2><i class="bi bi-calendar-heart"></i> Próximas citas</h2>
     {% if citas %}
-    <table class="table usuario-table">
-        <thead>
-            <tr>
-                <th><i class="bi bi-calendar-event"></i> Fecha</th>
-                <th><i class="bi bi-brush"></i> Servicio</th>
-                <th><i class="bi bi-person-badge"></i> Gestora</th>
-                <th><i class="bi bi-gear"></i> Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
         {% for cita in citas %}
-            <tr>
-                <td>{{ cita.fecha }} {{ cita.hora }}</td>
-                <td>{{ cita.servicio }}</td>
-                <td>{{ cita.gestora }}</td>
-                <td>
-                    <a href="{% url 'clientes:cancelar' cita.pk %}" class="btn btn-danger btn-sm">
-                        <i class="bi bi-x-circle"></i> Cancelar
-                    </a>
-                </td>
-            </tr>
+        <div style="border:1px solid #f3c6e3; border-radius:12px; margin-bottom:18px; padding:18px 16px; background:#faf6fb;">
+            <div style="font-size:1.15em; color:#c06caa;">
+                <i class="bi bi-calendar-event"></i>
+                {{ cita.fecha }} - {{ cita.hora }}
+            </div>
+            <div style="margin-left:24px; color:#6c3483;">
+                <strong>Servicio:</strong> {{ cita.servicio }}<br>
+                <strong>Profesional:</strong> {{ cita.gestora }}
+            </div>
+            <div style="margin-top:8px; text-align:right;">
+                <a href="{% url 'clientes:cancelar' cita.pk %}" class="btn btn-danger btn-sm">
+                    <i class="bi bi-x-circle"></i> Cancelar
+                </a>
+            </div>
+        </div>
         {% endfor %}
-        </tbody>
-    </table>
     {% else %}
-    <p style="color:#c06caa;text-align:center;">No tienes citas asignadas.</p>
+        <p style="color:#c06caa;text-align:center;">No tienes citas asignadas.</p>
     {% endif %}
 </div>
-<div class="usuario-card">
-    <h2>Bienvenido, {{ cliente.nombre }}</h2>
-    <p><strong>Correo:</strong> {{ cliente.correo }}</p>
-    <p><strong>Teléfono:</strong> {{ cliente.telefono }}</p>
-    <p><strong>Fecha de registro:</strong> {{ cliente.fecha_registro|date:"d/m/Y H:i" }}</p>
+
+<div id="perfil" class="usuario-card" style="display:none;">
+    <h2><i class="bi bi-person-circle"></i> Información personal</h2>
+    <div style="color:#6c3483; font-size:1.08em;">
+        <strong>Nombre:</strong> {{ cliente.nombre }}<br>
+        <strong>Teléfono:</strong> {{ cliente.telefono }}<br>
+        <strong>Correo:</strong> {{ cliente.correo }}<br>
+        <strong>Fecha de registro:</strong> {{ cliente.fecha_registro|date:"d/m/Y H:i" }}
+    </div>
+    <div style="margin-top:24px; text-align:center;">
+        <a href="#" class="btn btn-primary" style="margin:8px 12px; background:#c06caa; border:none;">
+            <i class="bi bi-calendar-plus"></i> Agendar nueva cita
+        </a>
+        <a href="#" class="btn btn-outline-secondary" style="margin:8px 12px; color:#c06caa; border-color:#c06caa;">
+            <i class="bi bi-pencil-square"></i> Editar perfil
+        </a>
+    </div>
 </div>
 {% endblock %}
