@@ -108,7 +108,7 @@
 .login-card {
     background: #fff;
     border-radius: 16px;
-    box-shadow: 0 4px 24px rgba(230, 0, 126, 0.10);
+    box-shadow: 0 4px 24px rgba(228, 106, 173, 0.637);
     padding: 32px 24px;
     max-width: 400px;
     width: 100%;
@@ -161,7 +161,7 @@
 }
 
 .login-btn:hover {
-    background: #c06caa;
+    background: #ff0077;
 }
 
 .login-link {
