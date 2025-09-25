@@ -8,6 +8,7 @@ class RegistroClienteForm(forms.ModelForm):
             'placeholder': 'Contraseña',
             'autocomplete': 'new-password',
             'type': 'password',
+            'class': 'login-input',  # <--- agrega esta clase
             'style': 'background:transparent;color:#232c36;'
         })
     )
@@ -16,7 +17,8 @@ class RegistroClienteForm(forms.ModelForm):
             'placeholder': 'Nombre',
             'autocomplete': 'name',
             'type': 'text',
-            'style': 'background:transparent;color:#232c36;;'
+            'class': 'login-input',  # <--- agrega esta clase
+            'style': 'background:transparent;color:#232c36;'
         })
     )
     correo = forms.EmailField(
@@ -24,7 +26,8 @@ class RegistroClienteForm(forms.ModelForm):
             'placeholder': 'Correo',
             'autocomplete': 'email',
             'type': 'email',
-            'style': 'background:transparent;color:#232c36;;'
+            'class': 'login-input',  # <--- agrega esta clase
+            'style': 'background:transparent;color:#232c36;'
         })
     )
     telefono = forms.CharField(
@@ -32,7 +35,8 @@ class RegistroClienteForm(forms.ModelForm):
             'placeholder': 'Teléfono',
             'autocomplete': 'tel',
             'type': 'tel',
-            'style': 'background:transparent;color:#232c36;;'
+            'class': 'login-input',  # <--- agrega esta clase
+            'style': 'background:transparent;color:#232c36;'
         })
     )
 
