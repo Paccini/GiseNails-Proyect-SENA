@@ -12,9 +12,44 @@
     <meta http-equiv="Expires" content="0" />
 </head>
 <body class="usuario-bg">
-    {% block content %}{% endblock %}
+    <div class="usuario-sidebar" id="sidebar">
+        <nav>
+            <a href="#" onclick="mostrarSeccion('citas');toggleSidebar();return false;"><i class="bi bi-calendar-heart"></i> Citas</a>
+            <a href="#" onclick="mostrarSeccion('perfil');toggleSidebar();return false;"><i class="bi bi-person-circle"></i> Perfil</a>
+        </nav>
+    </div>
+    <!-- Botón hamburguesa -->
+    <button class="usuario-hamburguesa" id="btnHamburguesa" onclick="toggleSidebar()" aria-label="Menú">
+        <i class="bi bi-list"></i>
+    </button>
+    <div class="usuario-main">
+        {% block content %}{% endblock %}
+    </div>
     <footer class="usuario-footer">
         © 2025 GiseNails
     </footer>
+    <script>
+        function mostrarSeccion(seccion) {
+            document.getElementById('citas').style.display = seccion === 'citas' ? 'block' : 'none';
+            document.getElementById('perfil').style.display = seccion === 'perfil' ? 'block' : 'none';
+        }
+        window.onload = function() { mostrarSeccion('citas'); }
+
+        // Hamburguesa
+        function toggleSidebar() {
+            var sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('sidebar-visible');
+        }
+        // Oculta el sidebar al hacer click fuera en móviles
+        document.addEventListener('click', function(e) {
+            var sidebar = document.getElementById('sidebar');
+            var btn = document.getElementById('btnHamburguesa');
+            if (window.innerWidth <= 900 && sidebar.classList.contains('sidebar-visible')) {
+                if (!sidebar.contains(e.target) && e.target !== btn) {
+                    sidebar.classList.remove('sidebar-visible');
+                }
+            }
+        });
+    </script>
 </body>
 </html>

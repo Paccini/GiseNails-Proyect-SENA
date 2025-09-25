@@ -1,18 +1,17 @@
 {% extends 'home.html' %}
 {% block title %}
-  Reserva
+  Gise Nails
 {% endblock %}
 {% block content %}
   {% load static %}
   <link rel="stylesheet" href="{% static 'css/base.css' %}" />
   <link rel="stylesheet" href="{% static 'css/login.css' %}" />
   <main class="login-main">
-    <section class="login-card">
+    <section class="login-card">   
       <header>
         <h1>Iniciar sesión</h1>
       </header>
-
-      <form method="post" autocomplete="off">
+      <form method="post" autocomplete="on">
         {% csrf_token %}
         <div class="login-input-group">
           <span class="login-icon"><i class="bi bi-person"></i></span>
