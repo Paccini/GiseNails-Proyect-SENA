@@ -18,6 +18,9 @@
     --negro-suave: #333333;
     --letra-pie: #FFFFF7;
     --gris-claro: #F5F5F5;
+    --fuente-titulos: 'Arapey' sans-serif;
+    --fuente-cursiva: 'Dancing script';
+    --fuente-textos: 'Open sans';
 }
 
 /* Reset y estilos generales */
