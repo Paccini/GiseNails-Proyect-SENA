@@ -1,8 +1,13 @@
-from django.shortcuts import render, redirect
+from django.contrib.auth import logout
+from django.shortcuts import redirect, render
+from django.views.decorators.cache import never_cache
+from django.utils.decorators import method_decorator
+
 from .forms import RegistroClienteForm
 from .models import Cliente
 
 
+@never_cache
 def panel_cliente(request):
     if not request.user.is_authenticated:
         return redirect('login:login')
@@ -23,3 +28,8 @@ def registro_cliente(request):
     else:
         form = RegistroClienteForm()
     return render(request, 'clientes/registro.html', {'form': form})
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('login:login')
