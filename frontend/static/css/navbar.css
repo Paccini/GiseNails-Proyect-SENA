@@ -1,0 +1,31 @@
+.navbar {
+    background: var(--rosado-muy-claro);
+    border-bottom: 2px solid var(--blanco);
+    padding: 20px;
+    
+}
+
+.navbar-brand span {
+    font-size: 1.8rem;
+}
+
+.navbar-nav .nav-link {
+    background-color: var(--rosado-claro) !important;
+    color: var(--negro-suave);
+    border-radius: 20px;
+    margin: 0 8px;
+    padding: 8px 18px;
+    box-shadow: 0 2px 8px rgba(230, 0, 126, 0.12);
+    transition: background 0.3s, color 0.3s, transform 0.3s;
+}
+
+.navbar-nav .nav-link:hover {
+    background: var(--blanco);
+    transform: scale(1.08);
+    text-decoration: none;
+}
+
+.navbar-nav .nav-item:not(:last-child) {
+    border-right: 1px solid #fff2;
+}
+

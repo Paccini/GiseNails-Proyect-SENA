@@ -1,0 +1,61 @@
+{% extends 'home.html' %}
+{% block title %}
+  Gise Nails
+{% endblock %}
+{% block content %}
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/login.css' %}" />
+  <main class="login-main">
+    <section class="login-card">   
+      <header>
+        <h1>Iniciar sesión</h1>
+      </header>
+      <form method="post" autocomplete="on">
+        {% csrf_token %}
+        <div class="login-input-group">
+          <span class="login-icon"><i class="bi bi-person"></i></span>
+          <input type="text" name="username" placeholder="Correo" required autofocus class="login-input" />
+        </div>
+        <div class="login-input-group">
+          <span class="login-icon"><i class="bi bi-lock"></i></span>
+          <input type="password" name="password" placeholder="Contraseña" required class="login-input" />
+        </div>
+        <button type="submit" class="login-btn">Entrar</button>
+        {% if error %}
+          <div class="login-alert">{{ error }}</div>
+        {% endif %}
+      </form><p>
+        ¿No tienes una cuenta? <a href="{% url 'clientes:registro' %}" class="login-link">Regístrate</a>
+      </p>
+    </section>
+  </main>
+
+  <style>
+    footer {
+      display: none !important;
+    }
+  </style>
+  <head>
+    <!-- ...otros tags... -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+  </head>
+  <body>
+    <!-- ...contenido... -->
+    <script>
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState(null, '', window.location.href)
+      }
+      window.onload = function () {
+        if (window.history && window.history.pushState) {
+          window.history.pushState(null, '', window.location.href)
+          window.onpopstate = function () {
+            window.location.href = '/login/'
+          }
+        }
+      }
+    </script>
+  </body>
+{% endblock %}
