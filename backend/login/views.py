@@ -19,11 +19,20 @@ def login_view(request):
         if user is not None:
             login(request, user)
             if user.is_superuser or user.is_staff:
-                return redirect('paneladmin')  # Cambia por la URL de tu panel admin
+                return redirect('login:admin_panel')  # Redirige a la vista admin
             elif Cliente.objects.filter(user=user).exists():
-                return redirect('clientes:panel')  # Cambia por la URL de tu panel cliente
+                return redirect('clientes:panel')
             else:
                 error = "No tienes permisos para acceder."
         else:
             error = "Usuario o contraseña incorrectos."
     return render(request, 'login/login.html', {'form': {}, 'error': error})
+
+def admin_panel(request):
+    if not request.user.is_authenticated or not (request.user.is_superuser or request.user.is_staff):
+        return redirect('login:login')
+    return render(request, 'base_admin.html')
+
+def logout_view(request):
+    logout(request)
+    return redirect('login:login')
