@@ -5,6 +5,6 @@ app_name = 'login'
 
 urlpatterns = [
     path("", views.login_view, name='login'),
-    # path('logout/', views.logout_view, name='logout'),
-    # path('inicio/', views.inicio, name='inicio'),
+    path("admin-panel/", views.admin_panel, name='admin_panel'), 
+    path("logout/", views.logout_view, name='logout'), # <-- Nueva ruta
 ]
