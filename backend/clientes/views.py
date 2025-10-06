@@ -1,14 +1,16 @@
 from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.views.decorators.cache import never_cache
-from django.utils.decorators import method_decorator
 
 from .forms import RegistroClienteForm
 from .models import Cliente
 
 
 @never_cache
+@login_required(login_url='login:login')
 def panel_cliente(request):
+    # Si el usuario no está autenticado, redirigir a la página de inicio de sesión
     if not request.user.is_authenticated:
         return redirect('login:login')
     try:
