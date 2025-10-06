@@ -1,0 +1,16 @@
+{% extends 'base_admin.html' %}
+{% block content %}
+<div class="card shadow mb-4">
+    <div class="card-header bg-danger text-white">
+        <h2 class="mb-0">Eliminar Empleado</h2>
+    </div>
+    <div class="card-body">
+        <p>¿Estás seguro que deseas eliminar al empleado <strong>{{ empleado.nombre }} {{ empleado.apellidos }}</strong>?</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Eliminar</button>
+            <a href="{% url 'empleados:empleado_list' %}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
