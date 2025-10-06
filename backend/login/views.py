@@ -2,6 +2,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from clientes.models import Cliente
+from django.views.decorators.cache import never_cache
+from django.contrib.auth.decorators import login_required
 
 def login_view(request):
     error = None
@@ -28,8 +30,10 @@ def login_view(request):
             error = "Usuario o contraseña incorrectos."
     return render(request, 'login/login.html', {'form': {}, 'error': error})
 
+@never_cache
+@login_required(login_url='login:login')
 def admin_panel(request):
-    if not request.user.is_authenticated or not (request.user.is_superuser or request.user.is_staff):
+    if not (request.user.is_superuser or request.user.is_staff):
         return redirect('login:login')
     return render(request, 'base_admin.html')
 
