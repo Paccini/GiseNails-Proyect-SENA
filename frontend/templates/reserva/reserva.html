@@ -1,44 +1,96 @@
-{% extends 'home.html' %}
-{% block title %}Gise Nails{% endblock %}
-{% block content %}
-{% load static %}
+
+{% extends 'home.html' %} 
+
+{% block title %}Reserva{% endblock %} 
+
+{% block content %} 
+{% load static %} 
+
+
 <link rel="stylesheet" href="{% static 'css/reserva.css' %}">
 
-<main class="container-fluid py-5">
-    <section class="row justify-content-center align-items-center info-reserva">
-        <!-- Imagen local -->
-        <figure class="col-md-6 col-12 mb-4 mb-md-0 text-center">
-            <img src="{% static 'img/foto-local.jpg' %}" alt="Local Gise Nails" class="img-fluid rounded-4 shadow"
-                style="max-width: 95%; height: auto;">
-            <figcaption class="visually-hidden">Foto del local Gise Nails</figcaption>
-        </figure>
-        <!-- Panel de información -->
-        <aside class="col-md-6 col-12 info-panel">
-            <header>
-                <h2 class="titulo-reserva">Gise-Nails</h2>
-                <div class="direccion mb-2">
-                    <i class="bi bi-geo-alt-fill"></i> Cra 9a #42-44 B/calarca
-                </div>
-            </header>
-            <ul class="list-unstyled contacto mb-3">
-                <li><i class="bi bi-envelope-at"></i> <a href="mailto:giselav489@gmail.com"
-                        class="contact-link">giselav489@gmail.com</a></li>
-                <li><i class="bi bi-telephone"></i> <a href="https://wa.me/3002040538" class="contact-link">300 204
-                        0538</a></li>
-            </ul>
-            <h5 class="mb-2" style="color: var(--azul-medio); font-weight: bold;">Horario de Atención</h5>
-            <p class="mb-3" style="color: var(--azul-fuerte); font-size: 1.1rem;">
-                7:00 AM a 12:00 PM | 2:00 PM a 6:00 PM
-            </p>
-            <nav>
-                <a href="{% url 'reserva:reserva2' %}" class="btn btn-reserva mb-2">
-                    <i class="bi bi-calendar-check"></i> Reserva tu cita
-                </a>
-                <a href="#" class="btn btn-comollegar mb-2">
-                    <i class="bi bi-geo-alt"></i> Cómo llegar
-                </a>
-            </nav>
-        </aside>
-    </section>
-</main>
+<div class="reserva-container">
+    <div class="header">
+        <h1>Gise-Nails</h1>
+        <div class="info"><i class="bi bi-geo-alt-fill"></i> Cra 9a #42-44 B/calarca</div>
+        <div class="info"><i class="bi bi-envelope-at"></i> giselav489@gmail.com</div>
+        <div class="info"><i class="bi bi-telephone"></i> 300 204 0538</div>
+    </div>
+    
+    <div class="main-content">
+        <section class="form-section">
+            <h2>Reserva tu cita</h2>
+            <form method="post" action="">
+                {% csrf_token %}
+                <input type="text" name="nombre" placeholder="Nombre" required>
+                <input type="text" name="telefono" placeholder="Teléfono" required>
+                <input type="email" name="correo" placeholder="Correo electrónico" required>
+
+                <!-- Select para tipo de servicio -->
+                <select id="tipo-servicio" required>
+                    <option value="">Selecciona tipo de servicio</option>
+                    <option value="manicure">Manicure</option>
+                    <option value="pedicure">Pedicure</option>
+                    <option value="estructura">Estructura de uñas</option>
+                </select>
+
+                <!-- Select para gestora -->
+                <select name="gestora" id="gestora-select" required>
+                    <option value="">Selecciona gestora</option>
+                    {% for gestora in gestoras %}
+                        <option value="{{ gestora.id }}">{{ gestora.nombre }} {{ gestora.apellidos }}</option>
+                    {% endfor %}
+                </select>
+
+                <input type="date" name="fecha" id="fecha-select" required>
+
+                <select name="horario" id="horario-select" required>
+                    <option value="">Selecciona horario</option>
+                </select>
+
+                <!-- Contenedor para mostrar los servicios con imágenes -->
+                <div id="servicios-contenedor" class="servicios-list"></div>
+
+                <button type="submit">Confirmar cita</button>
+            </form>
+        </section>
+    </div>
+</div>
+
+<!-- Servicios agrupados por categoría en formato JSON seguro -->
+<script id="servicios-data" type="application/json">
+    {
+        "manicure": [
+            {% for s in servicios_por_categoria.manicure %}
+                {
+                    "nombre": "{{ s.nombre|escapejs }}",
+                    "precio": "{{ s.precio }}",
+                    "imagen": "{{ s.imagen.url }}"
+                }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ],
+        "pedicure": [
+            {% for s in servicios_por_categoria.pedicure %}
+                {
+                    "nombre": "{{ s.nombre|escapejs }}",
+                    "precio": "{{ s.precio }}",
+                    "imagen": "{{ s.imagen.url }}"
+                }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ],
+        "estructura": [
+            {% for s in servicios_por_categoria.estructura %}
+                {
+                    "nombre": "{{ s.nombre|escapejs }}",
+                    "precio": "{{ s.precio }}",
+                    "imagen": "{{ s.imagen.url }}"
+                }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ]
+    }
+</script>
+
+<!-- Solo enlaza el JS externo -->
+<script src="{% static 'js/servicios.js' %}"></script> 
+
 {% endblock %}
