@@ -1,0 +1,596 @@
+/* --- ESTILOS GENERALES DEL SISTEMA --- */
+html,
+body {
+    height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    flex-direction: column;
+    /* Elimina display:flex y background aquí para no afectar el login */
+}
+
+main.container {
+    flex: 1;
+}
+
+.flex-grow-1.d-flex.flex-column {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main.container.flex-grow-1 {
+    flex: 1 0 auto;
+}
+
+footer {
+    flex-shrink: 0;
+    margin-top: auto;
+}
+
+/* Card efecto para el contenido principal */
+main.container>div,
+main.container>.card,
+main.container>form,
+main.container>table {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px 0 rgba(44, 62, 80, 0.10);
+    padding: 24px;
+    margin-top: 32px;
+}
+
+/* Estilo para la cabecera de la card y tabla empleados */
+.card-header {
+    background: #f8fafc !important;
+    border-bottom: 1px solid #e5e7eb !important;
+    border-radius: 12px 12px 0 0 !important;
+    color: #232c36 !important;
+    /* Texto negro */
+}
+
+.table thead {
+    background: #232c36;
+    color: #fff;
+}
+
+.table thead th {
+    background: #f1f5f9 !important;
+    color: #232c36 !important;
+    font-weight: 600;
+    border-bottom: 2px solid #e5e7eb !important;
+}
+
+.table th,
+.table td {
+    vertical-align: middle;
+}
+
+.table-hover tbody tr:hover {
+    background: #f3f4f6;
+}
+
+.table tbody tr {
+    background: #fff;
+    border-bottom: 2px solid #f3f4f6;
+}
+
+.table tbody tr td {
+    border: none;
+}
+
+/* Botones */
+.btn-primary {
+    background: #3b82f6;
+    border: none;
+}
+
+.btn-danger {
+    background: #ef4444;
+    border: none;
+}
+
+.btn-success {
+    background: #22c55e;
+    border: none;
+}
+
+.btn-warning {
+    background: #fde68a;
+    color: #232c36;
+    border: none;
+}
+
+.btn-warning:hover {
+    background: #fbbf24;
+    color: #fff;
+}
+
+.btn-outline-primary {
+    border-color: #3b82f6;
+    color: #3b82f6;
+}
+
+.btn-outline-primary:hover {
+    background: #3b82f6;
+    color: #fff;
+}
+
+.btn-outline-danger {
+    border-color: #ef4444;
+    color: #ef4444;
+}
+
+.btn-outline-danger:hover {
+    background: #ef4444;
+    color: #fff;
+}
+
+/* Badge estados */
+.badge-pendiente {
+    background: #22d3ee;
+    color: #fff;
+}
+
+.badge-activo {
+    background: #22c55e;
+    color: #fff;
+}
+
+.badge-inactivo {
+    background: #ef4444;
+    color: #fff;
+}
+
+/* Sombra para el card principal */
+main.container>div,
+main.container>.card {
+    box-shadow: 0 4px 24px 0 rgba(44, 62, 80, 0.10);
+}
+
+/* Ajuste de botón grande */
+.btn {
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+/* Responsive para el card */
+@media (max-width: 768px) {
+
+    main.container>div,
+    main.container>.card {
+        padding: 12px;
+        margin-top: 16px;
+    }
+}
+
+/* Sidebar estilo */
+.sidebar-nav {
+    width: 210px;
+    min-height: 100vh;
+    background: #232c36;
+    color: #fff;
+    padding: 24px 0 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sidebar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    letter-spacing: 1px;
+}
+
+.sidebar-nav .nav-link {
+    color: #fff;
+    padding: 10px 24px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    transition: background 0.2s;
+}
+
+.sidebar-nav .nav-link:hover,
+.sidebar-nav .nav-link.active {
+    background: #2d3741;
+    color: #fff;
+}
+
+.sidebar-nav .nav {
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .sidebar-nav {
+        width: 100px;
+        padding: 12px 0 0 0;
+    }
+
+    .sidebar-brand {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .sidebar-nav .nav-link {
+        padding: 8px 10px;
+        font-size: 0.95rem;
+    }
+}
+
+/* Barra superior visual */
+.topbar {
+    height: 56px;
+    background: #3b4654;
+    color: #fff;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    margin-bottom: 24px;
+    margin-top: 0;
+}
+
+.topbar-title {
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+}
+
+.topbar-user .badge {
+    background: #7c3aed !important;
+}
+
+/* --- LOGIN PERSONALIZADO --- */
+body.login-bg {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    background: url('../img/salon.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contenedor {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.formulario {
+    background: rgba(20, 20, 20, 0.95);
+    padding: 40px 32px 32px 32px;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px 0 rgba(44, 62, 80, 0.30);
+    width: 100%;
+    max-width: 400px;
+}
+
+h1 {
+    text-align: center;
+    color: #fff;
+    font-size: 2.2rem;
+    margin-bottom: 24px;
+}
+
+.input-contenedor {
+    margin-bottom: 18px;
+    border: 1px solid #444;
+    display: flex;
+    align-items: center;
+    background: #222;
+    border-radius: 8px;
+    padding: 0 10px;
+}
+
+body.login-bg input[type="text"],
+body.login-bg input[type="password"] {
+    font-size: 1.1rem;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background: transparent;
+    color: #fff;
+    outline: none;
+}
+
+/* Para los formularios normales (cards) */
+.card input[type="text"],
+.card input[type="number"],
+.card textarea {
+    background: #fff;
+    color: #232c36;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 8px;
+}
+
+.icon {
+    min-width: 36px;
+    text-align: center;
+    color: #aaa;
+    font-size: 1.3em;
+}
+
+.button {
+    border: none;
+    width: 100%;
+    color: white;
+    font-size: 1.1rem;
+    background: #1a2537;
+    padding: 14px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+
+.button:hover {
+    background: cadetblue;
+}
+
+.alert-danger {
+    background: #ef4444;
+    color: #fff;
+    border-radius: 6px;
+    padding: 10px;
+    text-align: center;
+}
+
+body.login-bg p {
+    text-align: center;
+    color: #fff;
+    margin-top: 18px;
+    font-size: 0.97em;
+}
+
+/* Para el resto del sistema, usa el color por defecto (negro) */
+main.container p,
+.card p {
+    text-align: left;
+    color: #232c36;
+    margin-top: 18px;
+    font-size: 1em;
+}
+
+p {
+    text-align: center;
+    color: #fff;
+    margin-top: 18px;
+    font-size: 0.97em;
+}
+
+.link {
+    text-decoration: none;
+    color: #7de2d1;
+    font-weight: 600;
+}
+
+.link:hover {
+    color: #fff;
+}
+
+/* --- Responsive para el panel administrativo --- */
+@media (max-width: 992px) {
+    .d-flex {
+        flex-direction: column !important;
+    }
+
+    .sidebar-nav {
+        width: 100vw;
+        min-height: auto;
+        flex-direction: row;
+        padding: 12px 0 12px 0;
+        overflow-x: auto;
+        border-radius: 0 0 12px 12px;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .sidebar-nav .nav {
+        flex-direction: row;
+        width: auto;
+    }
+
+    .sidebar-nav .nav-link {
+        margin-bottom: 0;
+        margin-right: 8px;
+        padding: 8px 10px;
+        font-size: 1em;
+        white-space: nowrap;
+    }
+
+    .sidebar-brand {
+        margin-bottom: 0;
+        font-size: 1.1rem;
+        margin-right: 16px;
+    }
+
+    .flex-grow-1.d-flex.flex-column {
+        min-height: auto;
+    }
+
+    .topbar {
+        height: auto;
+        flex-direction: column;
+        padding: 12px 4px;
+        margin-bottom: 12px;
+    }
+
+    .topbar header {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 8px;
+        padding: 8px 4px;
+    }
+
+    .topbar-user {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    main.container {
+        padding: 8px;
+        margin-top: 12px;
+        max-width: 98vw;
+    }
+
+    main.container>div,
+    main.container>.card,
+    main.container>form,
+    main.container>table {
+        padding: 12px;
+        margin-top: 12px;
+    }
+
+    footer {
+        font-size: 0.95em;
+        padding: 8px 2px;
+    }
+}
+
+/* --- Responsive para login --- */
+@media (max-width: 600px) {
+    .contenedor {
+        min-height: 100vh;
+        padding: 0 4px;
+    }
+
+    .formulario {
+        padding: 20px 4px 12px 4px;
+        max-width: 98vw;
+        border-radius: 10px;
+    }
+
+    h1 {
+        font-size: 1.3rem;
+        margin-bottom: 12px;
+    }
+
+    .input-contenedor {
+        padding: 0 4px;
+        font-size: 1em;
+    }
+
+    .button {
+        padding: 10px 0;
+        font-size: 1em;
+    }
+
+    body.login-bg p {
+        font-size: 0.9em;
+        margin-top: 10px;
+    }
+}
+
+/* --- Mejoras generales para accesibilidad y usabilidad --- */
+.table {
+    font-size: 0.97em;
+    word-break: break-word;
+}
+
+.table th,
+.table td {
+    padding: 10px 6px;
+}
+
+.btn,
+.button {
+    font-size: 1em;
+    min-width: 90px;
+}
+
+.alert-danger {
+    font-size: 0.97em;
+    padding: 8px;
+}
+
+/* --- Navbar hamburguesa para admin --- */
+@media (max-width: 992px) {
+    .sidebar-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 220px;
+        background: #232c36;
+        z-index: 100;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 24px 0 0 0;
+        box-shadow: 2px 0 12px rgba(44, 62, 80, 0.10);
+    }
+
+    .sidebar-nav.open {
+        transform: translateX(0);
+    }
+
+    .sidebar-toggle {
+        display: block;
+        position: fixed;
+        top: 16px;
+        left: 16px;
+        z-index: 101;
+        background: #232c36;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 8px 12px;
+        font-size: 1.5rem;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(44, 62, 80, 0.10);
+    }
+
+    .sidebar-brand {
+        margin-left: 16px;
+    }
+
+    .d-flex {
+        flex-direction: column !important;
+    }
+
+    .flex-grow-1.d-flex.flex-column {
+        margin-left: 0 !important;
+    }
+
+    /* Oculta el sidebar por defecto */
+    .sidebar-nav:not(.open) {
+        display: none;
+    }
+
+    /* Footer fijo abajo en móviles */
+    footer {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100vw;
+        background: #232c36;
+        color: #fff;
+        font-size: 0.95em;
+        padding: 8px 2px;
+        z-index: 99;
+        border-radius: 0;
+        margin-top: 0;
+    }
+}
+
+/* Mostrar sidebar normalmente en desktop */
+@media (min-width: 993px) {
+    .sidebar-toggle {
+        display: none;
+    }
+
+    footer {
+        position: static;
+        width: 100%;
+        border-radius: 0;
+        margin-top: auto;
+    }
+}
