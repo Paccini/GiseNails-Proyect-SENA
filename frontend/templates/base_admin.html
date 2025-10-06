@@ -53,23 +53,28 @@
                                 Panel de Usuario
                                 {% endif %}
                             </span>
-                            <div class="dropdown ms-auto">
-                                <a class="d-flex align-items-center text-decoration-none dropdown-toggle" href="#"
-                                    id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img src="{% if user.profile.foto %}{{ user.profile.foto.url }}{% else %}{% static 'img/foto.jpg' %}{% endif %}"
-                                        alt="Avatar" width="40" height="40"
-                                        class="rounded-circle border border-2 border-secondary shadow-sm">
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                    <li>
-                                        <form action="{% url 'login:logout' %}" method="post" class="d-inline">
-                                            {% csrf_token %}
-                                            <button type="submit" class="dropdown-item">
-                                                <i class="bi bi-box-arrow-right me-2"></i> Cerrar sesión
-                                            </button>
-                                        </form>
-                                    </li>
-                                </ul>
+                            <div class="d-flex align-items-center ms-auto gap-3">
+                                <button id="toggleTheme" class="btn btn-outline-secondary" title="Cambiar tema">
+                                    <i class="bi bi-moon"></i>
+                                </button>
+                                <div class="dropdown">
+                                    <a class="d-flex align-items-center text-decoration-none dropdown-toggle" href="#"
+                                        id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <img src="{% if user.profile.foto %}{{ user.profile.foto.url }}{% else %}{% static 'img/foto.jpg' %}{% endif %}"
+                                            alt="Avatar" width="40" height="40"
+                                            class="rounded-circle border border-2 border-secondary shadow-sm">
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                        <li>
+                                            <form action="{% url 'login:logout' %}" method="post" class="d-inline">
+                                                {% csrf_token %}
+                                                <button type="submit" class="dropdown-item">
+                                                    <i class="bi bi-box-arrow-right me-2"></i> Cerrar sesión
+                                                </button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </nav>
@@ -92,13 +97,28 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     {% block scripts %}{% endblock %}
     <script>
-document.addEventListener('click', function(e) {
-    const sidebar = document.querySelector('.sidebar-nav');
-    const toggle = document.querySelector('.sidebar-toggle');
-    if (!sidebar || !toggle) return;
-    if (window.innerWidth > 992) return;
-    if (!sidebar.contains(e.target) && !toggle.contains(e.target)) {
-        sidebar.classList.remove('open');
+document.addEventListener('DOMContentLoaded', function() {
+    // Al cargar, aplica el tema guardado
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('toggleTheme').querySelector('i').classList.remove('bi-moon');
+        document.getElementById('toggleTheme').querySelector('i').classList.add('bi-sun');
+    }
+});
+
+document.getElementById('toggleTheme').addEventListener('click', function() {
+    document.body.classList.toggle('dark-mode');
+    // Cambia el ícono del botón
+    const icon = this.querySelector('i');
+    if(document.body.classList.contains('dark-mode')) {
+        icon.classList.remove('bi-moon');
+        icon.classList.add('bi-sun');
+        localStorage.setItem('theme', 'dark');
+    } else {
+        icon.classList.remove('bi-sun');
+        icon.classList.add('bi-moon');
+        localStorage.setItem('theme', 'light');
     }
 });
 </script>
