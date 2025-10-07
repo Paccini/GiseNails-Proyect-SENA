@@ -15,80 +15,68 @@
 
 <body>
     {% if user.is_authenticated %}
-    <div class="d-flex">
-        {% if user.is_staff %}
-        <!-- Sidebar solo para admin -->
-        <!-- Botón hamburguesa solo en móviles -->
-        <button class="sidebar-toggle" onclick="document.querySelector('.sidebar-nav').classList.toggle('open')">
-            <i class="bi bi-list"></i>
+    <!-- Navbar superior con offcanvas lateral -->
+    <nav class="navbar navbar-light bg-white border-bottom fixed-top shadow-sm">
+      <div class="container-fluid">
+        <button class="navbar-toggler me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
         </button>
-        <nav class="sidebar-nav">
-            <div class="sidebar-brand">GiseNails</div>
-            <ul class="nav flex-column">
-                <li class="nav-item"><a class="nav-link" href="{% url 'login:dashboard' %}"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a>
-                </li>
-                <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-calendar-check me-2"></i>Citas</a>
-                </li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'empleados:empleado_list' %}"><i class="bi bi-people me-2"></i>Empleados</a>
-                </li>
-                <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-box-seam me-2"></i>Productos</a>
-                </li>
-                <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-scissors me-2"></i>Servicios</a>
-                </li>
-                <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-person-lines-fill me-2"></i>Clientes</a>
-                </li>
+        <span class="navbar-brand fw-bold text-dark" style="font-size: 1.5rem;">
+          {% if user.is_staff %}
+            Panel de Administración
+          {% else %}
+            Panel de Usuario
+          {% endif %}
+        </span>
+        <div class="d-flex align-items-center gap-3 ms-auto">
+          <button id="toggleTheme" class="btn btn-outline-secondary" title="Cambiar tema">
+            <i class="bi bi-moon"></i>
+          </button>
+          <div class="dropdown">
+            <a class="d-flex align-items-center text-decoration-none dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="{% if user.profile.foto %}{{ user.profile.foto.url }}{% else %}{% static 'img/foto.jpg' %}{% endif %}"
+                alt="Avatar" width="40" height="40"
+                class="rounded-circle border border-2 border-secondary shadow-sm">
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <li>
+                <form action="{% url 'login:logout' %}" method="post" class="d-inline">
+                  {% csrf_token %}
+                  <button type="submit" class="dropdown-item">
+                    <i class="bi bi-box-arrow-right me-2"></i> Cerrar sesión
+                  </button>
+                </form>
+              </li>
             </ul>
-        </nav>
-        {% endif %}
-        <!-- Contenido principal + footer -->
-        <div class="flex-grow-1 d-flex flex-column">
-            <div class="topbar">
-                <header class="topbar px-0">
-                    <nav class="navbar navbar-expand-lg" style="background: #f8fafc; border-bottom: 1px solid #e5e7eb;">
-                        <div class="container-fluid">
-                            <span class="navbar-brand fw-bold text-dark" style="font-size: 1.5rem;">
-                                {% if user.is_staff %}
-                                Panel de Administración
-                                {% else %}
-                                Panel de Usuario
-                                {% endif %}
-                            </span>
-                            <div class="d-flex align-items-center ms-auto gap-3">
-                                <button id="toggleTheme" class="btn btn-outline-secondary" title="Cambiar tema">
-                                    <i class="bi bi-moon"></i>
-                                </button>
-                                <div class="dropdown">
-                                    <a class="d-flex align-items-center text-decoration-none dropdown-toggle" href="#"
-                                        id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <img src="{% if user.profile.foto %}{{ user.profile.foto.url }}{% else %}{% static 'img/foto.jpg' %}{% endif %}"
-                                            alt="Avatar" width="40" height="40"
-                                            class="rounded-circle border border-2 border-secondary shadow-sm">
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                        <li>
-                                            <form action="{% url 'login:logout' %}" method="post" class="d-inline">
-                                                {% csrf_token %}
-                                                <button type="submit" class="dropdown-item">
-                                                    <i class="bi bi-box-arrow-right me-2"></i> Cerrar sesión
-                                                </button>
-                                            </form>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </nav>
-                </header>
-            </div>
-            <main class="container flex-grow-1">
-                {% block content %}
-                {% endblock %}
-            </main>
-            <footer class="text-center py-3 bg-dark text-white">
-                © 2025 GiseNails
-            </footer>
+          </div>
         </div>
-    </div>
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menú</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <ul class="navbar-nav flex-grow-1">
+              <li class="nav-item"><a class="nav-link" href="{% url 'login:dashboard' %}"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
+              <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-calendar-check me-2"></i>Citas</a></li>
+              <li class="nav-item"><a class="nav-link" href="{% url 'empleados:empleado_list' %}"><i class="bi bi-people me-2"></i>Empleados</a></li>
+              <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-box-seam me-2"></i>Productos</a></li>
+              <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-scissors me-2"></i>Servicios</a></li>
+              <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-person-lines-fill me-2"></i>Clientes</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <!-- Espacio para navbar fijo -->
+    <div style="height: 70px;"></div>
+    <main class="container flex-grow-1">
+        {% block content %}
+        {% endblock %}
+    </main>
+    <footer class="text-center py-4" style="background: #f8fafc; color: #232c36; border-top: 1px solid #e5e7eb; box-shadow: 0 -2px 12px rgba(44,62,80,0.07); font-size: 1.05rem;">
+        © 2025 GiseNails &nbsp;|&nbsp; Todos los derechos reservados
+    </footer>
     {% else %}
     <main class="container my-5">
     </main>
