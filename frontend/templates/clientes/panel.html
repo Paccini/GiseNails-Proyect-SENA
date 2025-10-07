@@ -1,4 +1,5 @@
 {% extends 'base_usuario.html' %}
+{% load static %}
 {% block content %}
 <div class="usuario-topbar">
     <span class="usuario-nombre">
@@ -15,25 +16,26 @@
 <div id="citas" class="usuario-card" style="margin-top:0;">
     <h2><i class="bi bi-calendar-heart"></i> Próximas citas</h2>
     {% if citas %}
-        {% for cita in citas %}
-        <div style="border:1px solid #f3c6e3; border-radius:12px; margin-bottom:18px; padding:18px 16px; background:#faf6fb;">
-            <div style="font-size:1.15em; color:#c06caa;">
-                <i class="bi bi-calendar-event"></i>
-                {{ cita.fecha }} - {{ cita.hora }}
-            </div>
-            <div style="margin-left:24px; color:#6c3483;">
-                <strong>Servicio:</strong> {{ cita.servicio }}<br>
-                <strong>Profesional:</strong> {{ cita.gestora }}
-            </div>
-            <div style="margin-top:8px; text-align:right;">
-                <a href="{% url 'clientes:cancelar' cita.pk %}" class="btn btn-danger btn-sm">
-                    <i class="bi bi-x-circle"></i> Cancelar
-                </a>
-            </div>
+    {% for cita in citas %}
+    <div
+        style="border:1px solid #f3c6e3; border-radius:12px; margin-bottom:18px; padding:18px 16px; background:#faf6fb;">
+        <div style="font-size:1.15em; color:#c06caa;">
+            <i class="bi bi-calendar-event"></i>
+            {{ cita.fecha }} - {{ cita.hora }}
         </div>
-        {% endfor %}
+        <div style="margin-left:24px; color:#6c3483;">
+            <strong>Servicio:</strong> {{ cita.servicio }}<br>
+            <strong>Profesional:</strong> {{ cita.gestora }}
+        </div>
+        <div style="margin-top:8px; text-align:right;">
+            <a href="{% url 'clientes:cancelar' cita.pk %}" class="btn btn-danger btn-sm">
+                <i class="bi bi-x-circle"></i> Cancelar
+            </a>
+        </div>
+    </div>
+    {% endfor %}
     {% else %}
-        <p style="color:#c06caa;text-align:center;">No tienes citas asignadas.</p>
+    <p style="color:#c06caa;text-align:center;">No tienes citas asignadas.</p>
     {% endif %}
 </div>
 
@@ -49,9 +51,54 @@
         <a href="#" class="btn btn-primary" style="margin:8px 12px; background:#c06caa; border:none;">
             <i class="bi bi-calendar-plus"></i> Agendar nueva cita
         </a>
-        <a href="#" class="btn btn-outline-secondary" style="margin:8px 12px; color:#c06caa; border-color:#c06caa;">
+        <button type="button" onclick="abrirModal()" class="btn btn-outline-secondary"
+            style="margin:8px 12px; color:#c06caa; border-color:#c06caa;">
             <i class="bi bi-pencil-square"></i> Editar perfil
-        </a>
+        </button>
+
+
+        <div id="modal" class="modal">
+            <div class="modal-content animate">
+                <span onclick="cerrarModal()" class="close" title="Cerrar"><i class="bi bi-x-octagon"></i></span>
+                <h2>Actualizacion de informacion</h2>
+                <form action="{% url 'clientes:editar_perfil' %}" method="post">
+                        {% csrf_token %}
+                        {% if form.errors %}
+                        <div class="alert alert-danger">
+                            {% for field in form %}
+                            {% for error in field.errors %}
+                            <strong>{{ field.label }}:</strong> {{ error }}<br>
+                            {% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}
+                            {{ error }}<br>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <style>
+                            /* Oculta el campo de contraseña */
+                            input[type="password"],
+                            .field-password,
+                            .form-group-password {
+                                display: none !important;
+                            }
+
+                            /* Mantiene el estilo de los demás campos */
+                            .modal-content input,
+                            .modal-content select {
+                                margin-bottom: 12px;
+                            }
+                        </style>
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-success" style="background:#c06caa; border:none;">
+                            <i class="bi bi-save"></i> Guardar cambios
+                        </button>
+                    </form>
+            </div>
+        </div>
+
+
     </div>
 </div>
+<script src="{% static 'js/panel.js' %}"></script>
 {% endblock %}
