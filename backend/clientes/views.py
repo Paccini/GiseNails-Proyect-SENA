@@ -42,10 +42,14 @@ def editar_perfil(request):
         form = RegistroClienteForm(request.POST, instance=cliente)
         if form.is_valid():
             form.save()
+            
             return redirect('clientes:panel')
     else:
         form = RegistroClienteForm(instance=cliente)
-    return render(request, 'clientes/panel.html', {'cliente': cliente, 'user': request.user, 'form': form})
+    return render(request, 'clientes/panel.html', {
+        'cliente': cliente, 
+        'user': request.user, 
+        'form': form})
     
 
 @never_cache

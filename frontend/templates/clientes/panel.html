@@ -64,16 +64,18 @@
                 <form action="{% url 'clientes:editar_perfil' %}" method="post">
                         {% csrf_token %}
                         {% if form.errors %}
-                        <div class="alert alert-danger">
-                            {% for field in form %}
-                            {% for error in field.errors %}
-                            <strong>{{ field.label }}:</strong> {{ error }}<br>
-                            {% endfor %}
-                            {% endfor %}
+                        
+                        <div style="color:#c00; font-weight:bold; margin-bottom:12px;" class="alert alert-danger">
+                        
+                            
+                            
+                            <strong>{{ field.label }}</strong> {{ error }}<br>
+                            
+                            
                             {% for error in form.non_field_errors %}
-                            {{ error }}<br>
+                            <h2>{{ error }} </h2><br>
                             {% endfor %}
-                        </div>
+                        
                         {% endif %}
                         <style>
                             /* Oculta el campo de contraseña */
@@ -93,12 +95,35 @@
                         <button type="submit" class="btn btn-success" style="background:#c06caa; border:none;">
                             <i class="bi bi-save"></i> Guardar cambios
                         </button>
-                    </form>
+                </form>
             </div>
         </div>
 
 
     </div>
 </div>
+<!-- Sweetalert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{% static 'js/notifiaciones.js' %}"></script>
+
 <script src="{% static 'js/panel.js' %}"></script>
+
+{% if form.errors %}
+<script>
+    document.addEventListener('DOMContentLoaded', cerrarModalSiExito);
+</script>
+{% endif %}
+
+
+{% if request.GET.guardado == 'ok' %}
+    
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        si_guardado();
+    });
+</script>
+{% endif %}
+    
+
+
 {% endblock %}
