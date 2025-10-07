@@ -37,7 +37,7 @@ def login_view(request):
 def admin_panel(request):
     if not (request.user.is_superuser or request.user.is_staff):
         return redirect('login:login')
-    return render(request, 'base_admin.html')
+    return redirect('login:dashboard')
 
 def logout_view(request):
     logout(request)

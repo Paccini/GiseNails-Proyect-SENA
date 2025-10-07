@@ -641,3 +641,237 @@ body.dark-mode footer {
     border-top: 1px solid #343a40 !important;
     box-shadow: 0 -2px 12px rgba(44, 62, 80, 0.15);
 }
+
+/* --- MODO CLARO --- */
+body {
+    background: #f8fafc;
+    color: #232c36;
+}
+
+.navbar,
+.offcanvas,
+.card,
+.card-header,
+.table thead th,
+.table tbody tr,
+.dropdown-menu,
+footer {
+    background: #f8fafc;
+    color: #232c36;
+}
+
+.navbar-brand,
+.offcanvas-title,
+.nav-link,
+.dropdown-item,
+.card-header,
+.table th,
+.table td,
+footer {
+    color: #232c36 !important;
+}
+
+.navbar-toggler,
+.btn-close {
+    filter: none;
+}
+
+.icon,
+.bi {
+    color: #232c36 !important;
+}
+
+/* --- MODO OSCURO --- */
+body.dark-mode {
+    background: #181a1b !important;
+    color: #f8fafc !important;
+}
+
+body.dark-mode .navbar,
+body.dark-mode .offcanvas,
+body.dark-mode .card,
+body.dark-mode .card-header,
+body.dark-mode .dropdown-menu,
+body.dark-mode footer {
+    background: #23272b !important;
+    color: #f8fafc !important;
+    border-color: #343a40 !important;
+}
+
+body.dark-mode .navbar-brand,
+body.dark-mode .offcanvas-title,
+body.dark-mode .nav-link,
+body.dark-mode .dropdown-item,
+body.dark-mode .card-header,
+body.dark-mode .table th,
+body.dark-mode .table td,
+body.dark-mode footer {
+    color: #f8fafc !important;
+}
+
+body.dark-mode .navbar-toggler,
+body.dark-mode .btn-close {
+    filter: invert(1);
+}
+
+body.dark-mode .icon,
+body.dark-mode .bi {
+    color: #f8fafc !important;
+}
+
+body.dark-mode .table thead th {
+    background: #23272b !important;
+    color: #f8fafc !important;
+    border-bottom: 2px solid #343a40 !important;
+}
+
+body.dark-mode .table tbody tr {
+    background: #23272b !important;
+    border-bottom: 2px solid #343a40 !important;
+}
+
+body.dark-mode .table-hover tbody tr:hover {
+    background: #343a40 !important;
+}
+
+body.dark-mode .btn-primary,
+body.dark-mode .btn-success,
+body.dark-mode .btn-danger,
+body.dark-mode .btn-warning {
+    color: #fff !important;
+}
+
+body.dark-mode .btn-outline-secondary,
+body.dark-mode .btn-outline-primary,
+body.dark-mode .btn-outline-danger {
+    color: #f8fafc !important;
+    border-color: #f8fafc !important;
+}
+
+body.dark-mode .dropdown-menu {
+    background: #23272b !important;
+    color: #f8fafc !important;
+}
+
+body.dark-mode .dropdown-item:hover,
+body.dark-mode .dropdown-item:focus {
+    background: #343a40 !important;
+    color: #fff !important;
+}
+
+body.dark-mode .border-secondary {
+    border-color: #f8fafc !important;
+}
+
+body.dark-mode .shadow-sm {
+    box-shadow: 0 4px 24px 0 rgba(44, 62, 80, 0.25) !important;
+}
+
+/* Avatar/foto */
+.avatar,
+img.rounded-circle {
+    background: #fff;
+    border: 2px solid #e5e7eb;
+}
+
+body.dark-mode .avatar,
+body.dark-mode img.rounded-circle {
+    background: #23272b;
+    border: 2px solid #f8fafc;
+}
+
+/* Cards y formularios */
+.card,
+.card-header,
+main.container>div,
+main.container>.card,
+main.container>form,
+main.container>table {
+    background: #fff;
+    color: #232c36;
+}
+
+body.dark-mode .card,
+body.dark-mode .card-header,
+body.dark-mode main.container>div,
+body.dark-mode main.container>.card,
+body.dark_mode main.container>form,
+body.dark-mode main.container>table {
+    background: #23272b !important;
+    color: #f8fafc !important;
+}
+
+/* Input y textarea */
+.card input,
+.card textarea,
+.card select {
+    background: #fff;
+    color: #232c36;
+    border: 1px solid #ccc;
+}
+
+body.dark-mode .card input,
+body.dark-mode .card textarea,
+body.dark-mode .card select {
+    background: #23272b !important;
+    color: #f8fafc !important;
+    border: 1px solid #343a40 !important;
+}
+
+/* Input de búsqueda: letras visibles en ambos modos */
+.card input[type="text"],
+.card input[type="search"] {
+    background: #fff;
+    color: #232c36;
+    border: 1px solid #ccc;
+}
+
+body.dark-mode .card input[type="text"],
+body.dark-mode .card input[type="search"] {
+    background: #23272b !important;
+    color: #f8fafc !important;
+    border: 1px solid #343a40 !important;
+}
+
+body.dark-mode .card input[type="text"]::placeholder,
+body.dark-mode .card input[type="search"]::placeholder {
+    color: #d1d5db !important;
+    opacity: 1;
+}
+
+/* Footer */
+footer {
+    background: #f8fafc;
+    color: #232c36;
+    border-top: 1px solid #e5e7eb;
+    box-shadow: 0 -2px 12px rgba(44, 62, 80, 0.07);
+    font-size: 1.05rem;
+}
+
+body.dark-mode footer {
+    background: #23272b !important;
+    color: #f8fafc !important;
+    border-top: 1px solid #343a40 !important;
+    box-shadow: 0 -2px 12px rgba(44, 62, 80, 0.15);
+}
+
+/* Dashboard cards: textos y subtítulos legibles en ambos modos */
+.card-body .fs-4,
+.card-body .fw-bold {
+    color: #232c36 !important;
+}
+
+.card-body .text-muted {
+    color: #6b7280 !important;
+}
+
+body.dark-mode .card-body .fs-4,
+body.dark-mode .card-body .fw-bold {
+    color: #f8fafc !important;
+}
+
+body.dark-mode .card-body .text-muted {
+    color: #d1d5db !important;
+}
+
+/* --- FIN --- */
