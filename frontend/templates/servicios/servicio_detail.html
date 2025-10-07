@@ -1,0 +1,16 @@
+{% extends 'base_admin.html' %}
+{% block content %}
+<div class="card shadow mb-4">
+    <div class="card-header bg-info text-white">
+        <h2 class="mb-0">Detalle de Servicio</h2>
+    </div>
+    <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"><strong>Nombre:</strong> {{ servicio.nombre }}</li>
+            <li class="list-group-item"><strong>Descripción:</strong> {{ servicio.descripcion }}</li>
+            <li class="list-group-item"><strong>Precio:</strong> ${{ servicio.precio }}</li>
+        </ul>
+        <a href="{% url 'servicio:servicio_list' %}" class="btn btn-secondary mt-3">Volver a la lista</a>
+    </div>
+</div>
+{% endblock %}

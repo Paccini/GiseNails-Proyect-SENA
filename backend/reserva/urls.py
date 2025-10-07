@@ -1,7 +1,8 @@
 from django.urls import path
-from reserva import views
+from .views import reserva, horarios_disponibles
+
 urlpatterns = [
-    path("", views.reserva, name="reserva"),
-    path('nueva/', views.reserva2, name='reserva2'),
-    # path('horarios-disponibles/', views.horarios_disponibles, name='horarios_disponibles'),
+    path('', reserva, name='reserva'),  # Esta línea crea la ruta /reserva/
+    path('horarios-disponibles/', horarios_disponibles, name='horarios_disponibles'),
+    # ... otras rutas ...
 ]

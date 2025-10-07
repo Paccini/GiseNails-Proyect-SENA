@@ -1,4 +1,7 @@
 from django.db import models
+from empleados.models import Empleado
+from servicio.models import Servicio
+from productos.models import Producto
 
 class HorarioDisponible(models.Model):
     hora = models.TimeField(unique=True)  # Ejemplo: 09:00, 10:00, etc.
@@ -26,3 +29,14 @@ class HorarioDisponible(models.Model):
         ]
         for h in horas:
             HorarioDisponible.objects.get_or_create(hora=h)
+
+
+class Reserva(models.Model):
+    gestora = models.ForeignKey(Empleado, on_delete=models.CASCADE)
+    servicio = models.ForeignKey(Servicio, on_delete=models.CASCADE)
+    producto = models.ForeignKey(Producto, on_delete=models.SET_NULL, null=True, blank=True)
+    hora = models.ForeignKey(HorarioDisponible, on_delete=models.CASCADE)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Reserva de {self.servicio.nombre} con {self.gestora.nombre} a las {self.hora}"

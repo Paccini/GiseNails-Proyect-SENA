@@ -1,0 +1,25 @@
+{% extends 'base_admin.html' %}
+{% block content %}
+<div class="card shadow mb-4">
+    <div class="card-header bg-info text-white">
+        <h2 class="mb-0">Detalle de Producto</h2>
+    </div>
+    <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"><strong>Nombre:</strong> {{ producto.nombre }}</li>
+            <li class="list-group-item"><strong>Descripción:</strong> {{ producto.descripcion }}</li>
+            <li class="list-group-item"><strong>Stock:</strong> {{ producto.cantidad }}</li>
+            <li class="list-group-item"><strong>Precio:</strong> ${{ producto.precio }}</li>
+            <li class="list-group-item">
+                <strong>Imagen:</strong><br>
+                {% if producto.imagen %}
+                    <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" style="max-width:200px; max-height:200px;">
+                {% else %}
+                    No hay imagen
+                {% endif %}
+            </li>
+        </ul>
+        <a href="{% url 'productos:producto_list' %}" class="btn btn-secondary mt-3">Volver a la lista</a>
+    </div>
+</div>
+{% endblock %}

@@ -5,3 +5,7 @@ def csrf_failure(request, reason=""):
 
 def home(request):
     return render(request, 'home.html')  # Asegúrate de tener este template
+
+def panel_admin(request):
+    # Vista para admin
+    return render(request, 'admin/panel.html')
