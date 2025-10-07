@@ -77,14 +77,18 @@
 /* =========================
    Iconos y textos destacados
    ========================= */
+
+
 .rounded-circle {
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 16px;
-    width: 120px;
-    height: 120px;
-    object-fit: cover;
+    width: 30px;
+    height: 30px;
+    padding: 50px;
+    object-fit: cover
+
 }
 
 /* Centrar y organizar los iconos y textos destacados en la sección de inicio */
