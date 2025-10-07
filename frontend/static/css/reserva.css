@@ -2,11 +2,11 @@
    reserva.css - Estilos para las páginas de reserva
    ========================= */
 body, .reserva-container {
-    font-family: 'Georgia', 'Times New Roman', serif !important;
+    font-family: 'Arapey', serif-elegant;
 }
 body {
     background: #fff6fa;
-    font-family: 'Montserrat', Arial, sans-serif;
+    font-family: 'arapey', serif-elegant;
     margin: 0;
     padding: 0;
 }
