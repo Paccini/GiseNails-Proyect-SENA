@@ -34,6 +34,7 @@ urlpatterns = [
     path('clientes/', include(('clientes.urls', 'clientes'), namespace='clientes')),
     path('paneladmin/', views.panel_admin, name='paneladmin'),
     path('logout/', auth_views.LogoutView.as_view(next_page='/login/'), name='logout'),
+    path('empleados/', include(('empleados.urls', 'empleados'), namespace='empleados')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
