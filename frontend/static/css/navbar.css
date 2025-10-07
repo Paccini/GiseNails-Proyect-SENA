@@ -1,8 +1,6 @@
 .navbar {
-    background: var(--rosado-muy-claro);
-    border-bottom: 2px solid var(--blanco);
-    padding: 20px;
-    
+    background: var(--rosado-claro);
+    padding: 20px
 }
 
 .navbar-brand span {

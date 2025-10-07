@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'reserva',
     'login',
     'clientes',
-    'empleados',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -86,8 +85,12 @@ WSGI_APPLICATION = 'gisenails.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': config('MYSQL_ADDON_DB'),
+        'USER': config('MYSQL_ADDON_USER'),
+        'PASSWORD': config('MYSQL_ADDON_PASSWORD'),
+        'HOST': config('MYSQL_ADDON_HOST'),
+        'PORT': config('MYSQL_ADDON_PORT', cast=int),
     }
 }
 
