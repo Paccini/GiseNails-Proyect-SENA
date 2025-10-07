@@ -453,3 +453,51 @@ body {
     color: var(--blanco);
     transform: scale(1.05);
 }
+
+/* Estilos para el modal de confirmación de reserva (moved from reserva.html) */
+.reserva-success-modal {
+  position: fixed;
+  inset: 0;
+  display: none; /* se muestra vía JS */
+  align-items: center;
+  justify-content: center;
+  background: rgba(20,20,30,0.56);
+  z-index: 2000;
+}
+.reserva-success-modal[aria-hidden="false"] { display: flex; }
+
+.reserva-success-card{
+  position: relative;
+  background: #fff;
+  padding: 1.6rem;
+  border-radius: 12px;
+  width: min(520px, 92%);
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+.reserva-success-logo{ width:72px; margin-bottom:0.6rem; }
+.reserva-success-card h2{ color:#e91e63; margin:0.2rem 0 0.4rem; font-size:1.4rem; }
+.reserva-success-text{ color:#444; margin-bottom:1rem; line-height:1.4; }
+.reserva-success-actions{ display:flex; gap:0.6rem; justify-content:center; margin-top:0.6rem; }
+.btn{ padding:0.6rem 1rem; border-radius:8px; text-decoration:none; display:inline-block; }
+.btn-primary{ background:#e91e63; color:#fff; padding:10px 18px; border-radius:10px; text-decoration:none; }
+.btn-secondary{ background:#f3f3f3; color:#333; padding:10px 18px; border-radius:10px; text-decoration:none; }
+
+/* botón cerrar del modal */
+.reserva-success-close{
+  position:absolute;
+  right:1rem;
+  top:1rem;
+  background:transparent;
+  border:none;
+  font-size:1.6rem;
+  color:#999;
+  cursor:pointer;
+}
+
+/* pequeño ajuste responsive */
+@media (max-width:480px){
+  .reserva-success-card{ padding:1rem; }
+  .reserva-success-card h2{ font-size:1.1rem; }
+  .reserva-success-actions{ flex-direction:column; gap:0.4rem; }
+}

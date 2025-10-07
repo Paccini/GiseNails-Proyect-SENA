@@ -9,6 +9,8 @@ from servicio.models import Servicio
 
 def login_view(request):
     error = None
+    prefill_email = None
+    password_only = False
     if request.method == 'POST':
         email = request.POST.get('username')
         password = request.POST.get('password')
@@ -22,6 +24,9 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
+            # si hay reserva pendiente en sesión, redirigir a completarla
+            if request.session.get('pending_reserva'):
+                return redirect('/reserva/completar-reserva/')
             if user.is_superuser or user.is_staff:
                 return redirect('login:admin_panel')  # Redirige a la vista admin
             elif Cliente.objects.filter(user=user).exists():
@@ -30,7 +35,13 @@ def login_view(request):
                 error = "No tienes permisos para acceder."
         else:
             error = "Usuario o contraseña incorrectos."
-    return render(request, 'login/login.html', {'form': {}, 'error': error})
+    # Si hay una reserva pendiente, prellenar el correo y mostrar modo "solo contraseña"
+    if request.session.get('pending_reserva'):
+        pending = request.session.get('pending_reserva')
+        prefill_email = pending.get('correo')
+        password_only = True
+
+    return render(request, 'login/login.html', {'form': {}, 'error': error, 'prefill_email': prefill_email, 'password_only': password_only})
 
 @never_cache
 @login_required(login_url='login:login')
