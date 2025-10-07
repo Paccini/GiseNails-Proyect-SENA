@@ -1,0 +1,197 @@
+/* =========================
+   inicio.css - Estilos específicos para la página de inicio
+   ========================= */
+
+/* Banner principal */
+.banner-principal {
+    background: linear-gradient(90deg, var(--rosado-pastel) 0%, var(--rosado-oscuro) 100%);
+    color: var(--blanco);
+    padding: 60px 0 40px 0;
+    text-align: center;
+    border-radius: 0 0 40px 40px;
+    box-shadow: 0 8px 32px rgba(230, 0, 126, 0.10);
+}
+
+.banner-principal h1 {
+    font-family: 'Pacifico', cursive;
+    font-size: 3rem;
+    margin-bottom: 16px;
+    color: var(--rosa-principal);
+}
+
+.banner-principal p {
+    font-size: 1.3rem;
+    margin-bottom: 24px;
+    color: var(--blanco);
+}
+
+.banner-btn {
+    background: var(--rosa-principal);
+    color: var(--blanco);
+    border: none;
+    border-radius: 25px;
+    padding: 12px 36px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(236, 64, 122, 0.12);
+    transition: background 0.2s, transform 0.2s;
+}
+
+.banner-btn:hover {
+    background: var(--rosado-oscuro);
+    transform: scale(1.05);
+}
+
+/* Carrusel de imágenes */
+.carousel-inner img {
+    object-fit: cover;
+    border-radius: 18px;
+}
+
+/* Iconos y textos destacados */
+.rounded-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 3px solid var(--rosado-pastel);
+}
+
+.fw-bold {
+    font-weight: bold !important;
+}
+
+/* Sección de servicios destacados */
+.servicios-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 48px 32px;
+    justify-content: center;
+}
+
+.servicio-img {
+    width: 300px;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.servicio-img-lista {
+    margin: 0px;
+}
+
+/* Botón de reserva ahora y ver más servicios */
+.btn-danger.rounded-pill {
+    background: var(--rosado-fuerte);
+    border: none;
+    font-weight: bold;
+    font-size: 1.1rem;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.btn-danger.rounded-pill:hover {
+    background: var(--rosado-oscuro);
+    transform: scale(1.05);
+}
+
+/* =========================
+   Estilos para la página de inicio de sesión
+   ========================= */
+
+.login-main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+}
+
+.login-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(228, 106, 173, 0.637);
+    padding: 32px 24px;
+    max-width: 400px;
+    width: 100%;
+    margin: 32px auto;
+}
+
+.login-card h1 {
+    color: #ff4081;
+    font-family: 'Arapey', sans-serif;
+    font-size: 2.2rem;
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.login-input-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.login-icon {
+    margin-right: 8px;
+    color: #ff4081;
+    font-size: 1.2em;
+}
+
+.login-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1.5px solid #ff4081;
+    border-radius: 8px;
+    font-size: 1em;
+    background: #fff;
+    color: #232c36;
+    margin-bottom: 0;
+}
+
+.login-btn {
+    width: 100%;
+    background: #ff4081;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 0;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-top: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.login-btn:hover {
+    background: #ff0077;
+}
+
+.login-link {
+    color: #ff4081;
+    text-decoration: underline;
+}
+
+.login-alert {
+    color: #c06caa;
+    background: #ffe0ec;
+    border-radius: 8px;
+    padding: 8px;
+    margin-top: 12px;
+    text-align: center;
+}
+
+/* Responsive ajustes */
+@media (max-width: 991px) {
+    .banner-principal {
+        padding: 40px 0 24px 0;
+        border-radius: 0 0 20px 20px;
+    }
+
+    .servicios-row {
+        gap: 16px;
+    }
+
+    .servicio-img {
+        width: 98vw;
+        max-width: 340px;
+        padding: 18px 8px;
+    }
+}

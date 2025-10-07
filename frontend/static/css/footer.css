@@ -1,0 +1,103 @@
+/* =========================
+   footer.css - Estilos del pie de página y redes sociales
+   ========================= */
+
+.pierna {
+    text-align: center;
+}
+
+.pierna > div > h5 {
+    color: var(--rosado-oscuro);
+    text-align: center;
+    font-weight: bold;
+}
+
+
+.pierna > div > ul > li > a {
+    color: #222 !important; /* negro suave */
+    font-size: 20px !important;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.pierna > div > ul > li > a:hover {
+    color: var(--rosado-oscuro) !important;
+    font-size: 20px !important;
+    text-decoration: none;
+}
+
+.pierna .footer-column.separador ul.list-unstyled li a {
+    color: #222 !important; /* o var(--negro-suave) */
+    font-size: 16px;
+    text-decoration: none;
+}
+
+.pierna > .separador{
+    border-left: 2px solid var(--rosado-oscuro);
+    border-right: 2px solid var(--rosado-oscuro);
+}
+
+.icono_social > ul {
+    justify-items: space-between !important;
+    display: flex;
+    padding-left: 0px;
+    padding-top: 30px;
+
+    position: relative;
+    width: 300px;
+    height: 200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.icono_social > ul > li > a > i {
+    border-radius: 10px;
+    text-align: center;
+    padding: 10px 15px 10px 15px;
+    margin: 12px 12px;
+    border: solid 1px var(--rosado-oscuro);
+}
+
+.icono_social > ul > li a i:hover {
+    border-radius: 10px;
+    text-align: center;
+    padding: 10px 15px 10px 15px;
+    margin: 12px 12px;
+    color: var(--letra-pie);
+    background-color: var(--rosado-oscuro);
+}
+
+.social_1 {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.social_2 {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.social_3 {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+}
+
+.social_4 {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+
+.pie > .pie-2 {
+    color: var(--letra-pie);
+    background-color: var(--rosado-fuerte);
+}
+
+.pie > .pie-2 img {
+    width: 100px;
+    border-radius: 22px;
+    box-shadow: 4px 3px 4px var(--letra-pie);
+}

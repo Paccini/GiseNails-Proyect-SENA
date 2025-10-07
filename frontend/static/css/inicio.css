@@ -1,0 +1,167 @@
+/* =========================
+   inicio.css - Estilos específicos para la página de inicio
+   ========================= */
+
+/* =========================
+   Banner principal
+   ========================= */
+.banner-principal {
+    background: linear-gradient(90deg, var(--rosado-pastel) 0%, var(--rosado-oscuro) 100%);
+    color: var(--blanco);
+    padding: 60px 0 40px 0;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(230, 0, 126, 0.10);
+}
+
+.banner-principal h1 {
+    font-family: 'Pacifico', cursive;
+    font-size: 3rem;
+    margin-bottom: 16px;
+    color: var(--rosa-principal);
+}
+
+.banner-principal p {
+    font-size: 1.3rem;
+    margin-bottom: 24px;
+    color: var(--blanco);
+}
+
+.banner-btn {
+    background: var(--rosa-principal);
+    color: var(--blanco);
+    border: none;
+    border-radius: 25px;
+    padding: 12px 36px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(236, 64, 122, 0.12);
+    transition: background 0.2s, transform 0.2s;
+}
+
+.banner-btn:hover {
+    background: var(--rosado-oscuro);
+    transform: scale(1.05);
+}
+
+/* =========================
+   Carrusel de imágenes
+   ========================= */
+/* .carousel-img-container {
+    width: 100%;
+    height: 100%;
+    overflow:hidden;
+    
+} */
+
+.cont-bn{
+    background: url("../img/banner_inicio.png") no-repeat center center;
+    background-size: cover;
+    height: 50vh;
+    width: 100%;
+}
+
+.carousel-img {
+    background: url;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+@media (max-width: 768px) {
+  .banner {
+    aspect-ratio: 4 / 3; /* Proporción más cuadrada para celular */
+  }
+}
+
+/* =========================
+   Iconos y textos destacados
+   ========================= */
+
+
+.rounded-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    width: 30px;
+    height: 30px;
+    padding: 50px;
+    object-fit: cover
+
+}
+
+/* Centrar y organizar los iconos y textos destacados en la sección de inicio */
+.container-fluid .row.justify-content-around {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 32px;
+}
+
+.container-fluid .row.justify-content-around > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+/* Centrar los textos debajo de las imágenes */
+.container-fluid .row.justify-content-around p {
+    text-align: center;
+    margin-top: 12px;
+}
+
+/* =========================
+   Sección de servicios destacados
+   ========================= */
+.servicios-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 48px 32px;
+    justify-content: center;
+}
+
+.servicio-img {
+    width: 300px;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.servicio-img-lista {
+    margin: 0px;
+}
+
+/* =========================
+   Botón de reserva ahora y ver más servicios
+   ========================= */
+.btn-danger.rounded-pill {
+    background: var(--rosado-fuerte);
+    border: none;
+    font-weight: bold;
+    font-size: 1.1rem;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.btn-danger.rounded-pill:hover {
+    background: var(--rosado-oscuro);
+    transform: scale(1.05);
+}
+
+/* =========================
+   Responsive ajustes
+   ========================= */
+@media (max-width: 991px) {
+    .banner-principal {
+        padding: 40px 0 24px 0;
+    }
+    .servicios-row {
+        gap: 16px;
+    }
+    .servicio-img {
+        width: 98vw;
+        max-width: 340px;
+        padding: 18px 8px;
+    }
+}
