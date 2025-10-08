@@ -3,9 +3,15 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from clientes.models import Cliente
 from django.views.decorators.cache import never_cache
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from productos.models import Producto
 from servicio.models import Servicio
+from reserva.models import Reserva
+from django.utils import timezone
+from django.db.models import Count
+from django.http import HttpResponse
+from .forms import UpdateUserForm
+
 
 def login_view(request):
     error = None
@@ -54,23 +60,98 @@ def logout_view(request):
     logout(request)
     return redirect('login:login')
 
+@login_required
+@user_passes_test(lambda u: u.is_staff)
 @never_cache
-@login_required(login_url='login:login')
 def dashboard(request):
-    # Ejemplo de datos para el dashboard
     clientes_count = Cliente.objects.count()
     productos_count = Producto.objects.count()
     servicios_count = Servicio.objects.count()
-    ventas_total = 0  # Si tienes modelo de ventas, cámbialo
-    meses = ["Ene", "Feb", "Mar", "Abr", "May", "Jun"]
-    datos_citas = [5, 8, 12, 7, 10, 6]  # Simulado, reemplaza por tus datos
+    ventas_total = sum([cita.servicio.precio for cita in Reserva.objects.filter(estado='realizada') if hasattr(cita, 'servicio') and cita.servicio])
+
+    citas_realizadas = (
+        Reserva.objects
+        .filter(fecha__year=timezone.now().year, estado='realizada')
+        .values_list('fecha__month')
+        .annotate(total=Count('id'))
+        .order_by('fecha__month')
+    )
+    meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
+    datos_citas = [0]*12
+    for mes, total in citas_realizadas:
+        datos_citas[mes-1] = total
+
+    # Ejemplo de notificaciones
+    notificaciones = []
+    # Últimas 5 citas generadas
+    for cita in Reserva.objects.order_by('-fecha')[:5]:
+        notificaciones.append({
+            'icon': 'bi-calendar-check',
+            'texto': f'Cita generada para {cita.cliente}',
+            'fecha': cita.fecha.strftime('%d/%m/%Y %H:%M')
+        })
+    # Últimas 5 ventas realizadas
+    for venta in Reserva.objects.filter(estado='realizada').order_by('-fecha')[:5]:
+        notificaciones.append({
+            'icon': 'bi-cash-stack',
+            'texto': f'Venta realizada: ${venta.servicio.precio:.2f}',
+            'fecha': venta.fecha.strftime('%d/%m/%Y %H:%M')
+        })
 
     context = {
-        "clientes_count": clientes_count,
-        "productos_count": productos_count,
-        "servicios_count": servicios_count,
-        "ventas_total": ventas_total,
-        "meses": meses,
-        "datos_citas": datos_citas,
+        'clientes_count': clientes_count,
+        'productos_count': productos_count,
+        'servicios_count': servicios_count,
+        'ventas_total': ventas_total,
+        'datos_citas': datos_citas,
+        'meses': meses,
+        'notificaciones': notificaciones,
     }
-    return render(request, "dashboard.html", context)
+    return render(request, 'dashboard.html', context)
+
+@login_required(login_url='login:login')
+def update_user(request):
+    update_error = None
+    update_success = None
+    show_modal = False
+    if request.method == 'POST':
+        form = UpdateUserForm(request.POST)
+        show_modal = True  # Siempre mostrar el modal tras POST
+        if form.is_valid():
+            nombre = form.cleaned_data['nombre']
+            old_password = form.cleaned_data['old_password']
+            new_password = form.cleaned_data['new_password']
+            user = request.user
+            if not user.check_password(old_password):
+                update_error = "La contraseña actual es incorrecta. No se realizaron cambios."
+            else:
+                nombre_parts = nombre.strip().split(' ', 1)
+                user.first_name = nombre_parts[0]
+                user.last_name = nombre_parts[1] if len(nombre_parts) > 1 else ''
+                nuevo_username = nombre.replace(" ", "").lower()
+                if User.objects.exclude(pk=user.pk).filter(username=nuevo_username).exists():
+                    update_error = "El nombre de usuario ya está en uso. Elige otro nombre."
+                else:
+                    user.username = nuevo_username
+                    if new_password:
+                        user.set_password(new_password)
+                    user.save()
+                    if new_password:
+                        from django.contrib.auth import update_session_auth_hash
+                        update_session_auth_hash(request, user)
+                    update_success = "¡Datos actualizados correctamente!"
+                    show_modal = True
+        return render(request, 'dashboard.html', {
+            'form': form,
+            'update_error': update_error,
+            'update_success': update_success,
+            'show_modal': show_modal,
+        })
+    else:
+        form = UpdateUserForm(initial={'nombre': request.user.get_full_name()})
+    return render(request, 'dashboard.html', {
+        'form': form,
+        'update_error': update_error,
+        'update_success': None,
+        'show_modal': show_modal,
+    })

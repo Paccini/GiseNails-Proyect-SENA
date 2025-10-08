@@ -1,0 +1,22 @@
+<!-- clientes/templates/clientes/cliente_detail.html -->
+{% extends 'base_admin.html' %}
+{% block content %}
+<div class="card shadow mb-4">
+    <div class="card-header bg-primary text-white">
+        <h2 class="mb-0">
+            <i class="bi bi-person-lines-fill me-2"></i> Detalle de Cliente
+        </h2>
+    </div>
+    <div class="card-body">
+        <ul class="list-group list-group-flush mb-3">
+            <li class="list-group-item"><strong>ID:</strong> {{ object.id }}</li>
+            <li class="list-group-item"><strong>Nombre:</strong> {{ object.nombre }}</li>
+            <li class="list-group-item"><strong>Correo:</strong> {{ object.correo }}</li>
+            <li class="list-group-item"><strong>Teléfono:</strong> {{ object.telefono }}</li>
+        </ul>
+        <a href="{% url 'clientes:cliente_list' %}" class="btn btn-secondary d-flex align-items-center gap-2">
+            <i class="bi bi-arrow-left"></i> Volver
+        </a>
+    </div>
+</div>
+{% endblock %}

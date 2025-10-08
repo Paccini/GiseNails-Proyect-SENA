@@ -1,12 +1,21 @@
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from empleados.models import Empleado
 from servicio.models import Servicio
-from reserva.models import HorarioDisponible, Reserva
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect
 from clientes.models import Cliente
-from django.db import transaction, IntegrityError
+from .forms import ReservaForm, ReservaEditForm
+from reserva.models import HorarioDisponible, Reserva
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.views.decorators.cache import never_cache
+from django.core.paginator import Paginator
+from django.utils import timezone
+from productos.models import Producto
+from django.db.models import Count
+from django.urls import reverse_lazy
+from django.views.generic import CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from .models import Reserva
+from datetime import datetime, time
 
 def reserva(request):
     gestoras = Empleado.objects.all()
@@ -86,7 +95,7 @@ def reserva(request):
         except Exception as e:
             return JsonResponse({"success": False, "error": str(e)})
 
-    return render(request, 'reserva/reserva.html', {
+    return render(request, 'reservas/reserva.html', {
         'gestoras': gestoras,
         'horarios': horarios,
         'servicios_por_categoria': servicios_por_categoria,
@@ -112,53 +121,120 @@ def horarios_disponibles(request):
     data = [{'id': h.id, 'hora': h.hora.strftime('%H:%M')} for h in disponibles]
     return JsonResponse({'horarios': data})
 
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+@never_cache
+def home(request):
+    ahora = timezone.localtime()
+    hoy = ahora.date()
+    hora_actual = ahora.time().replace(second=0, microsecond=0)
 
-@login_required(login_url='login:login')
-def completar_reserva(request):
-    pending = request.session.pop('pending_reserva', None)
-    if not pending:
-        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            return JsonResponse({'success': False, 'error': 'No pending reservation'}, status=400)
-        return redirect('/reserva/')
+    # Cancelar solo las pendientes cuya fecha es menor a hoy
+    Reserva.objects.filter(
+        estado='pendiente',
+        fecha__lt=hoy
+    ).update(estado='cancelada')
 
-    # buscar cliente asociado al user
-    try:
-        cliente = Cliente.objects.get(user=request.user)
-    except Cliente.DoesNotExist:
-        return JsonResponse({'success': False, 'error': 'User has no cliente profile'}, status=400)
+    # Cancelar solo las pendientes de hoy cuya hora ya pasó
+    Reserva.objects.filter(
+        estado='pendiente',
+        fecha=hoy,
+        hora__hora__lt=hora_actual
+    ).update(estado='cancelada')
 
-    # crear reserva
-    gestora = Empleado.objects.get(id=pending['gestora_id'])
-    servicio = Servicio.objects.get(id=pending['servicio_id'])
-    try:
-        hora = HorarioDisponible.objects.get(id=pending['hora_id'])
-    except HorarioDisponible.DoesNotExist:
-        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            return JsonResponse({'success': False, 'error': 'Horario ya no existe. Por favor, elige otro.'}, status=400)
-        return redirect('/reserva/?error=hora_no_disponible')
-    from datetime import datetime
-    fecha = datetime.fromisoformat(pending['fecha']).date()
-    # Crear la reserva de forma atómica y prevenir duplicados
-    try:
-        with transaction.atomic():
-            # comprobar si ya existe
-            if Reserva.objects.filter(gestora=gestora, hora=hora, fecha=fecha).exists():
-                if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-                    return JsonResponse({'success': False, 'error': 'El horario ya fue reservado. Elige otro.'}, status=400)
-                return redirect('/reserva/?error=hora_no_disponible')
+    fecha = request.GET.get('fecha', '')
+    usuario = request.GET.get('usuario', '')
+    estado = request.GET.get('estado', '')
 
-            Reserva.objects.create(
-                gestora=gestora,
-                cliente=cliente,
-                servicio=servicio,
-                hora=hora,
-                fecha=fecha,
-            )
-    except IntegrityError:
-        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            return JsonResponse({'success': False, 'error': 'Error al crear la reserva. Intenta nuevamente.'}, status=500)
-        return redirect('/reserva/?error=error_creando')
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        return JsonResponse({'success': True})
-    # petición normal de navegador: redirigir a página de reserva con parámetro de éxito
-    return redirect('/reserva/?success=1')
+    citas = Reserva.objects.all()
+    # Excluye canceladas y realizadas por defecto
+    if not estado:
+        citas = citas.exclude(estado__in=['realizada', 'cancelada'])
+    else:
+        citas = citas.filter(estado=estado)
+
+    if fecha:
+        citas = citas.filter(fecha=fecha)
+    if usuario:
+        citas = citas.filter(cliente__nombre__icontains=usuario)
+
+    citas = citas.order_by('fecha', 'hora__hora')
+
+    paginator = Paginator(citas, 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    context = {
+        'reservas': page_obj,
+        'fecha': fecha,
+        'usuario': usuario,
+        'estado': estado,
+        'is_paginated': page_obj.has_other_pages(),
+        'page_obj': page_obj,
+        'paginator': paginator,
+    }
+    return render(request, 'reservas/home.html', context)
+
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+@never_cache
+def agregar_reserva(request):
+    fecha = request.GET.get('fecha')
+    gestora = request.GET.get('gestora')
+    form = ReservaForm(request.POST or None)
+
+    # Filtra las horas solo si hay fecha y gestora seleccionadas
+    if fecha and gestora:
+        ocupadas = Reserva.objects.filter(
+            gestora_id=gestora,
+            fecha=fecha
+        ).values_list('hora_id', flat=True)
+        horas_disponibles = HorarioDisponible.objects.exclude(id__in=ocupadas)
+        form.fields['hora'].queryset = horas_disponibles.order_by('hora')
+    else:
+        form.fields['hora'].queryset = HorarioDisponible.objects.all().order_by('hora')
+
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        return redirect('reserva:home')
+
+    return render(request, 'reservas/agregar.html', {'form': form})
+
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+@never_cache
+def editar_reserva(request, pk):
+    cita = get_object_or_404(Reserva, pk=pk)
+    if request.method == 'POST':
+        form = ReservaEditForm(request.POST, instance=cita)
+        if form.is_valid():
+            form.save()
+            return redirect('reserva:home')
+    else:
+        form = ReservaEditForm(instance=cita)
+    context = {'form': form}
+    return render(request, 'reservas/editar.html', context)
+
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+@never_cache
+def eliminar_reserva(request, pk):
+    cita = get_object_or_404(Reserva, pk=pk)
+    if request.method == 'POST':
+        cita.delete()
+        return redirect("reserva:home")
+    return render(request, 'reservas/eliminar.html', {'cita': cita})
+
+
+class ReservaCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    model = Reserva
+    form_class = ReservaForm
+    template_name = 'reservas/agregar.html'
+    success_url = reverse_lazy('reserva:home')
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def form_valid(self, form):
+        # El formulario ya tiene el cliente seleccionado
+        self.object = form.save()
+        return super().form_valid(form)

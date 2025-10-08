@@ -65,6 +65,14 @@ main.container>table {
 .table th,
 .table td {
     vertical-align: middle;
+    white-space: nowrap;
+    /* No cortar palabras */
+    overflow: hidden;
+    /* Oculta el desbordamiento */
+    text-overflow: ellipsis;
+    /* Muestra ... si se desborda */
+    max-width: 180px;
+    /* Ajusta el ancho máximo según tu diseño */
 }
 
 .table-hover tbody tr:hover {
@@ -78,6 +86,92 @@ main.container>table {
 
 .table tbody tr td {
     border: none;
+}
+
+/* Mejor separación y legibilidad para tablas en el panel admin */
+.table {
+    border-collapse: separate !important;
+    border-spacing: 0 12px !important;
+    /* Espacio vertical entre filas */
+    background: transparent;
+}
+
+.table th,
+.table td {
+    padding: 16px 12px !important;
+    /* Más espacio interno */
+    vertical-align: middle !important;
+    font-size: 1.05em;
+}
+
+.table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.table tbody tr {
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.07);
+    border-radius: 12px;
+    transition: box-shadow 0.2s;
+}
+
+body.dark-mode .table tbody tr {
+    background: #23272b !important;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.18);
+}
+
+.table tbody tr td:first-child,
+.table tbody tr th:first-child {
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+}
+
+.table tbody tr td:last-child,
+.table tbody tr th:last-child {
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+.table-hover tbody tr:hover {
+    box-shadow: 0 4px 16px rgba(44, 62, 80, 0.15);
+    background: #f3f4f6 !important;
+}
+
+body.dark-mode .table-hover tbody tr:hover {
+    background: #343a40 !important;
+}
+
+.table thead th {
+    background: #f1f5f9 !important;
+    color: #232c36 !important;
+    border-bottom: 2px solid #e5e7eb !important;
+}
+
+body.dark-mode .table thead th {
+    background: #23272b !important;
+    color: #f8fafc !important;
+    border-bottom: 2px solid #343a40 !important;
+}
+
+/* Espacio entre botones de acciones */
+.table .btn,
+.table .btn-group .btn {
+    min-width: 40px;
+    padding: 6px 10px;
+    font-size: 1.1em;
+    margin-right: 4px;
+    margin-bottom: 2px;
+}
+
+.table .btn i {
+    font-size: 1.2em;
+    vertical-align: middle;
+}
+
+.table .btn:last-child {
+    margin-right: 0;
 }
 
 /* Botones */
@@ -875,3 +969,51 @@ body.dark-mode .card-body .text-muted {
 }
 
 /* --- FIN --- */
+.modal-content {
+    border-radius: 16px;
+    box-shadow: 0 8px 32px 0 rgba(44, 62, 80, 0.18);
+    background: #fff;
+    color: #232c36;
+}
+
+body.dark-mode .modal-content {
+    background: #23272b !important;
+    color: #f8fafc !important;
+}
+
+.modal-header .modal-title,
+.modal-body label,
+.modal-body .form-text {
+    color: #232c36 !important;
+}
+
+body.dark-mode .modal-header .modal-title,
+body.dark-mode .modal-body label,
+body.dark-mode .modal-body .form-text {
+    color: #f8fafc !important;
+}
+
+.modal-body .form-label {
+    font-weight: 600;
+    font-size: 1.05em;
+}
+
+.modal-body input.form-control {
+    font-size: 1.1em;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    background: #fff;
+    color: #232c36;
+}
+
+body.dark-mode .modal-body input.form-control {
+    background: #23272b !important;
+    color: #f8fafc !important;
+    border: 1px solid #343a40 !important;
+}
+
+.modal-footer .btn {
+    min-width: 110px;
+    font-size: 1.05em;
+}
