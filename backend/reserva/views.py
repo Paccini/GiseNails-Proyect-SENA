@@ -95,7 +95,7 @@ def reserva(request):
         except Exception as e:
             return JsonResponse({"success": False, "error": str(e)})
 
-    return render(request, 'reserva/reserva.html', {
+    return render(request, 'reservas/reserva.html', {
         'gestoras': gestoras,
         'horarios': horarios,
         'servicios_por_categoria': servicios_por_categoria,

@@ -167,10 +167,10 @@ def registro_cliente(request):
         form = RegistroClienteForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('adminpanel:login')
+            return redirect('login:login')  # Si quieres redirigir después de registrar
     else:
         form = RegistroClienteForm()
-    return render(request, 'adminpanel/login.html', {
+    return render(request, 'clientes/registro.html', {
         'form': form,
         'registro': True
     })
