@@ -15,6 +15,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Reserva
+from datetime import datetime, time
 
 def reserva(request):
     gestoras = Empleado.objects.all()
@@ -124,20 +125,50 @@ def horarios_disponibles(request):
 @user_passes_test(lambda u: u.is_staff)
 @never_cache
 def home(request):
+    
+    ahora = timezone.localtime()
+    hoy = ahora.date()
+    hora_actual = ahora.time()
+
+    # Cancelar solo las pendientes cuya fecha es menor a hoy
+    Reserva.objects.filter(
+        estado='pendiente',
+        fecha__lt=hoy
+    ).update(estado='cancelada')
+
+    # Cancelar solo las pendientes de hoy cuya hora ya pasó
+    Reserva.objects.filter(
+        estado='pendiente',
+        fecha=hoy,
+        hora__hora__lt=hora_actual  # Asegúrate que 'hora__hora' es el campo correcto
+    ).update(estado='cancelada')
+
     fecha = request.GET.get('fecha', '')
     usuario = request.GET.get('usuario', '')
+    estado = request.GET.get('estado', '')  # Nuevo filtro por estado
+
+    # Por defecto, no mostrar realizadas
     citas = Reserva.objects.all()
+    if not estado:
+        citas = citas.exclude(estado='realizada')
+    else:
+        citas = citas.filter(estado=estado)
+
     if fecha:
         citas = citas.filter(fecha=fecha)
     if usuario:
         citas = citas.filter(cliente__nombre__icontains=usuario)
+
+    citas = citas.order_by('fecha', 'hora__hora')
+
     paginator = Paginator(citas, 5)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     context = {
-        'citas': page_obj,
+        'reservas': page_obj,
         'fecha': fecha,
         'usuario': usuario,
+        'estado': estado,
         'is_paginated': page_obj.has_other_pages(),
         'page_obj': page_obj,
         'paginator': paginator,
@@ -152,7 +183,7 @@ def agregar_reserva(request):
         form = ReservaForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('home')
+            return redirect('reserva:home')
     else:
         form = ReservaForm()
     context = {'form': form}
@@ -161,13 +192,13 @@ def agregar_reserva(request):
 @login_required
 @user_passes_test(lambda u: u.is_staff)
 @never_cache
-def editar_reserva(request, uuid):
-    cita = get_object_or_404(Reserva, uuid=uuid)
+def editar_reserva(request, pk):
+    cita = get_object_or_404(Reserva, pk=pk)
     if request.method == 'POST':
         form = ReservaEditForm(request.POST, instance=cita)
         if form.is_valid():
             form.save()
-            return redirect('home')
+            return redirect('reserva:home')
     else:
         form = ReservaEditForm(instance=cita)
     context = {'form': form}
@@ -176,49 +207,19 @@ def editar_reserva(request, uuid):
 @login_required
 @user_passes_test(lambda u: u.is_staff)
 @never_cache
-def eliminar_reserva(request, uuid):
-    cita = get_object_or_404(Reserva, uuid=uuid)
+def eliminar_reserva(request, pk):
+    cita = get_object_or_404(Reserva, pk=pk)
     if request.method == 'POST':
         cita.delete()
-        return redirect("home")
+        return redirect("reserva:home")
     return render(request, 'reservas/eliminar.html', {'cita': cita})
 
-@login_required
-@user_passes_test(lambda u: u.is_staff)
-@never_cache
-def dashboard(request):
-    clientes_count = Cliente.objects.count()
-    productos_count = Producto.objects.count()
-    servicios_count = Servicio.objects.count()
-    ventas_total = sum([cita.servicio.precio for cita in Reserva.objects.filter(estado='realizada') if hasattr(cita, 'servicio') and cita.servicio])
-
-    citas_realizadas = (
-        Reserva.objects
-        .filter(fecha__year=timezone.now().year, estado='realizada')
-        .values_list('fecha__month')
-        .annotate(total=Count('id'))
-        .order_by('fecha__month')
-    )
-    meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
-    datos_citas = [0]*12
-    for mes, total in citas_realizadas:
-        datos_citas[mes-1] = total
-
-    context = {
-        'clientes_count': clientes_count,
-        'productos_count': productos_count,
-        'servicios_count': servicios_count,
-        'ventas_total': ventas_total,
-        'datos_citas': datos_citas,
-        'meses': meses,
-    }
-    return render(request, 'dashboard.html', context)
 
 class ReservaCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Reserva
     form_class = ReservaForm
     template_name = 'citas/agregar.html'
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('reserva:home')
 
     def test_func(self):
         return self.request.user.is_staff
