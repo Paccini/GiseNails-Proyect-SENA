@@ -1,0 +1,16 @@
+{% extends 'base_admin.html' %}
+{% block content %}
+<div class="card shadow mb-4">
+    <div class="card-header bg-danger text-white">
+        <h2 class="mb-0">Eliminar Cita</h2>
+    </div>
+    <div class="card-body">
+        <p>¿Estás seguro que deseas eliminar la cita de <strong>{{ cita.cliente }}</strong> para el servicio <strong>{{ cita.servicio.nombre }}</strong>?</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Eliminar</button>
+            <a href="{% url 'home' %}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
