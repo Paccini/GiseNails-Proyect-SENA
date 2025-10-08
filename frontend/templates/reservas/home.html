@@ -13,7 +13,15 @@
     <div class="card-body">
         <form method="get" class="d-flex gap-2 mb-3">
             <input type="date" name="fecha" value="{{ fecha }}" class="form-control w-auto">
-            <input type="text" name="usuario" value="{{ usuario }}" class="form-control w-auto" placeholder="Buscar cliente...">
+            <input type="text" name="usuario" value="{{ usuario }}" class="form-control w-auto"
+                placeholder="Buscar cliente...">
+            <select name="estado" class="form-control w-auto">
+                <option value="">Pendientes y Confirmadas</option>
+                <option value="pendiente" {% if estado == "pendiente" %}selected{% endif %}>Pendiente</option>
+                <option value="confirmada" {% if estado == "confirmada" %}selected{% endif %}>Confirmada</option>
+                <option value="cancelada" {% if estado == "cancelada" %}selected{% endif %}>Cancelada</option>
+                <option value="realizada" {% if estado == "realizada" %}selected{% endif %}>Realizada</option>
+            </select>
             <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
         </form>
         <div class="table-responsive">
@@ -46,10 +54,12 @@
                             <span class="badge bg-info">{{ reserva.get_estado_display }}</span>
                         </td>
                         <td>
-                            <a href="{% url 'reserva:editar_reserva' reserva.id %}" class="btn btn-sm btn-warning me-1" title="Editar">
+                            <a href="{% url 'reserva:editar_reserva' reserva.id %}" class="btn btn-sm btn-warning me-1"
+                                title="Editar">
                                 <i class="bi bi-pencil-square"></i>
                             </a>
-                            <a href="{% url 'reserva:eliminar_reserva' reserva.id %}" class="btn btn-sm btn-danger" title="Eliminar">
+                            <a href="{% url 'reserva:eliminar_reserva' reserva.id %}" class="btn btn-sm btn-danger"
+                                title="Eliminar">
                                 <i class="bi bi-trash"></i>
                             </a>
                         </td>
@@ -67,7 +77,8 @@
             <ul class="pagination justify-content-center">
                 {% if page_obj.has_previous %}
                 <li class="page-item">
-                    <a class="page-link" href="?fecha={{ fecha }}&usuario={{ usuario }}&page={{ page_obj.previous_page_number }}">Anterior</a>
+                    <a class="page-link"
+                        href="?fecha={{ fecha }}&usuario={{ usuario }}&page={{ page_obj.previous_page_number }}">Anterior</a>
                 </li>
                 {% endif %}
                 {% for num in paginator.page_range %}
@@ -77,7 +88,8 @@
                 {% endfor %}
                 {% if page_obj.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="?fecha={{ fecha }}&usuario={{ usuario }}&page={{ page_obj.next_page_number }}">Siguiente</a>
+                    <a class="page-link"
+                        href="?fecha={{ fecha }}&usuario={{ usuario }}&page={{ page_obj.next_page_number }}">Siguiente</a>
                 </li>
                 {% endif %}
             </ul>
