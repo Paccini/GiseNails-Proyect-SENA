@@ -3,6 +3,11 @@ from django.core.validators import RegexValidator
 from django.contrib.auth.models import User
 from .models import Cliente
 
+class ClienteForm(forms.ModelForm):
+    class Meta:
+        model = Cliente
+        fields = '__all__'
+
 class RegistroClienteForm(forms.ModelForm):
     nombre = forms.CharField(
         validators=[
