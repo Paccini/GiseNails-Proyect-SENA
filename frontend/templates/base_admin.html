@@ -32,6 +32,33 @@
           <button id="toggleTheme" class="btn btn-outline-secondary" title="Cambiar tema">
             <i class="bi bi-moon"></i>
           </button>
+          <!-- Campana de notificaciones -->
+          <div class="dropdown">
+            <button class="btn btn-outline-secondary position-relative" id="notifDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Notificaciones">
+              <i class="bi bi-bell fs-5"></i>
+              {% if notificaciones|length > 0 %}
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {{ notificaciones|length }}
+              </span>
+              {% endif %}
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notifDropdown" style="min-width: 320px;">
+              <li class="dropdown-header fw-bold">Notificaciones</li>
+              {% if notificaciones %}
+                {% for notif in notificaciones %}
+                  <li>
+                    <div class="dropdown-item small">
+                      <i class="bi {{ notif.icon }} me-2"></i>
+                      {{ notif.texto }}
+                      <span class="text-muted ms-2" style="font-size:0.9em;">{{ notif.fecha }}</span>
+                    </div>
+                  </li>
+                {% endfor %}
+              {% else %}
+                <li><span class="dropdown-item text-muted">Sin notificaciones nuevas</span></li>
+              {% endif %}
+            </ul>
+          </div>
           <div class="dropdown">
             <a class="d-flex align-items-center text-decoration-none dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
               <img src="{% if user.profile.foto %}{{ user.profile.foto.url }}{% else %}{% static 'img/foto.jpg' %}{% endif %}"
@@ -39,6 +66,11 @@
                 class="rounded-circle border border-2 border-secondary shadow-sm">
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <li>
+                <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#updateUserModal">
+                  <i class="bi bi-pencil-square me-2"></i> Actualizar datos
+                </button>
+              </li>
               <li>
                 <form action="{% url 'login:logout' %}" method="post" class="d-inline">
                   {% csrf_token %}
@@ -109,6 +141,82 @@ document.getElementById('toggleTheme').addEventListener('click', function() {
         icon.classList.add('bi-moon');
         localStorage.setItem('theme', 'light');
     }
+});
+</script>
+<!-- Modal para actualizar datos -->
+<div class="modal fade" id="updateUserModal" tabindex="-1" aria-labelledby="updateUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" style="background: #fff; border-radius: 16px;">
+      <form method="post" action="{% url 'login:update_user' %}" id="updateUserForm">
+        {% csrf_token %}
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold" id="updateUserModalLabel" style="color:#232c36;">Actualizar datos de admin</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <span class="fw-semibold" style="color:#3b82f6;">Puedes actualizar tu nombre y contraseña de administrador. Para cambiar la contraseña, debes ingresar la actual y la nueva.</span>
+          </div>
+          {% if update_error %}
+            <div class="alert alert-danger">{{ update_error }}</div>
+          {% endif %}
+          <div class="mb-3">
+            <label for="id_nombre" class="form-label fw-bold" style="color:#232c36;">Nombre <span class="text-muted">(se mostrará en el sistema)</span></label>
+            <input type="text" class="form-control" name="nombre" id="id_nombre" value="{{ user.get_full_name }}" required autocomplete="name">
+          </div>
+          <div class="mb-3">
+            <label for="id_old_password" class="form-label fw-bold" style="color:#232c36;">Contraseña actual <span class="text-danger">*</span></label>
+            <input type="password" class="form-control" name="old_password" id="id_old_password" required autocomplete="current-password">
+            <div class="form-text" style="color:#6b7280;">Necesaria para cualquier cambio</div>
+          </div>
+          <div class="mb-3">
+            <label for="id_new_password" class="form-label fw-bold" style="color:#232c36;">Nueva contraseña</label>
+            <input type="password" class="form-control" name="new_password" id="id_new_password" autocomplete="new-password">
+            <div class="form-text" style="color:#6b7280;">Déjalo vacío si no deseas cambiarla</div>
+          </div>
+          <div class="form-text" style="color:#6b7280;">
+            Tu nombre de usuario para iniciar sesión será: <span id="nuevoUsername">{{ user.username }}</span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Actualizar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+  // Actualiza el nombre de usuario sugerido en tiempo real
+  document.getElementById('id_nombre').addEventListener('input', function() {
+    var nuevo = this.value.replace(/\s+/g, '').toLowerCase();
+    document.getElementById('nuevoUsername').textContent = nuevo;
+  });
+</script>
+<!-- SweetAlert CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    {% if show_modal %}
+      var modal = new bootstrap.Modal(document.getElementById('updateUserModal'));
+      modal.show();
+      {% if update_error %}
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: '{{ update_error }}',
+          confirmButtonColor: '#3b82f6'
+        });
+      {% elif update_success %}
+        Swal.fire({
+          icon: 'success',
+          title: '¡Actualizado!',
+          text: '{{ update_success }}',
+          confirmButtonColor: '#3b82f6'
+        });
+      {% endif %}
+    {% endif %}
 });
 </script>
 </body>
