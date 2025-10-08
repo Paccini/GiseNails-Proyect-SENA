@@ -3,9 +3,14 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from clientes.models import Cliente
 from django.views.decorators.cache import never_cache
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from productos.models import Producto
 from servicio.models import Servicio
+from reserva.models import Reserva
+from django.utils import timezone
+from django.db.models import Count
+from django.http import HttpResponse
+
 
 def login_view(request):
     error = None
@@ -54,23 +59,33 @@ def logout_view(request):
     logout(request)
     return redirect('login:login')
 
+@login_required
+@user_passes_test(lambda u: u.is_staff)
 @never_cache
-@login_required(login_url='login:login')
 def dashboard(request):
-    # Ejemplo de datos para el dashboard
     clientes_count = Cliente.objects.count()
     productos_count = Producto.objects.count()
     servicios_count = Servicio.objects.count()
-    ventas_total = 0  # Si tienes modelo de ventas, cámbialo
-    meses = ["Ene", "Feb", "Mar", "Abr", "May", "Jun"]
-    datos_citas = [5, 8, 12, 7, 10, 6]  # Simulado, reemplaza por tus datos
+    ventas_total = sum([cita.servicio.precio for cita in Reserva.objects.filter(estado='realizada') if hasattr(cita, 'servicio') and cita.servicio])
+
+    citas_realizadas = (
+        Reserva.objects
+        .filter(fecha__year=timezone.now().year, estado='realizada')
+        .values_list('fecha__month')
+        .annotate(total=Count('id'))
+        .order_by('fecha__month')
+    )
+    meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
+    datos_citas = [0]*12
+    for mes, total in citas_realizadas:
+        datos_citas[mes-1] = total
 
     context = {
-        "clientes_count": clientes_count,
-        "productos_count": productos_count,
-        "servicios_count": servicios_count,
-        "ventas_total": ventas_total,
-        "meses": meses,
-        "datos_citas": datos_citas,
+        'clientes_count': clientes_count,
+        'productos_count': productos_count,
+        'servicios_count': servicios_count,
+        'ventas_total': ventas_total,
+        'datos_citas': datos_citas,
+        'meses': meses,
     }
-    return render(request, "dashboard.html", context)
+    return render(request, 'dashboard.html', context)
