@@ -125,10 +125,9 @@ def horarios_disponibles(request):
 @user_passes_test(lambda u: u.is_staff)
 @never_cache
 def home(request):
-    
     ahora = timezone.localtime()
     hoy = ahora.date()
-    hora_actual = ahora.time()
+    hora_actual = ahora.time().replace(second=0, microsecond=0)
 
     # Cancelar solo las pendientes cuya fecha es menor a hoy
     Reserva.objects.filter(
@@ -140,17 +139,17 @@ def home(request):
     Reserva.objects.filter(
         estado='pendiente',
         fecha=hoy,
-        hora__hora__lt=hora_actual  # Asegúrate que 'hora__hora' es el campo correcto
+        hora__hora__lt=hora_actual
     ).update(estado='cancelada')
 
     fecha = request.GET.get('fecha', '')
     usuario = request.GET.get('usuario', '')
-    estado = request.GET.get('estado', '')  # Nuevo filtro por estado
+    estado = request.GET.get('estado', '')
 
-    # Por defecto, no mostrar realizadas
     citas = Reserva.objects.all()
+    # Excluye canceladas y realizadas por defecto
     if not estado:
-        citas = citas.exclude(estado='realizada')
+        citas = citas.exclude(estado__in=['realizada', 'cancelada'])
     else:
         citas = citas.filter(estado=estado)
 
@@ -179,15 +178,26 @@ def home(request):
 @user_passes_test(lambda u: u.is_staff)
 @never_cache
 def agregar_reserva(request):
-    if request.method == 'POST':
-        form = ReservaForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('reserva:home')
+    fecha = request.GET.get('fecha')
+    gestora = request.GET.get('gestora')
+    form = ReservaForm(request.POST or None)
+
+    # Filtra las horas solo si hay fecha y gestora seleccionadas
+    if fecha and gestora:
+        ocupadas = Reserva.objects.filter(
+            gestora_id=gestora,
+            fecha=fecha
+        ).values_list('hora_id', flat=True)
+        horas_disponibles = HorarioDisponible.objects.exclude(id__in=ocupadas)
+        form.fields['hora'].queryset = horas_disponibles.order_by('hora')
     else:
-        form = ReservaForm()
-    context = {'form': form}
-    return render(request, 'reservas/agregar.html', context)
+        form.fields['hora'].queryset = HorarioDisponible.objects.all().order_by('hora')
+
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        return redirect('reserva:home')
+
+    return render(request, 'reservas/agregar.html', {'form': form})
 
 @login_required
 @user_passes_test(lambda u: u.is_staff)
@@ -218,7 +228,7 @@ def eliminar_reserva(request, pk):
 class ReservaCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Reserva
     form_class = ReservaForm
-    template_name = 'citas/agregar.html'
+    template_name = 'reservas/agregar.html'
     success_url = reverse_lazy('reserva:home')
 
     def test_func(self):

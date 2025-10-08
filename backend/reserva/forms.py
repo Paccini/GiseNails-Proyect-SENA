@@ -18,13 +18,42 @@ class ReservaForm(forms.ModelForm):
                 'class': 'form-control',
                 'placeholder': 'Selecciona la fecha'
             }),
-            'hora': forms.TimeInput(attrs={
-                'type': 'time',
-                'class': 'form-control',
-                'placeholder': 'Selecciona la hora'
-            }),
+            'hora': forms.Select(attrs={'class': 'form-control'}),
             'estado': forms.Select(attrs={'class': 'form-control'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        data = self.data or None
+        fecha = None
+        gestora = None
+
+        # Si hay datos POST, filtra las horas según la fecha y gestora seleccionadas
+        if data:
+            fecha = data.get('fecha')
+            gestora = data.get('gestora')
+        # Si hay datos iniciales (GET con valores), también filtra
+        elif 'initial' in kwargs:
+            fecha = kwargs['initial'].get('fecha')
+            gestora = kwargs['initial'].get('gestora')
+
+        if fecha and gestora:
+            from datetime import datetime
+            try:
+                fecha_obj = datetime.strptime(fecha, '%Y-%m-%d').date()
+            except Exception:
+                fecha_obj = None
+            if fecha_obj:
+                ocupadas = Reserva.objects.filter(
+                    gestora_id=gestora,
+                    fecha=fecha_obj
+                ).values_list('hora_id', flat=True)
+                qs = HorarioDisponible.objects.exclude(id__in=ocupadas)
+                self.fields['hora'].queryset = qs.order_by('hora')
+            else:
+                self.fields['hora'].queryset = HorarioDisponible.objects.all().order_by('hora')
+        else:
+            self.fields['hora'].queryset = HorarioDisponible.objects.all().order_by('hora')
 
 class ReservaEditForm(forms.ModelForm):
     class Meta:
