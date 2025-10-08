@@ -3,18 +3,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from empleados.models import Empleado
 from servicio.models import Servicio
 from reserva.models import HorarioDisponible, Reserva
-from .forms import ReservaForm
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
 from clientes.models import Cliente
-from productos.models import Producto
-from servicio.models import Servicio as ServicioModel
-from django.db.models import Count
-from django.utils import timezone
-from django.urls import reverse_lazy
-from django.views.generic import CreateView
-from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.views.decorators.cache import never_cache
-from django.core.paginator import Paginator
+from django.db import transaction, IntegrityError
 
 def reserva(request):
     gestoras = Empleado.objects.all()
@@ -30,20 +22,66 @@ def reserva(request):
     if request.method == "POST":
         try:
             gestora_id = request.POST.get("gestora")
+            nombre_cliente = request.POST.get("nombre")
+            telefono_cliente = request.POST.get("telefono")
             servicio_id = request.POST.get("servicio")
             hora_id = request.POST.get("hora")
+            fecha_str = request.POST.get("fecha")
+            correo_cliente = request.POST.get("correo")
 
-            gestora = Empleado.objects.get(id=gestora_id)
-            servicio = Servicio.objects.get(id=servicio_id)
-            hora = HorarioDisponible.objects.get(id=hora_id)
+            # Validaciones básicas: asegurar que los ids existen
+            if not gestora_id or not servicio_id or not hora_id:
+                return JsonResponse({"success": False, "error": "Selecciona gestora, servicio y horario."})
 
-            Reserva.objects.create(
-                gestora=gestora,
-                servicio=servicio,
-                hora=hora
-            )
+            try:
+                gestora = Empleado.objects.get(id=gestora_id)
+            except Empleado.DoesNotExist:
+                return JsonResponse({"success": False, "error": "Gestora no encontrada."})
 
-            return JsonResponse({"success": True})
+            try:
+                servicio = Servicio.objects.get(id=servicio_id)
+            except Servicio.DoesNotExist:
+                return JsonResponse({"success": False, "error": "Servicio no encontrado."})
+
+            try:
+                hora = HorarioDisponible.objects.get(id=hora_id)
+            except HorarioDisponible.DoesNotExist:
+                return JsonResponse({"success": False, "error": "Horario no disponible (selecciona otro)."})
+
+            # parsear fecha (se espera formato d/m/Y desde flatpickr)
+            from datetime import datetime
+            try:
+                fecha = datetime.strptime(fecha_str, '%d/%m/%Y').date()
+            except Exception:
+                # intentar ISO (Y-m-d)
+                fecha = datetime.fromisoformat(fecha_str).date()
+
+            # Preparar datos de reserva para guardarlos en sesión y completar tras login/registro
+            pending = {
+                'gestora_id': gestora.id,
+                'servicio_id': servicio.id,
+                'hora_id': hora.id,
+                'fecha': fecha.strftime('%Y-%m-%d'),
+                'nombre': nombre_cliente,
+                'telefono': telefono_cliente,
+                'correo': correo_cliente,
+            }
+
+            # comprobar si el correo ya existe en clientes
+            from clientes.models import Cliente
+            cliente_obj = Cliente.objects.filter(correo__iexact=correo_cliente).first()
+            request.session['pending_reserva'] = pending
+
+            if cliente_obj:
+                # ya existe: pedir login (solo contraseña)
+                from django.urls import reverse
+                login_url = reverse('login:login')
+                return JsonResponse({"next": f"{login_url}?next=/completar-reserva/", "need": "login"})
+            else:
+                # no existe: redirigir a registro
+                from django.urls import reverse
+                registro_url = reverse('clientes:registro')
+                return JsonResponse({"next": f"{registro_url}?next=/completar-reserva/", "need": "register"})
 
         except Exception as e:
             return JsonResponse({"success": False, "error": str(e)})
@@ -58,118 +96,18 @@ def horarios_disponibles(request):
     gestora_id = request.GET.get('gestora_id')
     fecha = request.GET.get('fecha')
     horarios = HorarioDisponible.objects.all()
-    ocupados = Reserva.objects.filter(gestora_id=gestora_id, hora__dia=fecha).values_list('hora_id', flat=True)
+    # parsear fecha entrante (d/m/Y)
+    from datetime import datetime
+    try:
+        fecha_obj = datetime.strptime(fecha, '%d/%m/%Y').date()
+    except Exception:
+        try:
+            fecha_obj = datetime.fromisoformat(fecha).date()
+        except Exception:
+            return JsonResponse({'horarios': []})
+
+    ocupados = Reserva.objects.filter(gestora_id=gestora_id, fecha=fecha_obj).values_list('hora_id', flat=True)
     disponibles = horarios.exclude(id__in=ocupados)
-    data = [f"{h.hora.strftime('%H:%M')}" for h in disponibles]
+    # devolver id y texto para cada horario
+    data = [{'id': h.id, 'hora': h.hora.strftime('%H:%M')} for h in disponibles]
     return JsonResponse({'horarios': data})
-
-# --- Vistas administrativas de Reservas ---
-
-@login_required
-@user_passes_test(lambda u: u.is_staff)
-@never_cache
-def home(request):
-    fecha = request.GET.get('fecha', '')
-    usuario = request.GET.get('usuario', '')
-    reservas = Reserva.objects.all()
-    if fecha:
-        reservas = reservas.filter(fecha=fecha)
-    if usuario:
-        reservas = reservas.filter(cliente__nombre__icontains=usuario)
-    paginator = Paginator(reservas, 5)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    context = {
-        'reservas': page_obj,
-        'fecha': fecha,
-        'usuario': usuario,
-        'is_paginated': page_obj.has_other_pages(),
-        'page_obj': page_obj,
-        'paginator': paginator,
-    }
-    return render(request, 'reservas/home.html', context)
-
-@login_required
-@user_passes_test(lambda u: u.is_staff)
-@never_cache
-def agregar_reserva(request):
-    if request.method == 'POST':
-        form = ReservaForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('reserva:home')
-    else:
-        form = ReservaForm()
-    context = {'form': form}
-    return render(request, 'reservas/agregar.html', context)
-
-@login_required
-@user_passes_test(lambda u: u.is_staff)
-@never_cache
-def editar_reserva(request, pk):
-    reserva = get_object_or_404(Reserva, pk=pk)
-    from .forms import ReservaEditForm
-    if request.method == 'POST':
-        form = ReservaEditForm(request.POST, instance=reserva)
-        if form.is_valid():
-            form.save()
-            return redirect('reserva:home')
-    else:
-        form = ReservaEditForm(instance=reserva)
-    context = {'form': form}
-    return render(request, 'reservas/editar.html', context)
-
-@login_required
-@user_passes_test(lambda u: u.is_staff)
-@never_cache
-def eliminar_reserva(request, pk):
-    reserva = get_object_or_404(Reserva, pk=pk)
-    if request.method == 'POST':
-        reserva.delete()
-        return redirect("reserva:home")
-    return render(request, 'reservas/eliminar.html', {'reserva': reserva})
-
-@login_required
-@user_passes_test(lambda u: u.is_staff)
-@never_cache
-def dashboard(request):
-    clientes_count = Cliente.objects.count()
-    productos_count = Producto.objects.count()
-    servicios_count = ServicioModel.objects.count()
-    ventas_total = sum([reserva.servicio.precio for reserva in Reserva.objects.filter(estado='realizada') if hasattr(reserva, 'servicio') and reserva.servicio])
-
-    reservas_realizadas = (
-        Reserva.objects
-        .filter(fecha__year=timezone.now().year, estado='realizada')
-        .values_list('fecha__month')
-        .annotate(total=Count('id'))
-        .order_by('fecha__month')
-    )
-    meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
-    datos_reservas = [0]*12
-    for mes, total in reservas_realizadas:
-        datos_reservas[mes-1] = total
-
-    context = {
-        'clientes_count': clientes_count,
-        'productos_count': productos_count,
-        'servicios_count': servicios_count,
-        'ventas_total': ventas_total,
-        'datos_reservas': datos_reservas,
-        'meses': meses,
-    }
-    return render(request, 'dashboard.html', context)
-
-class ReservaCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
-    model = Reserva
-    form_class = ReservaForm
-    template_name = 'reservas/agregar.html'
-    success_url = reverse_lazy('reserva:home')
-
-    def test_func(self):
-        return self.request.user.is_staff
-
-    def form_valid(self, form):
-        # El formulario ya tiene el cliente seleccionado
-        self.object = form.save()
-        return super().form_valid(form)

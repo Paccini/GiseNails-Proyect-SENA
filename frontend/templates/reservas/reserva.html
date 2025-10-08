@@ -1,4 +1,3 @@
-
 {% extends 'home.html' %} 
 
 {% block title %}Reserva{% endblock %} 
@@ -26,6 +25,13 @@
                 <input type="text" name="telefono" placeholder="Teléfono" required>
                 <input type="email" name="correo" placeholder="Correo electrónico" required>
 
+             <select name="gestora" id="gestora-select" required>
+                    <option value="">Selecciona gestora</option>
+                    {% for gestora in gestoras %}
+                        <option value="{{ gestora.id }}">{{ gestora.nombre }} {{ gestora.apellidos }}</option>
+                    {% endfor %}
+             </select>
+             
                 <!-- Select para tipo de servicio -->
                 <select id="tipo-servicio" required>
                     <option value="">Selecciona tipo de servicio</option>
@@ -34,17 +40,15 @@
                     <option value="estructura">Estructura de uñas</option>
                 </select>
 
-                <!-- Select para gestora -->
-                <select name="gestora" id="gestora-select" required>
-                    <option value="">Selecciona gestora</option>
-                    {% for gestora in gestoras %}
-                        <option value="{{ gestora.id }}">{{ gestora.nombre }} {{ gestora.apellidos }}</option>
-                    {% endfor %}
-                </select>
+                <!-- campo oculto que contendrá el id del servicio seleccionado -->
+                <input type="hidden" name="servicio" id="servicio-input">
 
-                <input type="date" name="fecha" id="fecha-select" required>
+             
+        
 
-                <select name="horario" id="horario-select" required>
+                <input type="text" name="fecha" id="fecha-select" required placeholder="Selecciona la fecha">
+
+                <select name="hora" id="horario-select" required>
                     <option value="">Selecciona horario</option>
                 </select>
 
@@ -63,6 +67,7 @@
         "manicure": [
             {% for s in servicios_por_categoria.manicure %}
                 {
+                    "id": "{{ s.id }}",
                     "nombre": "{{ s.nombre|escapejs }}",
                     "precio": "{{ s.precio }}",
                     "imagen": "{{ s.imagen.url }}"
@@ -72,6 +77,7 @@
         "pedicure": [
             {% for s in servicios_por_categoria.pedicure %}
                 {
+                    "id": "{{ s.id }}",
                     "nombre": "{{ s.nombre|escapejs }}",
                     "precio": "{{ s.precio }}",
                     "imagen": "{{ s.imagen.url }}"
@@ -81,6 +87,7 @@
         "estructura": [
             {% for s in servicios_por_categoria.estructura %}
                 {
+                    "id": "{{ s.id }}",
                     "nombre": "{{ s.nombre|escapejs }}",
                     "precio": "{{ s.precio }}",
                     "imagen": "{{ s.imagen.url }}"
@@ -90,7 +97,56 @@
     }
 </script>
 
-<!-- Solo enlaza el JS externo -->
-<script src="{% static 'js/servicios.js' %}"></script> 
+<!-- Flatpickr CSS y JS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="{% static 'js/servicios.js' %}"></script>
+<script src="{% static 'js/reserva2.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        flatpickr("#fecha-select", {
+            dateFormat: "d/m/Y",
+            minDate: "today",
+            locale: "es"
+        });
+    });
+</script>
+
+<!-- Mensaje de confirmación de cita (añadir dentro de block content) -->
+<div id="reserva-success-modal" class="reserva-success-modal" aria-hidden="true">
+  <div class="reserva-success-card">
+    <button id="reserva-success-close" class="reserva-success-close" aria-label="Cerrar">&times;</button>
+    <img src="{% static 'img/Logo gisel-nails.png' %}" alt="Logo" class="reserva-success-logo" />
+    <h2>¡Cita reservada!</h2>
+    <p class="reserva-success-text">Tu cita se ha guardado correctamente. Te hemos enviado un correo de confirmación (revisa tu bandeja y spam).</p>
+    <div class="reserva-success-actions">
+      <a href="{% url 'inicio' %}" class="btn btn-secondary">Volver al inicio</a>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  const params = new URLSearchParams(window.location.search);
+  if(params.get('success') === '1'){
+    const modal = document.getElementById('reserva-success-modal');
+    modal.setAttribute('aria-hidden','false');
+    // quitar el parámetro ?success=1 de la URL (sin recargar)
+    const url = new URL(window.location);
+    url.searchParams.delete('success');
+    window.history.replaceState({}, document.title, url.toString());
+    // botón cerrar
+    document.getElementById('reserva-success-close').addEventListener('click', function(){
+      modal.setAttribute('aria-hidden','true');
+    });
+    // cerrar click fuera de la tarjeta
+    modal.addEventListener('click', function(e){
+      if(e.target === modal){
+        modal.setAttribute('aria-hidden','true');
+      }
+    });
+  }
+});
+</script>
 
 {% endblock %}

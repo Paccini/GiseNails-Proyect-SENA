@@ -41,6 +41,7 @@ class Reserva(models.Model):
 
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     gestora = models.ForeignKey(Empleado, on_delete=models.CASCADE)
+    cliente = models.ForeignKey(Cliente, on_delete=models.SET_NULL, null=True, blank=True)
     servicio = models.ForeignKey(Servicio, on_delete=models.CASCADE)
     producto = models.ForeignKey(Producto, on_delete=models.SET_NULL, null=True, blank=True)
     hora = models.ForeignKey(HorarioDisponible, on_delete=models.CASCADE)
