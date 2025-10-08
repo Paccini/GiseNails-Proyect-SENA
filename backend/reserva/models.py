@@ -31,20 +31,23 @@ class HorarioDisponible(models.Model):
         for h in horas:
             HorarioDisponible.objects.get_or_create(hora=h)
 
-
 class Reserva(models.Model):
+    ESTADO_CHOICES = [
+        ('pendiente', 'Pendiente'),
+        ('confirmada', 'Confirmada'),
+        ('cancelada', 'Cancelada'),
+        ('realizada', 'Realizada'),
+    ]
+
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     gestora = models.ForeignKey(Empleado, on_delete=models.CASCADE)
     cliente = models.ForeignKey(Cliente, on_delete=models.SET_NULL, null=True, blank=True)
     servicio = models.ForeignKey(Servicio, on_delete=models.CASCADE)
     producto = models.ForeignKey(Producto, on_delete=models.SET_NULL, null=True, blank=True)
     hora = models.ForeignKey(HorarioDisponible, on_delete=models.CASCADE)
-    fecha = models.DateField(null=True, blank=True)  # Fecha de la reserva (nullable para migraciones)
+    fecha = models.DateField()
+    estado = models.CharField(max_length=10, choices=ESTADO_CHOICES, default='pendiente')
     fecha_creacion = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Reserva de {self.servicio.nombre} con {self.gestora.nombre} a las {self.hora}"
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['gestora', 'hora', 'fecha'], name='unique_reserva_gestora_hora_fecha')
-        ]
+        return f"Reserva de {self.servicio.nombre} con {self.gestora.nombre} para {self.cliente} el {self.fecha} a las {self.hora}"
