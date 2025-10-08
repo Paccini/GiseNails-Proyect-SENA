@@ -15,12 +15,19 @@
         {% csrf_token %}
         <div class="login-input-group">
           <span class="login-icon"><i class="bi bi-person"></i></span>
-          <input type="text" name="username" placeholder="Correo" required autofocus class="login-input" />
+          {% if prefill_email %}
+            <input type="text" name="username" value="{{ prefill_email }}" readonly class="login-input" />
+          {% else %}
+            <input type="text" name="username" placeholder="Correo" required autofocus class="login-input" />
+          {% endif %}
         </div>
         <div class="login-input-group">
           <span class="login-icon"><i class="bi bi-lock"></i></span>
           <input type="password" name="password" placeholder="Contraseña" required class="login-input" />
         </div>
+        {% if password_only %}
+          <div class="login-hint">Hemos guardado tu cita pendiente. Introduce solo tu contraseña para completarla.</div>
+        {% endif %}
         <button type="submit" class="login-btn">Entrar</button>
         {% if error %}
           <div class="login-alert">{{ error }}</div>
