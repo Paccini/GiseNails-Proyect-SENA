@@ -1,4 +1,3 @@
-// filepath: c:\Users\nioco\OneDrive - SENA\Documentos\GiseNails-Proyect-SENA\frontend\static\js\servicios.js
 document.addEventListener("DOMContentLoaded", function () {
     const tipoSelect = document.getElementById('tipo-servicio');
     const serviciosContenedor = document.getElementById('servicios-contenedor');
@@ -12,13 +11,22 @@ document.addEventListener("DOMContentLoaded", function () {
         if (serviciosPorCategoria[tipo]) {
             serviciosPorCategoria[tipo].forEach(servicio => {
                 serviciosContenedor.innerHTML += `
-                    <div class="servicio-card">
+                    <div class="servicio-card" tabindex="0" data-id="${servicio.id}">
                         <img src="${servicio.imagen}" alt="${servicio.nombre}" class="servicio-img">
                         <div class="servicio-nombre">${servicio.nombre}</div>
                         <div class="servicio-precio">$${servicio.precio}</div>
                     </div>
                 `;
             });
+            // Auto-seleccionar el primer servicio disponible para evitar que el input hidden quede vacío
+            setTimeout(() => {
+                const first = serviciosContenedor.querySelector('.servicio-card');
+                const servicioInput = document.getElementById('servicio-input');
+                if (first && servicioInput) {
+                    first.classList.add('selected');
+                    servicioInput.value = first.getAttribute('data-id');
+                }
+            }, 10);
         }
     }
 
@@ -30,10 +38,10 @@ document.addEventListener("DOMContentLoaded", function () {
             fetch(`/reserva/horarios-disponibles/?gestora_id=${gestoraId}&fecha=${fecha}`)
                 .then(response => response.json())
                 .then(data => {
-                    data.horarios.forEach(hora => {
+                    data.horarios.forEach(item => {
                         const option = document.createElement('option');
-                        option.value = hora;
-                        option.textContent = hora;
+                        option.value = item.id; // usamos el id del HorarioDisponible
+                        option.textContent = item.hora;
                         horarioSelect.appendChild(option);
                     });
                 });
@@ -41,7 +49,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     tipoSelect.addEventListener('change', function () {
-        mostrarServicios(this.value);
+                mostrarServicios(this.value);
+                // Mostrar todas las tarjetas y quitar selección
+                setTimeout(() => {
+                    document.querySelectorAll('.servicio-card').forEach(el => {
+                        el.style.display = '';
+                        el.classList.remove('selected');
+                    });
+                }, 10);
     });
 
     gestoraSelect.addEventListener('change', cargarHorarios);
@@ -53,4 +68,38 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+// Selección automática del tipo de servicio al hacer clic en una tarjeta
+document.addEventListener('DOMContentLoaded', function() {
+    const serviciosContenedor = document.getElementById('servicios-contenedor');
+    const selectServicio = document.getElementById('tipo-servicio');
+
+    // Delegación de eventos para tarjetas generadas dinámicamente
+        serviciosContenedor.addEventListener('click', function(e) {
+            const card = e.target.closest('.servicio-card');
+            if (!card) return;
+            // Quitar selección previa
+            document.querySelectorAll('.servicio-card.selected').forEach(el => el.classList.remove('selected'));
+            // Marcar la tarjeta seleccionada
+            card.classList.add('selected');
+            // setear el id del servicio en el input hidden
+            const servicioId = card.getAttribute('data-id');
+            const servicioInput = document.getElementById('servicio-input');
+            if (servicioInput && servicioId) servicioInput.value = servicioId;
+            // Ocultar las demás tarjetas
+            document.querySelectorAll('.servicio-card').forEach(el => {
+                if (el !== card) el.style.display = 'none';
+            });
+            // Obtiene el nombre del servicio y lo normaliza
+            const nombreServicio = card.querySelector('.servicio-nombre').textContent.trim().toLowerCase().replace(/\s+/g, '');
+            // Busca la opción en el select y la selecciona
+            for (let option of selectServicio.options) {
+                const nombreOpcion = option.textContent.trim().toLowerCase().replace(/\s+/g, '');
+                if (nombreOpcion === nombreServicio) {
+                    selectServicio.value = option.value;
+                    selectServicio.dispatchEvent(new Event('change'));
+                    break;
+                }
+            }
+        });
+});
 

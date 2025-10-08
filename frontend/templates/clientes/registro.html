@@ -13,6 +13,12 @@
         </header>
         <form method="post" autocomplete="off">
             {% csrf_token %}
+            {% if pending_message %}
+            <div class="pending-reserva-message" style="margin-bottom:1rem;">
+                <p>Hemos guardado tu cita pendiente. Crea tu cuenta y después completaremos la reserva automáticamente.</p>
+            </div>
+            {% endif %}
+
             <div class="login-input-group">
                 <span class="login-icon"><i class="bi bi-person"></i></span>
                 {{ form.nombre }}
@@ -29,18 +35,53 @@
                 <span class="login-icon"><i class="bi bi-lock"></i></span>
                 {{ form.password }}
             </div>
+
+            {% if prefill_email %}
+              <p><a href="#" id="usar-otro-correo">Usar otro correo</a></p>
+            {% endif %}
+
             <button type="submit" class="login-btn">Registrarme</button>
             {% if form.errors %}
             <div class="login-alert">
                 Por favor revisa los datos ingresados.
             </div>
             {% endif %}
-        
         </form>
+
+        {% if form.non_field_errors %}
+          <div class="error">{{ form.non_field_errors }}</div>
+        {% endif %}
+        {{ form.nombre.errors }}
+        {{ form.correo.errors }}
+        {{ form.telefono.errors }}
+        {{ form.password.errors }}
+
         <p>¿Ya tienes una cuenta? <a href="{% url 'login:login' %}" class="login-link">Inicia sesión</a></p>
     </section>
 </main>
+
 <style>
     footer { display: none !important; }
 </style>
+
+<!-- Script para permitir editar el correo prellenado -->
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  const link = document.getElementById('usar-otro-correo');
+  if(!link) return;
+  link.addEventListener('click', function(e){
+    e.preventDefault();
+    // buscar el input de correo renderizado por el form
+    const emailInput = document.querySelector('input[name="correo"]');
+    if(emailInput){
+      emailInput.removeAttribute('readonly');
+      emailInput.focus();
+      // opcional: limpiar el valor si quieres que el usuario reescriba
+      // emailInput.value = '';
+    }
+    link.style.display = 'none';
+  });
+});
+</script>
+
 {% endblock %}
