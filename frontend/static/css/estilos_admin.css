@@ -969,3 +969,51 @@ body.dark-mode .card-body .text-muted {
 }
 
 /* --- FIN --- */
+.modal-content {
+    border-radius: 16px;
+    box-shadow: 0 8px 32px 0 rgba(44, 62, 80, 0.18);
+    background: #fff;
+    color: #232c36;
+}
+
+body.dark-mode .modal-content {
+    background: #23272b !important;
+    color: #f8fafc !important;
+}
+
+.modal-header .modal-title,
+.modal-body label,
+.modal-body .form-text {
+    color: #232c36 !important;
+}
+
+body.dark-mode .modal-header .modal-title,
+body.dark-mode .modal-body label,
+body.dark-mode .modal-body .form-text {
+    color: #f8fafc !important;
+}
+
+.modal-body .form-label {
+    font-weight: 600;
+    font-size: 1.05em;
+}
+
+.modal-body input.form-control {
+    font-size: 1.1em;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    background: #fff;
+    color: #232c36;
+}
+
+body.dark-mode .modal-body input.form-control {
+    background: #23272b !important;
+    color: #f8fafc !important;
+    border: 1px solid #343a40 !important;
+}
+
+.modal-footer .btn {
+    min-width: 110px;
+    font-size: 1.05em;
+}
