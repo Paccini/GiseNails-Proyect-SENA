@@ -1017,3 +1017,16 @@ body.dark-mode .modal-body input.form-control {
     min-width: 110px;
     font-size: 1.05em;
 }
+
+.modal-backdrop {
+    background-color: transparent !important;
+    opacity: 0 !important;
+}
+
+/* Ajuste para la información del cliente en modo oscuro */
+body.dark-mode .card-body p,
+body.dark-mode .card-body strong,
+body.dark-mode .card-header h3,
+body.dark-mode .card-header i {
+    color: #f8fafc !important;
+}

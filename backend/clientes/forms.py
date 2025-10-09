@@ -48,6 +48,24 @@ class RegistroClienteForm(forms.ModelForm):
             'style': 'background:transparent;color:#232c36;'
         })
     )
+    old_password = forms.CharField(
+        label='Contraseña actual',
+        required=False,
+        widget=forms.PasswordInput(attrs={
+            'placeholder': 'Contraseña actual',
+            'autocomplete': 'current-password',
+            'class': 'form-control'
+        })
+    )
+    new_password = forms.CharField(
+        label='Nueva contraseña',
+        required=False,
+        widget=forms.PasswordInput(attrs={
+            'placeholder': 'Nueva contraseña',
+            'autocomplete': 'new-password',
+            'class': 'form-control'
+        })
+    )
 
     class Meta:
         model = Cliente

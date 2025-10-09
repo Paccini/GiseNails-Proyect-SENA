@@ -66,11 +66,19 @@
                 class="rounded-circle border border-2 border-secondary shadow-sm">
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              {% if user.is_staff %}
               <li>
                 <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#updateUserModal">
                   <i class="bi bi-pencil-square me-2"></i> Actualizar datos
                 </button>
               </li>
+              {% else %}
+              <li>
+                <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#updateClienteModal">
+                  <i class="bi bi-pencil-square me-2"></i> Actualizar datos
+                </button>
+              </li>
+              {% endif %}
               <li>
                 <form action="{% url 'login:logout' %}" method="post" class="d-inline">
                   {% csrf_token %}
@@ -88,15 +96,16 @@
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
           </div>
           <div class="offcanvas-body">
+            {% if user.is_staff %}
             <ul class="navbar-nav flex-grow-1">
               <li class="nav-item"><a class="nav-link" href="{% url 'login:dashboard' %}"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
               <li class="nav-item"><a class="nav-link" href="{% url 'reserva:home' %}"><i class="bi bi-calendar-check me-2"></i>Citas</a></li>
               <li class="nav-item"><a class="nav-link" href="{% url 'empleados:empleado_list' %}"><i class="bi bi-people me-2"></i>Empleados</a></li>
               <li class="nav-item"><a class="nav-link" href="{% url 'productos:producto_list' %}"><i class="bi bi-box-seam me-2"></i>Productos</a></li>
               <li class="nav-item"><a class="nav-link" href="{% url 'servicio:servicio_list' %}"><i class="bi bi-scissors me-2"></i>Servicios</a></li>
-
               <li class="nav-item"><a class="nav-link" href="{% url 'clientes:cliente_list' %}"><i class="bi bi-person-lines-fill me-2"></i>Clientes</a></li>
             </ul>
+            {% endif %}
           </div>
         </div>
       </div>
@@ -199,22 +208,42 @@ document.getElementById('toggleTheme').addEventListener('click', function() {
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     {% if show_modal %}
-      var modal = new bootstrap.Modal(document.getElementById('updateUserModal'));
-      modal.show();
-      {% if update_error %}
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: '{{ update_error }}',
-          confirmButtonColor: '#3b82f6'
-        });
-      {% elif update_success %}
-        Swal.fire({
-          icon: 'success',
-          title: '¡Actualizado!',
-          text: '{{ update_success }}',
-          confirmButtonColor: '#3b82f6'
-        });
+      {% if user.is_staff %}
+        var modal = new bootstrap.Modal(document.getElementById('updateUserModal'));
+        modal.show();
+        {% if update_error %}
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: '{{ update_error }}',
+            confirmButtonColor: '#3b82f6'
+          });
+        {% elif update_success %}
+          Swal.fire({
+            icon: 'success',
+            title: '¡Actualizado!',
+            text: '{{ update_success }}',
+            confirmButtonColor: '#3b82f6'
+          });
+        {% endif %}
+      {% else %}
+        var modal = new bootstrap.Modal(document.getElementById('updateClienteModal'));
+        modal.show();
+        {% if update_error %}
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: '{{ update_error }}',
+            confirmButtonColor: '#3b82f6'
+          });
+        {% elif update_success %}
+          Swal.fire({
+            icon: 'success',
+            title: '¡Actualizado!',
+            text: '{{ update_success }}',
+            confirmButtonColor: '#3b82f6'
+          });
+        {% endif %}
       {% endif %}
     {% endif %}
 });
