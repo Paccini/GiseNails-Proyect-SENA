@@ -77,18 +77,69 @@ def editar_perfil(request):
         cliente = Cliente.objects.get(user=request.user)
     except Cliente.DoesNotExist:
         return redirect('login:login')
+    update_error = None
+    update_success = None
+    show_modal = False
     if request.method == 'POST':
         form = RegistroClienteForm(request.POST, instance=cliente)
+        show_modal = True
         if form.is_valid():
-            form.save()
-            
-            return redirect('clientes:panel')
+            old_password = form.cleaned_data.get('old_password')
+            new_password = form.cleaned_data.get('new_password')
+            user = request.user
+            if new_password:
+                if not old_password or not user.check_password(old_password):
+                    # Mostrar error y mantener modal abierto
+                    update_error = "La contraseña actual es incorrecta. No se realizaron cambios."
+                    return render(request, 'clientes/panel.html', {
+                        'cliente': cliente,
+                        'reservas': Reserva.objects.filter(cliente=cliente),
+                        'form': form,
+                        'user': request.user,
+                        'show_modal': True,
+                        'update_error': update_error,
+                        'update_success': None,
+                        'notificaciones': [],
+                    })
+                else:
+                    user.set_password(new_password)
+                    user.save()
+                    from django.contrib.auth import update_session_auth_hash
+                    update_session_auth_hash(request, user)
+                    form.save()
+                    return redirect('/clientes/panel/?success=1')
+            else:
+                form.save()
+                return redirect('/clientes/panel/?success=1')
+        else:
+            update_error = "Corrige los errores del formulario."
+            return render(request, 'clientes/panel.html', {
+                'cliente': cliente,
+                'reservas': Reserva.objects.filter(cliente=cliente),
+                'form': form,
+                'user': request.user,
+                'show_modal': True,
+                'update_error': update_error,
+                'update_success': None,
+                'notificaciones': [],
+            })
     else:
         form = RegistroClienteForm(instance=cliente)
+    # Mostrar alerta de éxito si viene en la URL
+    update_success = None
+    if request.GET.get('success') == '1':
+        update_success = "¡Datos actualizados correctamente!"
+        show_modal = True
     return render(request, 'clientes/panel.html', {
-        'cliente': cliente, 
-        'user': request.user, 
-        'form': form})
+        'cliente': cliente,
+        'reservas': Reserva.objects.filter(cliente=cliente),
+        'form': form,
+        'user': request.user,
+        'show_modal': show_modal,
+        'update_error': None,
+        'update_success': update_success,
+        'notificaciones': [],
+    })
     
 
 @never_cache
@@ -183,7 +234,22 @@ def panel_cliente(request):
     except Cliente.DoesNotExist:
         return redirect('clientes:registro')
     reservas = Reserva.objects.filter(cliente=cliente)
-    return render(request, 'clientes/panel.html', {'reservas': reservas})
+    # Notificaciones: solo reservas del cliente
+    notificaciones = []
+    for reserva in reservas.order_by('-fecha')[:5]:
+        notificaciones.append({
+            'icon': 'bi-calendar-check',
+            'texto': f'Cita creada para ti el {reserva.fecha.strftime("%d/%m/%Y")} a las {reserva.hora}',
+            'fecha': reserva.fecha.strftime('%d/%m/%Y %H:%M')
+        })
+    form = RegistroClienteForm(instance=cliente)
+    return render(request, 'clientes/panel.html', {
+        'cliente': cliente,
+        'reservas': reservas,
+        'form': form,
+        'user': request.user,
+        'notificaciones': notificaciones
+    })
 
 @login_required
 @never_cache
