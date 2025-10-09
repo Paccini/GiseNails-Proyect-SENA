@@ -238,3 +238,46 @@ class ReservaCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         # El formulario ya tiene el cliente seleccionado
         self.object = form.save()
         return super().form_valid(form)
+
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def completar_reserva(request):
+    pending = request.session.get('pending_reserva')
+    if not pending:
+        return redirect('clientes:panel')  # Si no hay reserva pendiente, muestra el panel
+
+    # Obtén el cliente autenticado
+    from clientes.models import Cliente
+    cliente = Cliente.objects.filter(user=request.user).first()
+    if not cliente:
+        return redirect('clientes:registro')
+
+    # Solo crea la reserva si no existe ya para ese horario y fecha
+    from reserva.models import Reserva, HorarioDisponible
+    from empleados.models import Empleado
+    from servicio.models import Servicio
+
+    existe = Reserva.objects.filter(
+        cliente=cliente,
+        gestora_id=pending['gestora_id'],
+        servicio_id=pending['servicio_id'],
+        hora_id=pending['hora_id'],
+        fecha=pending['fecha']
+    ).exists()
+
+    if not existe:
+        Reserva.objects.create(
+            cliente=cliente,
+            gestora=Empleado.objects.get(id=pending['gestora_id']),
+            servicio=Servicio.objects.get(id=pending['servicio_id']),
+            hora=HorarioDisponible.objects.get(id=pending['hora_id']),
+            fecha=pending['fecha'],
+            estado='pendiente'
+        )
+
+    # Limpia la sesión
+    del request.session['pending_reserva']
+
+    # Redirige al panel del cliente
+    return redirect('clientes:panel')

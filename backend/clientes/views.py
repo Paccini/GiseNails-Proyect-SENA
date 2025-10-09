@@ -30,37 +30,39 @@ def panel_cliente(request):
 
 
 def registro_cliente(request):
-    # detecta reserva pendiente en sesión para prellenar email y mostrar mensaje
     pending = request.session.get('pending_reserva')
     initial = {}
+    # Solo autocompleta si hay pending y el correo NO está registrado
     if pending:
-        initial = {
-            'nombre': pending.get('nombre', ''),
-            'correo': pending.get('correo', ''),
-            'telefono': pending.get('telefono', ''),
-        }
+        from clientes.models import Cliente
+        correo = pending.get('correo', '')
+        if not Cliente.objects.filter(correo__iexact=correo).exists():
+            initial = {
+                'nombre': pending.get('nombre', ''),
+                'correo': correo,
+                'telefono': pending.get('telefono', ''),
+            }
 
     if request.method == 'POST':
         form = RegistroClienteForm(request.POST)
-        # DEBUG rápido: descomenta para ver POST en consola
-        # print('POST registro:', request.POST)
         if form.is_valid():
-            cliente = form.save()  # que devuelva la instancia Cliente
-            # si usas UserCreationForm asegúrate de enlazar user<>cliente según tu modelo
+            cliente = form.save()
             try:
-                user = cliente.user  # si tu modelo Cliente crea/relaciona user
+                user = cliente.user
             except Exception:
                 user = None
             if user:
+                from django.contrib.auth import login as auth_login
                 auth_login(request, user)
-            # si hay reserva pendiente, redirigir para completarla
             if request.session.get('pending_reserva'):
                 return redirect('/reserva/completar-reserva/')
-            # si no hay pending, mostrar modal de éxito en reserva o llevar a inicio
             return redirect('/reserva/?success=1')
         else:
-            # render con errores (se verán en la plantilla si la incluíste)
-            return render(request, 'clientes/registro.html', {'form': form, 'prefill_email': initial.get('correo'), 'pending_message': bool(pending)})
+            return render(request, 'clientes/registro.html', {
+                'form': form,
+                'prefill_email': initial.get('correo'),
+                'pending_message': bool(pending)
+            })
     else:
         form = RegistroClienteForm(initial=initial)
         if initial.get('correo'):
@@ -68,7 +70,11 @@ def registro_cliente(request):
                 form.fields['correo'].widget.attrs['readonly'] = True
             except Exception:
                 pass
-        return render(request, 'clientes/registro.html', {'form': form, 'prefill_email': initial.get('correo'), 'pending_message': bool(pending)})
+        return render(request, 'clientes/registro.html', {
+            'form': form,
+            'prefill_email': initial.get('correo'),
+            'pending_message': bool(pending)
+        })
 
 @never_cache
 @login_required(login_url='login:login')
