@@ -219,6 +219,35 @@ document.addEventListener('DOMContentLoaded', function() {
     {% endif %}
 });
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var notifDropdown = document.getElementById('notifDropdown');
+  var notifBadge = notifDropdown.querySelector('.badge');
+
+  // Función para borrar el contador y guardar el estado en sessionStorage
+  function clearNotifBadge() {
+    if (notifBadge) {
+      notifBadge.style.display = 'none';
+      sessionStorage.setItem('notificaciones_vistas', 'true');
+      // Dispara evento para otras pestañas
+      window.dispatchEvent(new Event('notificaciones_vistas'));
+    }
+  }
+
+  notifDropdown.addEventListener('show.bs.dropdown', clearNotifBadge);
+  notifDropdown.addEventListener('hide.bs.dropdown', clearNotifBadge);
+
+  // Al cargar, revisa si ya se marcaron como vistas en otra pestaña
+  if (sessionStorage.getItem('notificaciones_vistas') === 'true') {
+    if (notifBadge) notifBadge.style.display = 'none';
+  }
+
+  // Escucha el evento en todas las pestañas
+  window.addEventListener('notificaciones_vistas', function() {
+    if (notifBadge) notifBadge.style.display = 'none';
+  });
+});
+</script>
 </body>
 
 </html>
