@@ -80,22 +80,8 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
   </head>
+{% endblock %}
 
-  <body>
-    <!-- Script para evitar el reenvío del formulario o navegación hacia atrás -->
-    <script>
-      if (window.history && window.history.replaceState) {
-        window.history.replaceState(null, '', window.location.href)
-      }
-
-      window.onload = function () {
-        if (window.history && window.history.pushState) {
-          window.history.pushState(null, '', window.location.href)
-          window.onpopstate = function () {
-            window.location.href = '/login/'
-          }
-        }
-      }
-    </script>
-  </body>
+{% block scripts %}
+<script src="{% static 'js/login.js' %}"></script>
 {% endblock %}

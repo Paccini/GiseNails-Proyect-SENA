@@ -149,31 +149,11 @@
 
 {% block scripts %}{% endblock %}
 
-<!-- SCRIPT: cambio de tema claro/oscuro -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-        document.body.classList.add('dark-mode');
-        document.getElementById('toggleTheme').querySelector('i').classList.remove('bi-moon');
-        document.getElementById('toggleTheme').querySelector('i').classList.add('bi-sun');
-    }
-});
+<!-- SweetAlert para alertas -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-document.getElementById('toggleTheme').addEventListener('click', function() {
-    document.body.classList.toggle('dark-mode');
-    const icon = this.querySelector('i');
-    if(document.body.classList.contains('dark-mode')) {
-        icon.classList.remove('bi-moon');
-        icon.classList.add('bi-sun');
-        localStorage.setItem('theme', 'dark');
-    } else {
-        icon.classList.remove('bi-sun');
-        icon.classList.add('bi-moon');
-        localStorage.setItem('theme', 'light');
-    }
-});
-</script>
+<!-- Archivo JS principal para base_admin -->
+<script src="{% static 'js/base_admin.js' %}"></script>
 
 <!-- MODAL: actualización de datos del administrador -->
 <div class="modal fade" id="updateUserModal" tabindex="-1" aria-labelledby="updateUserModalLabel" aria-hidden="true">
@@ -232,68 +212,5 @@ document.getElementById('toggleTheme').addEventListener('click', function() {
     </div>
   </div>
 </div>
-
-<!-- SCRIPT: actualizar el nombre de usuario sugerido -->
-<script>
-document.getElementById('id_nombre').addEventListener('input', function() {
-  var nuevo = this.value.replace(/\s+/g, '').toLowerCase();
-  document.getElementById('nuevoUsername').textContent = nuevo;
-});
-</script>
-
-<!-- SweetAlert para alertas -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<!-- SCRIPT: mostrar modal con alertas de éxito/error -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    {% if show_modal %}
-      var modal = new bootstrap.Modal(document.getElementById('updateUserModal'));
-      modal.show();
-      {% if update_error %}
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: '{{ update_error }}',
-          confirmButtonColor: '#3b82f6'
-        });
-      {% elif update_success %}
-        Swal.fire({
-          icon: 'success',
-          title: '¡Actualizado!',
-          text: '{{ update_success }}',
-          confirmButtonColor: '#3b82f6'
-        });
-      {% endif %}
-    {% endif %}
-});
-</script>
-
-<!-- SCRIPT: gestión del contador de notificaciones -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  var notifDropdown = document.getElementById('notifDropdown');
-  var notifBadge = notifDropdown.querySelector('.badge');
-
-  function clearNotifBadge() {
-    if (notifBadge) {
-      notifBadge.style.display = 'none';
-      sessionStorage.setItem('notificaciones_vistas', 'true');
-      window.dispatchEvent(new Event('notificaciones_vistas'));
-    }
-  }
-
-  notifDropdown.addEventListener('show.bs.dropdown', clearNotifBadge);
-  notifDropdown.addEventListener('hide.bs.dropdown', clearNotifBadge);
-
-  if (sessionStorage.getItem('notificaciones_vistas') === 'true') {
-    if (notifBadge) notifBadge.style.display = 'none';
-  }
-
-  window.addEventListener('notificaciones_vistas', function() {
-    if (notifBadge) notifBadge.style.display = 'none';
-  });
-});
-</script>
 </body>
 </html>
