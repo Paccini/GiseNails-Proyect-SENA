@@ -1,18 +1,24 @@
 <!-- clientes/templates/clientes/cliente_form.html -->
 {% extends 'base_admin.html' %}
 {% block content %}
+<!-- Contenedor principal de la tarjeta -->
 <div class="card shadow mb-4">
+    <!-- Encabezado con el título y botón de volver -->
     <div class="card-header bg-success text-dark d-flex justify-content-between align-items-center">
         <h2 class="mb-0">
+            <!-- Cambia el título según si se edita o se agrega un cliente -->
             {% if object %}Editar Cliente{% else %}Agregar Cliente{% endif %}
         </h2>
         <a href="{% url 'clientes:cliente_list' %}" class="btn btn-light btn-sm">
             <i class="bi bi-arrow-left"></i> Volver
         </a>
     </div>
+
+    <!-- Cuerpo principal del formulario -->
     <div class="card-body">
         <form method="post">
             {% csrf_token %}
+            <!-- Tabla con los campos del formulario -->
             <table class="table table-bordered">
                 {% for field in form %}
                 <tr>
@@ -21,10 +27,14 @@
                 </tr>
                 {% endfor %}
             </table>
+
+            <!-- Botones de acción -->
             <div class="d-flex gap-2">
+                <!-- Botón para guardar -->
                 <button type="submit" class="btn btn-success">
                     <i class="bi bi-save"></i> Guardar
                 </button>
+                <!-- Botón para cancelar -->
                 <a href="{% url 'clientes:cliente_list' %}" class="btn btn-secondary">
                     <i class="bi bi-x-circle"></i> Cancelar
                 </a>

@@ -1,6 +1,11 @@
 {% extends 'base_admin.html' %}
+<!-- Extiende la plantilla base del panel de administración llamada 'base_admin.html' -->
+
 {% block content %}
+<!-- Inicio del bloque de contenido principal -->
+
 <div class="mb-3 d-flex justify-content-between align-items-center">
+    <!-- Encabezado con título y botón para agregar empleados -->
     <h2 class="fs-4 fw-semibold">
         <i class="bi bi-list-ul me-2"></i> Gestión de Empleados
     </h2>
@@ -8,12 +13,18 @@
         <i class="bi bi-plus-lg fs-5"></i> Agregar
     </a>
 </div>
+
 <div class="card shadow mb-4">
     <div class="card-body">
+        <!-- Formulario de búsqueda -->
         <form method="get" class="d-flex justify-content-end mb-3">
             <input type="text" name="q" value="{{ q }}" class="form-control w-auto" placeholder="Buscar empleado..." style="min-width:200px;">
-            <button type="submit" class="btn btn-primary ms-2"><i class="bi bi-search"></i></button>
+            <button type="submit" class="btn btn-primary ms-2">
+                <i class="bi bi-search"></i>
+            </button>
         </form>
+
+        <!-- Tabla de empleados -->
         <div class="table-responsive">
             <table class="table table-hover align-middle">
                 <thead class="table-light">
@@ -25,7 +36,9 @@
                         <th><i class="bi bi-gear me-1"></i> Acciones</th>
                     </tr>
                 </thead>
+
                 <tbody>
+                    <!-- Iteración sobre la lista de empleados -->
                     {% for empleado in empleados %}
                     <tr>
                         <td>
@@ -38,6 +51,7 @@
                             {{ empleado.correo }}
                         </td>
                         <td>
+                            <!-- Mostrar la foto del empleado si existe -->
                             {% if empleado.foto %}
                                 <img src="{{ empleado.foto.url }}" alt="Foto de {{ empleado.nombre }}" width="48" class="rounded shadow-sm">
                             {% else %}
@@ -45,6 +59,7 @@
                             {% endif %}
                         </td>
                         <td>
+                            <!-- Botones de acción: editar y eliminar -->
                             <a href="{% url 'empleados:empleado_update' empleado.id %}" class="btn btn-sm btn-warning me-1" title="Editar">
                                 <i class="bi bi-pencil-square"></i>
                             </a>
@@ -53,7 +68,9 @@
                             </a>
                         </td>
                     </tr>
+
                     {% empty %}
+                    <!-- Si no hay empleados registrados -->
                     <tr>
                         <td colspan="5" class="text-center">No hay empleados registrados.</td>
                     </tr>
@@ -61,19 +78,26 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- Paginación -->
         {% if is_paginated %}
         <nav>
             <ul class="pagination justify-content-center">
+                <!-- Botón de página anterior -->
                 {% if page_obj.has_previous %}
                 <li class="page-item">
                     <a class="page-link" href="?q={{ q }}&page={{ page_obj.previous_page_number }}">Anterior</a>
                 </li>
                 {% endif %}
+
+                <!-- Números de página -->
                 {% for num in paginator.page_range %}
                 <li class="page-item {% if page_obj.number == num %}active{% endif %}">
                     <a class="page-link" href="?q={{ q }}&page={{ num }}">{{ num }}</a>
                 </li>
                 {% endfor %}
+
+                <!-- Botón de página siguiente -->
                 {% if page_obj.has_next %}
                 <li class="page-item">
                     <a class="page-link" href="?q={{ q }}&page={{ page_obj.next_page_number }}">Siguiente</a>
@@ -84,4 +108,6 @@
         {% endif %}
     </div>
 </div>
+
 {% endblock %}
+<!-- Fin del bloque de contenido principal -->

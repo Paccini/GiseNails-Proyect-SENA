@@ -1,47 +1,78 @@
 {% extends 'home.html' %}
+<!-- Extiende la plantilla base principal llamada 'home.html' -->
+
 {% block title %}Registro{% endblock %}
+<!-- Define el título de la página como "Registro" -->
+
 {% block content %}
+<!-- Inicio del bloque de contenido principal -->
+
 {% load static %}
+<!-- Carga las etiquetas de archivos estáticos (CSS, imágenes, JS, etc.) -->
 
 <link rel="stylesheet" href="{% static 'css/base.css' %}">
+<!-- Importa los estilos base de la aplicación -->
+
 <link rel="stylesheet" href="{% static 'css/login.css' %}">
+<!-- Importa los estilos específicos del formulario de login/registro -->
 
 <main class="login-main">
+    <!-- Contenedor principal de la página de registro -->
+
     <section class="login-card">
+        <!-- Tarjeta o bloque visual del formulario -->
+        
         <header>
             <h1>Registro</h1>
+            <!-- Título principal del formulario -->
         </header>
+
         <form method="post" autocomplete="off">
+            <!-- Formulario de registro con método POST -->
             {% csrf_token %}
+            <!-- Token de seguridad contra ataques CSRF -->
+
             {% if pending_message %}
+            <!-- Si existe una cita pendiente, se muestra este mensaje -->
             <div class="pending-reserva-message" style="margin-bottom:1rem;">
                 <p>Hemos guardado tu cita pendiente. Crea tu cuenta y después completaremos la reserva automáticamente.</p>
             </div>
             {% endif %}
 
+            <!-- Campo de nombre -->
             <div class="login-input-group">
                 <span class="login-icon"><i class="bi bi-person"></i></span>
                 {{ form.nombre }}
             </div>
+
+            <!-- Campo de correo -->
             <div class="login-input-group">
                 <span class="login-icon"><i class="bi bi-envelope"></i></span>
                 {{ form.correo }}
             </div>
+
+            <!-- Campo de teléfono -->
             <div class="login-input-group">
                 <span class="login-icon"><i class="bi bi-telephone"></i></span>
                 {{ form.telefono }}
             </div>
+
+            <!-- Campo de contraseña -->
             <div class="login-input-group">
                 <span class="login-icon"><i class="bi bi-lock"></i></span>
                 {{ form.password }}
             </div>
 
             {% if prefill_email %}
+            <!-- Si hay un correo prellenado, muestra enlace para cambiarlo -->
               <p><a href="#" id="usar-otro-correo">Usar otro correo</a></p>
             {% endif %}
 
             <button type="submit" class="login-btn">Registrarme</button>
+            <!-- Botón principal para enviar el formulario -->
+
             {% if form.errors %}
+            <!-- Si hay errores en el formulario, se muestra este mensaje -->
             <div class="login-alert">
                 Por favor revisa los datos ingresados.
             </div>
@@ -49,39 +80,48 @@
         </form>
 
         {% if form.non_field_errors %}
+        <!-- Muestra errores generales del formulario -->
           <div class="error">{{ form.non_field_errors }}</div>
         {% endif %}
+
+        <!-- Muestra errores específicos por campo -->
         {{ form.nombre.errors }}
         {{ form.correo.errors }}
         {{ form.telefono.errors }}
         {{ form.password.errors }}
 
-        <p>¿Ya tienes una cuenta? <a href="{% url 'login:login' %}" class="login-link">Inicia sesión</a></p>
+        <p>¿Ya tienes una cuenta? 
+            <a href="{% url 'login:login' %}" class="login-link">Inicia sesión</a>
+            <!-- Enlace a la página de inicio de sesión -->
+        </p>
     </section>
 </main>
 
 <style>
     footer { display: none !important; }
+    <!-- Oculta el pie de página en esta vista -->
 </style>
 
-<!-- Script para permitir editar el correo prellenado -->
+<!-- Script para permitir editar el correo si estaba bloqueado -->
 <script>
 document.addEventListener('DOMContentLoaded', function(){
   const link = document.getElementById('usar-otro-correo');
   if(!link) return;
   link.addEventListener('click', function(e){
     e.preventDefault();
-    // buscar el input de correo renderizado por el form
+    // Busca el input del correo
     const emailInput = document.querySelector('input[name="correo"]');
     if(emailInput){
       emailInput.removeAttribute('readonly');
       emailInput.focus();
-      // opcional: limpiar el valor si quieres que el usuario reescriba
+      // Opcional: limpiar el valor del campo si se desea
       // emailInput.value = '';
     }
     link.style.display = 'none';
+    // Oculta el enlace después de usarlo
   });
 });
 </script>
 
 {% endblock %}
+<!-- Fin del bloque de contenido -->

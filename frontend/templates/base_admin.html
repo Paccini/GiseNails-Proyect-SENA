@@ -1,43 +1,63 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <title>GiseNails</title>
+
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Estilos personalizados -->
     <link rel="stylesheet" href="{% static 'css/estilos_admin.css' %}">
+
+    <!-- Iconos Bootstrap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+    <!-- Evitar cacheo del navegador -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
 </head>
 
 <body>
-    {% if user.is_authenticated and user.is_staff %}
-    <!-- Navbar superior con offcanvas lateral -->
+{% if user.is_authenticated and user.is_staff %}
+    <!-- NAVBAR SUPERIOR CON MENÚ LATERAL -->
     <nav class="navbar navbar-light bg-white border-bottom fixed-top shadow-sm">
       <div class="container-fluid">
+
+        <!-- Botón que despliega el menú lateral (offcanvas) -->
         <button class="navbar-toggler me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
+
+        <!-- Título del panel -->
         <span class="navbar-brand fw-bold text-dark" style="font-size: 1.5rem;">
             Panel de Administración
         </span>
+
+        <!-- Sección derecha de la barra superior -->
         <div class="d-flex align-items-center gap-2 ms-auto">
+
+          <!-- Botón para alternar entre tema claro y oscuro -->
           <button id="toggleTheme" class="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center" style="width:38px;height:38px;padding:0;" title="Cambiar tema">
             <i class="bi bi-moon fs-5"></i>
           </button>
+
           <!-- Campana de notificaciones -->
           <div class="dropdown">
             <button class="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center position-relative" id="notifDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Notificaciones" style="width:38px;height:38px;padding:0;">
               <i class="bi bi-bell fs-5"></i>
+
+              <!-- Badge con contador de notificaciones -->
               {% if notificaciones|length > 0 %}
               <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.75em;">
                 {{ notificaciones|length }}
               </span>
               {% endif %}
             </button>
+
+            <!-- Menú desplegable con las notificaciones -->
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notifDropdown" style="min-width: 320px;">
               <li class="dropdown-header fw-bold">Notificaciones</li>
               {% if notificaciones %}
@@ -55,18 +75,20 @@
               {% endif %}
             </ul>
           </div>
+
+          <!-- Menú del usuario administrador -->
           <div class="dropdown">
             <a class="d-flex align-items-center text-decoration-none dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-              <img src="{% if user.profile.foto %}{{ user.profile.foto.url }}{% else %}{% static 'img/log.jpg' %}{% endif %}"
-                alt="Avatar" width="40" height="40"
-                class="rounded-circle border border-2 border-secondary shadow-sm">
+              <img src="{% if user.profile.foto %}{{ user.profile.foto.url }}{% else %}{% static 'img/log.jpg' %}{% endif %}" alt="Avatar" width="40" height="40" class="rounded-circle border border-2 border-secondary shadow-sm">
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <!-- Opción para abrir el modal de actualización -->
               <li>
                 <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#updateUserModal">
                   <i class="bi bi-pencil-square me-2"></i> Actualizar datos
                 </button>
               </li>
+              <!-- Opción para cerrar sesión -->
               <li>
                 <form action="{% url 'login:logout' %}" method="post" class="d-inline">
                   {% csrf_token %}
@@ -78,6 +100,8 @@
             </ul>
           </div>
         </div>
+
+        <!-- MENU LATERAL (OFFCANVAS) -->
         <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
           <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menú</h5>
@@ -85,6 +109,7 @@
           </div>
           <div class="offcanvas-body">
             <ul class="navbar-nav flex-grow-1">
+              <!-- Enlaces del menú lateral -->
               <li class="nav-item"><a class="nav-link" href="{% url 'login:dashboard' %}"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
               <li class="nav-item"><a class="nav-link" href="{% url 'reserva:home' %}"><i class="bi bi-calendar-check me-2"></i>Citas</a></li>
               <li class="nav-item"><a class="nav-link" href="{% url 'empleados:empleado_list' %}"><i class="bi bi-people me-2"></i>Empleados</a></li>
@@ -96,25 +121,37 @@
         </div>
       </div>
     </nav>
-    <!-- Espacio para navbar fijo -->
+
+    <!-- Margen superior para compensar la barra fija -->
     <div style="height: 70px;"></div>
+
+    <!-- CONTENIDO PRINCIPAL -->
     <main class="container flex-grow-1">
         {% block content %}
         {% endblock %}
     </main>
+
+    <!-- PIE DE PÁGINA -->
     <footer class="text-center py-4" style="background: #f8fafc; color: #232c36; border-top: 1px solid #e5e7eb; box-shadow: 0 -2px 12px rgba(44,62,80,0.07); font-size: 1.05rem;">
         © 2025 GiseNails &nbsp;|&nbsp; Todos los derechos reservados
     </footer>
-    {% else %}
-    <main class="container my-5">
-    </main>
-    {% endif %}
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    {% block scripts %}{% endblock %}
-    <script>
+
+{% else %}
+    <!-- Si el usuario no está autenticado o no es staff -->
+    <main class="container my-5"></main>
+{% endif %}
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Chart.js para los gráficos -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+{% block scripts %}{% endblock %}
+
+<!-- SCRIPT: cambio de tema claro/oscuro -->
+<script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Al cargar, aplica el tema guardado
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
         document.body.classList.add('dark-mode');
@@ -125,7 +162,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.getElementById('toggleTheme').addEventListener('click', function() {
     document.body.classList.toggle('dark-mode');
-    // Cambia el ícono del botón
     const icon = this.querySelector('i');
     if(document.body.classList.contains('dark-mode')) {
         icon.classList.remove('bi-moon');
@@ -138,7 +174,8 @@ document.getElementById('toggleTheme').addEventListener('click', function() {
     }
 });
 </script>
-<!-- Modal para actualizar datos de admin -->
+
+<!-- MODAL: actualización de datos del administrador -->
 <div class="modal fade" id="updateUserModal" tabindex="-1" aria-labelledby="updateUserModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content" style="background: #fff; border-radius: 16px;">
@@ -149,30 +186,44 @@ document.getElementById('toggleTheme').addEventListener('click', function() {
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
+
+          <!-- Mensaje informativo -->
           <div class="mb-3">
             <span class="fw-semibold" style="color:#3b82f6;">Puedes actualizar tu nombre y contraseña de administrador. Para cambiar la contraseña, debes ingresar la actual y la nueva.</span>
           </div>
+
+          <!-- Mostrar errores de validación -->
           {% if update_error %}
             <div class="alert alert-danger">{{ update_error }}</div>
           {% endif %}
+
+          <!-- Campo para el nombre -->
           <div class="mb-3">
             <label for="id_nombre" class="form-label fw-bold" style="color:#232c36;">Nombre <span class="text-muted">(se mostrará en el sistema)</span></label>
             <input type="text" class="form-control" name="nombre" id="id_nombre" value="{{ user.get_full_name }}" required autocomplete="name">
           </div>
+
+          <!-- Contraseña actual -->
           <div class="mb-3">
             <label for="id_old_password" class="form-label fw-bold" style="color:#232c36;">Contraseña actual <span class="text-danger">*</span></label>
             <input type="password" class="form-control" name="old_password" id="id_old_password" required autocomplete="current-password">
             <div class="form-text" style="color:#6b7280;">Necesaria para cualquier cambio</div>
           </div>
+
+          <!-- Nueva contraseña -->
           <div class="mb-3">
             <label for="id_new_password" class="form-label fw-bold" style="color:#232c36;">Nueva contraseña</label>
             <input type="password" class="form-control" name="new_password" id="id_new_password" autocomplete="new-password">
             <div class="form-text" style="color:#6b7280;">Déjalo vacío si no deseas cambiarla</div>
           </div>
+
+          <!-- Nombre de usuario generado -->
           <div class="form-text" style="color:#6b7280;">
             Tu nombre de usuario para iniciar sesión será: <span id="nuevoUsername">{{ user.username }}</span>
           </div>
         </div>
+
+        <!-- Botones del modal -->
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
           <button type="submit" class="btn btn-primary">Actualizar</button>
@@ -181,16 +232,19 @@ document.getElementById('toggleTheme').addEventListener('click', function() {
     </div>
   </div>
 </div>
+
+<!-- SCRIPT: actualizar el nombre de usuario sugerido -->
 <script>
-  // Actualiza el nombre de usuario sugerido en tiempo real
-  document.getElementById('id_nombre').addEventListener('input', function() {
-    var nuevo = this.value.replace(/\s+/g, '').toLowerCase();
-    document.getElementById('nuevoUsername').textContent = nuevo;
-  });
+document.getElementById('id_nombre').addEventListener('input', function() {
+  var nuevo = this.value.replace(/\s+/g, '').toLowerCase();
+  document.getElementById('nuevoUsername').textContent = nuevo;
+});
 </script>
-<!-- SweetAlert CDN -->
+
+<!-- SweetAlert para alertas -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<!-- SCRIPT: mostrar modal con alertas de éxito/error -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     {% if show_modal %}
@@ -214,17 +268,17 @@ document.addEventListener('DOMContentLoaded', function() {
     {% endif %}
 });
 </script>
+
+<!-- SCRIPT: gestión del contador de notificaciones -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   var notifDropdown = document.getElementById('notifDropdown');
   var notifBadge = notifDropdown.querySelector('.badge');
 
-  // Función para borrar el contador y guardar el estado en sessionStorage
   function clearNotifBadge() {
     if (notifBadge) {
       notifBadge.style.display = 'none';
       sessionStorage.setItem('notificaciones_vistas', 'true');
-      // Dispara evento para otras pestañas
       window.dispatchEvent(new Event('notificaciones_vistas'));
     }
   }
@@ -232,17 +286,14 @@ document.addEventListener('DOMContentLoaded', function() {
   notifDropdown.addEventListener('show.bs.dropdown', clearNotifBadge);
   notifDropdown.addEventListener('hide.bs.dropdown', clearNotifBadge);
 
-  // Al cargar, revisa si ya se marcaron como vistas en otra pestaña
   if (sessionStorage.getItem('notificaciones_vistas') === 'true') {
     if (notifBadge) notifBadge.style.display = 'none';
   }
 
-  // Escucha el evento en todas las pestañas
   window.addEventListener('notificaciones_vistas', function() {
     if (notifBadge) notifBadge.style.display = 'none';
   });
 });
 </script>
 </body>
-
 </html>
