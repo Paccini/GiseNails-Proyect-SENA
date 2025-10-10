@@ -1,17 +1,48 @@
 {% extends 'base_admin.html' %}
 {% block content %}
+
+<!-- ============================================= -->
+<!-- CONTENEDOR PRINCIPAL DE EDICIÓN / CREACIÓN DE PRODUCTO -->
+<!-- ============================================= -->
 <div class="card shadow mb-4">
+
+    <!-- ============================================= -->
+    <!-- ENCABEZADO DE LA TARJETA -->
+    <!-- Muestra el título dinámico según si se está editando o agregando -->
+    <!-- Incluye un botón para volver al listado de productos -->
+    <!-- ============================================= -->
     <div class="card-header bg-success text-dark d-flex justify-content-between align-items-center">
         <h2 class="mb-0">
-            {% if producto %}Editar Producto{% else %}Agregar Producto{% endif %}
+            {% if producto %}
+                Editar Producto
+            {% else %}
+                Agregar Producto
+            {% endif %}
         </h2>
         <a href="{% url 'productos:producto_list' %}" class="btn btn-light btn-sm">
             <i class="bi bi-arrow-left"></i> Volver
         </a>
     </div>
+
+    <!-- ============================================= -->
+    <!-- CUERPO DE LA TARJETA -->
+    <!-- Contiene el formulario con todos los campos del producto -->
+    <!-- ============================================= -->
     <div class="card-body">
+        
+        <!-- ============================================= -->
+        <!-- FORMULARIO DE PRODUCTO -->
+        <!-- Usa método POST y permite subida de archivos (imágenes) -->
+        <!-- Incluye protección CSRF para seguridad -->
+        <!-- ============================================= -->
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
+            
+            <!-- ============================================= -->
+            <!-- TABLA DE CAMPOS DEL FORMULARIO -->
+            <!-- Cada campo del formulario se renderiza dentro de una fila -->
+            <!-- Se muestran dinámicamente todos los campos definidos en el formulario Django -->
+            <!-- ============================================= -->
             <table class="table table-bordered">
                 {% for field in form %}
                 <tr>
@@ -20,10 +51,20 @@
                 </tr>
                 {% endfor %}
             </table>
+
+            <!-- ============================================= -->
+            <!-- BOTONES DE ACCIÓN -->
+            <!-- Botón principal: Guardar o Guardar cambios (según el contexto) -->
+            <!-- Botón secundario: Cancelar y volver a la lista -->
+            <!-- ============================================= -->
             <div class="d-flex gap-2">
                 <button type="submit" class="btn btn-success">
                     <i class="bi bi-save"></i>
-                    {% if producto %}Guardar cambios{% else %}Guardar{% endif %}
+                    {% if producto %}
+                        Guardar cambios
+                    {% else %}
+                        Guardar
+                    {% endif %}
                 </button>
                 <a href="{% url 'productos:producto_list' %}" class="btn btn-secondary">
                     <i class="bi bi-x-circle"></i> Cancelar
@@ -32,4 +73,5 @@
         </form>
     </div>
 </div>
+
 {% endblock %}

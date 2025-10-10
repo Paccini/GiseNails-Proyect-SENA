@@ -1,18 +1,30 @@
 <!-- filepath: c:\Users\juanv\Desktop\proyecto Gise-Nails\frontend\templates\clientes\panel.html -->
 {% extends 'base_cliente.html' %}
+<!-- Extiende la plantilla base para clientes -->
+
 {% load static %}
+<!-- Carga el uso de archivos estáticos -->
+
 {% block content %}
+<!-- Inicio del bloque principal de contenido -->
+
 <div class="card mb-4">
-  <div class="card-header">
-    <h3 class="fw-bold mb-0"><i class="bi bi-person-circle me-2"></i> Información del cliente</h3>
-  </div>
-  <div class="card-body">
-    <p><strong>Nombre:</strong> {{ cliente.nombre }}</p>
-    <p><strong>Correo:</strong> {{ cliente.correo }}</p>
-    <p><strong>Teléfono:</strong> {{ cliente.telefono }}</p>
-    <p><strong>Fecha de registro:</strong> {{ cliente.fecha_registro|date:"d/m/Y H:i" }}</p>
-  </div>
+
+  
+
+    <!-- Tarjeta que muestra la información del cliente -->
+    <div class="card-header">
+        <h3 class="fw-bold mb-0"><i class="bi bi-person-circle me-2"></i> Información del cliente</h3>
+    </div>
+    <div class="card-body">
+        <!-- Datos del cliente -->
+        <p><strong>Nombre:</strong> {{ cliente.nombre }}</p>
+        <p><strong>Correo:</strong> {{ cliente.correo }}</p>
+        <p><strong>Teléfono:</strong> {{ cliente.telefono }}</p>
+        <p><strong>Fecha de registro:</strong> {{ cliente.fecha_registro|date:"d/m/Y H:i" }}</p>
+    </div>
 </div>
+
 <div class="card">
   <div class="card-header">
     <h3 class="fw-bold mb-0"><i class="bi bi-calendar-heart me-2"></i> Mis citas</h3>
@@ -76,42 +88,54 @@
   aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
+      <!-- Formulario para actualizar la información del cliente -->
       <form method="post" action="{% url 'clientes:editar_perfil' %}">
         {% csrf_token %}
         <div class="modal-header">
-          <h5 class="modal-title fw-bold" id="updateClienteModalLabel" style="color:#232c36;">Actualizar datos de
-            cliente</h5>
+          <h5 class="modal-title fw-bold" id="updateClienteModalLabel" style="color:#232c36;">Actualizar datos de cliente</h5>
+          <!-- Botón para cerrar el modal -->
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
           <div class="mb-3">
+            <!-- Mensaje informativo -->
             <span class="fw-semibold" style="color:#3b82f6;">
               Puedes actualizar tu nombre, correo, teléfono y contraseña.<br>
               Para cambiar la contraseña, debes ingresar la actual y la nueva.
             </span>
           </div>
+
           {% if form.errors %}
-          <div class="alert alert-danger">
-            {% for field in form %}
-            {% for error in field.errors %}
-            {{ error }}<br>
-            {% endfor %}
-            {% endfor %}
-          </div>
+            <!-- Si hay errores en el formulario, se muestran aquí -->
+            <div class="alert alert-danger">
+              {% for field in form %}
+                {% for error in field.errors %}
+                  {{ error }}<br>
+                {% endfor %}
+              {% endfor %}
+            </div>
           {% endif %}
+
+          <!-- Campo: nombre -->
           <div class="mb-3">
             <label for="id_nombre" class="form-label fw-bold" style="color:#232c36;">Nombre</label>
             <input type="text" class="form-control" name="nombre" id="id_nombre" value="{{ cliente.nombre }}" required>
           </div>
+
+          <!-- Campo: correo -->
           <div class="mb-3">
             <label for="id_correo" class="form-label fw-bold" style="color:#232c36;">Correo</label>
             <input type="email" class="form-control" name="correo" id="id_correo" value="{{ cliente.correo }}" required>
           </div>
+
+          <!-- Campo: teléfono -->
           <div class="mb-3">
             <label for="id_telefono" class="form-label fw-bold" style="color:#232c36;">Teléfono</label>
             <input type="text" class="form-control" name="telefono" id="id_telefono" value="{{ cliente.telefono }}"
               required>
           </div>
+
+          <!-- Campo: contraseña actual -->
           <div class="mb-3">
             <label for="id_old_password" class="form-label fw-bold" style="color:#232c36;">Contraseña actual <span
                 class="text-danger">*</span></label>
@@ -119,6 +143,8 @@
               autocomplete="current-password">
             <div class="form-text" style="color:#6b7280;">Necesaria para cualquier cambio de contraseña</div>
           </div>
+
+          <!-- Campo: nueva contraseña -->
           <div class="mb-3">
             <label for="id_new_password" class="form-label fw-bold" style="color:#232c36;">Nueva contraseña</label>
             <input type="password" class="form-control" name="new_password" id="id_new_password"
@@ -126,6 +152,8 @@
             <div class="form-text" style="color:#6b7280;">Déjalo vacío si no deseas cambiarla</div>
           </div>
         </div>
+
+        <!-- Pie del modal con botones -->
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
           <button type="submit" class="btn btn-primary">Actualizar</button>
@@ -189,16 +217,21 @@
   </div>
 </div>
 {% endblock %}
+<!-- Fin del bloque principal de contenido -->
 
 {% block scripts %}
+<!-- Bloque de scripts adicionales -->
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <!-- JS para mostrar el modal de actualizar cliente y alertas -->
 {% if show_modal %}
+<!-- Si se debe mostrar el modal automáticamente -->
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     var modal = new bootstrap.Modal(document.getElementById('updateClienteModal'));
     modal.show();
+
     {% if update_error %}
     Swal.fire({
       icon: 'error',

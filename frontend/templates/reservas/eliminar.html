@@ -1,15 +1,46 @@
 {% extends 'base_admin.html' %}
 {% block content %}
+<!-- ===========================================================
+    PÁGINA: ELIMINAR CITA
+    Descripción:
+    Muestra un mensaje de confirmación antes de eliminar
+    definitivamente una cita registrada en el sistema.
+============================================================== -->
+
+<!-- === TARJETA PRINCIPAL === -->
 <div class="card shadow mb-4">
+    
+    <!-- === ENCABEZADO ROJO DE ADVERTENCIA === -->
     <div class="card-header bg-danger text-white">
-        <h2 class="mb-0">Eliminar Cita</h2>
+        <h2 class="mb-0">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            Eliminar Cita
+        </h2>
     </div>
+
+    <!-- === CUERPO DE LA TARJETA === -->
     <div class="card-body">
-        <p>¿Estás seguro que deseas eliminar la cita de <strong>{{ cita.cliente }}</strong> para el servicio <strong>{{ cita.servicio.nombre }}</strong>?</p>
+        <!-- Mensaje de confirmación dinámico -->
+        <p>
+            ¿Estás seguro que deseas eliminar la cita de 
+            <strong>{{ cita.cliente }}</strong>
+            para el servicio 
+            <strong>{{ cita.servicio.nombre }}</strong>?
+        </p>
+
+        <!-- === FORMULARIO DE CONFIRMACIÓN === -->
         <form method="post">
             {% csrf_token %}
-            <button type="submit" class="btn btn-danger">Eliminar</button>
-            <a href="{% url 'reserva:home' %}" class="btn btn-secondary">Cancelar</a>
+            
+            <!-- Botón principal de acción -->
+            <button type="submit" class="btn btn-danger">
+                <i class="bi bi-trash me-1"></i> Eliminar
+            </button>
+
+            <!-- Botón de cancelación -->
+            <a href="{% url 'reserva:home' %}" class="btn btn-secondary">
+                <i class="bi bi-x-circle me-1"></i> Cancelar
+            </a>
         </form>
     </div>
 </div>

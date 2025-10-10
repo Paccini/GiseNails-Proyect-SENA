@@ -1,16 +1,38 @@
 {% extends 'base_admin.html' %}
 {% block content %}
+
+<!-- Contenedor principal de la tarjeta para confirmar la eliminación del servicio -->
 <div class="card shadow mb-4">
+    
+    <!-- Encabezado con fondo rojo para indicar acción de eliminación -->
     <div class="card-header bg-danger text-white">
         <h2 class="mb-0">Eliminar Servicio</h2>
     </div>
+
+    <!-- Cuerpo de la tarjeta -->
     <div class="card-body">
-        <p>¿Estás seguro que deseas eliminar el servicio <strong>{{ servicio.nombre }}</strong>?</p>
+        
+        <!-- Mensaje de confirmación que muestra el nombre del servicio -->
+        <p>
+            ¿Estás seguro que deseas eliminar el servicio 
+            <strong>{{ servicio.nombre }}</strong>?
+        </p>
+
+        <!-- Formulario para confirmar la eliminación -->
         <form method="post">
             {% csrf_token %}
-            <button type="submit" class="btn btn-danger">Eliminar</button>
-            <a href="{% url 'servicio:servicio_list' %}" class="btn btn-secondary">Cancelar</a>
+            
+            <!-- Botón para confirmar la eliminación -->
+            <button type="submit" class="btn btn-danger">
+                Eliminar
+            </button>
+
+            <!-- Botón para cancelar y regresar a la lista -->
+            <a href="{% url 'servicio:servicio_list' %}" class="btn btn-secondary">
+                Cancelar
+            </a>
         </form>
     </div>
 </div>
+
 {% endblock %}
