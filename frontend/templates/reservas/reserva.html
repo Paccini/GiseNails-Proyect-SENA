@@ -11,6 +11,7 @@
 <!-- Contenedor general de la página de reserva -->
 <div class="reserva-container">
 
+
     <!-- Encabezado con logo e información de contacto -->
     <header class="reserva-header">
         <div class="marca">
@@ -39,6 +40,7 @@
             <!-- Formulario de reserva -->
             <form method="post" action="" class="reserva-form" novalidate>
                 {% csrf_token %}
+
 
                 <!-- Campos de información del cliente -->
                 <label for="nombre">Nombre</label>
@@ -95,14 +97,45 @@
                 <h3 class="servicios-titulo">Servicios disponibles</h3>
                 <div id="servicios-contenedor" class="servicios-list" role="list"></div>
 
+
+                <!-- Modal: lista de servicios por categoría -->
+                <div id="modal-servicios" class="modal-servicios" aria-hidden="true" role="dialog" aria-modal="true">
+                  <div class="modal-panel" role="document">
+                      <div class="modal-header">
+                        <h3 id="modal-title">Servicios</h3>
+                        <button id="modal-close" class="modal-close" aria-label="Cerrar">&times;</button>
+                      </div>
+                      <div class="modal-body">
+                        <div id="modal-servicios-list" class="modal-servicios-list"></div>
+                      </div>
+                      <div class="modal-footer">
+                        <button id="modal-cancel" class="btn-cancel">Cancelar</button>
+                      </div>
+                    </div>
+                  </div>
+
                 <!-- Botones de acción -->
+
                 <div class="acciones">
                     <button type="submit" class="btn-confirm">Confirmar cita</button>
                     <a href="{% url 'inicio' %}" class="btn-cancel">Volver</a>
                 </div>
             </form>
         </section>
+  
     </main>
+</div>
+<!-- Mensaje de confirmación de cita (añadir dentro de block content) -->
+<div id="reserva-success-modal" class="reserva-success-modal" aria-hidden="true">
+  <div class="reserva-success-card">
+    <button id="reserva-success-close" class="reserva-success-close" aria-label="Cerrar">&times;</button>
+    <img src="{% static 'img/Logo gisel-nails.png' %}" alt="Logo" class="reserva-success-logo" />
+    <h2>¡Cita reservada!</h2>
+    <p class="reserva-success-text">Tu cita se ha guardado correctamente. Te hemos enviado un correo de confirmación (revisa tu bandeja y spam).</p>
+    <div class="reserva-success-actions">
+      <a href="{% url 'inicio' %}" class="btn btn-secondary">Volver al inicio</a>
+    </div>
+  </div>
 </div>
 <!-- Fin del contenedor principal -->
 
@@ -145,6 +178,7 @@
 <!-- Librería Flatpickr para el selector de fechas -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
 
 <!-- Archivos JavaScript personalizados -->
 <script src="{% static 'js/servicios.js' %}"></script>
@@ -152,14 +186,15 @@
 
 <!-- Inicialización de Flatpickr -->
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        flatpickr("#fecha-select", {
-            dateFormat: "d/m/Y",
-            minDate: "today",
-            locale: "es"
-        });
+  document.addEventListener('DOMContentLoaded', function() {
+    flatpickr("#fecha-select", {
+      dateFormat: "d/m/Y",
+      minDate: "today",
+      locale: "es"
     });
+  });
 </script>
+
 
 <!-- Modal de confirmación de cita -->
 <div id="reserva-success-modal" class="reserva-success-modal" aria-hidden="true">
@@ -204,6 +239,8 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 });
 </script>
+
+<!-- pequeño script para renderizar tarjetas y actualizar resumen -->
 
 <!-- Script para renderizar dinámicamente los servicios y mostrar el resumen -->
 <script>
