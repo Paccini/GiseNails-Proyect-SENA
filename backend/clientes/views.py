@@ -30,37 +30,39 @@ def panel_cliente(request):
 
 
 def registro_cliente(request):
-    # detecta reserva pendiente en sesión para prellenar email y mostrar mensaje
     pending = request.session.get('pending_reserva')
     initial = {}
+    # Solo autocompleta si hay pending y el correo NO está registrado
     if pending:
-        initial = {
-            'nombre': pending.get('nombre', ''),
-            'correo': pending.get('correo', ''),
-            'telefono': pending.get('telefono', ''),
-        }
+        from clientes.models import Cliente
+        correo = pending.get('correo', '')
+        if not Cliente.objects.filter(correo__iexact=correo).exists():
+            initial = {
+                'nombre': pending.get('nombre', ''),
+                'correo': correo,
+                'telefono': pending.get('telefono', ''),
+            }
 
     if request.method == 'POST':
         form = RegistroClienteForm(request.POST)
-        # DEBUG rápido: descomenta para ver POST en consola
-        # print('POST registro:', request.POST)
         if form.is_valid():
-            cliente = form.save()  # que devuelva la instancia Cliente
-            # si usas UserCreationForm asegúrate de enlazar user<>cliente según tu modelo
+            cliente = form.save()
             try:
-                user = cliente.user  # si tu modelo Cliente crea/relaciona user
+                user = cliente.user
             except Exception:
                 user = None
             if user:
+                from django.contrib.auth import login as auth_login
                 auth_login(request, user)
-            # si hay reserva pendiente, redirigir para completarla
             if request.session.get('pending_reserva'):
                 return redirect('/reserva/completar-reserva/')
-            # si no hay pending, mostrar modal de éxito en reserva o llevar a inicio
             return redirect('/reserva/?success=1')
         else:
-            # render con errores (se verán en la plantilla si la incluíste)
-            return render(request, 'clientes/registro.html', {'form': form, 'prefill_email': initial.get('correo'), 'pending_message': bool(pending)})
+            return render(request, 'clientes/registro.html', {
+                'form': form,
+                'prefill_email': initial.get('correo'),
+                'pending_message': bool(pending)
+            })
     else:
         form = RegistroClienteForm(initial=initial)
         if initial.get('correo'):
@@ -68,7 +70,11 @@ def registro_cliente(request):
                 form.fields['correo'].widget.attrs['readonly'] = True
             except Exception:
                 pass
-        return render(request, 'clientes/registro.html', {'form': form, 'prefill_email': initial.get('correo'), 'pending_message': bool(pending)})
+        return render(request, 'clientes/registro.html', {
+            'form': form,
+            'prefill_email': initial.get('correo'),
+            'pending_message': bool(pending)
+        })
 
 @never_cache
 @login_required(login_url='login:login')
@@ -77,18 +83,69 @@ def editar_perfil(request):
         cliente = Cliente.objects.get(user=request.user)
     except Cliente.DoesNotExist:
         return redirect('login:login')
+    update_error = None
+    update_success = None
+    show_modal = False
     if request.method == 'POST':
         form = RegistroClienteForm(request.POST, instance=cliente)
+        show_modal = True
         if form.is_valid():
-            form.save()
-            
-            return redirect('clientes:panel')
+            old_password = form.cleaned_data.get('old_password')
+            new_password = form.cleaned_data.get('new_password')
+            user = request.user
+            if new_password:
+                if not old_password or not user.check_password(old_password):
+                    # Mostrar error y mantener modal abierto
+                    update_error = "La contraseña actual es incorrecta. No se realizaron cambios."
+                    return render(request, 'clientes/panel.html', {
+                        'cliente': cliente,
+                        'reservas': Reserva.objects.filter(cliente=cliente),
+                        'form': form,
+                        'user': request.user,
+                        'show_modal': True,
+                        'update_error': update_error,
+                        'update_success': None,
+                        'notificaciones': [],
+                    })
+                else:
+                    user.set_password(new_password)
+                    user.save()
+                    from django.contrib.auth import update_session_auth_hash
+                    update_session_auth_hash(request, user)
+                    form.save()
+                    return redirect('/clientes/panel/?success=1')
+            else:
+                form.save()
+                return redirect('/clientes/panel/?success=1')
+        else:
+            update_error = "Corrige los errores del formulario."
+            return render(request, 'clientes/panel.html', {
+                'cliente': cliente,
+                'reservas': Reserva.objects.filter(cliente=cliente),
+                'form': form,
+                'user': request.user,
+                'show_modal': True,
+                'update_error': update_error,
+                'update_success': None,
+                'notificaciones': [],
+            })
     else:
         form = RegistroClienteForm(instance=cliente)
+    # Mostrar alerta de éxito si viene en la URL
+    update_success = None
+    if request.GET.get('success') == '1':
+        update_success = "¡Datos actualizados correctamente!"
+        show_modal = True
     return render(request, 'clientes/panel.html', {
-        'cliente': cliente, 
-        'user': request.user, 
-        'form': form})
+        'cliente': cliente,
+        'reservas': Reserva.objects.filter(cliente=cliente),
+        'form': form,
+        'user': request.user,
+        'show_modal': show_modal,
+        'update_error': None,
+        'update_success': update_success,
+        'notificaciones': [],
+    })
     
 
 @never_cache
@@ -183,7 +240,24 @@ def panel_cliente(request):
     except Cliente.DoesNotExist:
         return redirect('clientes:registro')
     reservas = Reserva.objects.filter(cliente=cliente)
-    return render(request, 'clientes/panel.html', {'reservas': reservas})
+    # Notificaciones: solo reservas del cliente, solo las creadas hoy
+    from datetime import date
+    notificaciones = []
+    for reserva in reservas.order_by('-fecha_creacion')[:5]:
+        if reserva.fecha_creacion.date() == date.today():
+            notificaciones.append({
+                'icon': 'bi-calendar-check',
+                'texto': f'Cita agendada para el {reserva.fecha.strftime("%d/%m/%Y")} a las {reserva.hora}',
+                'fecha': reserva.fecha_creacion.strftime('%d/%m/%Y %H:%M')
+            })
+    form = RegistroClienteForm(instance=cliente)
+    return render(request, 'clientes/panel.html', {
+        'cliente': cliente,
+        'reservas': reservas,
+        'form': form,
+        'user': request.user,
+        'notificaciones': notificaciones
+    })
 
 @login_required
 @never_cache

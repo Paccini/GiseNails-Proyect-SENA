@@ -14,7 +14,7 @@
 </head>
 
 <body>
-    {% if user.is_authenticated %}
+    {% if user.is_authenticated and user.is_staff %}
     <!-- Navbar superior con offcanvas lateral -->
     <nav class="navbar navbar-light bg-white border-bottom fixed-top shadow-sm">
       <div class="container-fluid">
@@ -22,22 +22,18 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <span class="navbar-brand fw-bold text-dark" style="font-size: 1.5rem;">
-          {% if user.is_staff %}
             Panel de Administración
-          {% else %}
-            Panel de Usuario
-          {% endif %}
         </span>
-        <div class="d-flex align-items-center gap-3 ms-auto">
-          <button id="toggleTheme" class="btn btn-outline-secondary" title="Cambiar tema">
-            <i class="bi bi-moon"></i>
+        <div class="d-flex align-items-center gap-2 ms-auto">
+          <button id="toggleTheme" class="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center" style="width:38px;height:38px;padding:0;" title="Cambiar tema">
+            <i class="bi bi-moon fs-5"></i>
           </button>
           <!-- Campana de notificaciones -->
           <div class="dropdown">
-            <button class="btn btn-outline-secondary position-relative" id="notifDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Notificaciones">
+            <button class="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center position-relative" id="notifDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Notificaciones" style="width:38px;height:38px;padding:0;">
               <i class="bi bi-bell fs-5"></i>
               {% if notificaciones|length > 0 %}
-              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.75em;">
                 {{ notificaciones|length }}
               </span>
               {% endif %}
@@ -61,7 +57,7 @@
           </div>
           <div class="dropdown">
             <a class="d-flex align-items-center text-decoration-none dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-              <img src="{% if user.profile.foto %}{{ user.profile.foto.url }}{% else %}{% static 'img/foto.jpg' %}{% endif %}"
+              <img src="{% if user.profile.foto %}{{ user.profile.foto.url }}{% else %}{% static 'img/log.jpg' %}{% endif %}"
                 alt="Avatar" width="40" height="40"
                 class="rounded-circle border border-2 border-secondary shadow-sm">
             </a>
@@ -94,7 +90,6 @@
               <li class="nav-item"><a class="nav-link" href="{% url 'empleados:empleado_list' %}"><i class="bi bi-people me-2"></i>Empleados</a></li>
               <li class="nav-item"><a class="nav-link" href="{% url 'productos:producto_list' %}"><i class="bi bi-box-seam me-2"></i>Productos</a></li>
               <li class="nav-item"><a class="nav-link" href="{% url 'servicio:servicio_list' %}"><i class="bi bi-scissors me-2"></i>Servicios</a></li>
-
               <li class="nav-item"><a class="nav-link" href="{% url 'clientes:cliente_list' %}"><i class="bi bi-person-lines-fill me-2"></i>Clientes</a></li>
             </ul>
           </div>
@@ -143,7 +138,7 @@ document.getElementById('toggleTheme').addEventListener('click', function() {
     }
 });
 </script>
-<!-- Modal para actualizar datos -->
+<!-- Modal para actualizar datos de admin -->
 <div class="modal fade" id="updateUserModal" tabindex="-1" aria-labelledby="updateUserModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content" style="background: #fff; border-radius: 16px;">
@@ -217,6 +212,35 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       {% endif %}
     {% endif %}
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var notifDropdown = document.getElementById('notifDropdown');
+  var notifBadge = notifDropdown.querySelector('.badge');
+
+  // Función para borrar el contador y guardar el estado en sessionStorage
+  function clearNotifBadge() {
+    if (notifBadge) {
+      notifBadge.style.display = 'none';
+      sessionStorage.setItem('notificaciones_vistas', 'true');
+      // Dispara evento para otras pestañas
+      window.dispatchEvent(new Event('notificaciones_vistas'));
+    }
+  }
+
+  notifDropdown.addEventListener('show.bs.dropdown', clearNotifBadge);
+  notifDropdown.addEventListener('hide.bs.dropdown', clearNotifBadge);
+
+  // Al cargar, revisa si ya se marcaron como vistas en otra pestaña
+  if (sessionStorage.getItem('notificaciones_vistas') === 'true') {
+    if (notifBadge) notifBadge.style.display = 'none';
+  }
+
+  // Escucha el evento en todas las pestañas
+  window.addEventListener('notificaciones_vistas', function() {
+    if (notifBadge) notifBadge.style.display = 'none';
+  });
 });
 </script>
 </body>

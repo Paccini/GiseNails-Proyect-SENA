@@ -1,129 +1,147 @@
-{% extends 'base_usuario.html' %}
+<!-- filepath: c:\Users\juanv\Desktop\proyecto Gise-Nails\frontend\templates\clientes\panel.html -->
+{% extends 'base_cliente.html' %}
 {% load static %}
 {% block content %}
-<div class="usuario-topbar">
-    <span class="usuario-nombre">
-        Bienvenido, {{ cliente.nombre }} <span style="font-size:1.2em;">🌸</span>
-    </span>
-    <form action="{% url 'logout' %}" method="post" style="display:inline;">
+<div class="card mb-4">
+    <div class="card-header">
+        <h3 class="fw-bold mb-0"><i class="bi bi-person-circle me-2"></i> Información del cliente</h3>
+    </div>
+    <div class="card-body">
+        <p><strong>Nombre:</strong> {{ cliente.nombre }}</p>
+        <p><strong>Correo:</strong> {{ cliente.correo }}</p>
+        <p><strong>Teléfono:</strong> {{ cliente.telefono }}</p>
+        <p><strong>Fecha de registro:</strong> {{ cliente.fecha_registro|date:"d/m/Y H:i" }}</p>
+    </div>
+</div>
+<div class="card">
+    <div class="card-header">
+        <h3 class="fw-bold mb-0"><i class="bi bi-calendar-heart me-2"></i> Mis citas</h3>
+    </div>
+    <div class="card-body">
+        {% if reservas %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Servicio</th>
+                        <th>Gestora</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cita in reservas %}
+                    <tr>
+                        <td>{{ cita.fecha|date:"d/m/Y" }}</td>
+                        <td>{{ cita.hora }}</td>
+                        <td>{{ cita.servicio }}</td>
+                        <td>{{ cita.gestora }}</td>
+                        <td>
+                            <a href="{% url 'clientes:cancelar' cita.pk %}" class="btn btn-danger btn-sm">
+                                <i class="bi bi-x-circle"></i> Cancelar
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="text-muted">No tienes citas asignadas.</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Modal para actualizar datos del cliente -->
+<div class="modal fade" id="updateClienteModal" tabindex="-1" aria-labelledby="updateClienteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" action="{% url 'clientes:editar_perfil' %}">
         {% csrf_token %}
-        <button type="submit" class="usuario-btn-cerrar">
-            <i class="bi bi-box-arrow-right"></i> Cerrar sesión
-        </button>
-    </form>
-</div>
-
-<div id="citas" class="usuario-card" style="margin-top:0;">
-    <h2><i class="bi bi-calendar-heart"></i> Próximas citas</h2>
-    {% if citas %}
-    {% for cita in citas %}
-    <div
-        style="border:1px solid #f3c6e3; border-radius:12px; margin-bottom:18px; padding:18px 16px; background:#faf6fb;">
-        <div style="font-size:1.15em; color:#c06caa;">
-            <i class="bi bi-calendar-event"></i>
-            {{ cita.fecha }} - {{ cita.hora }}
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold" id="updateClienteModalLabel" style="color:#232c36;">Actualizar datos de cliente</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
-        <div style="margin-left:24px; color:#6c3483;">
-            <strong>Servicio:</strong> {{ cita.servicio }}<br>
-            <strong>Profesional:</strong> {{ cita.gestora }}
-        </div>
-        <div style="margin-top:8px; text-align:right;">
-            <a href="{% url 'clientes:cancelar' cita.pk %}" class="btn btn-danger btn-sm">
-                <i class="bi bi-x-circle"></i> Cancelar
-            </a>
-        </div>
-    </div>
-    {% endfor %}
-    {% else %}
-    <p style="color:#c06caa;text-align:center;">No tienes citas asignadas.</p>
-    {% endif %}
-</div>
-
-<div id="perfil" class="usuario-card" style="display:none;">
-    <h2><i class="bi bi-person-circle"></i> Información personal</h2>
-    <div style="color:#6c3483; font-size:1.08em;">
-        <strong>Nombre:</strong> {{ cliente.nombre }}<br>
-        <strong>Teléfono:</strong> {{ cliente.telefono }}<br>
-        <strong>Correo:</strong> {{ cliente.correo }}<br>
-        <strong>Fecha de registro:</strong> {{ cliente.fecha_registro|date:"d/m/Y H:i" }}
-    </div>
-    <div style="margin-top:24px; text-align:center;">
-        <a href="#" class="btn btn-primary" style="margin:8px 12px; background:#c06caa; border:none;">
-            <i class="bi bi-calendar-plus"></i> Agendar nueva cita
-        </a>
-        <button type="button" onclick="abrirModal()" class="btn btn-outline-secondary"
-            style="margin:8px 12px; color:#c06caa; border-color:#c06caa;">
-            <i class="bi bi-pencil-square"></i> Editar perfil
-        </button>
-
-
-        <div id="modal" class="modal">
-            <div class="modal-content animate">
-                <span onclick="cerrarModal()" class="close" title="Cerrar"><i class="bi bi-x-octagon"></i></span>
-                <h2>Actualizacion de informacion</h2>
-                <form action="{% url 'clientes:editar_perfil' %}" method="post">
-                        {% csrf_token %}
-                        {% if form.errors %}
-                        
-                        <div style="color:#c00; font-weight:bold; margin-bottom:12px;" class="alert alert-danger">
-                        
-                            
-                            
-                            <strong>{{ field.label }}</strong> {{ error }}<br>
-                            
-                            
-                            {% for error in form.non_field_errors %}
-                            <h2>{{ error }} </h2><br>
-                            {% endfor %}
-                        
-                        {% endif %}
-                        <style>
-                            /* Oculta el campo de contraseña */
-                            input[type="password"],
-                            .field-password,
-                            .form-group-password {
-                                display: none !important;
-                            }
-
-                            /* Mantiene el estilo de los demás campos */
-                            .modal-content input,
-                            .modal-content select {
-                                margin-bottom: 12px;
-                            }
-                        </style>
-                        {{ form.as_p }}
-                        <button type="submit" class="btn btn-success" style="background:#c06caa; border:none;">
-                            <i class="bi bi-save"></i> Guardar cambios
-                        </button>
-                </form>
+        <div class="modal-body">
+          <div class="mb-3">
+            <span class="fw-semibold" style="color:#3b82f6;">
+              Puedes actualizar tu nombre, correo, teléfono y contraseña.<br>
+              Para cambiar la contraseña, debes ingresar la actual y la nueva.
+            </span>
+          </div>
+          {% if form.errors %}
+            <div class="alert alert-danger">
+              {% for field in form %}
+                {% for error in field.errors %}
+                  {{ error }}<br>
+                {% endfor %}
+              {% endfor %}
             </div>
+          {% endif %}
+          <div class="mb-3">
+            <label for="id_nombre" class="form-label fw-bold" style="color:#232c36;">Nombre</label>
+            <input type="text" class="form-control" name="nombre" id="id_nombre" value="{{ cliente.nombre }}" required>
+          </div>
+          <div class="mb-3">
+            <label for="id_correo" class="form-label fw-bold" style="color:#232c36;">Correo</label>
+            <input type="email" class="form-control" name="correo" id="id_correo" value="{{ cliente.correo }}" required>
+          </div>
+          <div class="mb-3">
+            <label for="id_telefono" class="form-label fw-bold" style="color:#232c36;">Teléfono</label>
+            <input type="text" class="form-control" name="telefono" id="id_telefono" value="{{ cliente.telefono }}" required>
+          </div>
+          <div class="mb-3">
+            <label for="id_old_password" class="form-label fw-bold" style="color:#232c36;">Contraseña actual <span class="text-danger">*</span></label>
+            <input type="password" class="form-control" name="old_password" id="id_old_password" autocomplete="current-password">
+            <div class="form-text" style="color:#6b7280;">Necesaria para cualquier cambio de contraseña</div>
+          </div>
+          <div class="mb-3">
+            <label for="id_new_password" class="form-label fw-bold" style="color:#232c36;">Nueva contraseña</label>
+            <input type="password" class="form-control" name="new_password" id="id_new_password" autocomplete="new-password">
+            <div class="form-text" style="color:#6b7280;">Déjalo vacío si no deseas cambiarla</div>
+          </div>
         </div>
-
-
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Actualizar</button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>
-<!-- Sweetalert2 -->
+{% endblock %}
+
+{% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="{% static 'js/notifiaciones.js' %}"></script>
-
-<script src="{% static 'js/panel.js' %}"></script>
-
-{% if form.errors %}
+{% if show_modal %}
 <script>
-    document.addEventListener('DOMContentLoaded', cerrarModalSiExito);
+document.addEventListener('DOMContentLoaded', function() {
+    var modal = new bootstrap.Modal(document.getElementById('updateClienteModal'));
+    modal.show();
+    {% if update_error %}
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: '{{ update_error }}',
+          confirmButtonColor: '#3b82f6',
+          allowOutsideClick: false,
+          allowEscapeKey: false
+        }).then(function() {
+          modal.hide();
+        });
+    {% elif update_success %}
+        Swal.fire({
+          icon: 'success',
+          title: '¡Actualizado!',
+          text: '{{ update_success }}',
+          confirmButtonColor: '#3b82f6',
+          allowOutsideClick: false,
+          allowEscapeKey: false
+        }).then(function() {
+          modal.hide();
+          window.location.href = "{% url 'clientes:panel' %}";
+        });
+    {% endif %}
+});
 </script>
 {% endif %}
-
-
-{% if request.GET.guardado == 'ok' %}
-    
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        si_guardado();
-    });
-</script>
-{% endif %}
-    
-
-
 {% endblock %}

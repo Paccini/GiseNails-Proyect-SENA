@@ -81,21 +81,21 @@ def dashboard(request):
     for mes, total in citas_realizadas:
         datos_citas[mes-1] = total
 
-    # Ejemplo de notificaciones
+    # Notificaciones: solo citas creadas y clientes registrados
     notificaciones = []
-    # Últimas 5 citas generadas
+    # Últimas 5 citas creadas
     for cita in Reserva.objects.order_by('-fecha')[:5]:
         notificaciones.append({
             'icon': 'bi-calendar-check',
-            'texto': f'Cita generada para {cita.cliente}',
+            'texto': f'Cita creada para {cita.cliente}',
             'fecha': cita.fecha.strftime('%d/%m/%Y %H:%M')
         })
-    # Últimas 5 ventas realizadas
-    for venta in Reserva.objects.filter(estado='realizada').order_by('-fecha')[:5]:
+    # Últimos 5 clientes registrados
+    for cliente in Cliente.objects.order_by('-id')[:5]:
         notificaciones.append({
-            'icon': 'bi-cash-stack',
-            'texto': f'Venta realizada: ${venta.servicio.precio:.2f}',
-            'fecha': venta.fecha.strftime('%d/%m/%Y %H:%M')
+            'icon': 'bi-person-plus',
+            'texto': f'Cliente registrado: {cliente}',
+            'fecha': cliente.fecha_registro.strftime('%d/%m/%Y %H:%M') if hasattr(cliente, 'fecha_registro') else ''
         })
 
     context = {
