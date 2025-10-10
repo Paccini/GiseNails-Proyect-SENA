@@ -1,4 +1,5 @@
 {% extends 'base_admin.html' %}
+{% load static %}
 
 <!-- Bloque principal del contenido de la página -->
 {% block content %}
@@ -80,33 +81,9 @@
 <!-- Bloque de scripts (JavaScript para el gráfico de citas) -->
 {% block scripts %}
 <script>
-    <!-- Inicialización del gráfico con Chart.js -->
-    const ctx = document.getElementById('graficoCitas').getContext('2d');
-    const graficoCitas = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: [{% for mes in meses %}"{{ mes }}"{% if not forloop.last %},{% endif %}{% endfor %}],
-            datasets: [{
-                label: 'Citas realizadas por mes',
-                data: [{% for dato in datos_citas %}{{ dato }}{% if not forloop.last %},{% endif %}{% endfor %}],
-                fill: true,
-                borderColor: '#3b82f6',
-                borderWidth: 3,
-                backgroundColor: 'rgba(59,130,246,0.2)',
-                tension: 0.3,
-                pointRadius: 4,
-                pointBackgroundColor: '#3b82f6'
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { display: false }
-            },
-            scales: {
-                y: { beginAtZero: true, ticks: { stepSize: 1 } }
-            }
-        }
-    });
+    // Variables globales para el gráfico, accesibles desde dashboard.js
+    window.graficoCitasMeses = [{% for mes in meses %}"{{ mes }}"{% if not forloop.last %},{% endif %}{% endfor %}];
+    window.graficoCitasDatos = [{% for dato in datos_citas %}{{ dato }}{% if not forloop.last %},{% endif %}{% endfor %}];
 </script>
+<script src="{% static 'js/dashboard.js' %}"></script>
 {% endblock %}
