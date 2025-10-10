@@ -54,4 +54,17 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     }
+
+    // Ocultar el contador de notificaciones al abrir el dropdown
+    var notifDropdown = document.getElementById('notifDropdown');
+    if (notifDropdown) {
+        notifDropdown.addEventListener('show.bs.dropdown', function () {
+            var badge = notifDropdown.querySelector('.badge');
+            if (badge) {
+                badge.style.display = 'none';
+                // Opcional: puedes guardar en sessionStorage para no mostrarlo hasta que haya una nueva notificación real
+                sessionStorage.setItem('notificaciones_vistas', 'true');
+            }
+        });
+    }
 });
