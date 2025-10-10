@@ -240,14 +240,16 @@ def panel_cliente(request):
     except Cliente.DoesNotExist:
         return redirect('clientes:registro')
     reservas = Reserva.objects.filter(cliente=cliente)
-    # Notificaciones: solo reservas del cliente
+    # Notificaciones: solo reservas del cliente, solo las creadas hoy
+    from datetime import date
     notificaciones = []
-    for reserva in reservas.order_by('-fecha')[:5]:
-        notificaciones.append({
-            'icon': 'bi-calendar-check',
-            'texto': f'Cita creada para ti el {reserva.fecha.strftime("%d/%m/%Y")} a las {reserva.hora}',
-            'fecha': reserva.fecha.strftime('%d/%m/%Y %H:%M')
-        })
+    for reserva in reservas.order_by('-fecha_creacion')[:5]:
+        if reserva.fecha_creacion.date() == date.today():
+            notificaciones.append({
+                'icon': 'bi-calendar-check',
+                'texto': f'Cita agendada para el {reserva.fecha.strftime("%d/%m/%Y")} a las {reserva.hora}',
+                'fecha': reserva.fecha_creacion.strftime('%d/%m/%Y %H:%M')
+            })
     form = RegistroClienteForm(instance=cliente)
     return render(request, 'clientes/panel.html', {
         'cliente': cliente,

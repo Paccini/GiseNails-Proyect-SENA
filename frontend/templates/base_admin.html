@@ -14,7 +14,7 @@
 </head>
 
 <body>
-    {% if user.is_authenticated %}
+    {% if user.is_authenticated and user.is_staff %}
     <!-- Navbar superior con offcanvas lateral -->
     <nav class="navbar navbar-light bg-white border-bottom fixed-top shadow-sm">
       <div class="container-fluid">
@@ -22,22 +22,18 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <span class="navbar-brand fw-bold text-dark" style="font-size: 1.5rem;">
-          {% if user.is_staff %}
             Panel de Administración
-          {% else %}
-            Panel de Usuario
-          {% endif %}
         </span>
-        <div class="d-flex align-items-center gap-3 ms-auto">
-          <button id="toggleTheme" class="btn btn-outline-secondary" title="Cambiar tema">
-            <i class="bi bi-moon"></i>
+        <div class="d-flex align-items-center gap-2 ms-auto">
+          <button id="toggleTheme" class="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center" style="width:38px;height:38px;padding:0;" title="Cambiar tema">
+            <i class="bi bi-moon fs-5"></i>
           </button>
           <!-- Campana de notificaciones -->
           <div class="dropdown">
-            <button class="btn btn-outline-secondary position-relative" id="notifDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Notificaciones">
+            <button class="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center position-relative" id="notifDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Notificaciones" style="width:38px;height:38px;padding:0;">
               <i class="bi bi-bell fs-5"></i>
               {% if notificaciones|length > 0 %}
-              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.75em;">
                 {{ notificaciones|length }}
               </span>
               {% endif %}
@@ -66,19 +62,11 @@
                 class="rounded-circle border border-2 border-secondary shadow-sm">
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-              {% if user.is_staff %}
               <li>
                 <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#updateUserModal">
                   <i class="bi bi-pencil-square me-2"></i> Actualizar datos
                 </button>
               </li>
-              {% else %}
-              <li>
-                <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#updateClienteModal">
-                  <i class="bi bi-pencil-square me-2"></i> Actualizar datos
-                </button>
-              </li>
-              {% endif %}
               <li>
                 <form action="{% url 'login:logout' %}" method="post" class="d-inline">
                   {% csrf_token %}
@@ -96,7 +84,6 @@
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
           </div>
           <div class="offcanvas-body">
-            {% if user.is_staff %}
             <ul class="navbar-nav flex-grow-1">
               <li class="nav-item"><a class="nav-link" href="{% url 'login:dashboard' %}"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
               <li class="nav-item"><a class="nav-link" href="{% url 'reserva:home' %}"><i class="bi bi-calendar-check me-2"></i>Citas</a></li>
@@ -105,7 +92,6 @@
               <li class="nav-item"><a class="nav-link" href="{% url 'servicio:servicio_list' %}"><i class="bi bi-scissors me-2"></i>Servicios</a></li>
               <li class="nav-item"><a class="nav-link" href="{% url 'clientes:cliente_list' %}"><i class="bi bi-person-lines-fill me-2"></i>Clientes</a></li>
             </ul>
-            {% endif %}
           </div>
         </div>
       </div>
@@ -152,7 +138,7 @@ document.getElementById('toggleTheme').addEventListener('click', function() {
     }
 });
 </script>
-<!-- Modal para actualizar datos -->
+<!-- Modal para actualizar datos de admin -->
 <div class="modal fade" id="updateUserModal" tabindex="-1" aria-labelledby="updateUserModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content" style="background: #fff; border-radius: 16px;">
@@ -208,42 +194,22 @@ document.getElementById('toggleTheme').addEventListener('click', function() {
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     {% if show_modal %}
-      {% if user.is_staff %}
-        var modal = new bootstrap.Modal(document.getElementById('updateUserModal'));
-        modal.show();
-        {% if update_error %}
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: '{{ update_error }}',
-            confirmButtonColor: '#3b82f6'
-          });
-        {% elif update_success %}
-          Swal.fire({
-            icon: 'success',
-            title: '¡Actualizado!',
-            text: '{{ update_success }}',
-            confirmButtonColor: '#3b82f6'
-          });
-        {% endif %}
-      {% else %}
-        var modal = new bootstrap.Modal(document.getElementById('updateClienteModal'));
-        modal.show();
-        {% if update_error %}
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: '{{ update_error }}',
-            confirmButtonColor: '#3b82f6'
-          });
-        {% elif update_success %}
-          Swal.fire({
-            icon: 'success',
-            title: '¡Actualizado!',
-            text: '{{ update_success }}',
-            confirmButtonColor: '#3b82f6'
-          });
-        {% endif %}
+      var modal = new bootstrap.Modal(document.getElementById('updateUserModal'));
+      modal.show();
+      {% if update_error %}
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: '{{ update_error }}',
+          confirmButtonColor: '#3b82f6'
+        });
+      {% elif update_success %}
+        Swal.fire({
+          icon: 'success',
+          title: '¡Actualizado!',
+          text: '{{ update_success }}',
+          confirmButtonColor: '#3b82f6'
+        });
       {% endif %}
     {% endif %}
 });
