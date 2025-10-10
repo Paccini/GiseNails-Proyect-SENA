@@ -1,3 +1,25 @@
+// Mostrar modal de éxito de reserva si corresponde
+document.addEventListener('DOMContentLoaded', function(){
+	const params = new URLSearchParams(window.location.search);
+	if(params.get('success') === '1'){
+		const modal = document.getElementById('reserva-success-modal');
+		modal.setAttribute('aria-hidden','false');
+		// quitar el parámetro ?success=1 de la URL (sin recargar)
+		const url = new URL(window.location);
+		url.searchParams.delete('success');
+		window.history.replaceState({}, document.title, url.toString());
+		// botón cerrar
+		document.getElementById('reserva-success-close').addEventListener('click', function(){
+			modal.setAttribute('aria-hidden','true');
+		});
+		// cerrar click fuera de la tarjeta
+		modal.addEventListener('click', function(e){
+			if(e.target === modal){
+				modal.setAttribute('aria-hidden','true');
+			}
+		});
+	}
+});
 // Eliminado código de selección automática duplicado
 
 // Manejo del envío del formulario de reserva vía AJAX
