@@ -1,6 +1,13 @@
 {% extends 'base_admin.html' %}
+{% load static %}
+
+<!-- Bloque principal del contenido de la página -->
 {% block content %}
+
+<!-- Fila principal con tarjetas de resumen (clientes, ventas, servicios, productos) -->
 <div class="row g-3 mb-4">
+
+    <!-- Tarjeta: Total de clientes -->
     <div class="col-md-3">
         <div class="card shadow-sm border-0">
             <div class="card-body d-flex align-items-center gap-3">
@@ -14,6 +21,8 @@
             </div>
         </div>
     </div>
+
+    <!-- Tarjeta: Total de ventas -->
     <div class="col-md-3">
         <div class="card shadow-sm border-0">
             <div class="card-body d-flex align-items-center gap-3">
@@ -27,6 +36,8 @@
             </div>
         </div>
     </div>
+
+    <!-- Tarjeta: Total de servicios -->
     <div class="col-md-3">
         <div class="card shadow-sm border-0">
             <div class="card-body d-flex align-items-center gap-3">
@@ -40,6 +51,8 @@
             </div>
         </div>
     </div>
+
+    <!-- Tarjeta: Total de productos -->
     <div class="col-md-3">
         <div class="card shadow-sm border-0">
             <div class="card-body d-flex align-items-center gap-3">
@@ -54,41 +67,23 @@
         </div>
     </div>
 </div>
+
+<!-- Sección del gráfico de citas -->
 <div class="card shadow-sm border-0 mb-4">
     <div class="card-body">
         <h5 class="mb-3"><i class="bi bi-graph-up me-2"></i> Gráfico de citas</h5>
         <canvas id="graficoCitas" height="80"></canvas>
     </div>
 </div>
+
 {% endblock %}
+
+<!-- Bloque de scripts (JavaScript para el gráfico de citas) -->
 {% block scripts %}
 <script>
-const ctx = document.getElementById('graficoCitas').getContext('2d');
-const graficoCitas = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: [{% for mes in meses %}"{{ mes }}"{% if not forloop.last %},{% endif %}{% endfor %}],
-        datasets: [{
-            label: 'Citas realizadas por mes',
-            data: [{% for dato in datos_citas %}{{ dato }}{% if not forloop.last %},{% endif %}{% endfor %}],
-            fill: true,
-            borderColor: '#3b82f6',
-            borderWidth: 3,
-            backgroundColor: 'rgba(59,130,246,0.2)',
-            tension: 0.3,
-            pointRadius: 4,
-            pointBackgroundColor: '#3b82f6'
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            legend: { display: false }
-        },
-        scales: {
-            y: { beginAtZero: true, ticks: { stepSize: 1 } }
-        }
-    }
-});
+    // Variables globales para el gráfico, accesibles desde dashboard.js
+    window.graficoCitasMeses = [{% for mes in meses %}"{{ mes }}"{% if not forloop.last %},{% endif %}{% endfor %}];
+    window.graficoCitasDatos = [{% for dato in datos_citas %}{{ dato }}{% if not forloop.last %},{% endif %}{% endfor %}];
 </script>
+<script src="{% static 'js/dashboard.js' %}"></script>
 {% endblock %}

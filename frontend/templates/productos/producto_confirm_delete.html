@@ -1,16 +1,51 @@
 {% extends 'base_admin.html' %}
 {% block content %}
-<div class="card">
-    <div>
-        <h2>Eliminar Producto</h2>
+
+<!-- ===================================================== -->
+<!-- PLANTILLA: eliminar_producto.html -->
+<!-- DESCRIPCIÓN: Vista de confirmación para eliminar un producto -->
+<!-- UBICACIÓN: templates/productos/eliminar_producto.html -->
+<!-- CONTEXTO: Muestra los datos del producto seleccionado y -->
+<!-- solicita confirmación antes de eliminarlo definitivamente -->
+<!-- ===================================================== -->
+
+<div class="card shadow mb-4">
+
+    <!-- ============================================= -->
+    <!-- ENCABEZADO DE LA TARJETA -->
+    <!-- Muestra el título principal de la vista -->
+    <!-- ============================================= -->
+    <div class="card-header bg-danger text-white">
+        <h2 class="mb-0">Eliminar Producto</h2>
     </div>
-    <div>
-        <p>¿Estás seguro que deseas eliminar el producto <strong>{{ producto.nombre }}</strong>?</p>
+
+    <!-- ============================================= -->
+    <!-- CUERPO DE LA TARJETA -->
+    <!-- Presenta el mensaje de confirmación al usuario -->
+    <!-- ============================================= -->
+    <div class="card-body">
+        
+        <!-- Mensaje de advertencia -->
+        <p>
+            ¿Estás seguro que deseas eliminar el producto 
+            <strong>{{ producto.nombre }}</strong>?
+        </p>
+
+        <!-- ============================================= -->
+        <!-- FORMULARIO DE CONFIRMACIÓN -->
+        <!-- Envía la solicitud POST para eliminar el registro -->
+        <!-- Se incluye el token CSRF obligatorio en Django -->
+        <!-- ============================================= -->
         <form method="post">
             {% csrf_token %}
-            <button type="submit" class="btn btn-delete">Eliminar</button>
-            <a href="{% url 'productos:producto_list' %}" class="btn">Cancelar</a>
+            <button type="submit" class="btn btn-danger">
+                <i class="bi bi-trash"></i> Eliminar
+            </button>
+            <a href="{% url 'productos:producto_list' %}" class="btn btn-secondary">
+                <i class="bi bi-x-circle"></i> Cancelar
+            </a>
         </form>
     </div>
 </div>
+
 {% endblock %}

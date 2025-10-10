@@ -2,17 +2,19 @@
    footer.css - Estilos del pie de página y redes sociales
    ========================= */
 
+/* Contenedor principal del pie de página */
 .pierna {
     text-align: center;
 }
 
+/* Títulos dentro del pie de página */
 .pierna > div > h5 {
     color: var(--rosado-oscuro);
     text-align: center;
     font-weight: bold;
 }
 
-
+/* Enlaces del footer principales */
 .pierna > div > ul > li > a {
     color: #222 !important; /* negro suave */
     font-size: 20px !important;
@@ -20,23 +22,27 @@
     transition: color 0.2s;
 }
 
+/* Efecto hover para los enlaces principales del footer */
 .pierna > div > ul > li > a:hover {
     color: var(--rosado-oscuro) !important;
     font-size: 20px !important;
     text-decoration: none;
 }
 
+/* Enlaces dentro de las columnas del footer */
 .pierna .footer-column.separador ul.list-unstyled li a {
     color: #222 !important; /* o var(--negro-suave) */
     font-size: 16px;
     text-decoration: none;
 }
 
+/* Separador visual entre columnas del footer */
 .pierna > .separador{
     border-left: 2px solid var(--rosado-oscuro);
     border-right: 2px solid var(--rosado-oscuro);
 }
 
+/* Contenedor de los íconos sociales */
 .icono_social > ul {
     justify-items: space-between !important;
     display: flex;
@@ -50,6 +56,7 @@
     margin-right: auto;
 }
 
+/* Estilos de los íconos sociales */
 .icono_social > ul > li > a > i {
     border-radius: 10px;
     text-align: center;
@@ -58,6 +65,7 @@
     border: solid 1px var(--rosado-oscuro);
 }
 
+/* Efecto hover sobre los íconos sociales */
 .icono_social > ul > li a i:hover {
     border-radius: 10px;
     text-align: center;
@@ -67,35 +75,41 @@
     background-color: var(--rosado-oscuro);
 }
 
+/* Posición del ícono social 1 (superior derecha) */
 .social_1 {
     position: absolute;
     top: 20px;
     right: 20px;
 }
 
+/* Posición del ícono social 2 (superior izquierda) */
 .social_2 {
     position: absolute;
     top: 20px;
     left: 20px;
 }
 
+/* Posición del ícono social 3 (inferior izquierda) */
 .social_3 {
     position: absolute;
     bottom: 20px;
     left: 20px;
 }
 
+/* Posición del ícono social 4 (inferior derecha) */
 .social_4 {
     position: absolute;
     bottom: 20px;
     right: 20px;
 }
 
+/* Sección inferior del footer */
 .pie > .pie-2 {
     color: var(--letra-pie);
     background-color: var(--rosado-fuerte);
 }
 
+/* Imagen dentro del pie de página */
 .pie > .pie-2 img {
     width: 100px;
     border-radius: 22px;

@@ -2,34 +2,44 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    
+    <!-- Carga de metadatos y configuración inicial -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Gise Nails{% endblock %}</title>
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Great+Vibes&family=Dancing+Script&display=swap" rel="stylesheet">
+
     <!-- CSS personalizado -->
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
     <link rel="stylesheet" href="{% static 'css/footer.css' %}">
     {% block extra_head %}{% endblock %}
 </head>
+
 <body>
     <header>
         <!-- Barra de navegación principal -->
         <nav class="navbar navbar-expand-lg shadow-sm sticky-top">
             <div class="container-fluid">
+                <!-- Logo o nombre principal -->
                 <a class="navbar-brand d-flex align-items-center" href="{% url 'inicio' %}">
                     <span>GISE NAILS</span>
                 </a>
+
+                <!-- Botón responsive del menú -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
+                <!-- Elementos del menú -->
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
@@ -48,9 +58,8 @@
                             <a class="nav-link" href="{% url 'servicio:lista_servicios' %}"><i class="bi bi-star"></i> Servicios</a>
                         </li>
                         <li class="nav-item">
-
+                            <!-- Enlace para iniciar sesión -->
                             <a class="nav-link" href="{% url 'login:login' %}"><i class="bi bi-person-circle"></i> Inicia sesión</a>
-
                         </li>
                     </ul>
                 </div>
@@ -58,19 +67,24 @@
         </nav>
     </header>
 
+    <!-- Contenido principal -->
     <main class="main-content">
         <div class="container-fluid">
             {% block content %}{% endblock %}
         </div>
     </main>
 
+    <!-- Separadores visuales -->
     <hr style="border-top: 3px solid #fff; margin: 0 40px;">
     <hr>
 
+    <!-- Pie de página -->
     <footer class="mt-auto pie">
         <div class="footer-section-top py-4">
             <div class="container">
                 <div class="row pierna">
+
+                    <!-- Columna de contacto -->
                     <div class="col-md-4 footer-column">
                         <h5>¡Tu opinión es muy importante, déjanos tu comentario!</h5>
                         <ul class="list-unstyled">
@@ -78,6 +92,8 @@
                             <li><a href="https://wa.me/3153923380"><i class="bi bi-telephone"></i> +57 315-392-3380</a></li>
                         </ul>
                     </div>
+
+                    <!-- Columna de servicios -->
                     <div class="col-md-4 footer-column separador">
                         <h5>Nuestros servicios</h5>
                         <div class="row">
@@ -100,6 +116,8 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Columna de redes sociales -->
                     <div class="col-md-4 footer-column icono_social">
                         <h5>Síguenos en nuestras redes</h5>
                         <ul class="list-inline social-icons-list justify-content-center">
@@ -109,9 +127,12 @@
                             <li class="list-inline-item"><a href="https://wa.me/3002040538" class="social-icon-link" aria-label="WhatsApp"><i class="bi bi-whatsapp"></i></a></li>
                         </ul>
                     </div>
+
                 </div>
             </div>
         </div>
+
+        <!-- Parte inferior del pie de página -->
         <div class="footer-section-bottom py-3 text-center pie-2">
             <div class="container">
                 <div class="footer-logo">
@@ -129,10 +150,13 @@
 
     <!-- JQuery (necesario para main.js) -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
     <!-- JS personalizado -->
     <script src="{% static 'js/main.js' %}"></script>
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
     {% block extra_js %}{% endblock %}
 </body>
 </html>

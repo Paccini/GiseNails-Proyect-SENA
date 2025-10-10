@@ -2,7 +2,11 @@
    inicio.css - Estilos específicos para la página de inicio
    ========================= */
 
-/* Banner principal */
+/* =========================
+   Banner principal
+   ========================= */
+
+/* Contenedor del banner principal con degradado, color y forma inferior redondeada */
 .banner-principal {
     background: linear-gradient(90deg, var(--rosado-pastel) 0%, var(--rosado-oscuro) 100%);
     color: var(--blanco);
@@ -12,6 +16,7 @@
     box-shadow: 0 8px 32px rgba(230, 0, 126, 0.10);
 }
 
+/* Título del banner principal */
 .banner-principal h1 {
     font-family: 'Pacifico', cursive;
     font-size: 3rem;
@@ -19,12 +24,14 @@
     color: var(--rosa-principal);
 }
 
+/* Párrafo descriptivo del banner principal */
 .banner-principal p {
     font-size: 1.3rem;
     margin-bottom: 24px;
     color: var(--blanco);
 }
 
+/* Botón principal dentro del banner */
 .banner-btn {
     background: var(--rosa-principal);
     color: var(--blanco);
@@ -37,18 +44,27 @@
     transition: background 0.2s, transform 0.2s;
 }
 
+/* Efecto hover del botón del banner */
 .banner-btn:hover {
     background: var(--rosado-oscuro);
     transform: scale(1.05);
 }
 
-/* Carrusel de imágenes */
+/* =========================
+   Carrusel de imágenes
+   ========================= */
+
+/* Imágenes dentro del carrusel con ajuste de proporción y bordes redondeados */
 .carousel-inner img {
     object-fit: cover;
     border-radius: 18px;
 }
 
-/* Iconos y textos destacados */
+/* =========================
+   Iconos y textos destacados
+   ========================= */
+
+/* Iconos circulares destacados con borde y centrado */
 .rounded-circle {
     display: flex;
     align-items: center;
@@ -57,11 +73,16 @@
     border: 3px solid var(--rosado-pastel);
 }
 
+/* Clase para aplicar negrita en textos */
 .fw-bold {
     font-weight: bold !important;
 }
 
-/* Sección de servicios destacados */
+/* =========================
+   Sección de servicios destacados
+   ========================= */
+
+/* Contenedor general de los servicios en fila flexible */
 .servicios-row {
     display: flex;
     flex-wrap: wrap;
@@ -69,6 +90,7 @@
     justify-content: center;
 }
 
+/* Imagen individual de cada servicio */
 .servicio-img {
     width: 300px;
     height: 220px;
@@ -76,11 +98,16 @@
     border-radius: 10px;
 }
 
+/* Contenedor de lista para las imágenes de servicios */
 .servicio-img-lista {
     margin: 0px;
 }
 
-/* Botón de reserva ahora y ver más servicios */
+/* =========================
+   Botón de reserva ahora y ver más servicios
+   ========================= */
+
+/* Estilos generales del botón principal redondeado */
 .btn-danger.rounded-pill {
     background: var(--rosado-fuerte);
     border: none;
@@ -89,6 +116,7 @@
     transition: background 0.2s, transform 0.2s;
 }
 
+/* Efecto hover para los botones principales */
 .btn-danger.rounded-pill:hover {
     background: var(--rosado-oscuro);
     transform: scale(1.05);
@@ -98,6 +126,7 @@
    Estilos para la página de inicio de sesión
    ========================= */
 
+/* Contenedor principal del área de login, centrado vertical y horizontalmente */
 .login-main {
     display: flex;
     justify-content: center;
@@ -105,6 +134,7 @@
     min-height: 70vh;
 }
 
+/* Tarjeta que contiene el formulario de inicio de sesión */
 .login-card {
     background: #fff;
     border-radius: 16px;
@@ -115,6 +145,7 @@
     margin: 32px auto;
 }
 
+/* Título principal dentro de la tarjeta de login */
 .login-card h1 {
     color: #ff4081;
     font-family: 'Arapey', sans-serif;
@@ -123,18 +154,21 @@
     margin-bottom: 24px;
 }
 
+/* Contenedor del ícono y el input del formulario */
 .login-input-group {
     display: flex;
     align-items: center;
     margin-bottom: 18px;
 }
 
+/* Ícono decorativo junto al campo de texto */
 .login-icon {
     margin-right: 8px;
     color: #ff4081;
     font-size: 1.2em;
 }
 
+/* Campos de texto (inputs) del formulario */
 .login-input {
     width: 100%;
     padding: 10px 12px;
@@ -146,6 +180,7 @@
     margin-bottom: 0;
 }
 
+/* Botón principal para enviar el formulario de inicio de sesión */
 .login-btn {
     width: 100%;
     background: #ff4081;
@@ -160,15 +195,18 @@
     transition: background 0.2s;
 }
 
+/* Efecto hover para el botón de login */
 .login-btn:hover {
     background: #ff0077;
 }
 
+/* Enlace de ayuda o registro dentro de la página de login */
 .login-link {
     color: #ff4081;
     text-decoration: underline;
 }
 
+/* Alerta o mensaje de error dentro del formulario de login */
 .login-alert {
     color: #c06caa;
     background: #ffe0ec;
@@ -178,7 +216,11 @@
     text-align: center;
 }
 
-/* Responsive ajustes */
+/* =========================
+   Responsive ajustes
+   ========================= */
+
+/* Ajustes para pantallas más pequeñas (tablets o móviles) */
 @media (max-width: 991px) {
     .banner-principal {
         padding: 40px 0 24px 0;
