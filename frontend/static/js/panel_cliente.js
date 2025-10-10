@@ -55,16 +55,42 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Ocultar el contador de notificaciones al abrir el dropdown
+    // Ocultar el contador de notificaciones al abrir el dropdown y guardar las vistas
     var notifDropdown = document.getElementById('notifDropdown');
     if (notifDropdown) {
         notifDropdown.addEventListener('show.bs.dropdown', function () {
             var badge = notifDropdown.querySelector('.badge');
             if (badge) {
                 badge.style.display = 'none';
-                // Opcional: puedes guardar en sessionStorage para no mostrarlo hasta que haya una nueva notificación real
-                sessionStorage.setItem('notificaciones_vistas', 'true');
+            }
+            // Guardar los IDs de notificaciones vistas
+            var notifs = document.querySelectorAll('[data-notif-id]');
+            var vistos = JSON.parse(localStorage.getItem('notificaciones_vistas') || '[]');
+            notifs.forEach(function (el) {
+                var id = el.getAttribute('data-notif-id');
+                if (vistos.indexOf(id) === -1) {
+                    vistos.push(id);
+                }
+            });
+            localStorage.setItem('notificaciones_vistas', JSON.stringify(vistos));
+        });
+
+        // Al cargar, ocultar las notificaciones ya vistas
+        var vistos = JSON.parse(localStorage.getItem('notificaciones_vistas') || '[]');
+        var notifs = document.querySelectorAll('[data-notif-id]');
+        var nuevas = 0;
+        notifs.forEach(function (el) {
+            var id = el.getAttribute('data-notif-id');
+            if (vistos.indexOf(id) !== -1) {
+                el.style.display = 'none';
+            } else {
+                nuevas++;
             }
         });
+        // Oculta el badge si no hay nuevas
+        var badge = notifDropdown.querySelector('.badge');
+        if (badge && nuevas === 0) {
+            badge.style.display = 'none';
+        }
     }
 });
