@@ -24,6 +24,51 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // Confirmación al confirmar cita
+    document.querySelectorAll('.confirmar-btn').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: '¿Estás seguro que quieres confirmar la cita?',
+                html: 'Recuerda que tienes que abonar un <b>30%</b> de la cita para poder que quede agendada.<br><br>Si en dado caso la cita se confirma y <b>NO</b> se llega a asistir, será cancelada y <b>no se devolverá el depósito</b>.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#198754',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, confirmar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    btn.closest('form').submit();
+                }
+            });
+        });
+    });
+
+    // Cargar horas disponibles en el modal de agendar cita
+    var fechaInput = document.getElementById('id_fecha');
+    if (fechaInput) {
+        fechaInput.addEventListener('change', function() {
+            const fecha = fechaInput.value;
+            const horaSelect = document.getElementById('id_hora');
+            if (fecha) {
+                fetch(`/reserva/horarios-disponibles/?fecha=${fecha}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        horaSelect.innerHTML = '<option value="">Seleccione una hora</option>';
+                        data.horarios.forEach(function(h) {
+                            const opt = document.createElement('option');
+                            opt.value = h.id;
+                            opt.textContent = h.hora;
+                            horaSelect.appendChild(opt);
+                        });
+                    });
+            } else {
+                horaSelect.innerHTML = '<option value="">Seleccione una hora</option>';
+            }
+        });
+    }
+
     // Mostrar el modal y alertas si corresponde (variables inyectadas por Django)
     if (typeof show_modal !== 'undefined' && show_modal) {
         var modal = new bootstrap.Modal(document.getElementById('updateClienteModal'));
