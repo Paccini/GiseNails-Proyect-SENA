@@ -119,6 +119,40 @@ body {
 .servicio-nombre{ font-weight:600; font-size:14px; color:#222; }
 .servicio-precio{ color:var(--accent); font-weight:700; margin-top:6px; }
 
+/* Modal de servicios */
+/* Modal de servicios destacado */
+.modal-servicios{
+  position:fixed;
+  top:0; left:0; right:0; bottom:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(20,20,30,0.56); /* fondo más oscuro y opaco */
+  z-index:2000; /* muy alto para sobresalir sobre todo */
+  opacity:0;
+  visibility:hidden;
+  transition:opacity .18s ease;
+}
+.modal-servicios[aria-hidden="false"]{ opacity:1; visibility:visible; }
+.modal-panel{
+  background:#fff;
+  width:92%;
+  max-width:900px;
+  border-radius:16px;
+  padding:24px 18px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.22);
+}
+.modal-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.modal-header h3{ margin:0; font-family: Georgia, "Times New Roman", serif; }
+.modal-close{ background:transparent; border:0; font-size:22px; cursor:pointer; }
+.modal-body{ max-height:60vh; overflow:auto; }
+.modal-servicios-list{ display:grid; grid-template-columns: repeat(auto-fill,minmax(200px,1fr)); gap:12px; }
+.modal-servicio-card{ display:flex; flex-direction:column; gap:8px; align-items:center; padding:10px; border:1px solid #f0e6ec; border-radius:10px; cursor:pointer; background:#fff; }
+.modal-servicio-card img{ width:120px; height:120px; object-fit:cover; border-radius:8px; }
+.modal-servicio-card .m-nombre{ font-weight:700; text-align:center; }
+.modal-servicio-card .m-precio{ color:var(--accent); font-weight:700; margin-top:6px; }
+.modal-footer{ display:flex; justify-content:flex-end; margin-top:12px; }
+
 /* tarjeta única (modo detalle) */
 .servicio-card.single, .servicio-card.single.selected {
   display:flex;
@@ -145,11 +179,12 @@ body {
 .btn-change{
   background:transparent;
   border:1px solid rgba(24, 23, 23, 0.06);
-  color:var(--muted);
-  padding:8px 12px;
+  color: #fff;
+  padding:4px 6px;
   border-radius:8px;
   cursor:pointer;
-  font-weight:600;
+  font-weight:100;
+  background-color: #204cac;
 }
 
 /* acciones */

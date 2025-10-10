@@ -74,32 +74,26 @@ document.addEventListener('DOMContentLoaded', function() {
     const selectServicio = document.getElementById('tipo-servicio');
 
     // Delegación de eventos para tarjetas generadas dinámicamente
-        serviciosContenedor.addEventListener('click', function(e) {
-            const card = e.target.closest('.servicio-card');
-            if (!card) return;
-            // Quitar selección previa
-            document.querySelectorAll('.servicio-card.selected').forEach(el => el.classList.remove('selected'));
-            // Marcar la tarjeta seleccionada
-            card.classList.add('selected');
-            // setear el id del servicio en el input hidden
-            const servicioId = card.getAttribute('data-id');
-            const servicioInput = document.getElementById('servicio-input');
-            if (servicioInput && servicioId) servicioInput.value = servicioId;
-            // Ocultar las demás tarjetas
-            document.querySelectorAll('.servicio-card').forEach(el => {
-                if (el !== card) el.style.display = 'none';
-            });
-            // Obtiene el nombre del servicio y lo normaliza
-            const nombreServicio = card.querySelector('.servicio-nombre').textContent.trim().toLowerCase().replace(/\s+/g, '');
-            // Busca la opción en el select y la selecciona
-            for (let option of selectServicio.options) {
-                const nombreOpcion = option.textContent.trim().toLowerCase().replace(/\s+/g, '');
-                if (nombreOpcion === nombreServicio) {
-                    selectServicio.value = option.value;
-                    selectServicio.dispatchEvent(new Event('change'));
-                    break;
-                }
-            }
+    serviciosContenedor.addEventListener('click', function(e) {
+        const card = e.target.closest('.servicio-card');
+        if (!card) return;
+        document.querySelectorAll('.servicio-card.selected').forEach(el => el.classList.remove('selected'));
+        card.classList.add('selected');
+        const servicioId = card.getAttribute('data-id');
+        const servicioInput = document.getElementById('servicio-input');
+        if (servicioInput && servicioId) servicioInput.value = servicioId;
+        document.querySelectorAll('.servicio-card').forEach(el => {
+            if (el !== card) el.style.display = 'none';
         });
+        const nombreServicio = card.querySelector('.servicio-nombre').textContent.trim().toLowerCase().replace(/\s+/g, '');
+        for (let option of selectServicio.options) {
+            const nombreOpcion = option.textContent.trim().toLowerCase().replace(/\s+/g, '');
+            if (nombreOpcion === nombreServicio) {
+                selectServicio.value = option.value;
+                selectServicio.dispatchEvent(new Event('change'));
+                break;
+            }
+        }
+    });
 });
 
