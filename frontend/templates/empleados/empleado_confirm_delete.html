@@ -1,16 +1,40 @@
 {% extends 'base_admin.html' %}
+<!-- Extiende la plantilla base del panel de administración -->
+
 {% block content %}
+<!-- Inicio del bloque principal de contenido -->
+
 <div class="card shadow mb-4">
+    <!-- Tarjeta principal con sombra y margen inferior -->
+    
     <div class="card-header bg-danger text-white">
+        <!-- Encabezado de la tarjeta con fondo rojo y texto blanco -->
         <h2 class="mb-0">Eliminar Empleado</h2>
+        <!-- Título del formulario -->
     </div>
+
     <div class="card-body">
-        <p>¿Estás seguro que deseas eliminar al empleado <strong>{{ empleado.nombre }} {{ empleado.apellidos }}</strong>?</p>
+        <!-- Cuerpo principal del contenido -->
+        
+        <p>
+            <!-- Mensaje de confirmación con el nombre completo del empleado -->
+            ¿Estás seguro que deseas eliminar al empleado 
+            <strong>{{ empleado.nombre }} {{ empleado.apellidos }}</strong>?
+        </p>
+
         <form method="post">
+            <!-- Formulario de confirmación para eliminar empleado -->
             {% csrf_token %}
+            <!-- Token de seguridad CSRF obligatorio en formularios POST -->
+
             <button type="submit" class="btn btn-danger">Eliminar</button>
+            <!-- Botón para confirmar la eliminación -->
+
             <a href="{% url 'empleados:empleado_list' %}" class="btn btn-secondary">Cancelar</a>
+            <!-- Botón para cancelar y regresar a la lista de empleados -->
         </form>
     </div>
 </div>
+
 {% endblock %}
+<!-- Fin del bloque principal de contenido -->

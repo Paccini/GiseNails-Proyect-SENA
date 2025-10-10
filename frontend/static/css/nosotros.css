@@ -2,84 +2,144 @@
    nosotros.css - Estilos para la página "Nosotros"
    ========================= */
 
-/* Valores corporativos */
+/* --- Estilos para la sección de Valores Corporativos --- */
+
+/* Define el contenedor principal para la sección de "Valores Corporativos". */
 .val-corpo {
+    /* Establece un color de fondo semitransparente. */
     background-color: #eaf7fd96;
+    /* Añade un espaciado interno (relleno) de 40px arriba/abajo y 80px a los lados. */
     padding: 40px 80px;
+    /* Hace que el contenedor ocupe el 100% del ancho disponible. */
     width: 100%;
 }
 
+/* Estiliza los títulos de nivel 2 (h2) dentro de la sección de valores. */
 .val-corpo h2 {
+    /* Aplica el color rosa principal (definido como una variable CSS --rosa-principal). */
     color: var(--rosa-principal);
+    /* Centra el texto del título. */
     text-align: center;
+    /* Define una fuente decorativa y cursiva para el título. */
     font-family: 'Great Vibes', cursive;
+    /* Establece un tamaño de fuente grande. */
     font-size: 3rem;
+    /* Añade un margen inferior de 30px para separarlo del contenido siguiente. */
     margin-bottom: 30px;
+    /* Añade un relleno interno de 20px alrededor del texto del título. */
     padding: 20px;
 }
 
+/* Clase de utilidad para aplicar el color rosa a cualquier texto. */
 .rosa {
+    /* Aplica el color rosa principal. */
     color: var(--rosa-principal);
 }
 
+/* Estiliza los párrafos (p) dentro de la sección de valores. */
 .val-corpo p {
+    /* Justifica el texto del párrafo para alinear ambas márgenes. */
     text-align: justify;
+    /* Define el tamaño de la fuente. */
     font-size: 15px;
+    /* Elimina el margen por defecto del párrafo. */
     margin: 0;
+    /* Añade un pequeño relleno a la izquierda. */
     padding-left: 10px;
 }
 
-/* Círculos decorativos */
+/* --- Estilos para elementos decorativos --- */
+
+/* Define un círculo decorativo. */
 .circulo {
+    /* Establece el ancho del círculo. */
     width: 25px;
+    /* Establece la altura del círculo. */
     height: 25px;
+    /* Convierte el elemento cuadrado en un círculo perfecto. */
     border-radius: 50%;
 }
 
+/* Estiliza los títulos de nivel 6 (h6) que son hijos directos de un elemento .circulo. */
 .circulo > h6 {
+    /* Centra el texto dentro del círculo. */
     text-align: center;
+    /* Aplica el color de texto definido en la variable --letra-pie. */
     color: var(--letra-pie);
 }
 
-/* Corazón decorativo */
+/* Define un corazón decorativo creado puramente con CSS. */
 .corazon {
+    /* Permite posicionar los pseudo-elementos ::before y ::after de forma absoluta respecto a este contenedor. */
     position: relative;
+    /* Establece el ancho de la base del corazón. */
     width: 24px;
+    /* Establece la altura de la base del corazón. */
     height: 22px;
+    /* Asigna el color de fondo rosa. */
     background-color: var(--rosa-principal);
+    /* Rota el cuadrado 45 grados para formar la punta del corazón. */
     transform: rotate(-45deg);
+    /* Añade un margen a la derecha para separarlo de otros elementos. */
     margin-right: 12px;
+    /* Evita que el elemento se encoja si está en un contenedor flexible. */
     flex-shrink: 0;
+    /* Habilita Flexbox para centrar el contenido (el número o texto interior). */
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
+/* Crea la parte superior derecha del corazón usando un pseudo-elemento. */
 .corazon::after {
+    /* Genera el contenido del pseudo-elemento (necesario para que sea visible). */
     content: "";
+    /* Posiciona este elemento de forma absoluta con respecto al contenedor .corazon. */
     position: absolute;
+    /* Asigna el mismo ancho que la base. */
     width: 24px;
+    /* Asigna la misma altura que la base. */
     height: 22px;
+    /* Asigna el mismo color de fondo. */
     background-color: var(--rosa-principal);
+    /* Lo desplaza hacia la derecha. */
     left: 15px;
+    /* Lo alinea en la parte superior. */
     top: 0;
+    /* Nota: Este pseudo-elemento no tiene border-radius, por lo que forma la otra mitad del corazón al combinarse con ::before. */
 }
 
+/* Crea la parte superior izquierda del corazón usando otro pseudo-elemento. */
 .corazon::before {
+    /* Genera el contenido del pseudo-elemento. */
     content: "";
+    /* Posiciona este elemento de forma absoluta con respecto al contenedor .corazon. */
     position: absolute;
+    /* Asigna el mismo ancho que la base. */
     width: 24px;
+    /* Asigna la misma altura que la base. */
     height: 22px;
+    /* Asigna el mismo color de fondo. */
     background-color: var(--rosa-principal);
+    /* Lo desplaza hacia arriba. */
     top: -15px;
+    /* Lo alinea a la izquierda. */
     left: 0;
+    /* Nota: La combinación de la rotación del .corazon y la posición de ::before y ::after crea la forma completa del corazón. */
 }
 
+/* Estiliza el contenido de texto (span) dentro del corazón. */
 .corazon span {
+    /* Permite el uso de z-index y transform. */
     position: relative;
+    /* Rota el texto 45 grados en sentido contrario para que se lea horizontalmente. */
     transform: rotate(45deg);
+    /* Establece el color del texto a blanco. */
     color: #fff;
+    /* Pone el texto en negrita. */
     font-weight: bold;
+    /* Define el tamaño de la fuente. */
     font-size: 13px;
+    /* Asegura que el texto esté por encima de los pseudo-elementos del corazón. */
     z-index: 2;
 }
