@@ -8,26 +8,53 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.utils.decorators import method_decorator
 from django.urls import reverse_lazy
 from django.core.paginator import Paginator
-
 from .forms import RegistroClienteForm, ClienteForm
 from clientes.models import Cliente
 from reserva.models import Reserva
 from reserva.forms import ReservaForm
+from empleados.models import Empleado
+from servicio.models import Servicio
+from reserva.models import HorarioDisponible
 
 
+@login_required
 @never_cache
-@login_required(login_url='login:login')
 def panel_cliente(request):
-    # Si el usuario no está autenticado, redirigir a la página de inicio de sesión
-    if not request.user.is_authenticated:
-        return redirect('login:login')
     try:
         cliente = Cliente.objects.get(user=request.user)
     except Cliente.DoesNotExist:
-        return redirect('login:login')
-    # Renderiza el panel con contenido
-    return render(request, 'clientes/panel.html', {'cliente': cliente, 'user': request.user})
-
+        return redirect('clientes:registro')
+    reservas = Reserva.objects.filter(
+        cliente=cliente,
+    ).exclude(estado='cancelada')
+    from datetime import date
+    notificaciones = []
+    for reserva in reservas.order_by('-fecha_creacion')[:5]:
+        if reserva.fecha_creacion.date() == date.today():
+            notificaciones.append({
+                'icon': 'bi-calendar-check',
+                'texto': f'Cita agendada para el {reserva.fecha.strftime("%d/%m/%Y")} a las {reserva.hora}',
+                'fecha': reserva.fecha_creacion.strftime('%d/%m/%Y %H:%M')
+            })
+    form = RegistroClienteForm(instance=cliente)
+    # --- AGREGADO: pasar gestoras, servicios y horarios ---
+    from empleados.models import Empleado
+    from servicio.models import Servicio
+    from reserva.models import HorarioDisponible
+    gestoras = Empleado.objects.all()
+    servicios = Servicio.objects.all()
+    horarios = HorarioDisponible.objects.all()
+    # ------------------------------------------------------
+    return render(request, 'clientes/panel.html', {
+        'cliente': cliente,
+        'reservas': reservas,
+        'form': form,
+        'user': request.user,
+        'notificaciones': notificaciones,
+        'gestoras': gestoras,
+        'servicios': servicios,
+        'horarios': horarios,
+    })
 
 def registro_cliente(request):
     pending = request.session.get('pending_reserva')
@@ -148,18 +175,6 @@ def editar_perfil(request):
     })
     
 
-@never_cache
-@login_required(login_url='login:login')
-def panel_cliente(request):
-    if not request.user.is_authenticated:
-        return redirect('login:login')
-    try:
-        cliente = Cliente.objects.get(user=request.user)
-    except Cliente.DoesNotExist:
-        return redirect('login:login')
-    form = RegistroClienteForm(instance=cliente)  # <-- Agrega esto
-    return render(request, 'clientes/panel.html', {'cliente': cliente, 'user': request.user, 'form': form})
-
 def logout_view(request):
     logout(request)
     return redirect('login:login')
@@ -232,47 +247,39 @@ def registro_cliente(request):
         'registro': True
     })
 
-@login_required
-@never_cache
-def panel_cliente(request):
-    try:
-        cliente = Cliente.objects.get(user=request.user)
-    except Cliente.DoesNotExist:
-        return redirect('clientes:registro')
-    reservas = Reserva.objects.filter(cliente=cliente)
-    # Notificaciones: solo reservas del cliente, solo las creadas hoy
-    from datetime import date
-    notificaciones = []
-    for reserva in reservas.order_by('-fecha_creacion')[:5]:
-        if reserva.fecha_creacion.date() == date.today():
-            notificaciones.append({
-                'icon': 'bi-calendar-check',
-                'texto': f'Cita agendada para el {reserva.fecha.strftime("%d/%m/%Y")} a las {reserva.hora}',
-                'fecha': reserva.fecha_creacion.strftime('%d/%m/%Y %H:%M')
-            })
-    form = RegistroClienteForm(instance=cliente)
-    return render(request, 'clientes/panel.html', {
-        'cliente': cliente,
-        'reservas': reservas,
-        'form': form,
-        'user': request.user,
-        'notificaciones': notificaciones
-    })
 
 @login_required
 @never_cache
 def agendar_reserva(request):
     cliente = get_object_or_404(Cliente, user=request.user)
+    gestoras = Empleado.objects.all()
+    servicios = Servicio.objects.all()
+    horarios = HorarioDisponible.objects.all()
     if request.method == 'POST':
-        form = ReservaForm(request.POST)
-        if form.is_valid():
-            reserva = form.save(commit=False)
-            reserva.cliente = cliente
-            reserva.save()
+        fecha = request.POST.get('fecha')
+        hora_id = request.POST.get('hora')
+        gestora_id = request.POST.get('gestora')
+        servicio_id = request.POST.get('servicio')
+        observaciones = request.POST.get('observaciones', '')
+        if fecha and hora_id and gestora_id and servicio_id:
+            Reserva.objects.create(
+                cliente=cliente,
+                gestora_id=gestora_id,
+                servicio_id=servicio_id,
+                hora_id=hora_id,
+                fecha=fecha,
+                estado='pendiente'
+            )
             return redirect('clientes:panel')
-    else:
-        form = ReservaForm()
-    return render(request, 'clientes/agendar_reserva.html', {'form': form})
+    return render(request, 'clientes/panel.html', {
+        'cliente': cliente,
+        'user': request.user,
+        'gestoras': gestoras,
+        'servicios': servicios,
+        'horarios': horarios,
+        'form': RegistroClienteForm(instance=cliente),
+        'reservas': Reserva.objects.filter(cliente=cliente).exclude(estado='cancelada')
+    })
 
 @login_required
 @never_cache
@@ -283,3 +290,13 @@ def cancelar_reserva(request, pk):
         reserva.delete()
         return redirect('clientes:panel')
     return render(request, 'clientes/cancelar_reserva.html', {'reserva': reserva})
+
+@login_required
+@never_cache
+def confirmar_reserva(request, pk):
+    cliente = get_object_or_404(Cliente, user=request.user)
+    reserva = get_object_or_404(Reserva, pk=pk, cliente=cliente)
+    if request.method == 'POST' and reserva.estado == 'pendiente':
+        reserva.estado = 'confirmada'
+        reserva.save()
+    return redirect('clientes:panel')

@@ -15,7 +15,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Reserva
-from datetime import datetime, time
+from datetime import datetime, time, timedelta
 
 def reserva(request):
     gestoras = Empleado.objects.all()
@@ -102,22 +102,20 @@ def reserva(request):
     })
 
 def horarios_disponibles(request):
-    gestora_id = request.GET.get('gestora_id')
     fecha = request.GET.get('fecha')
     horarios = HorarioDisponible.objects.all()
-    # parsear fecha entrante (d/m/Y)
     from datetime import datetime
     try:
-        fecha_obj = datetime.strptime(fecha, '%d/%m/%Y').date()
-    except Exception:
+        # Acepta formato YYYY-MM-DD (input date) y d/m/Y (flatpickr)
         try:
-            fecha_obj = datetime.fromisoformat(fecha).date()
+            fecha_obj = datetime.strptime(fecha, '%Y-%m-%d').date()
         except Exception:
-            return JsonResponse({'horarios': []})
+            fecha_obj = datetime.strptime(fecha, '%d/%m/%Y').date()
+    except Exception:
+        return JsonResponse({'horarios': []})
 
-    ocupados = Reserva.objects.filter(gestora_id=gestora_id, fecha=fecha_obj).values_list('hora_id', flat=True)
+    ocupados = Reserva.objects.filter(fecha=fecha_obj).values_list('hora_id', flat=True)
     disponibles = horarios.exclude(id__in=ocupados)
-    # devolver id y texto para cada horario
     data = [{'id': h.id, 'hora': h.hora.strftime('%H:%M')} for h in disponibles]
     return JsonResponse({'horarios': data})
 
@@ -140,6 +138,13 @@ def home(request):
         estado='pendiente',
         fecha=hoy,
         hora__hora__lt=hora_actual
+    ).update(estado='cancelada')
+
+    # CANCELAR LAS CITAS PENDIENTES QUE NO HAN SIDO CONFIRMADAS UN DÍA ANTES
+    plazo = hoy + timedelta(days=1)
+    Reserva.objects.filter(
+        estado='pendiente',
+        fecha__lte=plazo
     ).update(estado='cancelada')
 
     fecha = request.GET.get('fecha', '')

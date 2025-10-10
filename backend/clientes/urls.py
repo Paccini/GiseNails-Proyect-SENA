@@ -8,6 +8,7 @@ urlpatterns = [
     path('panel/', views.panel_cliente, name='panel'),
     path('agendar/', views.agendar_reserva, name='agendar'),  # Cambiado a reserva
     path('cancelar/<int:pk>/', views.cancelar_reserva, name='cancelar'),  # Cambiado a reserva
+    path('confirmar/<int:pk>/', views.confirmar_reserva, name='confirmar'),
 
     # CRUD para clientes (administrador)
     path('', views.ClienteListView.as_view(), name='cliente_list'),
