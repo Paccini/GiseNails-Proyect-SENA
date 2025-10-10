@@ -5,29 +5,42 @@
 {% block content %} 
 {% load static %} 
 
-
+<!-- Enlace al archivo CSS principal de la sección de reservas -->
 <link rel="stylesheet" href="{% static 'css/reserva.css' %}">
 
+<!-- Contenedor general de la página de reserva -->
 <div class="reserva-container">
-    <!-- { changed code } -->
+
+    <!-- Encabezado con logo e información de contacto -->
     <header class="reserva-header">
         <div class="marca">
             <img src="{% static 'img/Logo gisel-nails.png' %}" alt="Gise-Nails" class="logo">
             <div class="marca-texto">
-                <h1>Gise‑Nails</h1>
-                <p class="direccion">Cra 9a #42-44, B/Calarca · <span class="email">giselav489@gmail.com</span> · <span class="telefono">300 204 0538</span></p>
+                <h1>Gise-Nails</h1>
+                <p class="direccion">
+                    Cra 9a #42-44, B/Calarca · 
+                    <span class="email">giselav489@gmail.com</span> · 
+                    <span class="telefono">300 204 0538</span>
+                </p>
             </div>
         </div>
     </header>
 
+    <!-- Contenido principal -->
     <main class="main-content">
         <section class="form-section">
-            <h2>Reserva tu cita</h2>
-            <p class="instrucciones">Rellena tus datos, elige categoría y haz clic en el servicio para ver el resumen antes de confirmar.</p>
 
+            <!-- Título e instrucciones del formulario -->
+            <h2>Reserva tu cita</h2>
+            <p class="instrucciones">
+                Rellena tus datos, elige categoría y haz clic en el servicio para ver el resumen antes de confirmar.
+            </p>
+
+            <!-- Formulario de reserva -->
             <form method="post" action="" class="reserva-form" novalidate>
                 {% csrf_token %}
 
+                <!-- Campos de información del cliente -->
                 <label for="nombre">Nombre</label>
                 <input id="nombre" type="text" name="nombre" placeholder="Ej. Ana Pérez" required>
 
@@ -37,6 +50,7 @@
                 <label for="correo">Correo (opcional)</label>
                 <input id="correo" type="email" name="correo" placeholder="tu@correo.com">
 
+                <!-- Selector de gestora asignada -->
                 <label for="gestora-select">Gestora</label>
                 <select name="gestora" id="gestora-select" required>
                     <option value="">Selecciona gestora</option>
@@ -45,6 +59,7 @@
                     {% endfor %}
                 </select>
 
+                <!-- Selector de categoría -->
                 <label for="tipo-servicio">Categoría de servicio</label>
                 <select name="tipo_servicio" id="tipo-servicio" required>
                     <option value="">Selecciona categoría</option>
@@ -53,17 +68,20 @@
                     <option value="estructura">Estructura de uñas</option>
                 </select>
 
+                <!-- Campo oculto para guardar el ID del servicio elegido -->
                 <input type="hidden" name="servicio" id="servicio-input">
 
+                <!-- Selección de fecha -->
                 <label for="fecha-select">Fecha</label>
                 <input id="fecha-select" type="text" name="fecha" required placeholder="DD/MM/AAAA">
 
+                <!-- Selección de horario -->
                 <label for="horario-select">Horario</label>
                 <select name="hora" id="horario-select" required>
                     <option value="">Selecciona horario</option>
                 </select>
 
-                <!-- resumen del servicio seleccionado -->
+                <!-- Resumen dinámico del servicio seleccionado -->
                 <div id="resumen-servicio" class="selected-summary" aria-live="polite" hidden>
                     <img id="resumen-img" src="" alt="" />
                     <div class="meta">
@@ -73,10 +91,11 @@
                     </div>
                 </div>
 
-                <!-- contenedor de tarjetas -->
+                <!-- Contenedor donde se renderizan los servicios disponibles -->
                 <h3 class="servicios-titulo">Servicios disponibles</h3>
                 <div id="servicios-contenedor" class="servicios-list" role="list"></div>
 
+                <!-- Botones de acción -->
                 <div class="acciones">
                     <button type="submit" class="btn-confirm">Confirmar cita</button>
                     <a href="{% url 'inicio' %}" class="btn-cancel">Volver</a>
@@ -84,10 +103,10 @@
             </form>
         </section>
     </main>
-    <!-- { end changed code } -->
 </div>
+<!-- Fin del contenedor principal -->
 
-<!-- Servicios agrupados por categoría en formato JSON seguro -->
+<!-- Datos JSON con los servicios agrupados por categoría -->
 <script id="servicios-data" type="application/json">
     {
         "manicure": [
@@ -123,11 +142,15 @@
     }
 </script>
 
-<!-- Flatpickr CSS y JS -->
+<!-- Librería Flatpickr para el selector de fechas -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<!-- Archivos JavaScript personalizados -->
 <script src="{% static 'js/servicios.js' %}"></script>
 <script src="{% static 'js/reserva2.js' %}"></script>
+
+<!-- Inicialización de Flatpickr -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         flatpickr("#fecha-select", {
@@ -138,34 +161,41 @@
     });
 </script>
 
-<!-- Mensaje de confirmación de cita (añadir dentro de block content) -->
+<!-- Modal de confirmación de cita -->
 <div id="reserva-success-modal" class="reserva-success-modal" aria-hidden="true">
   <div class="reserva-success-card">
     <button id="reserva-success-close" class="reserva-success-close" aria-label="Cerrar">&times;</button>
     <img src="{% static 'img/Logo gisel-nails.png' %}" alt="Logo" class="reserva-success-logo" />
     <h2>¡Cita reservada!</h2>
-    <p class="reserva-success-text">Tu cita se ha guardado correctamente. Te hemos enviado un correo de confirmación (revisa tu bandeja y spam).</p>
+    <p class="reserva-success-text">
+      Tu cita se ha guardado correctamente. Te hemos enviado un correo de confirmación 
+      (revisa tu bandeja y spam).
+    </p>
     <div class="reserva-success-actions">
       <a href="{% url 'inicio' %}" class="btn btn-secondary">Volver al inicio</a>
     </div>
   </div>
 </div>
 
+<!-- Script para controlar la visualización del modal de éxito -->
 <script>
 document.addEventListener('DOMContentLoaded', function(){
   const params = new URLSearchParams(window.location.search);
   if(params.get('success') === '1'){
     const modal = document.getElementById('reserva-success-modal');
     modal.setAttribute('aria-hidden','false');
-    // quitar el parámetro ?success=1 de la URL (sin recargar)
+    
+    /* Quita el parámetro ?success=1 de la URL sin recargar la página */
     const url = new URL(window.location);
     url.searchParams.delete('success');
     window.history.replaceState({}, document.title, url.toString());
-    // botón cerrar
+    
+    /* Cierra el modal al hacer clic en la X */
     document.getElementById('reserva-success-close').addEventListener('click', function(){
       modal.setAttribute('aria-hidden','true');
     });
-    // cerrar click fuera de la tarjeta
+    
+    /* Cierra el modal si se hace clic fuera de la tarjeta */
     modal.addEventListener('click', function(e){
       if(e.target === modal){
         modal.setAttribute('aria-hidden','true');
@@ -175,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 
-<!-- pequeño script para renderizar tarjetas y actualizar resumen -->
+<!-- Script para renderizar dinámicamente los servicios y mostrar el resumen -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const serviciosData = JSON.parse(document.getElementById('servicios-data').textContent || '{}');
@@ -191,6 +221,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   let currentCategory = '';
 
+  /* Crea la estructura de una tarjeta de servicio */
   function createCardElement(s) {
     const card = document.createElement('div');
     card.className = 'servicio-card';
@@ -204,27 +235,35 @@ document.addEventListener('DOMContentLoaded', function() {
     return card;
   }
 
+  /* Renderiza los servicios de la categoría seleccionada */
   function renderServicios(categoria) {
     currentCategory = categoria || '';
     contenedor.innerHTML = '';
     const lista = serviciosData[categoria] || [];
+
     if (!lista.length) {
       contenedor.innerHTML = '<p class="no-servicios">No hay servicios en esta categoría.</p>';
       return;
     }
+
     lista.forEach(s => {
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'servicio-card';
       btn.setAttribute('aria-label', `${s.nombre} $${s.precio}`);
-      btn.innerHTML = `<img src="${s.imagen}" alt="${s.nombre}" class="servicio-img"/><div class="servicio-body"><div class="servicio-nombre">${s.nombre}</div><div class="servicio-precio">$${s.precio}</div></div>`;
+      btn.innerHTML = `
+        <img src="${s.imagen}" alt="${s.nombre}" class="servicio-img"/>
+        <div class="servicio-body">
+          <div class="servicio-nombre">${s.nombre}</div>
+          <div class="servicio-precio">$${s.precio}</div>
+        </div>`;
       btn.addEventListener('click', () => selectServicio(s));
       contenedor.appendChild(btn);
     });
   }
 
+  /* Actualiza el resumen y bloquea la selección de servicio */
   function selectServicio(s) {
-    // marcar input y resumen
     servicioInput.value = s.id;
     resumenImg.src = s.imagen;
     resumenImg.alt = s.nombre;
@@ -233,14 +272,13 @@ document.addEventListener('DOMContentLoaded', function() {
     resumenCategoria.textContent = (currentCategory || '').charAt(0).toUpperCase() + (currentCategory || '').slice(1);
     resumen.hidden = false;
 
-    // mostrar solo la tarjeta seleccionada (modo "detalle")
+    /* Muestra solo la tarjeta seleccionada */
     contenedor.innerHTML = '';
     const singleCard = createCardElement(s);
     singleCard.classList.add('single', 'selected');
-    singleCard.setAttribute('role','group');
     contenedor.appendChild(singleCard);
 
-    // botón para volver a la lista
+    /* Botón para cambiar servicio */
     const changeWrap = document.createElement('div');
     changeWrap.className = 'change-wrap';
     const changeBtn = document.createElement('button');
@@ -256,12 +294,14 @@ document.addEventListener('DOMContentLoaded', function() {
     contenedor.appendChild(changeWrap);
   }
 
+  /* Escucha los cambios en el selector de categoría */
   tipoSelect.addEventListener('change', function(){
     renderServicios(this.value);
     servicioInput.value='';
     resumen.hidden = true;
   });
 
+  /* Si ya hay una categoría seleccionada (por ejemplo al volver atrás), se renderiza automáticamente */
   if (tipoSelect.value) renderServicios(tipoSelect.value);
 });
 </script>

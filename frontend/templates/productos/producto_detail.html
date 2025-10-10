@@ -1,15 +1,56 @@
 {% extends 'base_admin.html' %}
 {% block content %}
+
+<!-- ============================================= -->
+<!-- VISTA DE DETALLE DE PRODUCTO -->
+<!-- Muestra toda la información del producto seleccionado -->
+<!-- Plantilla usada en la app 'productos' -->
+<!-- ============================================= -->
+
 <div class="card shadow mb-4">
+
+    <!-- ============================================= -->
+    <!-- ENCABEZADO DE LA TARJETA -->
+    <!-- Muestra el título principal del detalle del producto -->
+    <!-- ============================================= -->
     <div class="card-header bg-info text-white">
         <h2 class="mb-0">Detalle de Producto</h2>
     </div>
+
+    <!-- ============================================= -->
+    <!-- CUERPO DE LA TARJETA -->
+    <!-- Contiene la información detallada del producto -->
+    <!-- Se utilizan listas para mantener una presentación ordenada -->
+    <!-- ============================================= -->
     <div class="card-body">
+        
+        <!-- ============================================= -->
+        <!-- LISTA DE DETALLES DEL PRODUCTO -->
+        <!-- Cada elemento muestra un atributo del modelo Producto -->
+        <!-- ============================================= -->
         <ul class="list-group list-group-flush">
-            <li class="list-group-item"><strong>Nombre:</strong> {{ producto.nombre }}</li>
-            <li class="list-group-item"><strong>Descripción:</strong> {{ producto.descripcion }}</li>
-            <li class="list-group-item"><strong>Stock:</strong> {{ producto.cantidad }}</li>
-            <li class="list-group-item"><strong>Precio:</strong> ${{ producto.precio }}</li>
+            
+            <!-- Nombre del producto -->
+            <li class="list-group-item">
+                <strong>Nombre:</strong> {{ producto.nombre }}
+            </li>
+
+            <!-- Descripción del producto -->
+            <li class="list-group-item">
+                <strong>Descripción:</strong> {{ producto.descripcion }}
+            </li>
+
+            <!-- Cantidad o stock disponible -->
+            <li class="list-group-item">
+                <strong>Stock:</strong> {{ producto.cantidad }}
+            </li>
+
+            <!-- Precio del producto -->
+            <li class="list-group-item">
+                <strong>Precio:</strong> ${{ producto.precio }}
+            </li>
+
+            <!-- Imagen del producto -->
             <li class="list-group-item">
                 <strong>Imagen:</strong><br>
                 {% if producto.imagen %}
@@ -19,7 +60,15 @@
                 {% endif %}
             </li>
         </ul>
-        <a href="{% url 'productos:producto_list' %}" class="btn btn-secondary mt-3">Volver a la lista</a>
+
+        <!-- ============================================= -->
+        <!-- BOTÓN DE REGRESO -->
+        <!-- Permite volver a la lista general de productos -->
+        <!-- ============================================= -->
+        <a href="{% url 'productos:producto_list' %}" class="btn btn-secondary mt-3">
+            <i class="bi bi-arrow-left"></i> Volver a la lista
+        </a>
     </div>
 </div>
+
 {% endblock %}

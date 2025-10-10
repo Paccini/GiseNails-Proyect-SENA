@@ -1,20 +1,39 @@
 {% extends 'base_admin.html' %}
 {% block content %}
-<!-- Título fuera de la tarjeta -->
+<!-- ===========================================================
+    PÁGINA: LISTA DE RESERVAS
+    Descripción:
+    Muestra todas las citas registradas con opciones de filtrado,
+    búsqueda, paginación y acciones administrativas.
+============================================================== -->
+
+<!-- === TÍTULO Y BOTÓN PRINCIPAL === -->
 <div class="mb-3 d-flex justify-content-between align-items-center">
+    <!-- Título principal con ícono -->
     <h2 class="fs-4 fw-semibold">
         <i class="bi bi-calendar-check me-2"></i> Lista de Citas
     </h2>
+
+    <!-- Botón para agregar una nueva reserva -->
     <a href="{% url 'reserva:agregar_reserva' %}" class="btn btn-success d-flex align-items-center gap-2">
         <i class="bi bi-plus-lg fs-5"></i> Agregar
     </a>
 </div>
+
+<!-- === CONTENEDOR PRINCIPAL DE LA TABLA === -->
 <div class="card shadow mb-4">
     <div class="card-body">
+
+        <!-- === FORMULARIO DE BÚSQUEDA Y FILTRO === -->
         <form method="get" class="d-flex gap-2 mb-3">
+            <!-- Filtro por fecha -->
             <input type="date" name="fecha" value="{{ fecha }}" class="form-control w-auto">
+
+            <!-- Filtro por nombre de cliente -->
             <input type="text" name="usuario" value="{{ usuario }}" class="form-control w-auto"
                 placeholder="Buscar cliente...">
+
+            <!-- Filtro por estado de la cita -->
             <select name="estado" class="form-control w-auto">
                 <option value="">Pendientes y Confirmadas</option>
                 <option value="pendiente" {% if estado == "pendiente" %}selected{% endif %}>Pendiente</option>
@@ -22,8 +41,14 @@
                 <option value="cancelada" {% if estado == "cancelada" %}selected{% endif %}>Cancelada</option>
                 <option value="realizada" {% if estado == "realizada" %}selected{% endif %}>Realizada</option>
             </select>
-            <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
+
+            <!-- Botón de búsqueda -->
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-search"></i>
+            </button>
         </form>
+
+        <!-- === TABLA DE RESERVAS === -->
         <div class="table-responsive">
             <table class="table table-hover align-middle">
                 <thead class="table-light">
@@ -38,21 +63,36 @@
                         <th><i class="bi bi-gear me-1"></i> Acciones</th>
                     </tr>
                 </thead>
+
                 <tbody>
+                    <!-- Iteración sobre todas las reservas -->
                     {% for reserva in reservas %}
                     <tr>
+                        <!-- ID de la cita -->
                         <td>{{ reserva.id }}</td>
+
+                        <!-- Nombre del cliente -->
                         <td>
                             <i class="bi bi-person-circle me-1 text-secondary"></i>
                             {{ reserva.cliente.nombre }}
                         </td>
+
+                        <!-- Nombre de la gestora asignada -->
                         <td>{{ reserva.gestora }}</td>
+
+                        <!-- Nombre del servicio reservado -->
                         <td>{{ reserva.servicio }}</td>
+
+                        <!-- Fecha y hora de la cita -->
                         <td>{{ reserva.fecha }}</td>
                         <td>{{ reserva.hora }}</td>
+
+                        <!-- Estado actual (pendiente, confirmada, etc.) -->
                         <td>
                             <span class="badge bg-info">{{ reserva.get_estado_display }}</span>
                         </td>
+
+                        <!-- Botones de acción (editar y eliminar) -->
                         <td>
                             <a href="{% url 'reserva:editar_reserva' reserva.id %}" class="btn btn-sm btn-warning me-1"
                                 title="Editar">
@@ -64,6 +104,8 @@
                             </a>
                         </td>
                     </tr>
+
+                    <!-- Si no hay reservas -->
                     {% empty %}
                     <tr>
                         <td colspan="8" class="text-center">No hay reservas registradas.</td>
@@ -72,24 +114,35 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- === PAGINACIÓN === -->
         {% if is_paginated %}
         <nav>
             <ul class="pagination justify-content-center">
+                <!-- Botón "Anterior" -->
                 {% if page_obj.has_previous %}
                 <li class="page-item">
                     <a class="page-link"
-                        href="?fecha={{ fecha }}&usuario={{ usuario }}&page={{ page_obj.previous_page_number }}">Anterior</a>
+                        href="?fecha={{ fecha }}&usuario={{ usuario }}&page={{ page_obj.previous_page_number }}">
+                        Anterior
+                    </a>
                 </li>
                 {% endif %}
+
+                <!-- Números de página -->
                 {% for num in paginator.page_range %}
                 <li class="page-item {% if page_obj.number == num %}active{% endif %}">
                     <a class="page-link" href="?fecha={{ fecha }}&usuario={{ usuario }}&page={{ num }}">{{ num }}</a>
                 </li>
                 {% endfor %}
+
+                <!-- Botón "Siguiente" -->
                 {% if page_obj.has_next %}
                 <li class="page-item">
                     <a class="page-link"
-                        href="?fecha={{ fecha }}&usuario={{ usuario }}&page={{ page_obj.next_page_number }}">Siguiente</a>
+                        href="?fecha={{ fecha }}&usuario={{ usuario }}&page={{ page_obj.next_page_number }}">
+                        Siguiente
+                    </a>
                 </li>
                 {% endif %}
             </ul>
@@ -97,4 +150,5 @@
         {% endif %}
     </div>
 </div>
+
 {% endblock %}

@@ -1,35 +1,42 @@
 /* --- ESTILOS GENERALES DEL SISTEMA --- */
+
+/* Define altura completa para html y body */
 html,
 body {
     height: 100%;
 }
 
+/* Establece altura mínima y dirección de flex para el body */
 body {
     min-height: 100vh;
     flex-direction: column;
     /* Elimina display:flex y background aquí para no afectar el login */
 }
 
+/* El main ocupa el espacio restante en el layout flex */
 main.container {
     flex: 1;
 }
 
+/* Hace que el contenedor principal crezca y se apile en columna */
 .flex-grow-1.d-flex.flex-column {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
+/* Ajusta el main para que crezca y ocupe el espacio disponible */
 main.container.flex-grow-1 {
     flex: 1 0 auto;
 }
 
+/* El footer no se encoge y se mantiene al fondo */
 footer {
     flex-shrink: 0;
     margin-top: auto;
 }
 
-/* Card efecto para el contenido principal */
+/* Card efecto para el contenido principal: fondo blanco, bordes redondeados y sombra */
 main.container>div,
 main.container>.card,
 main.container>form,
@@ -50,11 +57,13 @@ main.container>table {
     /* Texto negro */
 }
 
+/* Encabezado de tabla: fondo oscuro y texto blanco */
 .table thead {
     background: #232c36;
     color: #fff;
 }
 
+/* Encabezado de tabla: fondo claro, texto oscuro, borde inferior */
 .table thead th {
     background: #f1f5f9 !important;
     color: #232c36 !important;
@@ -62,6 +71,7 @@ main.container>table {
     border-bottom: 2px solid #e5e7eb !important;
 }
 
+/* Celdas de tabla: alineación, no cortar palabras, elipsis si se desborda, ancho máximo */
 .table th,
 .table td {
     vertical-align: middle;
@@ -75,15 +85,18 @@ main.container>table {
     /* Ajusta el ancho máximo según tu diseño */
 }
 
+/* Efecto hover en filas de tabla */
 .table-hover tbody tr:hover {
     background: #f3f4f6;
 }
 
+/* Filas de tabla: fondo blanco y borde inferior */
 .table tbody tr {
     background: #fff;
     border-bottom: 2px solid #f3f4f6;
 }
 
+/* Quita borde en celdas de cuerpo de tabla */
 .table tbody tr td {
     border: none;
 }
@@ -96,6 +109,7 @@ main.container>table {
     background: transparent;
 }
 
+/* Espaciado y tamaño de fuente en celdas de tabla */
 .table th,
 .table td {
     padding: 16px 12px !important;
@@ -104,12 +118,14 @@ main.container>table {
     font-size: 1.05em;
 }
 
+/* Encabezado de tabla fijo al hacer scroll */
 .table thead th {
     position: sticky;
     top: 0;
     z-index: 2;
 }
 
+/* Sombra y bordes redondeados en filas de tabla */
 .table tbody tr {
     background: #fff;
     box-shadow: 0 2px 8px rgba(44, 62, 80, 0.07);
@@ -117,11 +133,13 @@ main.container>table {
     transition: box-shadow 0.2s;
 }
 
+/* Modo oscuro: fondo y sombra en filas de tabla */
 body.dark-mode .table tbody tr {
     background: #23272b !important;
     box-shadow: 0 2px 8px rgba(44, 62, 80, 0.18);
 }
 
+/* Bordes redondeados en extremos de filas */
 .table tbody tr td:first-child,
 .table tbody tr th:first-child {
     border-top-left-radius: 12px;
@@ -134,28 +152,32 @@ body.dark-mode .table tbody tr {
     border-bottom-right-radius: 12px;
 }
 
+/* Sombra y fondo al hacer hover en filas */
 .table-hover tbody tr:hover {
     box-shadow: 0 4px 16px rgba(44, 62, 80, 0.15);
     background: #f3f4f6 !important;
 }
 
+/* Modo oscuro: fondo al hacer hover */
 body.dark-mode .table-hover tbody tr:hover {
     background: #343a40 !important;
 }
 
+/* Encabezado de tabla: fondo claro, texto oscuro, borde inferior */
 .table thead th {
     background: #f1f5f9 !important;
     color: #232c36 !important;
     border-bottom: 2px solid #e5e7eb !important;
 }
 
+/* Modo oscuro: encabezado de tabla */
 body.dark-mode .table thead th {
     background: #23272b !important;
     color: #f8fafc !important;
     border-bottom: 2px solid #343a40 !important;
 }
 
-/* Espacio entre botones de acciones */
+/* Espacio entre botones de acciones en tabla */
 .table .btn,
 .table .btn-group .btn {
     min-width: 40px;
@@ -165,16 +187,18 @@ body.dark-mode .table thead th {
     margin-bottom: 2px;
 }
 
+/* Tamaño de iconos en botones */
 .table .btn i {
     font-size: 1.2em;
     vertical-align: middle;
 }
 
+/* Quita margen derecho al último botón */
 .table .btn:last-child {
     margin-right: 0;
 }
 
-/* Botones */
+/* Botones de colores personalizados */
 .btn-primary {
     background: #3b82f6;
     border: none;
@@ -221,7 +245,7 @@ body.dark-mode .table thead th {
     color: #fff;
 }
 
-/* Badge estados */
+/* Badge para estados personalizados */
 .badge-pendiente {
     background: #22d3ee;
     color: #fff;
@@ -259,7 +283,7 @@ main.container>.card {
     }
 }
 
-/* Sidebar estilo */
+/* Sidebar estilo: navegación lateral para admin */
 .sidebar-nav {
     width: 210px;
     min-height: 100vh;
@@ -271,6 +295,7 @@ main.container>.card {
     align-items: center;
 }
 
+/* Marca en el sidebar */
 .sidebar-brand {
     font-size: 1.5rem;
     font-weight: bold;
@@ -278,6 +303,7 @@ main.container>.card {
     letter-spacing: 1px;
 }
 
+/* Enlaces del sidebar */
 .sidebar-nav .nav-link {
     color: #fff;
     padding: 10px 24px;
@@ -286,16 +312,19 @@ main.container>.card {
     transition: background 0.2s;
 }
 
+/* Hover y activo en sidebar */
 .sidebar-nav .nav-link:hover,
 .sidebar-nav .nav-link.active {
     background: #2d3741;
     color: #fff;
 }
 
+/* Contenedor de navegación en sidebar */
 .sidebar-nav .nav {
     width: 100%;
 }
 
+/* Responsive sidebar en pantallas pequeñas */
 @media (max-width: 768px) {
     .sidebar-nav {
         width: 100px;
@@ -313,7 +342,7 @@ main.container>.card {
     }
 }
 
-/* Barra superior visual */
+/* Barra superior visual para admin */
 .topbar {
     height: 56px;
     background: #3b4654;
@@ -324,16 +353,20 @@ main.container>.card {
     margin-top: 0;
 }
 
+/* Título en la barra superior */
 .topbar-title {
     font-size: 1.2rem;
     letter-spacing: 1px;
 }
 
+/* Badge de usuario en la barra superior */
 .topbar-user .badge {
     background: #7c3aed !important;
 }
 
 /* --- LOGIN PERSONALIZADO --- */
+
+/* Fondo y alineación para la página de login */
 body.login-bg {
     font-family: Arial, Helvetica, sans-serif;
     margin: 0;
@@ -346,6 +379,7 @@ body.login-bg {
     justify-content: center;
 }
 
+/* Contenedor central para login */
 .contenedor {
     width: 100%;
     display: flex;
@@ -354,6 +388,7 @@ body.login-bg {
     min-height: 100vh;
 }
 
+/* Formulario de login: fondo oscuro, padding, bordes redondeados y sombra */
 .formulario {
     background: rgba(20, 20, 20, 0.95);
     padding: 40px 32px 32px 32px;
@@ -363,6 +398,7 @@ body.login-bg {
     max-width: 400px;
 }
 
+/* Título del formulario */
 h1 {
     text-align: center;
     color: #fff;
@@ -370,6 +406,7 @@ h1 {
     margin-bottom: 24px;
 }
 
+/* Contenedor de inputs en login */
 .input-contenedor {
     margin-bottom: 18px;
     border: 1px solid #444;
@@ -380,6 +417,7 @@ h1 {
     padding: 0 10px;
 }
 
+/* Inputs de texto y password en login */
 body.login-bg input[type="text"],
 body.login-bg input[type="password"] {
     font-size: 1.1rem;
@@ -391,7 +429,7 @@ body.login-bg input[type="password"] {
     outline: none;
 }
 
-/* Para los formularios normales (cards) */
+/* Inputs en cards normales */
 .card input[type="text"],
 .card input[type="number"],
 .card textarea {
@@ -402,6 +440,7 @@ body.login-bg input[type="password"] {
     padding: 8px;
 }
 
+/* Icono en input */
 .icon {
     min-width: 36px;
     text-align: center;
@@ -409,6 +448,7 @@ body.login-bg input[type="password"] {
     font-size: 1.3em;
 }
 
+/* Botón principal en login */
 .button {
     border: none;
     width: 100%;
@@ -423,10 +463,12 @@ body.login-bg input[type="password"] {
     transition: background 0.2s;
 }
 
+/* Hover en botón de login */
 .button:hover {
     background: cadetblue;
 }
 
+/* Alerta de error en login */
 .alert-danger {
     background: #ef4444;
     color: #fff;
@@ -435,6 +477,7 @@ body.login-bg input[type="password"] {
     text-align: center;
 }
 
+/* Texto en login */
 body.login-bg p {
     text-align: center;
     color: #fff;
@@ -442,7 +485,7 @@ body.login-bg p {
     font-size: 0.97em;
 }
 
-/* Para el resto del sistema, usa el color por defecto (negro) */
+/* Texto en main y cards normales */
 main.container p,
 .card p {
     text-align: left;
@@ -451,6 +494,7 @@ main.container p,
     font-size: 1em;
 }
 
+/* Texto general */
 p {
     text-align: center;
     color: #fff;
@@ -458,6 +502,7 @@ p {
     font-size: 0.97em;
 }
 
+/* Enlaces personalizados */
 .link {
     text-decoration: none;
     color: #7de2d1;
@@ -695,11 +740,13 @@ body.dark-mode {
     color: #f8fafc !important;
 }
 
+/* Navbar en modo oscuro */
 body.dark-mode .navbar {
     background: #23272b !important;
     border-bottom: 1px solid #343a40 !important;
 }
 
+/* Colores de textos y fondos en modo oscuro */
 body.dark-mode .navbar-brand,
 body.dark-mode .offcanvas-title,
 body.dark-mode .nav-link,
@@ -714,12 +761,14 @@ body.dark-mode .card {
     background: #23272b !important;
 }
 
+/* Botones en modo oscuro */
 body.dark-mode .btn,
 body.dark-mode .btn-outline-secondary {
     color: #f8fafc !important;
     border-color: #f8fafc !important;
 }
 
+/* Iconos de cerrar en modo oscuro */
 body.dark-mode .btn-close {
     filter: invert(1);
 }
@@ -729,6 +778,7 @@ body.dark-mode {
     color: #f8fafc !important;
 }
 
+/* Footer en modo oscuro */
 body.dark-mode footer {
     background: #23272b !important;
     color: #f8fafc !important;
@@ -969,6 +1019,8 @@ body.dark-mode .card-body .text-muted {
 }
 
 /* --- FIN --- */
+
+/* Modal: bordes redondeados, sombra y fondo */
 .modal-content {
     border-radius: 16px;
     box-shadow: 0 8px 32px 0 rgba(44, 62, 80, 0.18);
@@ -976,11 +1028,13 @@ body.dark-mode .card-body .text-muted {
     color: #232c36;
 }
 
+/* Modal en modo oscuro */
 body.dark-mode .modal-content {
     background: #23272b !important;
     color: #f8fafc !important;
 }
 
+/* Títulos y textos en modal */
 .modal-header .modal-title,
 .modal-body label,
 .modal-body .form-text {
@@ -993,11 +1047,13 @@ body.dark-mode .modal-body .form-text {
     color: #f8fafc !important;
 }
 
+/* Etiquetas en modal */
 .modal-body .form-label {
     font-weight: 600;
     font-size: 1.05em;
 }
 
+/* Inputs en modal */
 .modal-body input.form-control {
     font-size: 1.1em;
     padding: 10px;
@@ -1007,17 +1063,20 @@ body.dark-mode .modal-body .form-text {
     color: #232c36;
 }
 
+/* Inputs en modal modo oscuro */
 body.dark-mode .modal-body input.form-control {
     background: #23272b !important;
     color: #f8fafc !important;
     border: 1px solid #343a40 !important;
 }
 
+/* Botones en el footer del modal */
 .modal-footer .btn {
     min-width: 110px;
     font-size: 1.05em;
 }
 
+/* Fondo del modal transparente */
 .modal-backdrop {
     background-color: transparent !important;
     opacity: 0 !important;

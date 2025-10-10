@@ -1,212 +1,265 @@
 /* =========================
    reserva.css - Estilos para las páginas de reserva
    ========================= */
+
+/* Establece una fuente por defecto para el cuerpo y el contenedor principal. */
 body, .reserva-container {
     font-family: 'Arapey', serif-elegant;
 }
+
+/* Estilos base para toda la página. */
 body {
-    background: #fff6fa;
-    font-family: 'arapey', serif-elegant;
-    margin: 0;
-    padding: 0;
+    background: #fff6fa; /* Color de fondo global muy claro y cálido. */
+    font-family: 'arapey', serif-elegant; /* Fuente principal. */
+    margin: 0;  /* Elimina el margen por defecto del navegador. */
+    padding: 0; /* Elimina el padding por defecto del navegador. */
 }
 
-/* Ajustes globales y paleta seria */
+/* Define variables CSS globales para mantener consistencia en colores y valores. */
 :root {
-  --accent: #c2185b;    /* tono serio y profesional */
-  --muted: #6b6b6b;
-  --bg: #fff6fa;
-  --card: #ffffff;
-  --surface: #fbf7fa;
-  --radius: 12px;
+    --accent: #c2185b;     /* Color de acento principal, un tono rosa oscuro profesional. */
+    --muted: #6b6b6b;      /* Color para texto secundario o atenuado. */
+    --bg: #fff6fa;         /* Color de fondo principal (repite el del body). */
+    --card: #ffffff;       /* Color de fondo para las tarjetas o contenedores. */
+    --surface: #fbf7fa;    /* Color para superficies ligeramente distintas al fondo. */
+    --radius: 12px;        /* Radio de borde estándar para elementos. */
 }
 
-/* contenedor principal */
+/* Contenedor principal que envuelve todo el contenido de la reserva. */
 .reserva-container {
-  max-width: 980px;
-  margin: 32px auto;
-  background: var(--card);
-  border-radius: 16px;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.06);
-  padding: 20px;
-  font-family: "Segoe UI", Roboto, Arial, sans-serif;
-  color: #222;
+    max-width: 980px; /* Ancho máximo para evitar que se estire demasiado en pantallas grandes. */
+    margin: 32px auto; /* Centra el contenedor horizontalmente y le da espacio vertical. */
+    background: var(--card); /* Fondo blanco definido en las variables. */
+    border-radius: 16px; /* Bordes redondeados. */
+    box-shadow: 0 8px 30px rgba(0,0,0,0.06); /* Sombra suave para dar profundidad. */
+    padding: 20px; /* Espaciado interno. */
+    font-family: "Segoe UI", Roboto, Arial, sans-serif; /* Fuente más estándar para el contenido. */
+    color: #222; /* Color de texto principal oscuro. */
 }
 
-/* header compacto y logo reducido */
+/* Cabecera dentro del contenedor de reserva. */
 .reserva-header{
-  display:flex;
-  align-items:center;
-  gap:14px;
-  padding:8px 12px;
-  border-bottom:1px solid #f3e8ee;
-}
-.reserva-header .logo{
-  width:46px;
-  height:46px;
-  object-fit:contain;
-  border-radius:8px;
-}
-.marca-texto h1{
-  margin:0;
-  font-size:18px;
-  color:var(--accent);
-  letter-spacing:0.4px;
-  /* Tipografía más seria para el nombre de la marca */
-  font-family: Georgia, "Times New Roman", serif;
-  font-weight:700;
-}
-.marca-texto .direccion{
-  margin:2px 0 0 0;
-  font-size:14px;
-  color:var(--muted);
+    display:flex; /* Usa Flexbox para alinear el logo y el texto. */
+    align-items:center; /* Centra los elementos verticalmente. */
+    gap:14px; /* Espacio entre el logo y el texto. */
+    padding:8px 12px; /* Relleno interno. */
+    border-bottom:1px solid #f3e8ee; /* Línea divisoria sutil en la parte inferior. */
 }
 
-/* form */
-.main-content{ padding:18px; display:block; }
-.form-section{
-  background:var(--card);
-  border-radius:12px;
-  padding:18px;
-  box-shadow:none;
+/* Estilos para el logo en la cabecera. */
+.reserva-header .logo{
+    width:46px; /* Ancho del logo. */
+    height:46px; /* Alto del logo. */
+    object-fit:contain; /* Asegura que la imagen se ajuste sin deformarse. */
+    border-radius:8px; /* Bordes redondeados para el logo. */
 }
-.form-section h2{ margin:0 0 8px 0; font-size:20px; color:#222; /* título principal más serio */ font-family: Georgia, "Times New Roman", serif; font-weight:700; }
+
+/* Estilos para el título principal (nombre de la marca). */
+.marca-texto h1{
+    margin:0; /* Elimina el margen por defecto del h1. */
+    font-size:18px; /* Tamaño de fuente. */
+    color:var(--accent); /* Usa el color de acento. */
+    letter-spacing:0.4px; /* Espaciado ligero entre letras. */
+    /* Tipografía más seria para el nombre de la marca. */
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight:700; /* Texto en negrita. */
+}
+
+/* Estilos para el texto de la dirección o subtítulo. */
+.marca-texto .direccion{
+    margin:2px 0 0 0; /* Pequeño margen superior. */
+    font-size:14px; /* Tamaño de fuente más pequeño. */
+    color:var(--muted); /* Color de texto atenuado. */
+}
+
+
+/* --- Sección del Formulario --- */
+
+.main-content{ padding:18px; display:block; } /* Contenido principal con relleno. */
+
+/* Contenedor para la sección del formulario. */
+.form-section{
+    background:var(--card); /* Fondo blanco. */
+    border-radius:12px; /* Bordes redondeados. */
+    padding:18px; /* Relleno interno. */
+    box-shadow:none; /* Sin sombra para esta sección específica. */
+}
+
+/* Título de la sección del formulario. */
+.form-section h2{ margin:0 0 8px 0; font-size:20px; color:#222; font-family: Georgia, "Times New Roman", serif; font-weight:700; }
+
+/* Párrafo de instrucciones. */
 .instrucciones{ font-size:13px; color:var(--muted); margin-bottom:12px; }
 
+/* Estilos para las etiquetas (labels) del formulario. */
 .reserva-form label{ display:block; font-weight:600; margin-top:10px; font-size:13px; }
+
+/* Estilos para los campos de entrada (input) y selección (select). */
 .reserva-form input, .reserva-form select {
-  width:100%;
-  padding:10px 12px;
-  border-radius:10px;
-  border:1px solid #efe0e7;
-  background:#fff;
-  font-size:14px;
-  margin-top:6px;
-  box-sizing:border-box;
+    width:100%; /* Ocupan todo el ancho disponible. */
+    padding:10px 12px; /* Relleno interno. */
+    border-radius:10px; /* Bordes redondeados. */
+    border:1px solid #efe0e7; /* Borde sutil. */
+    background:#fff; /* Fondo blanco. */
+    font-size:14px; /* Tamaño de fuente del texto ingresado. */
+    margin-top:6px; /* Espacio superior. */
+    box-sizing:border-box; /* Asegura que el padding y borde no aumenten el ancho total. */
 }
+/* Efecto visual al hacer clic o seleccionar un campo del formulario. */
 .reserva-form input:focus, .reserva-form select:focus { outline: 3px solid rgba(194,24,91,0.06); border-color: rgba(194,24,91,0.2); }
 
-/* resumen del servicio */
+
+/* --- Sección de Resumen y Servicios --- */
+
+/* Contenedor para mostrar un resumen del servicio seleccionado. */
 .selected-summary{
-  display:flex;
-  gap:12px;
-  align-items:center;
-  padding:10px;
-  border-radius:10px;
-  background:var(--surface);
-  border:1px solid #f0e6ec;
-  margin-top:12px;
+    display:flex; /* Usa Flexbox para alinear imagen y texto. */
+    gap:12px; /* Espacio entre elementos. */
+    align-items:center; /* Centra verticalmente. */
+    padding:10px; /* Relleno. */
+    border-radius:10px; /* Bordes redondeados. */
+    background:var(--surface); /* Fondo ligeramente coloreado. */
+    border:1px solid #f0e6ec; /* Borde sutil. */
+    margin-top:12px; /* Espacio superior. */
 }
-.selected-summary img{ width:64px; height:64px; object-fit:cover; border-radius:8px; }
-.selected-summary .meta strong{ display:block; font-size:15px; }
-.selected-summary .precio{ color:var(--accent); font-weight:700; margin-top:4px; }
 
-/* tarjetas de servicios */
-.servicios-titulo{ margin-top:16px; font-size:15px; color:#333; font-weight:700; /* título sección servicios con serif serio */ font-family: Georgia, "Times New Roman", serif; }
+.selected-summary img{ width:64px; height:64px; object-fit:cover; border-radius:8px; } /* Imagen del resumen. */
+.selected-summary .meta strong{ display:block; font-size:15px; } /* Nombre del servicio en el resumen. */
+.selected-summary .precio{ color:var(--accent); font-weight:700; margin-top:4px; } /* Precio en el resumen. */
+
+/* Título de la sección de la lista de servicios. */
+.servicios-titulo{ margin-top:16px; font-size:15px; color:#333; font-weight:700; font-family: Georgia, "Times New Roman", serif; }
+
+/* Contenedor de la lista de tarjetas de servicios. */
 .servicios-list{ display:flex; gap:12px; flex-wrap:wrap; margin-top:10px; }
-.servicio-card{
-  background:#fff;
-  border:1px solid #f0e6ec;
-  border-radius:10px;
-  padding:10px;
-  width:180px;
-  text-align:center;
-  cursor:pointer;
-  transition: transform .12s, box-shadow .12s, border-color .12s;
-}
-.servicio-card.selected { border-color: var(--accent); box-shadow: 0 8px 30px rgba(194,24,91,0.06); transform: translateY(-4px); }
-.servicio-img{ width:84px; height:84px; object-fit:cover; border-radius:8px; margin-bottom:8px; }
-.servicio-nombre{ font-weight:600; font-size:14px; color:#222; }
-.servicio-precio{ color:var(--accent); font-weight:700; margin-top:6px; }
 
-/* tarjeta única (modo detalle) */
+/* Estilo para cada tarjeta de servicio individual. */
+.servicio-card{
+    background:#fff; /* Fondo blanco. */
+    border:1px solid #f0e6ec; /* Borde sutil. */
+    border-radius:10px; /* Bordes redondeados. */
+    padding:10px; /* Relleno. */
+    width:180px; /* Ancho fijo. */
+    text-align:center; /* Centra el contenido. */
+    cursor:pointer; /* Muestra un cursor de mano para indicar que es clickeable. */
+    transition: transform .12s, box-shadow .12s, border-color .12s; /* Animación suave para los cambios. */
+}
+/* Estilo que se aplica a la tarjeta cuando está seleccionada. */
+.servicio-card.selected { border-color: var(--accent); box-shadow: 0 8px 30px rgba(194,24,91,0.06); transform: translateY(-4px); }
+
+.servicio-img{ width:84px; height:84px; object-fit:cover; border-radius:8px; margin-bottom:8px; } /* Imagen de la tarjeta. */
+.servicio-nombre{ font-weight:600; font-size:14px; color:#222; } /* Nombre del servicio. */
+.servicio-precio{ color:var(--accent); font-weight:700; margin-top:6px; } /* Precio del servicio. */
+
+/* Estilo especial para cuando se muestra una única tarjeta (modo detalle). */
 .servicio-card.single, .servicio-card.single.selected {
-  display:flex;
-  align-items:center;
-  gap:14px;
-  padding:16px;
-  border-radius:12px;
-  width:100%;
-  box-shadow:0 8px 30px rgba(0,0,0,0.04);
-  transform:none;
+    display:flex; /* Cambia a Flexbox para alinear horizontalmente. */
+    align-items:center; /* Centra verticalmente. */
+    gap:14px; /* Espacio entre imagen y texto. */
+    padding:16px; /* Más relleno. */
+    border-radius:12px; /* Bordes más redondeados. */
+    width:100%; /* Ocupa todo el ancho. */
+    box-shadow:0 8px 30px rgba(0,0,0,0.04); /* Sombra por defecto. */
+    transform:none; /* Anula el efecto de transformación de la tarjeta normal. */
 }
+/* Ajustes de la imagen para la vista de tarjeta única. */
 .servicio-card.single .servicio-img {
-  width:96px;
-  height:96px;
-  border-radius:10px;
-  flex-shrink:0;
+    width:96px;
+    height:96px;
+    border-radius:10px;
+    flex-shrink:0; /* Evita que la imagen se encoja. */
 }
-.servicio-card .servicio-body { text-align:left; }
+/* Contenedor del texto en la tarjeta. */
+.servicio-card .servicio-body { text-align:left; } /* Alinea el texto a la izquierda. */
+
+/* Ajustes de texto para la vista de tarjeta única. */
 .servicio-card.single .servicio-nombre { font-size:18px; font-weight:700; color:#222; }
 .servicio-card.single .servicio-precio { font-size:16px; color:var(--accent); margin-top:6px; }
 
-/* wrapper del botón cambiar */
-.change-wrap { margin-top:12px; display:flex; justify-content:flex-end; }
+
+/* --- Botones y Acciones --- */
+
+/* Contenedor para el botón "Cambiar". */
+.change-wrap { margin-top:12px; display:flex; justify-content:flex-end; } /* Alinea el botón a la derecha. */
+/* Estilo del botón "Cambiar". */
 .btn-change{
-  background:transparent;
-  border:1px solid rgba(24, 23, 23, 0.06);
-  color:var(--muted);
-  padding:8px 12px;
-  border-radius:8px;
-  cursor:pointer;
-  font-weight:600;
+    background:transparent; /* Fondo transparente. */
+    border:1px solid rgba(24, 23, 23, 0.06); /* Borde muy sutil. */
+    color:var(--muted); /* Color de texto atenuado. */
+    padding:8px 12px; /* Relleno. */
+    border-radius:8px; /* Bordes redondeados. */
+    cursor:pointer; /* Cursor de mano. */
+    font-weight:600; /* Texto seminegrita. */
 }
 
-/* acciones */
+/* Contenedor para los botones de acción principales (Confirmar/Cancelar). */
 .acciones{ display:flex; gap:10px; justify-content:flex-end; margin-top:14px; }
+
+/* Botón de confirmación. */
 .btn-confirm{ background:var(--accent); color:#fff; border:none; padding:10px 16px; border-radius:10px; font-weight:700; cursor:pointer; }
+/* Botón de cancelación. */
 .btn-cancel{ background:transparent; border:1px solid #e9dbe2; color:var(--muted); padding:10px 14px; border-radius:10px; text-decoration:none; display:inline-flex; align-items:center; }
 
-/* responsive */
+
+/* --- Diseño Responsivo (Responsive) --- */
 @media (max-width:900px){
-  .servicios-list{ justify-content:flex-start; }
-  .acciones{ justify-content:center; flex-wrap:wrap; }
+    .servicios-list{ justify-content:flex-start; } /* Alinea las tarjetas a la izquierda. */
+    .acciones{ justify-content:center; flex-wrap:wrap; } /* Centra los botones y permite que se envuelvan. */
 }
 
-/* pequeño ajuste modal (ya existente) */
+
+/* --- Estilos para el Modal de Éxito --- */
+
+/* Contenedor del modal, ocupa toda la pantalla. */
 .reserva-success-modal {
-  position: fixed;
-  inset: 0;
-  display: none; /* se muestra vía JS */
-  align-items: center;
-  justify-content: center;
-  background: rgba(20,20,30,0.56);
-  z-index: 2000;
+    position: fixed; /* Fijo en la pantalla, no se desplaza con el scroll. */
+    inset: 0; /* Abarca toda la pantalla (top, right, bottom, left = 0). */
+    display: none; /* Oculto por defecto, se muestra con JavaScript. */
+    align-items: center; /* Centra la tarjeta del modal verticalmente. */
+    justify-content: center; /* Centra la tarjeta del modal horizontalmente. */
+    background: rgba(20,20,30,0.56); /* Fondo oscuro semitransparente. */
+    z-index: 2000; /* Se asegura de que esté por encima de todo lo demás. */
 }
+/* Muestra el modal cuando tiene este atributo (manejado por JS). */
 .reserva-success-modal[aria-hidden="false"] { display: flex; }
 
+/* La tarjeta o ventana de contenido del modal. */
 .reserva-success-card{
-  position: relative;
-  background: #fff;
-  padding: 1.6rem;
-  border-radius: 12px;
-  width: min(520px, 92%);
-  text-align: center;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    position: relative; /* Permite posicionar el botón de cerrar de forma absoluta. */
+    background: #fff; /* Fondo blanco. */
+    padding: 1.6rem; /* Relleno interno. */
+    border-radius: 12px; /* Bordes redondeados. */
+    width: min(520px, 92%); /* Ancho máximo de 520px, pero no más del 92% de la pantalla. */
+    text-align: center; /* Centra el texto. */
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2); /* Sombra pronunciada. */
 }
+
+/* Estilos para el contenido del modal. */
 .reserva-success-logo{ width:72px; margin-bottom:0.6rem; }
 .reserva-success-card h2{ color:#e91e63; margin:0.2rem 0 0.4rem; font-size:1.4rem; }
 .reserva-success-text{ color:#444; margin-bottom:1rem; line-height:1.4; }
-.reserva-success-actions{ display:flex; gap:0.6rem; justify-content:center; margin-top:0.6rem; }
+.reserva-success-actions{ display:flex; gap:0.6rem; justify-content:center; margin-top:0.6rem; } /* Contenedor de botones del modal. */
+
+/* Estilos genéricos para botones dentro del modal. */
 .btn{ padding:0.6rem 1rem; border-radius:8px; text-decoration:none; display:inline-block; }
 .btn-primary{ background:#e91e63; color:#fff; padding:10px 18px; border-radius:10px; text-decoration:none; }
 .btn-secondary{ background:#f3f3f3; color:#333; padding:10px 18px; border-radius:10px; text-decoration:none; }
 
-/* botón cerrar del modal */
+/* Botón para cerrar el modal (la 'X'). */
 .reserva-success-close{
-  position:absolute;
-  right:1rem;
-  top:1rem;
-  background:transparent;
-  border:none;
-  font-size:1.6rem;
-  color:#999;
-  cursor:pointer;
+    position:absolute; /* Posición absoluta respecto a .reserva-success-card. */
+    right:1rem; /* A la derecha. */
+    top:1rem; /* Arriba. */
+    background:transparent; /* Sin fondo. */
+    border:none; /* Sin borde. */
+    font-size:1.6rem; /* Tamaño grande. */
+    color:#999; /* Color gris. */
+    cursor:pointer; /* Cursor de mano. */
 }
 
-/* pequeño ajuste responsive */
+/* Ajustes responsivos para pantallas muy pequeñas. */
 @media (max-width:480px){
-  .reserva-success-card{ padding:1rem; }
-  .reserva-success-card h2{ font-size:1.1rem; }
-  .reserva-success-actions{ flex-direction:column; gap:0.4rem; }
+    .reserva-success-card{ padding:1rem; } /* Reduce el relleno del modal. */
+    .reserva-success-card h2{ font-size:1.1rem; } /* Reduce el tamaño del título. */
+    .reserva-success-actions{ flex-direction:column; gap:0.4rem; } /* Apila los botones verticalmente. */
 }

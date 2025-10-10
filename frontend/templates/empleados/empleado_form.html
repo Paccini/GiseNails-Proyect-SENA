@@ -1,30 +1,57 @@
 {% extends 'base_admin.html' %}
+<!-- Extiende la plantilla base del panel de administración -->
+
 {% block content %}
+<!-- Inicio del bloque principal de contenido -->
+
 <div class="card shadow mb-4">
+    <!-- Tarjeta principal con sombra y margen inferior -->
+    
     <div class="card-header bg-success text-dark d-flex justify-content-between align-items-center">
+        <!-- Encabezado de la tarjeta con fondo verde y texto oscuro -->
         <h2 class="mb-0">
+            <!-- Título dinámico: cambia según si se edita o se agrega un empleado -->
             {% if empleado %}Editar Empleado{% else %}Agregar Empleado{% endif %}
         </h2>
+
+        <!-- Botón para volver a la lista de empleados -->
         <a href="{% url 'empleados:empleado_list' %}" class="btn btn-light btn-sm">
             <i class="bi bi-arrow-left"></i> Volver
         </a>
     </div>
+
     <div class="card-body">
+        <!-- Cuerpo principal del formulario -->
+
         <form method="post" enctype="multipart/form-data">
+            <!-- Formulario para agregar o editar empleado -->
+            <!-- enctype="multipart/form-data" permite subir archivos (por ejemplo, foto del empleado) -->
+            
             {% csrf_token %}
+            <!-- Token CSRF para protección contra ataques cross-site request forgery -->
+
             <table class="table table-bordered">
+                <!-- Tabla para mostrar los campos del formulario de forma ordenada -->
                 {% for field in form %}
                 <tr>
                     <th>{{ field.label_tag }}</th>
+                    <!-- Etiqueta del campo -->
                     <td>{{ field }}</td>
+                    <!-- Campo del formulario -->
                 </tr>
                 {% endfor %}
             </table>
+
             <div class="d-flex gap-2">
+                <!-- Contenedor con espacio entre botones -->
+
                 <button type="submit" class="btn btn-success">
                     <i class="bi bi-save"></i>
+                    <!-- Texto dinámico según si es edición o creación -->
                     {% if empleado %}Guardar cambios{% else %}Guardar{% endif %}
                 </button>
+
+                <!-- Botón para cancelar y volver a la lista -->
                 <a href="{% url 'empleados:empleado_list' %}" class="btn btn-secondary">
                     <i class="bi bi-x-circle"></i> Cancelar
                 </a>
@@ -32,4 +59,6 @@
         </form>
     </div>
 </div>
+
 {% endblock %}
+<!-- Fin del bloque principal de contenido -->
