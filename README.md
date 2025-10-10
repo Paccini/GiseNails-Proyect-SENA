@@ -1,6 +1,6 @@
 # Gise-Nails Web App
 
-Aplicativo web para **Gise-Nails**, empresa de uñas ubicada en Ibagué, Colombia. Permite gestionar reservas, clientes, información de servicios y más, facilitando la administración y experiencia de los usuarios.
+Aplicativo web para **Gise-Nails**, empresa de uñas ubicada en Ibagué, Colombia. Permite gestionar reservas, clientes, servicios y productos, facilitando la administración y experiencia de los usuarios.
 
 ## Autores
 
@@ -16,12 +16,15 @@ Aplicativo web para **Gise-Nails**, empresa de uñas ubicada en Ibagué, Colombi
 proyecto Gise-Nails/
 │
 ├── backend/        # Backend Django: lógica, modelos, vistas, urls
-│   ├── clientes/   # Gestión de clientes
+│   ├── clientes/   # Gestión de clientes y panel de usuario
 │   ├── gisenails/  # Configuración principal Django
 │   ├── inicio/     # Página principal
 │   ├── login/      # Autenticación de usuarios
 │   ├── nosotros/   # Información de la empresa
-│   ├── reserva/    # Gestión de reservas
+│   ├── reserva/    # Gestión de reservas y lógica de citas
+│   ├── empleados/  # Gestión de empleados
+│   ├── productos/  # Gestión de productos
+│   ├── servicio/   # Gestión de servicios
 │   └── manage.py   # Script de administración Django
 │
 ├── frontend/       # Recursos estáticos y plantillas
@@ -64,8 +67,6 @@ proyecto Gise-Nails/
    python manage.py runserver
    ```
 
-6. **(Opcional) Instala dependencias del frontend si las hay.**
-
 ## Uso
 
 - Accede a la aplicación en [http://localhost:8000](http://localhost:8000).
@@ -73,18 +74,27 @@ proyecto Gise-Nails/
 
 ## Funcionalidades
 
-- **Gestión de clientes:** Registro y administración de usuarios.
-- **Reservas:** Solicitud y gestión de citas.
-- **Autenticación:** Inicio de sesión y registro seguro.
-- **Información de servicios:** Detalles sobre los servicios ofrecidos.
+- **Gestión de clientes:** Registro, edición y panel de usuario con historial de reservas.
+- **Reservas inteligentes:** Si el usuario agenda una cita y no está registrado, los datos de la reserva se guardan y se autocompletan en el formulario de registro. Al registrarse o iniciar sesión, la cita queda asociada automáticamente al usuario y se muestra en su panel.
+- **Autenticación:** Inicio de sesión y registro seguro, con autocompletado de datos desde la reserva.
+- **Gestión de empleados, servicios y productos:** Administración completa desde el panel.
 - **Panel administrativo:** Gestión interna para el equipo Gise-Nails.
 - **Frontend atractivo:** Interfaz visual con imágenes, videos y estilos personalizados.
+- **Notificaciones y experiencia mejorada:** Mensajes y redirecciones automáticas según el flujo de usuario.
 
 ## Tecnologías
 
 - **Backend:** Django (Python)
 - **Frontend:** HTML, CSS, JavaScript
 - **Base de datos:** SQLite (por defecto Django)
+
+## Novedades recientes
+
+- **Reserva asociada automáticamente al usuario tras registro/login.**
+- **Autocompletado de nombre, correo y teléfono en el registro si la cita fue agendada antes de crear la cuenta.**
+- **Panel de usuario muestra todas las reservas asociadas al cliente autenticado.**
+- **Mejoras en la gestión de rutas y redirecciones para un flujo de usuario más intuitivo.**
+- **Validación para evitar duplicidad de reservas y correos.**
 
 ## Estructura de carpetas principales
 
