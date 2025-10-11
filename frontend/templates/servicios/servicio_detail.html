@@ -1,0 +1,40 @@
+{% extends 'base_admin.html' %}
+{% block content %}
+
+<!-- Contenedor principal de la tarjeta que muestra el detalle del servicio -->
+<div class="card shadow mb-4">
+    
+    <!-- Encabezado con color informativo -->
+    <div class="card-header bg-info text-white">
+        <h2 class="mb-0">Detalle de Servicio</h2>
+    </div>
+
+    <!-- Cuerpo de la tarjeta -->
+    <div class="card-body">
+        
+        <!-- Lista con los datos del servicio -->
+        <ul class="list-group list-group-flush">
+            <!-- Nombre del servicio -->
+            <li class="list-group-item">
+                <strong>Nombre:</strong> {{ servicio.nombre }}
+            </li>
+
+            <!-- Descripción del servicio -->
+            <li class="list-group-item">
+                <strong>Descripción:</strong> {{ servicio.descripcion }}
+            </li>
+
+            <!-- Precio del servicio -->
+            <li class="list-group-item">
+                <strong>Precio:</strong> ${{ servicio.precio }}
+            </li>
+        </ul>
+
+        <!-- Botón para volver a la lista de servicios -->
+        <a href="{% url 'servicio:servicio_list' %}" class="btn btn-secondary mt-3">
+            Volver a la lista
+        </a>
+    </div>
+</div>
+
+{% endblock %}

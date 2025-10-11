@@ -1,0 +1,83 @@
+{% extends 'base_admin.html' %}
+{% block content %}
+<!-- ===========================================================
+    PÁGINA: EDITAR CITA
+    Descripción:
+    Permite al administrador modificar los datos de una cita ya
+    registrada (cliente, servicio, gestora, fecha, hora y estado).
+============================================================== -->
+
+<!-- === TARJETA PRINCIPAL === -->
+<div class="card shadow mb-4">
+
+    <!-- === ENCABEZADO AZUL DE EDICIÓN === -->
+    <div class="card-header bg-primary text-dark d-flex justify-content-between align-items-center">
+        <h2 class="mb-0">
+            <i class="bi bi-pencil-square me-2"></i>
+            Editar Cita
+        </h2>
+
+        <!-- Botón para regresar al listado -->
+        <a href="{% url 'reserva:home' %}" class="btn btn-light btn-sm">
+            <i class="bi bi-arrow-left"></i> Volver
+        </a>
+    </div>
+
+    <!-- === CUERPO DE LA TARJETA === -->
+    <div class="card-body">
+
+        <!-- === MENSAJE DE ERROR (si existen errores en el formulario) === -->
+        {% if form.errors %}
+        <div class="alert alert-danger">
+            {{ form.errors }}
+        </div>
+        {% endif %}
+
+        <!-- === FORMULARIO DE EDICIÓN === -->
+        <form method="post">
+            {% csrf_token %}
+
+            <!-- === TABLA DE CAMPOS === -->
+            <table class="table table-bordered align-middle">
+                <tr>
+                    <th>{{ form.cliente.label_tag }}</th>
+                    <td>{{ form.cliente }}</td>
+                </tr>
+                <tr>
+                    <th>{{ form.servicio.label_tag }}</th>
+                    <td>{{ form.servicio }}</td>
+                </tr>
+                <tr>
+                    <th>{{ form.gestora.label_tag }}</th>
+                    <td>{{ form.gestora }}</td>
+                </tr>
+                <tr>
+                    <th>{{ form.fecha.label_tag }}</th>
+                    <td>{{ form.fecha }}</td>
+                </tr>
+                <tr>
+                    <th>{{ form.hora.label_tag }}</th>
+                    <td>{{ form.hora }}</td>
+                </tr>
+                <tr>
+                    <th>{{ form.estado.label_tag }}</th>
+                    <td>{{ form.estado }}</td>
+                </tr>
+            </table>
+
+            <!-- === BOTONES DE ACCIÓN === -->
+            <div class="d-flex gap-2">
+                <!-- Botón para guardar cambios -->
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-save"></i> Guardar
+                </button>
+
+                <!-- Botón para cancelar la edición -->
+                <a href="{% url 'reserva:home' %}" class="btn btn-secondary">
+                    <i class="bi bi-x-circle"></i> Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

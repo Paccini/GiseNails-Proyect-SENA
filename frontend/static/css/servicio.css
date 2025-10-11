@@ -1,44 +1,82 @@
-/* Card Flip Effect */
+/* --- Efecto de voltear tarjeta (Card Flip Effect) --- */
+
+/* Contenedor principal de la tarjeta. Establece el escenario 3D. */
 .flip-card {
+    /* El fondo es transparente porque las caras (frontal y trasera) tendrán su propio color. */
     background-color: transparent;
+    /* Ancho completo del elemento padre. */
     width: 100%;
+    /* Altura fija para la tarjeta. */
     height: 320px;
+    /* Define la perspectiva 3D. Es crucial para que la rotación se vea tridimensional y no plana. */
     perspective: 1000px;
+    /* Margen inferior para separar esta tarjeta de otros elementos. */
     margin-bottom: 1rem;
+    /* Sombra sutil para darle profundidad a la tarjeta. */
     box-shadow: 0 2px 8px rgba(230, 0, 126, 0.10);
 }
+
+/* Contenedor interno que realmente gira. */
 .flip-card-inner {
+    /* Permite posicionar las caras frontal y trasera de forma absoluta dentro de él. */
     position: relative;
+    /* Ocupa el 100% del ancho de .flip-card. */
     width: 100%;
+    /* Ocupa el 100% de la altura de .flip-card. */
     height: 100%;
+    /* Define la animación: la propiedad 'transform' tardará 0.9s en cambiar, con una curva de aceleración personalizada para un efecto más elástico. */
     transition: transform 0.9s cubic-bezier(.4,2,.6,1);
+    /* Asegura que los elementos hijos (las caras) se mantengan en el mismo espacio 3D durante la rotación. */
     transform-style: preserve-3d;
 }
+
+/* Activa la animación al pasar el ratón por encima (.hover) o al enfocar un elemento dentro de la tarjeta (.focus-within). */
 .flip-card:hover .flip-card-inner,
 .flip-card:focus-within .flip-card-inner {
+    /* Gira el contenedor interno 180 grados sobre el eje Y, revelando la cara trasera. */
     transform: rotateY(180deg);
 }
+
+/* Estilos compartidos por ambas caras de la tarjeta. */
 .flip-card-front, .flip-card-back {
+    /* Posiciona ambas caras en el mismo lugar, una encima de la otra, dentro del .flip-card-inner. */
     position: absolute;
+    /* Ocupan el 100% del ancho del contenedor interno. */
     width: 100%;
+    /* Ocupan el 100% de la altura del contenedor interno. */
     height: 100%;
+    /* Oculta la parte trasera de la cara cuando está girada. Sin esto, veríamos la cara trasera "en espejo". */
     backface-visibility: hidden;
+    /* Redondea las esquinas de ambas caras. */
     border-radius: 1rem;
+    /* Oculta cualquier contenido que se desborde de las esquinas redondeadas. */
     overflow: hidden;
 }
+
+/* Estilos específicos para la cara frontal (la que se ve por defecto). */
 .flip-card-front {
+    /* Fondo blanco. */
     background: #fff;
+    /* Utiliza Flexbox para centrar perfectamente el contenido en su interior. */
     display: flex;
     align-items: center;
     justify-content: center;
 }
+
+/* Estilos específicos para la cara trasera (la que está oculta al principio). */
 .flip-card-back {
+    /* Fondo con un color definido por una variable CSS (--rosado-claro). */
     background: var(--rosado-claro);
+    /* Color de texto oscuro. */
     color: #333;
+    /* Rota la cara trasera 180 grados desde el inicio para que esté de espaldas y oculta. */
     transform: rotateY(180deg);
+    /* Utiliza Flexbox para centrar su contenido. */
     display: flex;
+    /* Apila los elementos hijos verticalmente (uno debajo del otro). */
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    /* Añade un relleno interno para que el contenido no toque los bordes. */
     padding: 1rem;
 }

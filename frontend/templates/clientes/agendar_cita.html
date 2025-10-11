@@ -1,0 +1,16 @@
+<!-- filepath: c:\Users\juanv\Desktop\Juan-Django\templates\clientes\agendar_cita.html -->
+{% extends 'base_admin.html' %}
+{% block content %}
+<!-- Encabezado principal de la página -->
+<h2>Agendar Cita</h2>
+
+<!-- Formulario para agendar una nueva cita -->
+<form method="post">
+    {% csrf_token %}
+    <!-- Renderizado automático de los campos del formulario -->
+    {{ form.as_p }}
+
+    <!-- Botón para enviar el formulario y agendar la cita -->
+    <button type="submit" class="btn btn-success">Agendar</button>
+</form>
+{% endblock %}

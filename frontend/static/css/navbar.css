@@ -1,31 +1,37 @@
+/* =========================
+   navbar.css - Estilos para la barra de navegación
+   ========================= */
+
+/* Contenedor principal de la barra de navegación */
 .navbar {
-    background: var(--rosado-muy-claro);
-    border-bottom: 2px solid var(--blanco);
-    padding: 20px;
-    
+    background: var(--rosado-claro); /* Fondo rosado claro definido en variables */
+    padding: 20px; /* Espaciado interno general */
 }
 
+/* Estilo del texto dentro del nombre de la marca (logo o título principal) */
 .navbar-brand span {
-    font-size: 1.8rem;
+    font-size: 1.8rem; /* Tamaño de letra más grande para destacar el nombre */
 }
 
+/* Enlaces dentro de la barra de navegación */
 .navbar-nav .nav-link {
-    background-color: var(--rosado-claro) !important;
-    color: var(--negro-suave);
-    border-radius: 20px;
-    margin: 0 8px;
-    padding: 8px 18px;
-    box-shadow: 0 2px 8px rgba(230, 0, 126, 0.12);
-    transition: background 0.3s, color 0.3s, transform 0.3s;
+    background-color: var(--rosado-claro) !important; /* Fondo igual al navbar */
+    color: var(--negro-suave); /* Texto oscuro para contraste */
+    border-radius: 20px; /* Bordes redondeados en los enlaces */
+    margin: 0 8px; /* Separación lateral entre enlaces */
+    padding: 8px 18px; /* Espaciado interno para dar forma de botón */
+    box-shadow: 0 2px 8px rgba(230, 0, 126, 0.12); /* Sombra sutil debajo */
+    transition: background 0.3s, color 0.3s, transform 0.3s; /* Animaciones suaves */
 }
 
+/* Efecto al pasar el cursor por encima de los enlaces */
 .navbar-nav .nav-link:hover {
-    background: var(--blanco);
-    transform: scale(1.08);
-    text-decoration: none;
+    background: var(--blanco); /* Cambia a blanco al hacer hover */
+    transform: scale(1.08); /* Efecto de agrandamiento */
+    text-decoration: none; /* Evita subrayado en los enlaces */
 }
 
+/* Añade una línea divisoria entre los elementos del menú, excepto el último */
 .navbar-nav .nav-item:not(:last-child) {
-    border-right: 1px solid #fff2;
+    border-right: 1px solid #fff2; /* Línea tenue de separación */
 }
-

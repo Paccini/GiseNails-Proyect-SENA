@@ -21,3 +21,28 @@ class LoginForm(forms.Form):
             'style': 'background:transparent;color:#232c36;'
         })
     )
+
+class UpdateUserForm(forms.Form):
+    nombre = forms.CharField(
+        label='Nombre',
+        max_length=150,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Nombre completo'
+        })
+    )
+    old_password = forms.CharField(
+        label='Contraseña actual',
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Contraseña actual'
+        })
+    )
+    new_password = forms.CharField(
+        label='Nueva contraseña',
+        required=False,
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Nueva contraseña'
+        })
+    )

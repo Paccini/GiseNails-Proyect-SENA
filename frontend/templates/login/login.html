@@ -1,61 +1,87 @@
 {% extends 'home.html' %}
+<!-- Extiende la plantilla base "home.html" para mantener la estructura general del sitio -->
+
 {% block title %}
   Gise Nails
 {% endblock %}
+<!-- Define el título de la página en la pestaña del navegador -->
+
 {% block content %}
   {% load static %}
+  <!-- Carga los archivos estáticos para poder usar CSS e imágenes -->
+
+  <!-- Enlaces a las hojas de estilo -->
   <link rel="stylesheet" href="{% static 'css/base.css' %}" />
   <link rel="stylesheet" href="{% static 'css/login.css' %}" />
+
+  <!-- Contenedor principal del formulario de inicio de sesión -->
   <main class="login-main">
     <section class="login-card">   
+      <!-- Encabezado del formulario -->
       <header>
         <h1>Iniciar sesión</h1>
       </header>
+
+      <!-- Formulario de inicio de sesión -->
       <form method="post" autocomplete="on">
         {% csrf_token %}
+        <!-- Token de seguridad obligatorio en formularios POST de Django -->
+
+        <!-- Campo de correo o usuario -->
         <div class="login-input-group">
           <span class="login-icon"><i class="bi bi-person"></i></span>
-          <input type="text" name="username" placeholder="Correo" required autofocus class="login-input" />
+          {% if prefill_email %}
+            <!-- Si hay un correo precargado (por ejemplo, de una cita pendiente), se muestra solo lectura -->
+            <input type="text" name="username" value="{{ prefill_email }}" readonly class="login-input" />
+          {% else %}
+            <!-- Si no hay correo precargado, se muestra el campo editable -->
+            <input type="text" name="username" placeholder="Correo" required autofocus class="login-input" />
+          {% endif %}
         </div>
+
+        <!-- Campo de contraseña -->
         <div class="login-input-group">
           <span class="login-icon"><i class="bi bi-lock"></i></span>
           <input type="password" name="password" placeholder="Contraseña" required class="login-input" />
         </div>
+
+        {% if password_only %}
+          <!-- Mensaje si solo se requiere ingresar la contraseña (por cita guardada) -->
+          <div class="login-hint">Hemos guardado tu cita pendiente. Introduce solo tu contraseña para completarla.</div>
+        {% endif %}
+
+        <!-- Botón de envío -->
         <button type="submit" class="login-btn">Entrar</button>
+
         {% if error %}
+          <!-- Mensaje de error si las credenciales son incorrectas -->
           <div class="login-alert">{{ error }}</div>
         {% endif %}
-      </form><p>
-        ¿No tienes una cuenta? <a href="{% url 'clientes:registro' %}" class="login-link">Regístrate</a>
+      </form>
+
+      <!-- Enlace al registro -->
+      <p>
+        ¿No tienes una cuenta? 
+        <a href="{% url 'clientes:registro' %}" class="login-link">Regístrate</a>
       </p>
     </section>
   </main>
 
+  <!-- Oculta el footer en la página de login -->
   <style>
     footer {
       display: none !important;
     }
   </style>
+
+  <!-- Metadatos para evitar que el navegador almacene la página en caché -->
   <head>
-    <!-- ...otros tags... -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
   </head>
-  <body>
-    <!-- ...contenido... -->
-    <script>
-      if (window.history && window.history.replaceState) {
-        window.history.replaceState(null, '', window.location.href)
-      }
-      window.onload = function () {
-        if (window.history && window.history.pushState) {
-          window.history.pushState(null, '', window.location.href)
-          window.onpopstate = function () {
-            window.location.href = '/login/'
-          }
-        }
-      }
-    </script>
-  </body>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/login.js' %}"></script>
 {% endblock %}
