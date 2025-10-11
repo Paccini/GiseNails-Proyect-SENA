@@ -1,5 +1,31 @@
 // Confirmación al cancelar una cita usando SweetAlert2
 document.addEventListener('DOMContentLoaded', function () {
+    // Mostrar alerta solo una vez por sesión de login
+    if (typeof show_cita_alert !== 'undefined' && show_cita_alert) {
+        if (!sessionStorage.getItem('cita_alert_shown')) {
+            Swal.fire({
+                icon: 'info',
+                title: '¡Importante!',
+                text: 'Recuerda confirmar tu cita 1 hora antes del servicio, de lo contrario esta se cancelará automáticamente.',
+                timer: 7000,
+                timerProgressBar: true,
+                showCloseButton: true,
+                confirmButtonText: 'Entendido',
+                allowOutsideClick: false,
+                allowEscapeKey: true
+            });
+            sessionStorage.setItem('cita_alert_shown', '1');
+        }
+    }
+
+    // Borra la alerta al cerrar sesión
+    var logoutForm = document.querySelector('form[action*="logout"]');
+    if (logoutForm) {
+        logoutForm.addEventListener('submit', function () {
+            sessionStorage.removeItem('cita_alert_shown');
+        });
+    }
+
     // Botón cancelar cita
     const botonesCancelar = document.querySelectorAll('.btn-cancelar-cita');
     botonesCancelar.forEach(function (btn) {
@@ -137,5 +163,51 @@ document.addEventListener('DOMContentLoaded', function () {
         if (badge && nuevas === 0) {
             badge.style.display = 'none';
         }
+    }
+
+    // Eliminar notificación al hacer clic en la X (campanita)
+    document.querySelectorAll('.notif-close-btn').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const notifDiv = btn.closest('[data-notif-id]');
+            const notifId = notifDiv.getAttribute('data-notif-id');
+            notifDiv.style.display = 'none';
+            // Guardar como eliminada en localStorage
+            let eliminadas = JSON.parse(localStorage.getItem('notificaciones_eliminadas') || '[]');
+            if (!eliminadas.includes(notifId)) {
+                eliminadas.push(notifId);
+                localStorage.setItem('notificaciones_eliminadas', JSON.stringify(eliminadas));
+            }
+            // Ocultar badge si ya no quedan notificaciones visibles
+            const visibles = Array.from(document.querySelectorAll('[data-notif-id]')).filter(el => el.style.display !== 'none');
+            const badge = document.querySelector('#notifDropdown .badge');
+            if (badge && visibles.length === 0) badge.style.display = 'none';
+        });
+    });
+
+    // Al cargar, ocultar las notificaciones eliminadas
+    let eliminadas = JSON.parse(localStorage.getItem('notificaciones_eliminadas') || '[]');
+    document.querySelectorAll('[data-notif-id]').forEach(function(el) {
+        if (eliminadas.includes(el.getAttribute('data-notif-id'))) {
+            el.style.display = 'none';
+        }
+    });
+
+    // Enviar los eliminados al backend en cada carga del panel
+    if (eliminadas.length > 0) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('notifs_eliminadas', eliminadas.join(','));
+        if (!window.location.search.includes('notifs_eliminadas=')) {
+            window.location.replace(url.toString());
+        }
+    }
+
+    // Limpia eliminados al cerrar sesión
+    var logoutForm = document.querySelector('form[action*="logout"]');
+    if (logoutForm) {
+        logoutForm.addEventListener('submit', function () {
+            localStorage.removeItem('notificaciones_eliminadas');
+        });
     }
 });
