@@ -1,3 +1,4 @@
+
 {% extends 'home.html' %}
 <!-- Extiende la plantilla base 'home.html' para mantener la estructura principal del sitio -->
 
@@ -8,7 +9,20 @@
 <!-- Inicio del bloque principal de contenido -->
 
 <link rel="stylesheet" href="{% static 'css/inicio.css' %}">
+<link rel="stylesheet" href="{% static 'css/loading.css' %}">
 <!-- Enlace a la hoja de estilos específica para la página de inicio -->
+
+<div class="loading-page">
+  <!-- SVG con la letra G -->
+  <svg id="svg" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+    <text id="svg-g" x="50%" y="55%" dominant-baseline="middle" text-anchor="middle">G</text>
+  </svg>
+
+  <!-- Nombre de la marca -->
+  <div class="name-container">
+    <div class="welcome-text">Bienvenid@ a Gise Nails</div>
+  </div>
+</div>
 
 <main>
   <!-- Contenedor principal del contenido de la página -->
@@ -28,7 +42,7 @@
   <!-- Sección de presentación de características o beneficios -->
   <section class="container-fluid py-5" style="background-color: #ffe6f0;">
     <div class="row justify-content-around ">
-      
+
       <!-- Primer beneficio -->
       <div class="col-md-2 text-center">
         <div class="rounded-circle">
@@ -125,6 +139,9 @@
 
 </main>
 <!-- Fin del contenedor principal -->
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js"
+    integrity="sha512-gmwBmiTVER57N3jYS3LinA9eb8aHrJua5iQD7yqYCKa5x6Jjc7VDVaEA0je0Lu0bP9j7tEjV3+1qUm6loO99Kw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="{% static 'js/loading.js' %}"></script>
 {% endblock %}
 <!-- Fin del bloque de contenido -->
