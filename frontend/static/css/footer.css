@@ -2,28 +2,41 @@
    footer.css - Estilos del pie de página y redes sociales
    ========================= */
 
+/* Fuentes para el cuerpo y el pie de página */
+body,
+footer,
+.pie,
+.pierna {
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+.pierna>div>h5 {
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
 /* Contenedor principal del pie de página */
 .pierna {
     text-align: center;
 }
 
 /* Títulos dentro del pie de página */
-.pierna > div > h5 {
+.pierna>div>h5 {
     color: var(--rosado-oscuro);
     text-align: center;
     font-weight: bold;
 }
 
 /* Enlaces del footer principales */
-.pierna > div > ul > li > a {
-    color: #222 !important; /* negro suave */
+.pierna>div>ul>li>a {
+    color: #222 !important;
+    /* negro suave */
     font-size: 20px !important;
     text-decoration: none;
     transition: color 0.2s;
 }
 
 /* Efecto hover para los enlaces principales del footer */
-.pierna > div > ul > li > a:hover {
+.pierna>div>ul>li>a:hover {
     color: var(--rosado-oscuro) !important;
     font-size: 20px !important;
     text-decoration: none;
@@ -31,19 +44,20 @@
 
 /* Enlaces dentro de las columnas del footer */
 .pierna .footer-column.separador ul.list-unstyled li a {
-    color: #222 !important; /* o var(--negro-suave) */
+    color: #222 !important;
+    /* o var(--negro-suave) */
     font-size: 16px;
     text-decoration: none;
 }
 
 /* Separador visual entre columnas del footer */
-.pierna > .separador{
+.pierna>.separador {
     border-left: 2px solid var(--rosado-oscuro);
     border-right: 2px solid var(--rosado-oscuro);
 }
 
 /* Contenedor de los íconos sociales */
-.icono_social > ul {
+.icono_social>ul {
     justify-items: space-between !important;
     display: flex;
     padding-left: 0px;
@@ -57,7 +71,7 @@
 }
 
 /* Estilos de los íconos sociales */
-.icono_social > ul > li > a > i {
+.icono_social>ul>li>a>i {
     border-radius: 10px;
     text-align: center;
     padding: 10px 15px 10px 15px;
@@ -66,7 +80,7 @@
 }
 
 /* Efecto hover sobre los íconos sociales */
-.icono_social > ul > li a i:hover {
+.icono_social>ul>li a i:hover {
     border-radius: 10px;
     text-align: center;
     padding: 10px 15px 10px 15px;
@@ -104,13 +118,13 @@
 }
 
 /* Sección inferior del footer */
-.pie > .pie-2 {
+.pie>.pie-2 {
     color: var(--letra-pie);
     background-color: var(--rosado-fuerte);
 }
 
 /* Imagen dentro del pie de página */
-.pie > .pie-2 img {
+.pie>.pie-2 img {
     width: 100px;
     border-radius: 22px;
     box-shadow: 4px 3px 4px var(--letra-pie);

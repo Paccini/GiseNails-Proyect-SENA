@@ -4,122 +4,64 @@
 {% endblock %}
 
 {% block content %}
-{% load static %}
+  {% load static %}
 
-<!-- Enlace al archivo CSS personalizado para los estilos de las tarjetas -->
-<link rel="stylesheet" href="{% static 'css/servicio.css' %}">
+  <link rel="stylesheet" href="{% static 'css/card_moderno.css' %}" />
 
-<!-- Título principal de la sección de servicios -->
-<h1 class="text-center fw-bold mb-4" 
-    style="color:#ff4081;font-size:2.5em;font-family: 'Comic Sans MS', cursive;">
-    ¡CONOCE TODOS NUESTROS SERVICIOS!
-</h1>
+  <h1 class="text-center fw-bold mb-4" style="color:#ff4081;font-size:2.5em;font-family: 'Comic Sans MS', cursive;">¡CONOCE TODOS NUESTROS SERVICIOS!</h1>
 
-<!-- Descripción introductoria -->
-<p class="text-center fs-5 mb-4">
-    Reserva en el mejor spa de uñas de Colombia, donde ofrecemos las técnicas más innovadoras 
-    en el cuidado de uñas, un ambiente sofisticado y relajante, protocolos rigurosos de 
-    esterilización y productos libres de químicos, seguros para tu salud y respetuosos con 
-    el medio ambiente.
-</p>
+  <p class="text-center fs-5 mb-4">Reserva en el mejor spa de uñas de Colombia, donde ofrecemos las técnicas más innovadoras en el cuidado de uñas, un ambiente sofisticado y relajante, protocolos rigurosos de esterilización y productos libres de químicos, seguros para tu salud y respetuosos con el medio ambiente.</p>
 
-<!-- Contenedor de tarjetas de servicios -->
-<div class="row justify-content-center g-4">
-
-    <!-- Bucle que recorre los servicios disponibles -->
+  <div class="cards">
     {% for servicio in servicios %}
-    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-        <div class="flip-card">
-            <div class="flip-card-inner">
-
-                <!-- Lado frontal de la tarjeta con la imagen -->
-                <div class="flip-card-front">
-                    {% if servicio.imagen %}
-                        <img src="{{ servicio.imagen.url }}" 
-                             alt="{{ servicio.nombre }}" 
-                             class="card-img-top rounded" 
-                             style="height:100%;width:100%;object-fit:cover;">
-                    {% endif %}
-                </div>
-
-                <!-- Lado posterior con información del servicio -->
-                <div class="flip-card-back d-flex flex-column justify-content-between align-items-center h-100 w-100 text-center">
-                    <div>
-                        <!-- Nombre del servicio -->
-                        <h3 class="card-title fw-bold mb-2" style="color:#ff4081;">
-                            {{ servicio.nombre }}
-                        </h3>
-
-                        <!-- Descripción -->
-                        <p class="card-text mb-2">{{ servicio.descripcion }}</p>
-
-                        <!-- Recomendaciones (opcional) -->
-                        {% if servicio.recomendaciones %}
-                        <div class="text-secondary mb-2">
-                            Recomendaciones: {{ servicio.recomendaciones }}
-                        </div>
-                        {% endif %}
-                    </div>
-
-                    <!-- Precio -->
-                    <div class="w-100">
-                        <span class="badge bg-light text-dark fs-6 mb-2" style="width:100%;">
-                            ${{ servicio.precio }}
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+      <div class="card-gn">
+        {% if servicio.imagen %}
+          <img src="{{ servicio.imagen.url }}" alt="{{ servicio.nombre }}" />
+        {% endif %}
+        <span class="card-title">{{ servicio.nombre }}</span>
+        <div class="card-text mb-2">{{ servicio.descripcion }}</div>
+        {% if servicio.recomendaciones %}
+          <div class="muted mb-2">Recomendaciones: {{ servicio.recomendaciones }}</div>
+        {% endif %}
+        <span class="badge">${{ servicio.precio }}</span>
+        <a href="{% url 'reserva:reserva' %}" class="btn">Reservar</a>
+      </div>
     {% endfor %}
-</div>
-<!-- Fin del contenedor de tarjetas -->
+  </div>
 
-<!-- Navegación de paginación -->
-<div class="d-flex justify-content-center mt-4">
+  <div class="d-flex justify-content-center mt-4">
     <nav aria-label="Page navigation">
-        <ul class="pagination">
-            
-            <!-- Botón Anterior -->
-            {% if servicios.has_previous %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ servicios.previous_page_number }}" aria-label="Anterior">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-            {% else %}
-                <li class="page-item disabled">
-                    <span class="page-link">&laquo;</span>
-                </li>
-            {% endif %}
-
-            <!-- Números de página -->
-            {% for num in servicios.paginator.page_range %}
-                {% if servicios.number == num %}
-                    <li class="page-item active">
-                        <span class="page-link">{{ num }}</span>
-                    </li>
-                {% else %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
-                    </li>
-                {% endif %}
-            {% endfor %}
-
-            <!-- Botón Siguiente -->
-            {% if servicios.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ servicios.next_page_number }}" aria-label="Siguiente">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            {% else %}
-                <li class="page-item disabled">
-                    <span class="page-link">&raquo;</span>
-                </li>
-            {% endif %}
-        </ul>
+      <ul class="pagination">
+        {% if servicios.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ servicios.previous_page_number }}" aria-label="Anterior"><span aria-hidden="true">&laquo;</span></a>
+          </li>
+        {% else %}
+          <li class="page-item disabled">
+            <span class="page-link">&laquo;</span>
+          </li>
+        {% endif %}
+        {% for num in servicios.paginator.page_range %}
+          {% if servicios.number == num %}
+            <li class="page-item active">
+              <span class="page-link">{{ num }}</span>
+            </li>
+          {% else %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+            </li>
+          {% endif %}
+        {% endfor %}
+        {% if servicios.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ servicios.next_page_number }}" aria-label="Siguiente"><span aria-hidden="true">&raquo;</span></a>
+          </li>
+        {% else %}
+          <li class="page-item disabled">
+            <span class="page-link">&raquo;</span>
+          </li>
+        {% endif %}
+      </ul>
     </nav>
-</div>
-
+  </div>
 {% endblock %}

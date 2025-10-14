@@ -6,7 +6,13 @@
 <!-- Carga los archivos estáticos del proyecto (CSS, imágenes, JS, etc.) -->
 
 {% block content %}
-<!-- Inicio del bloque principal de contenido -->
+  <!-- Inicio del bloque principal de contenido -->
+
+  <link rel="stylesheet" href="{% static 'css/inicio.css' %}" />
+  <!-- Enlace a la hoja de estilos específica para la página de inicio -->
+
+  <main>
+    <!-- Contenedor principal del contenido de la página -->
 
 <link rel="stylesheet" href="{% static 'css/inicio.css' %}">
 <link rel="stylesheet" href="{% static 'css/loading.css' %}">
@@ -27,15 +33,27 @@
 <main>
   <!-- Contenedor principal del contenido de la página -->
 
-  <section>
-    <!-- Sección del carrusel principal de inicio -->
-    <div id="carouselExample" class="carousel slide">
-      <div class="carousel-inner carousel-img-container">
-        <div class="carousel-item active cont-bn">
-          <!-- Imagen de banner principal (actualmente comentada para posible uso futuro) -->
-          <!-- <img src="{% static 'img/banner_inicio.png' %}" class="d-block w-100 carousel-img"> -->
+    <section>
+      <!-- Sección del carrusel principal de inicio -->
+      <div id="carouselExample" class="carousel slide">
+        <div class="carousel-inner carousel-img-container">
+          <div class="carousel-item active cont-bn">
+            <!-- Imagen de banner principal (actualmente comentada para posible uso futuro) -->
+            <!-- <img src="{% static 'img/banner_inicio.png' %}" class="d-block w-100 carousel-img"> -->
+          </div>
         </div>
       </div>
+    </section>
+
+    <!-- Sección de presentación de características o beneficios -->
+    <section class="container-fluid py-5" style="background-color: #ffe6f0;">
+      <div class="row justify-content-around">
+        <!-- Primer beneficio -->
+        <div class="col-md-2 text-center">
+          <div class="rounded-circle">
+            <img src="{% static 'img/barra1.png' %}" alt="Profesionales" />
+          </div>
+          <p class="mt-3">Profesionales apasionadas por el arte de embellecer tus uñas con precisión y estilo.</p>
     </div>
   </section>
 
@@ -48,87 +66,105 @@
         <div class="rounded-circle">
           <img src="{% static 'img/barra1.png' %}" alt="Profesionales">
         </div>
-        <p class="mt-3">Profesionales apasionadas por el arte de embellecer tus uñas con precisión y estilo.</p>
-      </div>
 
-      <!-- Segundo beneficio -->
-      <div class="col-md-2 text-center">
-        <div class="rounded-circle">
-          <img src="{% static 'img/barra.png' %}" alt="Reserva tu cita">
+        <!-- Segundo beneficio -->
+        <div class="col-md-2 text-center">
+          <div class="rounded-circle">
+            <img src="{% static 'img/barra.png' %}" alt="Reserva tu cita" />
+          </div>
+          <p class="mt-3">Reserva tu cita fácilmente en el horario que más te convenga.</p>
         </div>
-        <p class="mt-3">Reserva tu cita fácilmente en el horario que más te convenga.</p>
-      </div>
 
-      <!-- Tercer beneficio -->
-      <div class="col-md-2 text-center">
-        <div class="rounded-circle">
-          <img src="{% static 'img/barra3.png' %}" alt="Servicio cálido">
+        <!-- Tercer beneficio -->
+        <div class="col-md-2 text-center">
+          <div class="rounded-circle">
+            <img src="{% static 'img/barra3.png' %}" alt="Servicio cálido" />
+          </div>
+          <p class="mt-3">Un servicio cálido y personalizado para ti</p>
         </div>
-        <p class="mt-3">Un servicio cálido y personalizado para ti</p>
-      </div>
 
-      <!-- Cuarto beneficio -->
-      <div class="col-md-2 text-center">
-        <div class="rounded-circle">
-          <img src="{% static 'img/barra4.png' %}" alt="Libres de tóxicos">
+        <!-- Cuarto beneficio -->
+        <div class="col-md-2 text-center">
+          <div class="rounded-circle">
+            <img src="{% static 'img/barra4.png' %}" alt="Libres de tóxicos" />
+          </div>
+          <p class="mt-3">Libres de tóxicos y manejando estándares de calidad premium</p>
         </div>
-        <p class="mt-3">Libres de tóxicos y manejando estándares de calidad premium</p>
-      </div>
 
-      <!-- Quinto beneficio -->
-      <div class="col-md-2 text-center">
-        <div class="rounded-circle">
-          <img src="{% static 'img/barra5.png' %}" alt="Protocolos de limpieza">
+        <!-- Quinto beneficio -->
+        <div class="col-md-2 text-center">
+          <div class="rounded-circle">
+            <img src="{% static 'img/barra5.png' %}" alt="Protocolos de limpieza" />
+          </div>
+          <p class="mt-3">Cumplimos con estrictos protocolos de limpieza y esterilización</p>
         </div>
-        <p class="mt-3">Cumplimos con estrictos protocolos de limpieza y esterilización</p>
       </div>
+    </section>
 
-    </div>
-  </section>
+    <!-- Sección de servicios destacados con carrusel de imágenes -->
+    <section class="container my-5">
+      <h2 class="text-center mb-4 text-danger" style="font-family: 'Tinos', serif">¡TUS UÑAS SIEMPRE A LA MODA CON NUESTROS EFECTOS!</h2>
 
-  <!-- Sección de servicios destacados con carrusel de imágenes -->
-  <section class="container my-5">
-    <h2 class="text-center mb-4 text-danger" style="font-family: 'Tinos', serif">
-      ¡TUS UÑAS SIEMPRE A LA MODA CON NUESTROS EFECTOS!
-    </h2>
+      <div id="carouselUñas" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="4000">
+        <div class="carousel-inner">
+          <!-- Imagen 1 -->
+          <div class="carousel-item active position-relative">
+            <img src="{% static 'img/uñas semipermanentes.jpg' %}" class="d-block w-100 rounded-4 shadow-lg carousel-img-efecto" alt="Uñas Semipermanentes" />
+            <div class="overlay">
+              <h3>Uñas Semipermanentes</h3>
+              <p>Brillo duradero y acabado profesional</p>
+            </div>
+          </div>
 
-    <!-- Carrusel de imágenes de estilos de uñas -->
-    <div id="carouselUñas" class="carousel slide" data-bs-ride="carousel">
-      <div class="carousel-inner">
+          <!-- Imagen 2 -->
+          <div class="carousel-item position-relative">
+            <img src="{% static 'img/uñas polygel.jpg' %}" class="d-block w-100 rounded-4 shadow-lg carousel-img-efecto" alt="Uñas Polygel" />
+            <div class="overlay">
+              <h3>Uñas Polygel</h3>
+              <p>Fuerza y flexibilidad en un solo diseño</p>
+            </div>
+          </div>
 
-        <!-- Primer grupo de imágenes -->
-        <div class="carousel-item active">
-          <div class="d-flex justify-content-center gap-4 flex-wrap">
-            <img src="{% static 'img/uñas semipermanentes.jpg' %}" class="servicio-img">
-            <img src="{% static 'img/uñas polygel.jpg' %}" class="servicio-img">
-            <img src="{% static 'img/uñas press-on.jpg' %}" class="servicio-img">
+          <!-- Imagen 3 -->
+          <div class="carousel-item position-relative">
+            <img src="{% static 'img/uñas press-on.jpg' %}" class="d-block w-100 rounded-4 shadow-lg carousel-img-efecto" alt="Press-On" />
+            <div class="overlay">
+              <h3>Press-On Nails</h3>
+              <p>Estilo instantáneo y sin complicaciones</p>
+            </div>
+          </div>
+
+          <!-- Imagen 4 -->
+          <div class="carousel-item position-relative">
+            <img src="{% static 'img/uñas tradicionales.jpg' %}" class="d-block w-100 rounded-4 shadow-lg carousel-img-efecto" alt="Uñas Tradicionales" />
+            <div class="overlay">
+              <h3>Uñas Tradicionales</h3>
+              <p>Elegancia en su forma más clásica</p>
+            </div>
+          </div>
+
+          <!-- Imagen 5 -->
+          <div class="carousel-item position-relative">
+            <img src="{% static 'img/pies semipermanentes.jpg' %}" class="d-block w-100 rounded-4 shadow-lg carousel-img-efecto" alt="Pies Semipermanentes" />
+            <div class="overlay">
+              <h3>Pies Semipermanentes</h3>
+              <p>Reluce cada paso con estilo y cuidado</p>
+            </div>
           </div>
         </div>
 
-        <!-- Segundo grupo de imágenes -->
-        <div class="carousel-item">
-          <div class="d-flex justify-content-center gap-4 flex-wrap">
-            <img src="{% static 'img/uñas tradicionales.jpg' %}" class="servicio-img">
-            <img src="{% static 'img/uñas dipping.jpg' %}" class="servicio-img">
-            <img src="{% static 'img/pies semipermanentes.jpg' %}" class="servicio-img">
-          </div>
-        </div>
+        <!-- Controles de navegación -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselUñas" data-bs-slide="prev"><span class="carousel-control-prev-icon bg-dark rounded-circle p-3"></span></button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselUñas" data-bs-slide="next"><span class="carousel-control-next-icon bg-dark rounded-circle p-3"></span></button>
       </div>
 
-      <!-- Controles de navegación del carrusel -->
-      <button class="carousel-control-prev" type="button" data-bs-target="#carouselUñas" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon bg-dark rounded-circle"></span>
-      </button>
-
-      <button class="carousel-control-next" type="button" data-bs-target="#carouselUñas" data-bs-slide="next">
-        <span class="carousel-control-next-icon bg-dark rounded-circle"></span>
-      </button>
-
-      <!-- Indicadores del carrusel -->
-      <div class="carousel-indicators mt-3">
-        <button type="button" data-bs-target="#carouselUñas" data-bs-slide-to="0" class="active bg-danger"></button>
-        <button type="button" data-bs-target="#carouselUñas" data-bs-slide-to="1" class="bg-danger"></button>
+      <!-- Botón -->
+      <div class="text-center mt-5">
+        <a href="{% url 'reserva:reserva' %}" class="btn btn-danger rounded-pill px-5 py-2 fs-5 shadow">RESERVA AHORA</a>
       </div>
+    </section>
+  </main>
+  <!-- Fin del contenedor principal -->
     </div>
 
     <!-- Botón para redirigir al sistema de reservas -->

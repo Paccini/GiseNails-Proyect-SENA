@@ -5,54 +5,89 @@
 /* Variables globales para colores, fuentes y estilos */
 :root {
     /* Paleta principal */
-    --rosa-principal: #E6007E; /* Color rosa principal de la marca */
-    --rosado-claro: #FAD2E1; /* Rosa claro para fondos o detalles suaves */
-    --rosado-muy-claro: #FFE4EC; /* Tonalidad muy clara para contrastes */
-    --rosado-pastel: #F7A8B8; /* Rosa pastel para acentos */
-    --rosado-fuerte: #EC407A; /* Rosa fuerte, útil en botones o textos destacados */
-    --rosado-oscuro: #C2185B; /* Rosa oscuro, ideal para títulos o énfasis */
-    --morado-amethyst: #9966CC; /* Toque morado complementario */
-    --azul-medio: #2196F3; /* Azul medio para enlaces o resaltes */
-    --azul-fuerte: #1565C0; /* Azul intenso para contraste */
-    --azul-oscuro: #0D47A1; /* Azul profundo, más serio o formal */
-    --blanco: #FFFFFF; /* Blanco puro para fondos */
-    --negro-suave: #333333; /* Negro atenuado para textos */
-    --letra-pie: #FFFFF7; /* Color claro para letras en pie de página */
-    --gris-claro: #F5F5F5; /* Gris suave de fondo */
-    --fuente-titulos: 'Arapey' sans-serif; /* Fuente principal para títulos */
-    --fuente-cursiva: 'Dancing script'; /* Fuente decorativa */
-    --fuente-textos: 'Open sans'; /* Fuente legible para párrafos */
+    --rosa-principal: #E6007E;
+    /* Color rosa principal de la marca */
+    --rosado-claro: #FAD2E1;
+    /* Rosa claro para fondos o detalles suaves */
+    --rosado-muy-claro: #FFE4EC;
+    /* Tonalidad muy clara para contrastes */
+    --rosado-pastel: #F7A8B8;
+    /* Rosa pastel para acentos */
+    --rosado-fuerte: #EC407A;
+    /* Rosa fuerte, útil en botones o textos destacados */
+    --rosado-oscuro: #C2185B;
+    /* Rosa oscuro, ideal para títulos o énfasis */
+    --morado-amethyst: #9966CC;
+    /* Toque morado complementario */
+    --azul-medio: #2196F3;
+    /* Azul medio para enlaces o resaltes */
+    --azul-fuerte: #1565C0;
+    /* Azul intenso para contraste */
+    --azul-oscuro: #0D47A1;
+    /* Azul profundo, más serio o formal */
+    --blanco: #FFFFFF;
+    /* Blanco puro para fondos */
+    --negro-suave: #333333;
+    /* Negro atenuado para textos */
+    --letra-pie: #FFFFF7;
+    /* Color claro para letras en pie de página */
+    --gris-claro: #F5F5F5;
+    /* Gris suave de fondo */
+    --fuente-titulos: 'Arapey' sans-serif;
+    /* Fuente principal para títulos */
+    --fuente-cursiva: 'Dancing script';
+    /* Fuente decorativa */
+    --fuente-textos: 'Open sans';
+    /* Fuente legible para párrafos */
 }
 
 /* Reset y estilos generales */
-html, body {
-    height: 100%; /* Asegura que el body ocupe toda la altura */
-    margin: 0; /* Elimina márgenes por defecto */
-    padding: 0; /* Elimina padding por defecto */
-    font-family: 'Arapey'; /* Fuente base */
+html,
+body {
+    height: 100%;
+    /* Asegura que el body ocupe toda la altura */
+    margin: 0;
+    /* Elimina márgenes por defecto */
+    padding: 0;
+    /* Elimina padding por defecto */
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
 
 body {
-    min-height: 100vh; /* Asegura que el body cubra toda la pantalla */
-    display: flex; /* Usa flexbox para estructura */
-    flex-direction: column; /* Organiza el contenido en columna */
+    min-height: 100vh;
+    /* Asegura que el body cubra toda la pantalla */
+    display: flex;
+    /* Usa flexbox para estructura */
+    flex-direction: column;
+    /* Organiza el contenido en columna */
+    /* font-family ya está heredado de html */
 }
 
 .main-content {
-    flex: 1; /* Permite que el contenido principal ocupe el espacio restante */
+    flex: 1;
+    /* Permite que el contenido principal ocupe el espacio restante */
 }
 
 a {
-    text-decoration: none; /* Quita subrayado a los enlaces */
+    text-decoration: none;
+    /* Quita subrayado a los enlaces */
 }
 
 .container-fluid {
-    padding-left: 0 !important; /* Elimina padding lateral izquierdo */
-    padding-right: 0 !important; /* Elimina padding lateral derecho */
+    padding-left: 0 !important;
+    /* Elimina padding lateral izquierdo */
+    padding-right: 0 !important;
+    /* Elimina padding lateral derecho */
 }
 
-h1, h2, h3, h4 {
-    font-family: 'Pacifico', cursive, 'Century Gothic', 'Lato', sans-serif; /* Fuentes decorativas */
-    font-weight: 700; /* Negrita para resaltar títulos */
-    color: var(--rosa-principal); /* Aplica el color principal */
+h1,
+h2,
+h3,
+h4 {
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    /* Fuentes decorativas */
+    font-weight: 700;
+    /* Negrita para resaltar títulos */
+    color: var(--rosa-principal);
+    /* Aplica el color principal */
 }

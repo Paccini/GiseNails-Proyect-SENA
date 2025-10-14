@@ -2,36 +2,175 @@
    navbar.css - Estilos para la barra de navegación
    ========================= */
 
+/* Modern Navbar GiseNails */
+:root {
+    --bg: #f7fafc;
+    --card: #ffffff;
+    --muted: #6b7280;
+    --accent: #e75480;
+    --glass: rgba(255, 255, 255, 0.65);
+    --shadow: 0 10px 30px rgba(20, 30, 60, 0.08);
+    --glass-border: rgba(0, 0, 0, 0.06);
+}
+
+body {
+    background: var(--bg);
+    transition: background .35s ease;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+header.gn-navbar {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 18px;
+    z-index: 1000;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.5));
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--glass-border);
+    box-shadow: 0 6px 18px rgba(10, 15, 30, 0.04);
+    transition: background .3s ease, border-color .3s ease;
+}
+
+.gn-navbar .brand {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.gn-navbar .brand .logo {
+    width: 46px;
+    height: 46px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #ffd5e2, #ffe6f5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    color: #ad0f57;
+    box-shadow: var(--shadow);
+}
+
+.gn-navbar .brand h1 {
+    font-size: 1.05rem;
+    margin: 0;
+    letter-spacing: 1px;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+.gn-navbar nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.gn-navbar .nav-links {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.gn-navbar .nav-links button {
+    background: none;
+    border: 0;
+    padding: 8px 18px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--muted);
+    transition: all .25s ease;
+    font-size: 1rem;
+    box-shadow: 0 2px 8px rgba(230, 0, 126, 0.12);
+}
+
+.gn-navbar .nav-links button.active,
+.gn-navbar .nav-links button:hover {
+    color: var(--accent);
+    background: #fff;
+    transform: scale(1.08);
+    text-decoration: none;
+}
+
+.gn-navbar .icon-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid var(--glass-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--glass);
+    cursor: pointer;
+    transition: background .25s ease, transform .25s ease;
+}
+
+.gn-navbar .icon-btn:hover {
+    transform: translateY(-2px);
+}
+
+.gn-navbar .mobile-toggle {
+    display: none;
+}
+
+@media (max-width:780px) {
+    .gn-navbar .nav-links {
+        display: none
+    }
+
+    .gn-navbar .mobile-toggle {
+        display: block
+    }
+}
+
 /* Contenedor principal de la barra de navegación */
 .navbar {
-    background: var(--rosado-claro); /* Fondo rosado claro definido en variables */
-    padding: 20px; /* Espaciado interno general */
+    background: var(--rosado-claro);
+    /* Fondo rosado claro definido en variables */
+    padding: 20px;
+    /* Espaciado interno general */
 }
 
 /* Estilo del texto dentro del nombre de la marca (logo o título principal) */
 .navbar-brand span {
-    font-size: 1.8rem; /* Tamaño de letra más grande para destacar el nombre */
+    font-size: 1.8rem;
+    /* Tamaño de letra más grande para destacar el nombre */
 }
 
 /* Enlaces dentro de la barra de navegación */
 .navbar-nav .nav-link {
-    background-color: var(--rosado-claro) !important; /* Fondo igual al navbar */
-    color: var(--negro-suave); /* Texto oscuro para contraste */
-    border-radius: 20px; /* Bordes redondeados en los enlaces */
-    margin: 0 8px; /* Separación lateral entre enlaces */
-    padding: 8px 18px; /* Espaciado interno para dar forma de botón */
-    box-shadow: 0 2px 8px rgba(230, 0, 126, 0.12); /* Sombra sutil debajo */
-    transition: background 0.3s, color 0.3s, transform 0.3s; /* Animaciones suaves */
+    background-color: var(--rosado-claro) !important;
+    /* Fondo igual al navbar */
+    color: var(--negro-suave);
+    /* Texto oscuro para contraste */
+    border-radius: 20px;
+    /* Bordes redondeados en los enlaces */
+    margin: 0 8px;
+    /* Separación lateral entre enlaces */
+    padding: 8px 18px;
+    /* Espaciado interno para dar forma de botón */
+    box-shadow: 0 2px 8px rgba(230, 0, 126, 0.12);
+    /* Sombra sutil debajo */
+    transition: background 0.3s, color 0.3s, transform 0.3s;
+    /* Animaciones suaves */
 }
 
 /* Efecto al pasar el cursor por encima de los enlaces */
 .navbar-nav .nav-link:hover {
-    background: var(--blanco); /* Cambia a blanco al hacer hover */
-    transform: scale(1.08); /* Efecto de agrandamiento */
-    text-decoration: none; /* Evita subrayado en los enlaces */
+    background: var(--blanco);
+    /* Cambia a blanco al hacer hover */
+    transform: scale(1.08);
+    /* Efecto de agrandamiento */
+    text-decoration: none;
+    /* Evita subrayado en los enlaces */
 }
 
 /* Añade una línea divisoria entre los elementos del menú, excepto el último */
 .navbar-nav .nav-item:not(:last-child) {
-    border-right: 1px solid #fff2; /* Línea tenue de separación */
+    border-right: 1px solid #fff2;
+    /* Línea tenue de separación */
 }
