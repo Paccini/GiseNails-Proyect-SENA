@@ -30,13 +30,11 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            # si hay reserva pendiente en sesión, redirigir a completarla
-            if request.session.get('pending_reserva'):
-                return redirect('/reserva/completar-reserva/')
-            if user.is_superuser or user.is_staff:
-                return redirect('login:admin_panel')  # Redirige a la vista admin
-            elif Cliente.objects.filter(user=user).exists():
+            if Cliente.objects.filter(user=user).exists():
+                request.session['show_cita_alert'] = True
                 return redirect('clientes:panel')
+            elif user.is_staff or user.is_superuser:
+                return redirect('login:dashboard')
             else:
                 error = "No tienes permisos para acceder."
         else:

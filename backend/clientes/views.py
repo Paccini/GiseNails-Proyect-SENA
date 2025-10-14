@@ -24,27 +24,23 @@ def panel_cliente(request):
         cliente = Cliente.objects.get(user=request.user)
     except Cliente.DoesNotExist:
         return redirect('clientes:registro')
-    reservas = Reserva.objects.filter(
-        cliente=cliente,
-    ).exclude(estado='cancelada')
-    from datetime import date
+    reservas = Reserva.objects.filter(cliente=cliente).exclude(estado='cancelada')
+    eliminadas = request.GET.get('notifs_eliminadas', '')
+    eliminadas_ids = [int(x) for x in eliminadas.split(',') if x.isdigit()]
     notificaciones = []
-    for reserva in reservas.order_by('-fecha_creacion')[:5]:
-        if reserva.fecha_creacion.date() == date.today():
+    for reserva in reservas.order_by('-fecha_creacion')[:10]:
+        if reserva.pk not in eliminadas_ids:
             notificaciones.append({
-                'icon': 'bi-calendar-check',
-                'texto': f'Cita agendada para el {reserva.fecha.strftime("%d/%m/%Y")} a las {reserva.hora}',
+                'id': reserva.pk,
+                'icon': 'bi-calendar-check' if reserva.estado == 'confirmada' else 'bi-calendar',
+                'texto': f'Cita {reserva.get_estado_display()} para el {reserva.fecha.strftime("%d/%m/%Y")} a las {reserva.hora}',
                 'fecha': reserva.fecha_creacion.strftime('%d/%m/%Y %H:%M')
             })
     form = RegistroClienteForm(instance=cliente)
-    # --- AGREGADO: pasar gestoras, servicios y horarios ---
-    from empleados.models import Empleado
-    from servicio.models import Servicio
-    from reserva.models import HorarioDisponible
     gestoras = Empleado.objects.all()
     servicios = Servicio.objects.all()
     horarios = HorarioDisponible.objects.all()
-    # ------------------------------------------------------
+    show_cita_alert = request.session.pop('show_cita_alert', True)
     return render(request, 'clientes/panel.html', {
         'cliente': cliente,
         'reservas': reservas,
@@ -54,6 +50,7 @@ def panel_cliente(request):
         'gestoras': gestoras,
         'servicios': servicios,
         'horarios': horarios,
+        'show_cita_alert': show_cita_alert,
     })
 
 def registro_cliente(request):
