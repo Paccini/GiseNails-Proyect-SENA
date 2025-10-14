@@ -1,3 +1,4 @@
+
 {% extends 'home.html' %}
 <!-- Extiende la plantilla base 'home.html' para mantener la estructura principal del sitio -->
 
@@ -12,6 +13,25 @@
 
   <main>
     <!-- Contenedor principal del contenido de la página -->
+
+<link rel="stylesheet" href="{% static 'css/inicio.css' %}">
+<link rel="stylesheet" href="{% static 'css/loading.css' %}">
+<!-- Enlace a la hoja de estilos específica para la página de inicio -->
+
+<div class="loading-page">
+  <!-- SVG con la letra G -->
+  <svg id="svg" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+    <text id="svg-g" x="50%" y="55%" dominant-baseline="middle" text-anchor="middle">G</text>
+  </svg>
+
+  <!-- Nombre de la marca -->
+  <div class="name-container">
+    <div class="welcome-text">Bienvenid@ a Gise Nails</div>
+  </div>
+</div>
+
+<main>
+  <!-- Contenedor principal del contenido de la página -->
 
     <section>
       <!-- Sección del carrusel principal de inicio -->
@@ -34,6 +54,17 @@
             <img src="{% static 'img/barra1.png' %}" alt="Profesionales" />
           </div>
           <p class="mt-3">Profesionales apasionadas por el arte de embellecer tus uñas con precisión y estilo.</p>
+    </div>
+  </section>
+
+  <!-- Sección de presentación de características o beneficios -->
+  <section class="container-fluid py-5" style="background-color: #ffe6f0;">
+    <div class="row justify-content-around ">
+
+      <!-- Primer beneficio -->
+      <div class="col-md-2 text-center">
+        <div class="rounded-circle">
+          <img src="{% static 'img/barra1.png' %}" alt="Profesionales">
         </div>
 
         <!-- Segundo beneficio -->
@@ -134,5 +165,19 @@
     </section>
   </main>
   <!-- Fin del contenedor principal -->
+    </div>
+
+    <!-- Botón para redirigir al sistema de reservas -->
+    <div class="text-center mt-4">
+      <a href="{% url 'reserva:reserva' %}" class="btn btn-danger rounded-pill px-5 py-2 fs-5">RESERVA AHORA</a>
+    </div>
+  </section>
+
+</main>
+<!-- Fin del contenedor principal -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js"
+    integrity="sha512-gmwBmiTVER57N3jYS3LinA9eb8aHrJua5iQD7yqYCKa5x6Jjc7VDVaEA0je0Lu0bP9j7tEjV3+1qUm6loO99Kw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="{% static 'js/loading.js' %}"></script>
 {% endblock %}
 <!-- Fin del bloque de contenido -->
