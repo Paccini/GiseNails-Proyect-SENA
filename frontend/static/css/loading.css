@@ -1,0 +1,64 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@400;600&display=swap");
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+
+
+/* Pantalla de carga */
+.loading-page {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(145deg, #1a1416 0%, #0e0b0c 45%, #1f1719 100%);
+  flex-direction: column;
+  z-index: 9999; /* 🔥 Muy importante */
+}
+
+/* Contenedor del logo */
+.logo-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* SVG */
+#svg {
+  width: 280px;
+  height: 140px;
+}
+
+/* G */
+#svg-g {
+  font-family: "Playfair Display", serif;
+  font-size: 140px;
+  font-weight: 600;
+  fill: none;
+  stroke: #caa3a3; /* rosa viejo suave */
+  stroke-width: 3.2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  stroke-dasharray: 1200;
+  stroke-dashoffset: 1200;
+  filter: drop-shadow(0 4px 10px rgba(75, 11, 27, 0.45));
+}
+
+/* Texto debajo */
+.welcome-text {
+  font-size: 18px;
+  color: #bfa3a3;
+  margin-top: 12px;
+  opacity: 0;
+  text-align: center;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+/* Responsivo */
+@media (max-width: 420px) {
+  #svg { width: 220px; height:120px; }
+  #svg-g { font-size: 100px; stroke-width:2.6; stroke-dasharray:900; stroke-dashoffset:900; }
+  .welcome-text { font-size: 15px; margin-top: 8px; }
+}
