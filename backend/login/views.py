@@ -22,17 +22,17 @@ def login_view(request):
         email = request.POST.get('username')
         password = request.POST.get('password')
         # Buscar usuario por email
-        try:
-            user = User.objects.get(email=email)
-            username = user.username
-        except User.DoesNotExist:
-            username = email  # Por si el username es el email
+        user = User.objects.filter(email=email).first()
+        username = email if user is None else user.username
 
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
             # Cliente -> panel clientes
             if Cliente.objects.filter(user=user).exists():
+                # Si hay reserva pendiente, completar la reserva
+                if request.session.get('pending_reserva'):
+                    return redirect('/reserva/completar-reserva/')
                 request.session['show_cita_alert'] = True
                 return redirect('clientes:panel')
             # Empleado -> panel de empleados (buscar por correo en lugar de user)

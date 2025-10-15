@@ -16,6 +16,7 @@ from django.views.generic import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Reserva
 from datetime import datetime, time, timedelta
+from django.contrib import messages
 
 def reserva(request):
     gestoras = Empleado.objects.all()
@@ -247,7 +248,9 @@ class ReservaCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 from django.contrib.auth.decorators import login_required
 
 @login_required
+
 def completar_reserva(request):
+    from django.core.mail import send_mail
     pending = request.session.get('pending_reserva')
     if not pending:
         return redirect('clientes:panel')  # Si no hay reserva pendiente, muestra el panel
@@ -272,7 +275,7 @@ def completar_reserva(request):
     ).exists()
 
     if not existe:
-        Reserva.objects.create(
+        reserva_obj = Reserva.objects.create(
             cliente=cliente,
             gestora=Empleado.objects.get(id=pending['gestora_id']),
             servicio=Servicio.objects.get(id=pending['servicio_id']),
@@ -280,6 +283,38 @@ def completar_reserva(request):
             fecha=pending['fecha'],
             estado='pendiente'
         )
+        # Enviar correo de confirmación al usuario
+        correo_destino = cliente.correo or pending.get('correo')
+        if correo_destino:
+            servicio_nombre = reserva_obj.servicio.nombre
+            from datetime import datetime
+            if isinstance(reserva_obj.fecha, str):
+                fecha_dt = datetime.fromisoformat(reserva_obj.fecha)
+            else:
+                fecha_dt = reserva_obj.fecha
+            fecha = fecha_dt.strftime('%d/%m/%Y')
+            hora = reserva_obj.hora.hora.strftime('%H:%M')
+            mensaje =  f"Hola {cliente.nombre},\n\nTu cita para '{servicio_nombre}' ha sido agendada para el día {fecha} a las {hora}.\n\n¡Gracias por reservar con Gise-Nails!"
+            mensaje_html = f"""
+            <div style="font-family: Arial, sans-serif; background: #f9f9f9; padding: 30px;">
+                <h2 style="color: #d63384;">¡Cita agendada en Gise-Nails!</h2>
+                <p>Hola <b>{cliente.nombre}</b>,</p>
+                <p>Tu cita para <b>{servicio_nombre}</b> ha sido agendada para el día <b>{fecha}</b> a las <b>{hora}</b>.</p>
+                <p style="margin-top: 40px; color: #555;">¡Gracias por reservar con <b>Gise-Nails</b>!</p>
+                <p style="margin-top: 40px;">⚠️ Tu cita debe confirmarse con al menos 1 hora de anticipación. De no hacerlo, será cancelada automáticamente. ¡Gracias por tu puntualidad! </p>
+                <h2 style="color: #d63384;">¡Recuerda confirmar tu cita 💖!</h2>
+               </div>
+            """
+            print(f"Enviando correo a {correo_destino}...")
+            send_mail(
+                subject="Confirmación de tu cita en Gise-Nails",
+                message=mensaje,  # Texto plano
+                from_email=None,  # Usa el DEFAULT_FROM_EMAIL de settings
+                recipient_list=[correo_destino],
+                fail_silently=False,
+                html_message=mensaje_html
+            )
+    
 
     # Limpia la sesión
     del request.session['pending_reserva']
