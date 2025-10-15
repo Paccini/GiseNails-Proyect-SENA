@@ -33,13 +33,24 @@
             <table class="table table-bordered">
                 <!-- Tabla para mostrar los campos del formulario de forma ordenada -->
                 {% for field in form %}
-                <tr>
-                    <th>{{ field.label_tag }}</th>
-                    <!-- Etiqueta del campo -->
-                    <td>{{ field }}</td>
-                    <!-- Campo del formulario -->
-                </tr>
+                    {% if field.name not in 'password password_confirm' %}
+                    <tr>
+                        <th>{{ field.label_tag }}</th>
+                        <!-- Etiqueta del campo -->
+                        <td>{{ field }}</td>
+                        <!-- Campo del formulario -->
+                    </tr>
+                    {% endif %}
                 {% endfor %}
+
+                <tr>
+                    <th>{{ form.password.label_tag }}</th>
+                    <td>{{ form.password }}</td>
+                </tr>
+                <tr>
+                    <th>{{ form.password_confirm.label_tag }}</th>
+                    <td>{{ form.password_confirm }}</td>
+                </tr>
             </table>
 
             <div class="d-flex gap-2">

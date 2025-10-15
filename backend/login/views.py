@@ -11,6 +11,7 @@ from django.utils import timezone
 from django.db.models import Count
 from django.http import HttpResponse
 from .forms import UpdateUserForm
+from empleados.models import Empleado
 
 
 def login_view(request):
@@ -30,15 +31,21 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
+            # Cliente -> panel clientes
             if Cliente.objects.filter(user=user).exists():
                 request.session['show_cita_alert'] = True
                 return redirect('clientes:panel')
-            elif user.is_staff or user.is_superuser:
+            # Empleado -> panel de empleados (buscar por correo en lugar de user)
+            if Empleado.objects.filter(correo__iexact=user.email).exists():
+                return redirect('empleados:empleado_list')
+            # Staff / superuser -> dashboard admin
+            if user.is_staff or user.is_superuser:
                 return redirect('login:dashboard')
-            else:
-                error = "No tienes permisos para acceder."
+            # Si no encaja en ningún tipo permitido
+            error = "No tienes permisos para acceder."
         else:
             error = "Usuario o contraseña incorrectos."
+
     # Si hay una reserva pendiente, prellenar el correo y mostrar modo "solo contraseña"
     if request.session.get('pending_reserva'):
         pending = request.session.get('pending_reserva')
