@@ -4,6 +4,8 @@ from .forms import EmpleadoForm
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.cache import never_cache
 from django.core.paginator import Paginator
+from django.contrib.auth.models import User  # agregado
+
 
 @login_required
 @user_passes_test(lambda u: u.is_staff)
@@ -31,7 +33,19 @@ def empleado_create(request):
     if request.method == 'POST':
         form = EmpleadoForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            empleado = form.save(commit=False)
+            correo = form.cleaned_data.get('correo') or ''
+            password = form.cleaned_data.get('password') or None
+            # crear o obtener user
+            user, created = User.objects.get_or_create(username=correo, defaults={'email': correo})
+            if password:
+                user.set_password(password)
+                user.save()
+            try:
+                empleado.user = user
+            except Exception:
+                pass
+            empleado.save()
             return redirect('empleados:empleado_list')
     else:
         form = EmpleadoForm()
@@ -45,7 +59,30 @@ def empleado_update(request, pk):
     if request.method == 'POST':
         form = EmpleadoForm(request.POST, request.FILES, instance=empleado)
         if form.is_valid():
-            form.save()
+            empleado = form.save(commit=False)
+            correo = form.cleaned_data.get('correo') or ''
+            password = form.cleaned_data.get('password') or None
+            # crear o actualizar user
+            user = None
+            try:
+                user = empleado.user
+            except Exception:
+                user = None
+            if user is None:
+                user, created = User.objects.get_or_create(username=correo, defaults={'email': correo})
+            else:
+                # si cambió el correo, actualizar username/email
+                if correo and user.username != correo:
+                    user.username = correo
+                    user.email = correo
+            if password:
+                user.set_password(password)
+            user.save()
+            try:
+                empleado.user = user
+            except Exception:
+                pass
+            empleado.save()
             return redirect('empleados:empleado_list')
     else:
         form = EmpleadoForm(instance=empleado)
@@ -60,3 +97,6 @@ def empleado_delete(request, pk):
         empleado.delete()
         return redirect('empleados:empleado_list')
     return render(request, 'empleados/empleado_confirm_delete.html', {'empleado': empleado})
+
+
+
