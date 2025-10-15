@@ -1,0 +1,247 @@
+{% extends 'base_empleado' %}
+{% load static %}
+
+{% block content %}
+<div class="card mb-4">
+    <div class="card-header">
+        <h3 class="fw-bold mb-0"><i class="bi bi-person-circle me-2"></i> Información del empleado</h3>
+    </div>
+    <div class="card-body">
+        <p><strong>Nombre:</strong> {{ empleado.nombre }}</p>
+        <p><strong>Correo:</strong> {{ empleado.correo }}</p>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="fw-bold mb-0"><i class="bi bi-calendar-check me-2"></i> Citas asignadas</h3>
+    </div>
+    <div class="card-body">
+        {% if citas %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Servicio</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cita in citas %}
+                <tr>
+                    <td>{{ cita.cliente }}</td>
+                    <td>{{ cita.fecha|date:"d/m/Y" }}</td>
+                    <td>{{ cita.hora }}</td>
+                    <td>{{ cita.servicio }}</td>
+                    <td>
+                        <span class="badge bg-info">{{ cita.get_estado_display }}</span>
+                    </td>
+                    <td>
+                        <button 
+                            type="button"
+                            class="btn btn-sm btn-outline-primary ms-2"
+                            data-bs-toggle="modal"
+                            data-bs-target="#editarReservaModal"
+                            data-id="{{ cita.pk }}"
+                            data-fecha="{{ cita.fecha }}"
+                            data-hora="{{ cita.hora.id }}"
+                            data-servicio="{{ cita.servicio.id }}"
+                            data-estado="{{ cita.estado }}"
+                        >
+                            <i class="bi bi-pencil-square"></i> Editar
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="text-muted">No tienes citas asignadas.</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="d-flex justify-content-end mb-3">
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agendarCitaModal">
+    <i class="bi bi-calendar-plus"></i> Agendar cita
+  </button>
+</div>
+
+<!-- Modal para editar reserva -->
+<div class="modal fade" id="editarReservaModal" tabindex="-1" aria-labelledby="editarReservaModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="editarReservaForm" method="post">
+        {% csrf_token %}
+        <div class="modal-header">
+          <h5 class="modal-title" id="editarReservaModalLabel">Editar Reserva</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" name="reserva_id" id="modalReservaId">
+          <div class="mb-3">
+            <label for="modalFecha" class="form-label">Fecha</label>
+            <input type="date" class="form-control" name="fecha" id="modalFecha" required>
+          </div>
+          <div class="mb-3">
+            <label for="modalHora" class="form-label">Hora</label>
+            <select class="form-select" name="hora" id="modalHora" required>
+              {% for hora in horas_disponibles %}
+                <option value="{{ hora.id }}">{{ hora.hora }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="modalServicio" class="form-label">Servicio</label>
+            <select class="form-select" name="servicio" id="modalServicio" required>
+              {% for servicio in servicios %}
+                <option value="{{ servicio.id }}">{{ servicio.nombre }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="modalEstado" class="form-label">Estado</label>
+            <select class="form-select" name="estado" id="modalEstado" required>
+              <option value="pendiente">Pendiente</option>
+              <option value="confirmada">Confirmada</option>
+              <option value="cancelada">Cancelada</option>
+              <option value="realizada">Realizada</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para agendar nueva cita -->
+<div class="modal fade" id="agendarCitaModal" tabindex="-1" aria-labelledby="agendarCitaModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="agendarCitaForm" method="post">
+        {% csrf_token %}
+        <div class="modal-header">
+          <h5 class="modal-title" id="agendarCitaModalLabel">Agendar nueva cita</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="agendarCliente" class="form-label">Cliente</label>
+            <select class="form-select" name="cliente" id="agendarCliente" required>
+              <option value="">Seleccione un cliente</option>
+              {% for cliente in clientes %}
+                <option value="{{ cliente.id }}">{{ cliente.nombre }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="agendarFecha" class="form-label">Fecha</label>
+            <input type="date" class="form-control" name="fecha" id="agendarFecha" required>
+          </div>
+          <div class="mb-3">
+            <label for="agendarHora" class="form-label">Hora</label>
+            <select class="form-select" name="hora" id="agendarHora" required>
+              <option value="">Seleccione una hora</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="agendarServicio" class="form-label">Servicio</label>
+            <select class="form-select" name="servicio" id="agendarServicio" required>
+              <option value="">Seleccione un servicio</option>
+              {% for servicio in servicios %}
+                <option value="{{ servicio.id }}">{{ servicio.nombre }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Agendar cita</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var editarReservaModal = document.getElementById('editarReservaModal');
+  editarReservaModal.addEventListener('show.bs.modal', function (event) {
+    var button = event.relatedTarget;
+    document.getElementById('modalReservaId').value = button.getAttribute('data-id');
+    document.getElementById('modalFecha').value = button.getAttribute('data-fecha');
+    document.getElementById('modalHora').value = button.getAttribute('data-hora');
+    document.getElementById('modalServicio').value = button.getAttribute('data-servicio');
+    document.getElementById('modalEstado').value = button.getAttribute('data-estado');
+  });
+
+  document.getElementById('editarReservaForm').onsubmit = function(e) {
+    e.preventDefault();
+    var form = e.target;
+    var reservaId = document.getElementById('modalReservaId').value;
+    var url = "{% url 'empleados:editar_cita_empleado' 0 %}".replace('0', reservaId);
+    var formData = new FormData(form);
+
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+      },
+      body: formData
+    })
+    .then(response => {
+      if (response.redirected) {
+        window.location.href = response.url;
+      } else {
+        window.location.reload();
+      }
+    });
+  }
+
+  // --- AGENDAR CITA ---
+  document.getElementById('agendarFecha').addEventListener('change', function() {
+    var fecha = this.value;
+    var url = "{% url 'empleados:horas_disponibles_empleado' %}?fecha=" + fecha;
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        var horaSelect = document.getElementById('agendarHora');
+        horaSelect.innerHTML = '<option value="">Seleccione una hora</option>';
+        data.horarios.forEach(function(hora) {
+          horaSelect.innerHTML += `<option value="${hora.id}">${hora.hora}</option>`;
+        });
+      });
+  });
+
+  document.getElementById('agendarCitaForm').onsubmit = function(e) {
+    e.preventDefault();
+    var form = e.target;
+    var formData = new FormData(form);
+    fetch("{% url 'empleados:agendar_cita_empleado' %}", {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+      },
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        window.location.reload();
+      } else {
+        alert(data.error || 'No se pudo agendar la cita.');
+      }
+    });
+  };
+});
+</script>
+{% endblock %}
