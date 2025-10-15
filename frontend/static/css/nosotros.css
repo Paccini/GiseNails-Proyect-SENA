@@ -61,7 +61,7 @@
 }
 
 /* Estiliza los títulos de nivel 6 (h6) que son hijos directos de un elemento .circulo. */
-.circulo > h6 {
+.circulo>h6 {
     /* Centra el texto dentro del círculo. */
     text-align: center;
     /* Aplica el color de texto definido en la variable --letra-pie. */
@@ -142,4 +142,21 @@
     font-size: 13px;
     /* Asegura que el texto esté por encima de los pseudo-elementos del corazón. */
     z-index: 2;
+}
+
+/* --- Estilos para la tipografía --- */
+
+/* Aplica la tipografía Inter como fuente principal en todo el documento. */
+body {
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    /* Establece un color de texto por defecto. */
+    color: #333;
+    /* Define un tamaño de fuente base. */
+    font-size: 16px;
+    /* Establece un interlineado para mejorar la legibilidad. */
+    line-height: 1.5;
+    /* Elimina el margen por defecto del cuerpo. */
+    margin: 0;
+    /* Añade un relleno interno al cuerpo. */
+    padding: 0;
 }
