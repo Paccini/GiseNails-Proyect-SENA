@@ -37,7 +37,7 @@ def login_view(request):
                 return redirect('clientes:panel')
             # Empleado -> panel de empleados (buscar por correo en lugar de user)
             if Empleado.objects.filter(correo__iexact=user.email).exists():
-                return redirect('empleados:empleado_list')
+                 return redirect('empleados:panel_empleado')
             # Staff / superuser -> dashboard admin
             if user.is_staff or user.is_superuser:
                 return redirect('login:dashboard')
