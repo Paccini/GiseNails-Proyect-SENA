@@ -17,7 +17,7 @@ from servicio.models import Servicio
 from reserva.models import HorarioDisponible
 from django.contrib import messages
 from django.http import JsonResponse  # <-- agregar si no está
-
+from datetime import datetime
 
 @login_required
 @never_cache
@@ -26,11 +26,32 @@ def panel_cliente(request):
         cliente = Cliente.objects.get(user=request.user)
     except Cliente.DoesNotExist:
         return redirect('clientes:registro')
-    reservas = Reserva.objects.filter(cliente=cliente).exclude(estado='cancelada')
+
+    # filtros desde querystring
+    estado = request.GET.get('estado', 'all')  # 'all' muestra todos
+    fecha_str = request.GET.get('fecha', '').strip()
+    page = request.GET.get('page', 1)
+
+    reservas_qs = Reserva.objects.filter(cliente=cliente).order_by('-fecha', '-hora')
+
+    if estado and estado != 'all':
+        reservas_qs = reservas_qs.filter(estado=estado)
+
+    if fecha_str:
+        try:
+            fecha_obj = datetime.strptime(fecha_str, '%Y-%m-%d').date()
+            reservas_qs = reservas_qs.filter(fecha=fecha_obj)
+        except Exception:
+            pass
+
+    paginator = Paginator(reservas_qs, 3)  # 4 por página
+    reservas_page = paginator.get_page(page)
+
+    # resto del contexto como antes, + variables de filtro/paginación
     eliminadas = request.GET.get('notifs_eliminadas', '')
     eliminadas_ids = [int(x) for x in eliminadas.split(',') if x.isdigit()]
     notificaciones = []
-    for reserva in reservas.order_by('-fecha_creacion')[:10]:
+    for reserva in reservas_qs.order_by('-fecha_creacion')[:10]:
         if reserva.pk not in eliminadas_ids:
             notificaciones.append({
                 'id': reserva.pk,
@@ -38,6 +59,7 @@ def panel_cliente(request):
                 'texto': f'Cita {reserva.get_estado_display()} para el {reserva.fecha.strftime("%d/%m/%Y")} a las {reserva.hora}',
                 'fecha': reserva.fecha_creacion.strftime('%d/%m/%Y %H:%M')
             })
+
     form = RegistroClienteForm(instance=cliente)
     gestoras = Empleado.objects.all()
     servicios = Servicio.objects.all()
@@ -45,7 +67,7 @@ def panel_cliente(request):
     show_cita_alert = request.session.pop('show_cita_alert', True)
     return render(request, 'clientes/panel.html', {
         'cliente': cliente,
-        'reservas': reservas,
+        'reservas': reservas_page,
         'form': form,
         'user': request.user,
         'notificaciones': notificaciones,
@@ -53,6 +75,8 @@ def panel_cliente(request):
         'servicios': servicios,
         'horarios': horarios,
         'show_cita_alert': show_cita_alert,
+        'filter_estado': estado,
+        'filter_fecha': fecha_str,
     })
 
 def registro_cliente(request):

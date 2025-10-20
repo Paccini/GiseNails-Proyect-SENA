@@ -12,56 +12,95 @@
     </div>
 </div>
 
-<div class="card">
-    <div class="card-header">
-        <h3 class="fw-bold mb-0"><i class="bi bi-calendar-check me-2"></i> Citas asignadas</h3>
+<div class="card mb-3">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h3 class="fw-bold mb-0"><i class="bi bi-calendar-check me-2"></i> Citas asignadas</h3>
+
+    <!-- filtros inline -->
+    <form method="get" class="d-flex gap-2 align-items-center">
+      <select name="estado" class="form-select form-select-sm" aria-label="Filtrar por estado">
+        <option value="all" {% if filter_estado == 'all' %}selected{% endif %}>Todos</option>
+        <option value="pendiente" {% if filter_estado == 'pendiente' %}selected{% endif %}>Pendiente</option>
+        <option value="confirmada" {% if filter_estado == 'confirmada' %}selected{% endif %}>Confirmada</option>
+        <option value="cancelada" {% if filter_estado == 'cancelada' %}selected{% endif %}>Cancelada</option>
+        <option value="realizada" {% if filter_estado == 'realizada' %}selected{% endif %}>Realizada</option>
+      </select>
+
+      <input type="date" name="fecha" class="form-control form-control-sm" value="{{ filter_fecha }}">
+
+      <button type="submit" class="btn btn-sm btn-primary">Filtrar</button>
+      <a href="{% url 'empleados:panel_empleado' %}" class="btn btn-sm btn-outline-secondary">Limpiar</a>
+    </form>
+  </div>
+
+  <div class="card-body">
+    {% if citas %}
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+            <tr>
+                <th>Cliente</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Servicio</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cita in citas %}
+            <tr>
+                <td>{{ cita.cliente }}</td>
+                <td>{{ cita.fecha|date:"d/m/Y" }}</td>
+                <td>{{ cita.hora }}</td>
+                <td>{{ cita.servicio }}</td>
+                <td><span class="badge bg-info">{{ cita.get_estado_display }}</span></td>
+                <td>
+                    <button 
+                        type="button"
+                        class="btn btn-sm btn-outline-primary ms-2"
+                        data-bs-toggle="modal"
+                        data-bs-target="#editarReservaModal"
+                        data-id="{{ cita.pk }}"
+                        data-fecha="{{ cita.fecha }}"
+                        data-hora="{{ cita.hora.id }}"
+                        data-servicio="{{ cita.servicio.id }}"
+                        data-estado="{{ cita.estado }}"
+                    >
+                        <i class="bi bi-pencil-square"></i> Editar
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+      </table>
     </div>
-    <div class="card-body">
-        {% if citas %}
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Cliente</th>
-                    <th>Fecha</th>
-                    <th>Hora</th>
-                    <th>Servicio</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for cita in citas %}
-                <tr>
-                    <td>{{ cita.cliente }}</td>
-                    <td>{{ cita.fecha|date:"d/m/Y" }}</td>
-                    <td>{{ cita.hora }}</td>
-                    <td>{{ cita.servicio }}</td>
-                    <td>
-                        <span class="badge bg-info">{{ cita.get_estado_display }}</span>
-                    </td>
-                    <td>
-                        <button 
-                            type="button"
-                            class="btn btn-sm btn-outline-primary ms-2"
-                            data-bs-toggle="modal"
-                            data-bs-target="#editarReservaModal"
-                            data-id="{{ cita.pk }}"
-                            data-fecha="{{ cita.fecha }}"
-                            data-hora="{{ cita.hora.id }}"
-                            data-servicio="{{ cita.servicio.id }}"
-                            data-estado="{{ cita.estado }}"
-                        >
-                            <i class="bi bi-pencil-square"></i> Editar
-                        </button>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+
+    <!-- PAGINACIÓN -->
+    <nav aria-label="Paginación de citas">
+      <ul class="pagination justify-content-center">
+        {% if citas.has_previous %}
+          <li class="page-item"><a class="page-link" href="?page={{ citas.previous_page_number }}&estado={{ filter_estado }}&fecha={{ filter_fecha }}">Anterior</a></li>
         {% else %}
-        <p class="text-muted">No tienes citas asignadas.</p>
+          <li class="page-item disabled"><span class="page-link">Anterior</span></li>
         {% endif %}
-    </div>
+
+        {% for num in citas.paginator.page_range %}
+          <li class="page-item {% if citas.number == num %}active{% endif %}"><a class="page-link" href="?page={{ num }}&estado={{ filter_estado }}&fecha={{ filter_fecha }}">{{ num }}</a></li>
+        {% endfor %}
+
+        {% if citas.has_next %}
+          <li class="page-item"><a class="page-link" href="?page={{ citas.next_page_number }}&estado={{ filter_estado }}&fecha={{ filter_fecha }}">Siguiente</a></li>
+        {% else %}
+          <li class="page-item disabled"><span class="page-link">Siguiente</span></li>
+        {% endif %}
+      </ul>
+    </nav>
+
+    {% else %}
+    <p class="text-muted">No tienes citas asignadas.</p>
+    {% endif %}
+  </div>
 </div>
 
 <div class="d-flex justify-content-end mb-3">
@@ -207,7 +246,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // --- AGENDAR CITA ---
   document.getElementById('agendarFecha').addEventListener('change', function() {
     var fecha = this.value;
     var url = "{% url 'empleados:horas_disponibles_empleado' %}?fecha=" + fecha;

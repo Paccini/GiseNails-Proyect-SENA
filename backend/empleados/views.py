@@ -10,6 +10,7 @@ from django import forms
 from clientes.models import Cliente
 from django.http import JsonResponse
 from django.contrib import messages
+from datetime import datetime
 
 
 class EditarCitaForm(forms.ModelForm):
@@ -131,16 +132,38 @@ def panel_empleado(request):
     from servicio.models import Servicio
     from clientes.models import Cliente
     empleado = get_object_or_404(Empleado, correo__iexact=request.user.email)
-    citas = Reserva.objects.filter(gestora=empleado)
+
+    # filtros
+    estado = request.GET.get('estado', 'all')
+    fecha_str = request.GET.get('fecha', '').strip()
+    page = request.GET.get('page', 1)
+
+    citas_qs = Reserva.objects.filter(gestora=empleado).order_by('-fecha', '-hora')
+
+    if estado and estado != 'all':
+        citas_qs = citas_qs.filter(estado=estado)
+
+    if fecha_str:
+        try:
+            fecha_obj = datetime.strptime(fecha_str, '%Y-%m-%d').date()
+            citas_qs = citas_qs.filter(fecha=fecha_obj)
+        except Exception:
+            pass
+
+    paginator = Paginator(citas_qs, 3)  # 3 por página (ajusta si quieres)
+    citas_page = paginator.get_page(page)
+
     servicios = Servicio.objects.all()
     horas_disponibles = HorarioDisponible.objects.all()
     clientes = Cliente.objects.all()
     return render(request, 'empleados/panel_empleado', {
         'empleado': empleado,
-        'citas': citas,
+        'citas': citas_page,
         'servicios': servicios,
         'horas_disponibles': horas_disponibles,
         'clientes': clientes,
+        'filter_estado': estado,
+        'filter_fecha': fecha_str,
     })
 
 

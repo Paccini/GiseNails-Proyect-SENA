@@ -8,60 +8,99 @@
 
   <link rel="stylesheet" href="{% static 'css/card_moderno.css' %}" />
 
-  <h1 class="text-center fw-bold mb-4" style="color:#ff4081;font-size:2.5em;font-family: 'Comic Sans MS', cursive;">¡CONOCE TODOS NUESTROS SERVICIOS!</h1>
+  <style>
+    .scroll-fade {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+      will-change: opacity, transform;
+    }
+    .scroll-fade.visible {
+      opacity: 1;
+      transform: none;
+    }
+  </style>
 
-  <p class="text-center fs-5 mb-4">Reserva en el mejor spa de uñas de Colombia, donde ofrecemos las técnicas más innovadoras en el cuidado de uñas, un ambiente sofisticado y relajante, protocolos rigurosos de esterilización y productos libres de químicos, seguros para tu salud y respetuosos con el medio ambiente.</p>
+  <div class="scroll-fade" data-delay="0.02">
+    <h1 class="text-center fw-bold mb-4" style="color:#ff4081;font-size:2.5em;font-family: 'Comic Sans MS', cursive;">¡CONOCE TODOS NUESTROS SERVICIOS!</h1>
 
-  <div class="cards">
-    {% for servicio in servicios %}
-      <div class="card-gn">
-        {% if servicio.imagen %}
-          <img src="{{ servicio.imagen.url }}" alt="{{ servicio.nombre }}" />
-        {% endif %}
-        <span class="card-title">{{ servicio.nombre }}</span>
-        <div class="card-text mb-2">{{ servicio.descripcion }}</div>
-        {% if servicio.recomendaciones %}
-          <div class="muted mb-2">Recomendaciones: {{ servicio.recomendaciones }}</div>
-        {% endif %}
-        <span class="badge">${{ servicio.precio }}</span>
-        <a href="{% url 'reserva:reserva' %}" class="btn">Reservar</a>
-      </div>
-    {% endfor %}
-  </div>
+    <p class="text-center fs-5 mb-4">Reserva en el mejor spa de uñas de Colombia, donde ofrecemos las técnicas más innovadoras en el cuidado de uñas, un ambiente sofisticado y relajante, protocolos rigurosos de esterilización y productos libres de químicos, seguros para tu salud y respetuosos con el medio ambiente.</p>
 
-  <div class="d-flex justify-content-center mt-4">
-    <nav aria-label="Page navigation">
-      <ul class="pagination">
-        {% if servicios.has_previous %}
-          <li class="page-item">
-            <a class="page-link" href="?page={{ servicios.previous_page_number }}" aria-label="Anterior"><span aria-hidden="true">&laquo;</span></a>
-          </li>
-        {% else %}
-          <li class="page-item disabled">
-            <span class="page-link">&laquo;</span>
-          </li>
-        {% endif %}
-        {% for num in servicios.paginator.page_range %}
-          {% if servicios.number == num %}
-            <li class="page-item active">
-              <span class="page-link">{{ num }}</span>
+    <div class="cards">
+      {% for servicio in servicios %}
+        <div class="card-gn scroll-fade" data-delay="{{ forloop.counter0|floatformat:2|add:'0.03' }}">
+          {% if servicio.imagen %}
+            <img src="{{ servicio.imagen.url }}" alt="{{ servicio.nombre }}" />
+          {% endif %}
+          <span class="card-title">{{ servicio.nombre }}</span>
+          <div class="card-text mb-2">{{ servicio.descripcion }}</div>
+          {% if servicio.recomendaciones %}
+            <div class="muted mb-2">Recomendaciones: {{ servicio.recomendaciones }}</div>
+          {% endif %}
+          <span class="badge">${{ servicio.precio }}</span>
+          <a href="{% url 'reserva:reserva' %}" class="btn">Reservar</a>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="d-flex justify-content-center mt-4">
+      <nav aria-label="Page navigation">
+        <ul class="pagination">
+          {% if servicios.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ servicios.previous_page_number }}" aria-label="Anterior"><span aria-hidden="true">&laquo;</span></a>
             </li>
           {% else %}
-            <li class="page-item">
-              <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+            <li class="page-item disabled">
+              <span class="page-link">&laquo;</span>
             </li>
           {% endif %}
-        {% endfor %}
-        {% if servicios.has_next %}
-          <li class="page-item">
-            <a class="page-link" href="?page={{ servicios.next_page_number }}" aria-label="Siguiente"><span aria-hidden="true">&raquo;</span></a>
-          </li>
-        {% else %}
-          <li class="page-item disabled">
-            <span class="page-link">&raquo;</span>
-          </li>
-        {% endif %}
-      </ul>
-    </nav>
+          {% for num in servicios.paginator.page_range %}
+            {% if servicios.number == num %}
+              <li class="page-item active">
+                <span class="page-link">{{ num }}</span>
+              </li>
+            {% else %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+              </li>
+            {% endif %}
+          {% endfor %}
+          {% if servicios.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ servicios.next_page_number }}" aria-label="Siguiente"><span aria-hidden="true">&raquo;</span></a>
+            </li>
+          {% else %}
+            <li class="page-item disabled">
+              <span class="page-link">&raquo;</span>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
   </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const observer = new IntersectionObserver(
+        (entries, obs) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const el = entry.target
+              const delay = parseFloat(el.getAttribute('data-delay') || 0)
+              if (delay > 0) {
+                setTimeout(() => el.classList.add('visible'), Math.round(delay * 1000))
+              } else {
+                el.classList.add('visible')
+              }
+              obs.unobserve(el)
+            }
+          })
+        },
+        { threshold: 0.15 }
+      )
+    
+      document.querySelectorAll('.scroll-fade').forEach((el) => observer.observe(el))
+    })
+  </script>
 {% endblock %}
