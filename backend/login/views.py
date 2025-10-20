@@ -22,14 +22,40 @@ def login_view(request):
         email = request.POST.get('username')
         password = request.POST.get('password')
         # Buscar usuario por email
-        user = User.objects.filter(email=email).first()
+        user_qs = User.objects.filter(email__iexact=email)
+        user = user_qs.first()
         username = email if user is None else user.username
 
         user = authenticate(request, username=username, password=password)
         if user is not None:
+            # Antes de iniciar sesión, comprobar si está relacionado con Cliente o Empleado inactivo
+            # 1) Cliente asociado al user
+            cliente_obj = Cliente.objects.filter(user=user).first()
+            if cliente_obj is not None and not cliente_obj.activo:
+                # Cuenta de cliente deshabilitada
+                error = "Tu cuenta está inactiva, contáctate con el administrador."
+                # Asegurarse de no dejar sesión iniciada
+                try:
+                    logout(request)
+                except Exception:
+                    pass
+                return render(request, 'login/login.html', {'form': {}, 'error': error, 'prefill_email': None, 'password_only': False})
+
+            # 2) Empleado asociado por correo
+            empleado_obj = Empleado.objects.filter(correo__iexact=user.email).first()
+            if empleado_obj is not None and not empleado_obj.activo:
+                # Cuenta de empleado deshabilitada
+                error = "Tu cuenta está inactiva, contáctate con el administrador."
+                try:
+                    logout(request)
+                except Exception:
+                    pass
+                return render(request, 'login/login.html', {'form': {}, 'error': error, 'prefill_email': None, 'password_only': False})
+
+            # Si pasa validaciones, iniciar sesión
             login(request, user)
             # Cliente -> panel clientes
-            if Cliente.objects.filter(user=user).exists():
+            if cliente_obj:
                 # Si hay reserva pendiente, completar la reserva
                 if request.session.get('pending_reserva'):
                     return redirect('/reserva/completar-reserva/')
@@ -53,6 +79,7 @@ def login_view(request):
         password_only = True
 
     return render(request, 'login/login.html', {'form': {}, 'error': error, 'prefill_email': prefill_email, 'password_only': password_only})
+
 
 @never_cache
 @login_required(login_url='login:login')

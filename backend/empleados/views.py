@@ -9,6 +9,7 @@ from reserva.models import Reserva, HorarioDisponible
 from django import forms
 from clientes.models import Cliente
 from django.http import JsonResponse
+from django.contrib import messages
 
 
 class EditarCitaForm(forms.ModelForm):
@@ -102,10 +103,25 @@ def empleado_update(request, pk):
 @user_passes_test(lambda u: u.is_staff)
 @never_cache
 def empleado_delete(request, pk):
+    """
+    Ya no elimina el empleado. Alterna (habilita/deshabilita) el campo 'activo'.
+    No permite deshabilitar si el empleado tiene reservas pendientes/confirmadas.
+    """
     empleado = get_object_or_404(Empleado, pk=pk)
     if request.method == 'POST':
-        empleado.delete()
+        # Si se intenta deshabilitar, comprobar reservas activas
+        if empleado.activo:
+            reservas_activas = Reserva.objects.filter(gestora=empleado, estado__in=['pendiente', 'confirmada']).exists()
+            if reservas_activas:
+                messages.error(request, "No se puede deshabilitar: el empleado tiene reservas pendientes o confirmadas.")
+                return redirect('empleados:empleado_list')
+        # Alternar activo
+        empleado.activo = not empleado.activo
+        empleado.save()
+        estado = "habilitado" if empleado.activo else "deshabilitado"
+        messages.success(request, f"Empleado {empleado.nombre} {empleado.apellidos} {estado}.")
         return redirect('empleados:empleado_list')
+    # Mostrar confirmación (antes era confirm delete)
     return render(request, 'empleados/empleado_confirm_delete.html', {'empleado': empleado})
 
 
@@ -212,6 +228,23 @@ def agendar_cita_empleado(request):
         )
         return JsonResponse({'success': True})
     return JsonResponse({'success': False, 'error': 'Método no permitido.'})
+
+
+def toggle_empleado_activo(request, pk):
+    """
+    Endpoint AJAX para alternar empleado.activo con validación de reservas.
+    """
+    if not request.user.is_authenticated or not request.user.is_staff:
+        return JsonResponse({'success': False, 'error': 'No autorizado.'}, status=403)
+
+    empleado = get_object_or_404(Empleado, pk=pk)
+    if empleado.activo:
+        tiene_reservas = Reserva.objects.filter(gestora=empleado, estado__in=['pendiente', 'confirmada']).exists()
+        if tiene_reservas:
+            return JsonResponse({'success': False, 'error': 'El empleado tiene reservas pendientes o confirmadas.'})
+    empleado.activo = not empleado.activo
+    empleado.save()
+    return JsonResponse({'success': True, 'activo': empleado.activo})
 
 
 

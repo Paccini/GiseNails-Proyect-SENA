@@ -17,5 +17,5 @@ urlpatterns = [
     path('<int:pk>/editar/', views.ClienteUpdateView.as_view(), name='cliente_update'),
     path('<int:pk>/eliminar/', views.ClienteDeleteView.as_view(), name='cliente_delete'),
     path('editar-perfil/', views.editar_perfil,name='editar_perfil'),
-
+    path('<int:pk>/toggle-activo/', views.toggle_cliente_activo, name='cliente_toggle_activo'),
 ]
