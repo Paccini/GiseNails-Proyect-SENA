@@ -15,6 +15,8 @@ from reserva.forms import ReservaForm
 from empleados.models import Empleado
 from servicio.models import Servicio
 from reserva.models import HorarioDisponible
+from django.contrib import messages
+from django.http import JsonResponse  # <-- agregar si no está
 
 
 @login_required
@@ -231,6 +233,25 @@ class ClienteDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         return self.request.user.is_staff
 
+    def delete(self, request, *args, **kwargs):
+        """
+        No eliminar físicamente. Alternar campo 'activo'.
+        No permitir deshabilitar si el cliente tiene reservas pendientes/confirmadas.
+        """
+        self.object = self.get_object()
+        # Si se intenta deshabilitar (object.activo True) comprobamos reservas
+        if self.object.activo:
+            tiene_reservas = Reserva.objects.filter(cliente=self.object, estado__in=['pendiente', 'confirmada']).exists()
+            if tiene_reservas:
+                messages.error(request, "No se puede deshabilitar: el cliente tiene reservas pendientes o confirmadas.")
+                return redirect(self.success_url)
+        # Alterna activo
+        self.object.activo = not self.object.activo
+        self.object.save()
+        estado = "habilitado" if self.object.activo else "deshabilitado"
+        messages.success(request, f"Cliente {self.object.nombre} {estado}.")
+        return redirect(self.success_url)
+
 def registro_cliente(request):
     if request.method == 'POST':
         form = RegistroClienteForm(request.POST)
@@ -297,3 +318,22 @@ def confirmar_reserva(request, pk):
         reserva.estado = 'confirmada'
         reserva.save()
     return redirect('clientes:panel')
+
+def toggle_cliente_activo(request, pk):
+    """
+    Endpoint AJAX: alterna cliente.activo.
+    Si se intenta deshabilitar y tiene reservas pendientes/confirmadas, devuelve error.
+    """
+    if not request.user.is_authenticated or not request.user.is_staff:
+        return JsonResponse({'success': False, 'error': 'No autorizado.'}, status=403)
+
+    cliente = get_object_or_404(Cliente, pk=pk)
+    # Intentamos deshabilitar -> validar reservas activas
+    if cliente.activo:
+        tiene_reservas = Reserva.objects.filter(cliente=cliente, estado__in=['pendiente', 'confirmada']).exists()
+        if tiene_reservas:
+            return JsonResponse({'success': False, 'error': 'El cliente tiene reservas pendientes o confirmadas.'})
+
+    cliente.activo = not cliente.activo
+    cliente.save()
+    return JsonResponse({'success': True, 'activo': cliente.activo})

@@ -1,27 +1,50 @@
 <!-- clientes/templates/clientes/cliente_confirm_delete.html -->
 {% extends 'base_admin.html' %}
 {% block content %}
-<!-- Tarjeta principal para confirmar la eliminación de un cliente -->
-<div class="card shadow mb-4">
-    <!-- Encabezado en color rojo indicando acción de eliminación -->
-    <div class="card-header bg-danger text-white">
-        <h2 class="mb-0">
-            <i class="bi bi-person-x me-2"></i> Eliminar Cliente
-        </h2>
+  <!-- Tarjeta principal para confirmar la eliminación de un cliente -->
+  <div class="card shadow mb-4">
+    <!-- Encabezado en color según estado -->
+    <div class="card-header {% if object.activo %}
+        bg-danger text-white
+      {% else %}
+        bg-success text-white
+      {% endif %}">
+      <h2 class="mb-0">
+        {% if object.activo %}
+          <i class="bi bi-person-x me-2"></i> Deshabilitar Cliente
+        {% else %}
+          <i class="bi bi-person-check me-2"></i> Habilitar Cliente
+        {% endif %}
+      </h2>
     </div>
 
     <!-- Cuerpo del mensaje de confirmación -->
     <div class="card-body">
-        <p>¿Estás seguro que deseas eliminar al cliente <strong>{{ object }}</strong>?</p>
+      <p>
+        {% if object.activo %}
+          ¿Seguro que deseas deshabilitar al cliente <strong>{{ object.nombre }}</strong>? Sus reservas se conservarán.
+        {% else %}
+          ¿Deseas habilitar al cliente <strong>{{ object.nombre }}</strong>?
+        {% endif %}
+      </p>
 
-        <!-- Formulario para confirmar la eliminación -->
-        <form method="post">
-            {% csrf_token %}
-            <!-- Botón de confirmación de eliminación -->
-            <button type="submit" class="btn btn-danger">Eliminar</button>
-            <!-- Botón para cancelar y regresar a la lista -->
-            <a href="{% url 'clientes:cliente_list' %}" class="btn btn-secondary ms-2">Cancelar</a>
-        </form>
+      <!-- Formulario para confirmar la acción -->
+      <form method="post">
+        {% csrf_token %}
+        <button type="submit"
+          class="btn {% if object.activo %}
+            btn-danger
+          {% else %}
+            btn-success
+          {% endif %}">
+          {% if object.activo %}
+            Deshabilitar
+          {% else %}
+            Habilitar
+          {% endif %}
+        </button>
+        <a href="{% url 'clientes:cliente_list' %}" class="btn btn-secondary">Cancelar</a>
+      </form>
     </div>
-</div>
+  </div>
 {% endblock %}
