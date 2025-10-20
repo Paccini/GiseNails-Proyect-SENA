@@ -1,99 +1,180 @@
 <!-- clientes/templates/clientes/cliente_list.html -->
 {% extends 'base_admin.html' %}
 {% block content %}
-<!-- Contenedor principal con título -->
-<div class="mb-3 d-flex justify-content-between align-items-center">
-    <h2 class="fs-4 fw-semibold">
-        <i class="bi bi-person-lines-fill me-2"></i> Lista de Clientes
-    </h2>
-</div>
+  <style>
+    /* dot indicator */
+    .dot {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+    }
+    .dot-green {
+      background: #28a745;
+    }
+    .dot-gray {
+      background: #6c757d;
+    }
+    .btn-dot {
+      padding: 2px 6px;
+      border: none;
+      background: transparent;
+    }
+  </style>
 
-<!-- Tarjeta principal -->
-<div class="card shadow mb-4">
+  <!-- Contenedor principal con título -->
+  <div class="mb-3 d-flex justify-content-between align-items-center">
+    <h2 class="fs-4 fw-semibold"><i class="bi bi-person-lines-fill me-2"></i> Lista de Clientes</h2>
+  </div>
+
+  <!-- Tarjeta principal -->
+  <div class="card shadow mb-4">
     <div class="card-body">
-        <!-- Formulario de búsqueda -->
-        <form method="get" class="d-flex justify-content-end mb-3">
-            <input type="text" name="q" value="{{ request.GET.q }}" class="form-control w-auto" placeholder="Buscar cliente..." style="min-width:200px;">
-            <button type="submit" class="btn btn-primary ms-2">
-                <i class="bi bi-search"></i>
-            </button>
-        </form>
+      <!-- Formulario de búsqueda -->
+      <form method="get" class="d-flex justify-content-end mb-3">
+        <input type="text" name="q" value="{{ request.GET.q }}" class="form-control w-auto" placeholder="Buscar cliente..." style="min-width:200px;" />
+        <button type="submit" class="btn btn-primary ms-2"><i class="bi bi-search"></i></button>
+      </form>
 
-        <!-- Tabla de clientes -->
-        <div class="table-responsive">
-            <table class="table table-hover align-middle">
-                <thead class="table-light">
-                    <tr>
-                        <th><i class="bi bi-hash me-1"></i> ID</th>
-                        <th><i class="bi bi-person me-1"></i> Nombre</th>
-                        <th><i class="bi bi-envelope me-1"></i> Correo</th>
-                        <th><i class="bi bi-telephone me-1"></i> Teléfono</th>
-                        <th><i class="bi bi-gear me-1"></i> Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Bucle para mostrar cada cliente -->
-                    {% for cliente in object_list %}
-                    <tr>
-                        <td>{{ cliente.id }}</td>
-                        <td>
-                            <i class="bi bi-person-circle me-1 text-secondary"></i>
-                            {{ cliente.nombre }}
-                        </td>
-                        <td>{{ cliente.correo }}</td>
-                        <td>{{ cliente.telefono }}</td>
-                        <td>
-                            <!-- Botón para ver detalles del cliente -->
-                            <a href="{% url 'clientes:cliente_detail' cliente.pk %}" class="btn btn-sm btn-info me-1" title="Ver">
-                                <i class="bi bi-eye"></i>
-                            </a>
-                            <!-- Botón para editar cliente -->
-                            <a href="{% url 'clientes:cliente_update' cliente.pk %}" class="btn btn-sm btn-primary me-1" title="Editar">
-                                <i class="bi bi-pencil-square"></i>
-                            </a>
-                            <!-- Botón para eliminar cliente -->
-                            <a href="{% url 'clientes:cliente_delete' cliente.pk %}" class="btn btn-sm btn-danger" title="Eliminar">
-                                <i class="bi bi-trash"></i>
-                            </a>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <!-- Mensaje si no hay clientes registrados -->
-                    <tr>
-                        <td colspan="5" class="text-center">No hay clientes registrados.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+      <!-- Tabla de clientes -->
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>
+                <i class="bi bi-hash me-1"></i> ID
+              </th>
+              <th>
+                <i class="bi bi-person me-1"></i> Nombre
+              </th>
+              <th>
+                <i class="bi bi-envelope me-1"></i> Correo
+              </th>
+              <th>
+                <i class="bi bi-telephone me-1"></i> Teléfono
+              </th>
+              <th>
+                <i class="bi bi-gear me-1"></i> Acciones
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Bucle para mostrar cada cliente -->
+            {% for cliente in object_list %}
+              <tr>
+                <td>{{ cliente.id }}</td>
+                <td>
+                  <i class="bi bi-person-circle me-1 text-secondary"></i>
+                  {{ cliente.nombre }}
+                </td>
+                <td>{{ cliente.correo }}</td>
+                <td>{{ cliente.telefono }}</td>
+                <td>
+                  <!-- Botón para ver detalles del cliente -->
+                  <a href="{% url 'clientes:cliente_detail' cliente.pk %}" class="btn btn-sm btn-info me-1" title="Ver"><i class="bi bi-eye"></i></a>
+                  <!-- Botón para editar cliente -->
+                  <a href="{% url 'clientes:cliente_update' cliente.pk %}" class="btn btn-sm btn-primary me-1" title="Editar"><i class="bi bi-pencil-square"></i></a>
 
-        <!-- Paginación -->
-        {% if is_paginated %}
+                  <!-- Toggle activo inline -->
+                  <button class="btn-dot"
+                    data-id="{{ cliente.pk }}"
+                    title="{% if cliente.activo %}
+                      Activo
+                    {% else %}
+                      Inactivo
+                    {% endif %}">
+                    <span class="dot {% if cliente.activo %}
+                        dot-green
+                      {% else %}
+                        dot-gray
+                      {% endif %}">
+
+                    </span>
+                  </button>
+                </td>
+              </tr>
+            {% empty %}
+              <!-- Mensaje si no hay clientes registrados -->
+              <tr>
+                <td colspan="5" class="text-center">No hay clientes registrados.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Paginación -->
+      {% if is_paginated %}
         <nav>
-            <ul class="pagination justify-content-center">
-                <!-- Botón de página anterior -->
-                {% if page_obj.has_previous %}
-                <li class="page-item">
-                    <a class="page-link" href="?q={{ request.GET.q }}&page={{ page_obj.previous_page_number }}">Anterior</a>
-                </li>
-                {% endif %}
+          <ul class="pagination justify-content-center">
+            <!-- Botón de página anterior -->
+            {% if page_obj.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="?q={{ request.GET.q }}&page={{ page_obj.previous_page_number }}">Anterior</a>
+              </li>
+            {% endif %}
 
-                <!-- Números de página -->
-                {% for num in paginator.page_range %}
-                <li class="page-item {% if page_obj.number == num %}active{% endif %}">
-                    <a class="page-link" href="?q={{ request.GET.q }}&page={{ num }}">{{ num }}</a>
-                </li>
-                {% endfor %}
+            <!-- Números de página -->
+            {% for num in paginator.page_range %}
+              <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                <a class="page-link" href="?q={{ request.GET.q }}&page={{ num }}">{{ num }}</a>
+              </li>
+            {% endfor %}
 
-                <!-- Botón de página siguiente -->
-                {% if page_obj.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?q={{ request.GET.q }}&page={{ page_obj.next_page_number }}">Siguiente</a>
-                </li>
-                {% endif %}
-            </ul>
+            <!-- Botón de página siguiente -->
+            {% if page_obj.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?q={{ request.GET.q }}&page={{ page_obj.next_page_number }}">Siguiente</a>
+              </li>
+            {% endif %}
+          </ul>
         </nav>
-        {% endif %}
+      {% endif %}
     </div>
-</div>
+  </div>
+
+  <script>
+    ;(function () {
+      function getCookie(name) {
+        let v = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')
+        return v ? v.pop() : ''
+      }
+      const csrftoken = getCookie('csrftoken')
+    
+      document.querySelectorAll('.btn-dot').forEach((btn) => {
+        btn.addEventListener('click', function () {
+          const id = this.dataset.id
+          const span = this.querySelector('.dot')
+          fetch("{% url 'clientes:cliente_toggle_activo' 0 %}".replace('0', id), {
+            method: 'POST',
+            headers: {
+              'X-CSRFToken': csrftoken,
+              Accept: 'application/json'
+            }
+          })
+            .then((r) => r.json())
+            .then((data) => {
+              if (!data.success) {
+                alert(data.error || 'Error')
+                return
+              }
+              if (data.activo) {
+                span.classList.remove('dot-gray')
+                span.classList.add('dot-green')
+                this.title = 'Activo'
+              } else {
+                span.classList.remove('dot-green')
+                span.classList.add('dot-gray')
+                this.title = 'Inactivo'
+              }
+            })
+            .catch((err) => {
+              console.error(err)
+              alert('Error en la petición.')
+            })
+        })
+      })
+    })()
+  </script>
 {% endblock %}

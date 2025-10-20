@@ -5,6 +5,7 @@ class Empleado(models.Model):
     apellidos = models.CharField(max_length=150)
     correo = models.EmailField(unique=True)
     foto = models.ImageField(upload_to='empleados_fotos/', blank=True, null=True)
+    activo = models.BooleanField(default=True, help_text="Si False el empleado está deshabilitado")
 
     def __str__(self):
         return f"{self.nombre} {self.apellidos}"
