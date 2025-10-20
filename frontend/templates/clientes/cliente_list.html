@@ -1,27 +1,6 @@
 <!-- clientes/templates/clientes/cliente_list.html -->
 {% extends 'base_admin.html' %}
 {% block content %}
-  <style>
-    /* dot indicator */
-    .dot {
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      border: 1px solid rgba(0, 0, 0, 0.08);
-    }
-    .dot-green {
-      background: #28a745;
-    }
-    .dot-gray {
-      background: #6c757d;
-    }
-    .btn-dot {
-      padding: 2px 6px;
-      border: none;
-      background: transparent;
-    }
-  </style>
 
   <!-- Contenedor principal con título -->
   <div class="mb-3 d-flex justify-content-between align-items-center">
@@ -76,22 +55,11 @@
                   <!-- Botón para editar cliente -->
                   <a href="{% url 'clientes:cliente_update' cliente.pk %}" class="btn btn-sm btn-primary me-1" title="Editar"><i class="bi bi-pencil-square"></i></a>
 
-                  <!-- Toggle activo inline -->
-                  <button class="btn-dot"
-                    data-id="{{ cliente.pk }}"
-                    title="{% if cliente.activo %}
-                      Activo
-                    {% else %}
-                      Inactivo
-                    {% endif %}">
-                    <span class="dot {% if cliente.activo %}
-                        dot-green
-                      {% else %}
-                        dot-gray
-                      {% endif %}">
-
-                    </span>
-                  </button>
+                  <!-- Toggle moderno inline -->
+                  <label class="switch" title="{% if cliente.activo %}Activo{% else %}Inactivo{% endif %}">
+                    <input type="checkbox" class="switch-input cliente-toggle" data-id="{{ cliente.pk }}" {% if cliente.activo %}checked{% endif %}>
+                    <span class="switch-label"></span>
+                  </label>
                 </td>
               </tr>
             {% empty %}
@@ -141,36 +109,33 @@
         return v ? v.pop() : ''
       }
       const csrftoken = getCookie('csrftoken')
-    
-      document.querySelectorAll('.btn-dot').forEach((btn) => {
-        btn.addEventListener('click', function () {
+
+      document.querySelectorAll('.cliente-toggle').forEach((cb) => {
+        cb.addEventListener('change', function () {
           const id = this.dataset.id
-          const span = this.querySelector('.dot')
+          const checkedBefore = this.checked
+          // enviar petición
           fetch("{% url 'clientes:cliente_toggle_activo' 0 %}".replace('0', id), {
             method: 'POST',
             headers: {
               'X-CSRFToken': csrftoken,
-              Accept: 'application/json'
-            }
+              'Accept': 'application/json'
+            },
           })
             .then((r) => r.json())
             .then((data) => {
               if (!data.success) {
-                alert(data.error || 'Error')
+                // revertir estado si hubo error y mostrar mensaje
+                this.checked = !checkedBefore
+                Swal ? Swal.fire('Error', data.error || 'No fue posible actualizar', 'error') : alert(data.error || 'No fue posible actualizar')
                 return
               }
-              if (data.activo) {
-                span.classList.remove('dot-gray')
-                span.classList.add('dot-green')
-                this.title = 'Activo'
-              } else {
-                span.classList.remove('dot-green')
-                span.classList.add('dot-gray')
-                this.title = 'Inactivo'
-              }
+              // opcional: mostrar pequeño tooltip o cambiar title
+              this.closest('label.switch').title = data.activo ? 'Activo' : 'Inactivo'
             })
             .catch((err) => {
               console.error(err)
+              this.checked = !checkedBefore
               alert('Error en la petición.')
             })
         })

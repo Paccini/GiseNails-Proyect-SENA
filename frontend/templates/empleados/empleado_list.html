@@ -86,24 +86,12 @@
                 <td>
                   <!-- Botones de acción: editar y eliminar -->
                   <a href="{% url 'empleados:empleado_update' empleado.id %}" class="btn btn-sm btn-warning me-1" title="Editar"><i class="bi bi-pencil-square"></i></a>
-                  <a href="{% url 'empleados:empleado_delete' empleado.id %}" class="btn btn-sm btn-danger me-1" title="Eliminar"><i class="bi bi-trash"></i></a>
 
-                  <!-- Toggle inline -->
-                  <button class="btn-dot"
-                    data-id="{{ empleado.pk }}"
-                    title="{% if empleado.activo %}
-                      Activo
-                    {% else %}
-                      Inactivo
-                    {% endif %}">
-                    <span class="dot {% if empleado.activo %}
-                        dot-green
-                      {% else %}
-                        dot-gray
-                      {% endif %}">
-
-                    </span>
-                  </button>
+                  <!-- Toggle moderno inline -->
+                  <label class="switch" title="{% if empleado.activo %}Activo{% else %}Inactivo{% endif %}">
+                    <input type="checkbox" class="switch-input empleado-toggle" data-id="{{ empleado.pk }}" {% if empleado.activo %}checked{% endif %}>
+                    <span class="switch-label"></span>
+                  </label>
                 </td>
               </tr>
             {% empty %}
@@ -154,10 +142,10 @@
       }
       const csrftoken = getCookie('csrftoken')
     
-      document.querySelectorAll('.btn-dot').forEach((btn) => {
-        btn.addEventListener('click', function () {
+      document.querySelectorAll('.empleado-toggle').forEach((cb) => {
+        cb.addEventListener('change', function () {
           const id = this.dataset.id
-          const span = this.querySelector('.dot')
+          const checkedBefore = this.checked
           fetch("{% url 'empleados:empleado_toggle_activo' 0 %}".replace('0', id), {
             method: 'POST',
             headers: { 'X-CSRFToken': csrftoken, Accept: 'application/json' }
@@ -165,21 +153,15 @@
             .then((r) => r.json())
             .then((data) => {
               if (!data.success) {
-                alert(data.error || 'Error')
+                this.checked = !checkedBefore
+                Swal ? Swal.fire('Error', data.error || 'No fue posible actualizar', 'error') : alert(data.error || 'No fue posible actualizar')
                 return
               }
-              if (data.activo) {
-                span.classList.remove('dot-gray')
-                span.classList.add('dot-green')
-                this.title = 'Activo'
-              } else {
-                span.classList.remove('dot-green')
-                span.classList.add('dot-gray')
-                this.title = 'Inactivo'
-              }
+              this.closest('label.switch').title = data.activo ? 'Activo' : 'Inactivo'
             })
             .catch((err) => {
               console.error(err)
+              this.checked = !checkedBefore
               alert('Error en la petición.')
             })
         })
