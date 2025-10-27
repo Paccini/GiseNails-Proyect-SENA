@@ -2,14 +2,6 @@
 
 Aplicativo web para **Gise-Nails**, empresa de uñas ubicada en Ibagué, Colombia. Permite gestionar reservas, clientes, servicios y productos, facilitando la administración y experiencia de los usuarios.
 
-## Autores
-
-- Santiago Paccini
-- Juan Arcila
-- Sarai Prada
-- Luis Niño
-- Yohan Mahecha
-
 ## Estructura del Proyecto
 
 ```
