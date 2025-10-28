@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
             Swal.fire({
                 icon: 'info',
                 title: '¡Importante!',
-                text: 'Recuerda confirmar tu cita 1 hora antes del servicio, de lo contrario esta se cancelará automáticamente.',
+                text: '⚠️ Tu cita debe confirmarse con al menos 1 hora de anticipación. De no hacerlo, será cancelada automáticamente. ¡Gracias por tu puntualidad!.',
                 timer: 7000,
                 timerProgressBar: true,
                 showCloseButton: true,
