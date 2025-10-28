@@ -1,0 +1,441 @@
+/* =========================
+   reserva.css - Glassmorphism Moderno Negro & Rosado
+   ========================= */
+
+:root {
+    --accent: #ff4f9f;
+    --muted: #bdbdbd;
+    --bg: rgba(18, 14, 28, 0.92);
+    --glass: rgba(30, 24, 40, 0.55);
+    --glass-blur: blur(16px);
+    --card: rgba(40, 30, 50, 0.65);
+    --surface: rgba(60, 40, 70, 0.45);
+    --radius: 18px;
+    --rosa-claro: #ffb6e6;
+    --rosa-oscuro: #c2185b;
+    --input-border: #ff4f9f;
+    --input-focus: #ffb6e6;
+    --btn: linear-gradient(90deg, #ff4f9f 0%, #c2185b 100%);
+    --btn-hover: #ffb6e6;
+    --card-selected: #ffb6e6;
+    --text: #fff;
+    --shadow-glass: 0 8px 32px 0 rgba(255, 79, 159, 0.18);
+    --border-glass: 1.5px solid rgba(255, 79, 159, 0.35);
+    --border-glass-focus: 2.5px solid #ff4f9f;
+    --shadow-btn: 0 2px 12px 0 rgba(255, 79, 159, 0.25);
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    background-image: url('https://www.transparenttextures.com/patterns/diamond-upholstery.png');
+    background-size: 400px 400px;
+    backdrop-filter: var(--glass-blur);
+    margin: 0;
+    padding: 0;
+}
+
+.reserva-container {
+    background: var(--glass);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-glass);
+    padding: 40px 32px;
+    color: var(--text);
+    border: var(--border-glass);
+    backdrop-filter: var(--glass-blur);
+    position: relative;
+    overflow: hidden;
+    animation: glassFadeIn 1.2s cubic-bezier(.77,.2,.32,1.01);
+    margin-top: 5px;
+    margin-bottom: 40px;
+    min-height: 600px;
+    padding-bottom: 40px;
+}
+@keyframes glassFadeIn {
+    from { opacity: 0; transform: scale(0.98) translateY(30px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.reserva-header {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: linear-gradient(90deg, rgba(255,79,159,0.18) 0%, rgba(30,24,40,0.55) 100%);
+    border-radius: var(--radius);
+    padding: 18px 32px;
+    margin-bottom: 32px;
+    box-shadow: 0 2px 18px 0 rgba(255, 79, 159, 0.10);
+}
+
+.reserva-header .logo {
+    height: 80px;
+    filter: drop-shadow(0 0 16px var(--accent));
+}
+
+.marca-texto h2 {
+    color: var(--accent);
+    text-shadow: 0 1px 5px #ffb6e6;
+    font-size: 2.5rem;
+    font-family: 'Pacifico', cursive;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.marca-texto .direccion {
+    color: var(--rosa-claro);
+    font-size: 1.1rem;
+}
+
+.form-section {
+    background: var(--glass);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-glass);
+    border: var(--border-glass);
+    backdrop-filter: var(--glass-blur);
+    padding: 32px 28px;
+    margin-bottom: 32px;
+}
+
+.form-section h2 {
+    color: var(--accent);
+    text-shadow: 0 2px 12px #ffb6e6;
+    font-size: 2rem;
+    font-family: 'Pacifico', cursive;
+    font-weight: 700;
+}
+
+.instrucciones {
+    color: var(--rosa-claro);
+    font-size: 1.15rem;
+    text-shadow: 0 1px 8px #ffb6e6;
+    margin-bottom: 24px;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.reserva-form label {
+    display: block;
+    font-weight: 600;
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--accent);
+    text-shadow: 0 1px 8px #ffb6e6;
+}
+
+.reserva-form input,
+.reserva-form select {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: rgba(30,24,40,0.45);
+    color: var(--text);
+    border: var(--border-glass);
+    box-shadow: 0 2px 12px 0 rgba(255, 79, 159, 0.10);
+    backdrop-filter: blur(8px);
+    font-size: 1rem;
+    margin-top: 6px;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+    transition: border 0.2s, box-shadow 0.2s;
+}
+
+.reserva-form input:focus,
+.reserva-form select:focus {
+    border: var(--border-glass-focus);
+    box-shadow: 0 0 0 2px #ffb6e6, 0 2px 12px 0 rgba(255, 79, 159, 0.18);
+    outline: none;
+}
+
+.reserva-form select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: linear-gradient(90deg, rgba(255,79,159,0.10) 0%, rgba(30,24,40,0.55) 100%);
+    border: 2px solid var(--accent);
+    color: var(--text);
+    font-size: 1.08rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    box-shadow: 0 2px 12px 0 rgba(255, 79, 159, 0.10);
+    padding-right: 38px;
+    position: relative;
+}
+.reserva-form select:focus {
+    border: 2.5px solid var(--rosa-claro);
+    box-shadow: 0 0 0 2px #ffb6e6, 0 2px 12px 0 rgba(255, 79, 159, 0.18);
+}
+.reserva-form select option {
+    background: var(--card);
+    color: var(--text);
+    font-size: 1.05rem;
+    font-family: 'Montserrat', sans-serif;
+}
+.reserva-form select option:hover,
+.reserva-form select option:focus {
+    background: var(--accent);
+    color: #fff;
+}
+/* Icono personalizado para el select */
+.reserva-form select {
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%23ff4f9f" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 24px 24px;
+}
+
+.servicios-titulo {
+    color: var(--accent);
+    text-shadow: 0 1px 8px #ffb6e6;
+    font-size: 1.3rem;
+    margin-top: 24px;
+    margin-bottom: 12px;
+}
+
+.servicios-list {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.servicio-card {
+    background: var(--glass);
+    border: var(--border-glass);
+    color: var(--text);
+    box-shadow: 0 2px 12px 0 rgba(255, 79, 159, 0.10);
+    backdrop-filter: blur(8px);
+    border-radius: 10px;
+    padding: 10px;
+    width: 180px;
+    text-align: center;
+    cursor: pointer;
+    transition: border 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.servicio-card.selected {
+    border: 2.5px solid var(--card-selected);
+    box-shadow: 0 0 24px #ff4f9f, 0 0 12px #ffb6e6;
+    transform: scale(1.04);
+}
+
+.selected-summary {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 10px;
+    border-radius: 10px;
+    background: var(--surface);
+    border: var(--border-glass);
+    margin-top: 12px;
+    box-shadow: var(--shadow-glass);
+    backdrop-filter: blur(8px);
+}
+
+.selected-summary img {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.selected-summary .meta strong {
+    display: block;
+    font-size: 15px;
+}
+
+.selected-summary .precio {
+    color: var(--accent);
+    font-weight: 700;
+    margin-top: 4px;
+}
+
+.modal-servicios {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(18, 14, 28, 0.92);
+    border: var(--border-glass);
+    backdrop-filter: blur(24px);
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .18s ease;
+}
+.modal-servicios[aria-hidden="false"] {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-panel {
+    background: var(--glass);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-glass);
+    border: var(--border-glass);
+    backdrop-filter: blur(16px);
+    width: 92%;
+    max-width: 900px;
+    padding: 24px 18px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.modal-header h3 {
+    color: var(--accent);
+    text-shadow: 0 1px 8px #ffb6e6;
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+}
+.modal-close {
+    background: transparent;
+    border: 0;
+    font-size: 22px;
+    cursor: pointer;
+    color: var(--rosa-claro);
+    text-shadow: 0 1px 8px #ffb6e6;
+}
+.modal-body {
+    max-height: 60vh;
+    overflow: auto;
+}
+.modal-servicios-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 32px;
+    justify-content: flex-start;
+    align-items: stretch;
+    padding: 32px 24px;
+    overflow-y: auto;
+    background: none;
+}
+.modal-servicio-card {
+    background: var(--glass);
+    border-radius: 18px;
+    box-shadow: 0 2px 18px 0 rgba(255, 79, 159, 0.18);
+    border: 2px solid var(--accent);
+    transition: box-shadow 0.2s, transform 0.2s, border 0.2s;
+    min-width: 220px;
+    max-width: 260px;
+    min-height: 320px;
+    max-height: 340px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    box-sizing: border-box;
+    padding: 18px 10px;
+    margin: 0;
+}
+.modal-servicio-card img {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    background: #222;
+    box-shadow: 0 2px 12px 0 rgba(255, 79, 159, 0.10);
+    display: block;
+}
+.modal-servicio-card .m-nombre {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 6px;
+    text-align: center;
+    text-shadow: 0 1px 8px #ffb6e6;
+}
+.modal-servicio-card .m-precio {
+    color: var(--rosa-claro);
+    font-weight: 700;
+    font-size: 1.08rem;
+    margin-top: 6px;
+    text-shadow: 0 1px 8px #ffb6e6;
+}
+.modal-servicio-card.selected {
+    box-shadow: 0 0 32px #ff4f9f, 0 0 16px #ffb6e6;
+    transform: scale(1.07);
+    border: 2.5px solid var(--card-selected);
+    z-index: 2;
+}
+/* Footer del modal con botones hermosos */
+.modal-footer {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 24px;
+    padding-bottom: 8px;
+}
+
+.modal-btn {
+    background: var(--btn);
+    color: var(--text);
+    border: none;
+    border-radius: 10px;
+    padding: 9px 22px;
+    font-size: 1rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px 0 rgba(255, 79, 159, 0.10);
+    transition: background 0.18s, box-shadow 0.18s, transform 0.14s;
+    outline: none;
+    position: relative;
+    letter-spacing: 0.3px;
+    z-index: 1;
+}
+.modal-btn.confirmar {
+    background: linear-gradient(90deg, #ff4f9f 0%, #c2185b 100%);
+    color: #fff;
+    box-shadow: 0 0 8px #ff4f9f;
+}
+.modal-btn.cancelar {
+    background: linear-gradient(90deg, #222 0%, #ff4f9f 100%);
+    color: var(--rosa-claro);
+    box-shadow: 0 0 6px #ffb6e6;
+}
+.modal-btn.volver {
+    background: linear-gradient(90deg, #c2185b 0%, #ffb6e6 100%);
+    color: #fff;
+    box-shadow: 0 0 5px #c2185b;
+}
+.modal-btn:hover, .modal-btn:focus {
+    background: var(--btn-hover);
+    box-shadow: 0 0 12px #ffb6e6;
+    transform: scale(1.04);
+}
+.modal-btn:active {
+    transform: scale(0.97);
+    box-shadow: 0 0 4px #ff4f9f;
+}
+.modal-btn .icon {
+    margin-right: 10px;
+    font-size: 1.3em;
+    vertical-align: middle;
+}
+
+.btn-change {
+    background: var(--btn);
+    color: var(--text);
+    border: none;
+    border-radius: 10px;
+    padding: 12px 24px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: var(--shadow-btn);
+    transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+    outline: none;
+}
+.btn-change:hover {
+    background: var(--btn-hover);
+    box-shadow: 0 0 24px #ffb6e6;
+    transform: scale(1.05);
+}
+
+/* Responsive y detalles extra puedes agregar según tu preferencia */
