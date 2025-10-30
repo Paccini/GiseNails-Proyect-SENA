@@ -88,10 +88,10 @@ def reserva(request):
                 login_url = reverse('login:login')
                 return JsonResponse({"next": f"{login_url}?next=/completar-reserva/", "need": "login"})
             else:
-                # no existe: redirigir a registro
+                # no existe: redirigir al login mostrando el panel de registro
                 from django.urls import reverse
-                registro_url = reverse('clientes:registro')
-                return JsonResponse({"next": f"{registro_url}?next=/completar-reserva/", "need": "register"})
+                registro_url = reverse('login:login')
+                return JsonResponse({"next": f"{registro_url}?register_active=true&next=/completar-reserva/", "need": "register"})
 
         except Exception as e:
             return JsonResponse({"success": False, "error": str(e)})

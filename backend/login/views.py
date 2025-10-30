@@ -12,6 +12,7 @@ from django.db.models import Count
 from django.http import HttpResponse
 from .forms import UpdateUserForm
 from empleados.models import Empleado
+from clientes.forms import RegistroClienteForm  # Agregar esta línea
 
 
 def login_view(request):
@@ -79,6 +80,36 @@ def login_view(request):
         password_only = True
 
     return render(request, 'login/login.html', {'form': {}, 'error': error, 'prefill_email': prefill_email, 'password_only': password_only})
+
+def registro_cliente(request):
+    pending = request.session.get('pending_reserva', {})
+    initial = {
+        'nombre': pending.get('nombre', ''),
+        'correo': pending.get('correo', ''),
+        'telefono': pending.get('telefono', ''),
+    } if pending else {}
+
+    if request.method == 'POST':
+        form = RegistroClienteForm(request.POST)
+        if form.is_valid():
+            cliente = form.save()
+            user = getattr(cliente, 'user', None)
+            if user:
+                from django.contrib.auth import login as auth_login
+                auth_login(request, user)
+            if request.session.get('pending_reserva'):
+                return redirect('reserva:completar_reserva')
+            return redirect('clientes:panel')
+    else:
+        form = RegistroClienteForm(initial=initial)
+
+    return render(request, 'login/login.html', {
+        'register_form': form,
+        'register_active': True,
+        'pending_message': bool(pending),
+        'initial': initial,                     # <-- agregado
+        'prefill_email': initial.get('correo')  # <-- agregado
+    })
 
 
 @never_cache
