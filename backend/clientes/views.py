@@ -10,6 +10,7 @@ from django.urls import reverse_lazy
 from django.core.paginator import Paginator
 from .forms import RegistroClienteForm, ClienteForm
 from clientes.models import Cliente
+from clientes.forms import RegistroClienteForm
 from reserva.models import Reserva
 from reserva.forms import ReservaForm
 from empleados.models import Empleado
@@ -79,52 +80,6 @@ def panel_cliente(request):
         'filter_fecha': fecha_str,
     })
 
-def registro_cliente(request):
-    pending = request.session.get('pending_reserva')
-    initial = {}
-    # Solo autocompleta si hay pending y el correo NO está registrado
-    if pending:
-        from clientes.models import Cliente
-        correo = pending.get('correo', '')
-        if not Cliente.objects.filter(correo__iexact=correo).exists():
-            initial = {
-                'nombre': pending.get('nombre', ''),
-                'correo': correo,
-                'telefono': pending.get('telefono', ''),
-            }
-
-    if request.method == 'POST':
-        form = RegistroClienteForm(request.POST)
-        if form.is_valid():
-            cliente = form.save()
-            try:
-                user = cliente.user
-            except Exception:
-                user = None
-            if user:
-                from django.contrib.auth import login as auth_login
-                auth_login(request, user)
-            if request.session.get('pending_reserva'):
-                return redirect('/reserva/completar-reserva/')
-            return redirect('/reserva/?success=1')
-        else:
-            return render(request, 'clientes/registro.html', {
-                'form': form,
-                'prefill_email': initial.get('correo'),
-                'pending_message': bool(pending)
-            })
-    else:
-        form = RegistroClienteForm(initial=initial)
-        if initial.get('correo'):
-            try:
-                form.fields['correo'].widget.attrs['readonly'] = True
-            except Exception:
-                pass
-        return render(request, 'clientes/registro.html', {
-            'form': form,
-            'prefill_email': initial.get('correo'),
-            'pending_message': bool(pending)
-        })
 
 @never_cache
 @login_required(login_url='login:login')
