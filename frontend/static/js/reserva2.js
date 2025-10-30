@@ -40,13 +40,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	function createCardElement(s) {
 		const card = document.createElement('div');
-		card.className = 'servicio-card';
+		card.className = 'modal-servicio-card';
 		card.innerHTML = `
-			<img src="${s.imagen}" alt="${s.nombre}" class="servicio-img"/>
-			<div class="servicio-body">
-				<div class="servicio-nombre">${s.nombre}</div>
-				<div class="servicio-precio">$${s.precio}</div>
-			</div>
+			<img src="${s.imagen}" alt="${s.nombre}" />
+			<div class="m-nombre">${s.nombre}</div>
+			<div class="m-precio">$${s.precio}</div>
 		`;
 		return card;
 	}

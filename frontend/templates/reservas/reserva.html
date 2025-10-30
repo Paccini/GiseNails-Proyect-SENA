@@ -5,7 +5,7 @@
 {% block content %} 
 {% load static %}
 
-<link rel="stylesheet" href="{% static 'css/reserva.css' %}">
+<link rel="stylesheet" href="{% static 'css/reserva-glass.css' %}">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
 
 <div class="reserva-container">
@@ -98,15 +98,14 @@
                       <div class="modal-body">
                         <div id="modal-servicios-list" class="modal-servicios-list"></div>
                       </div>
-                      <div class="modal-footer">
-                        <button id="modal-cancel" class="btn-cancel">Cancelar</button>
-                      </div>
+                                                                    <div class="modal-footer">
+                                                                        <button id="modal-cancel" class="modal-btn cancelar"><span class="icon">&#10006;</span>Cancelar</button>
+                                                                    </div>
                     </div>
                   </div>
 
                 <div class="acciones">
-                    <button type="submit" class="btn-confirm">Confirmar cita</button>
-                    <a href="{% url 'inicio' %}" class="btn-cancel">Volver</a>
+                    <button type="submit" class="modal-btn confirmar"><span class="icon">&#10004;</span>Confirmar cita</button>
                 </div>
             </form>
         </section>
