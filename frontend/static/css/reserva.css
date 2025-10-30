@@ -83,7 +83,7 @@ body {
 }
 
 /* Estilos para el título principal (nombre de la marca). */
-.marca-texto h1 {
+.marca-texto h2 {
     margin: 0;
     /* Elimina el margen por defecto del h1. */
     font-size: 18px;
@@ -96,6 +96,7 @@ body {
     font-family: Georgia, "Times New Roman", serif;
     font-weight: 700;
     /* Texto en negrita. */
+    
 }
 
 /* Estilos para el texto de la dirección o subtítulo. */
@@ -104,8 +105,9 @@ body {
     /* Pequeño margen superior. */
     font-size: 14px;
     /* Tamaño de fuente más pequeño. */
-    color: var(--muted);
     /* Color de texto atenuado. */
+    font-family: 'Montserrat', sans-serif; 
+    color: #555;
 }
 
 
@@ -120,30 +122,32 @@ body {
 
 /* Contenedor para la sección del formulario. */
 .form-section {
-    background: var(--card);
+    background: #fff6fa;
     /* Fondo blanco. */
-    border-radius: 12px;
+    border-radius: 18px;
     /* Bordes redondeados. */
-    padding: 18px;
+    padding: 32px 28px;
     /* Relleno interno. */
-    box-shadow: none;
-    /* Sin sombra para esta sección específica. */
+    box-shadow: 0 6px 24px rgba(214,51,132,0.06);
+    margin-bottom: 32px;
 }
 
 /* Título de la sección del formulario. */
 .form-section h2 {
-    margin: 0 0 8px 0;
-    font-size: 20px;
-    color: #222;
-    font-family: Georgia, "Times New Roman", serif;
+    margin: 0 0 10px 0;
+    font-size: 2rem;
+    color: #d63384;
+    font-family: 'Pacifico', cursive;
     font-weight: 700;
 }
 
 /* Párrafo de instrucciones. */
 .instrucciones {
-    font-size: 13px;
-    color: var(--muted);
-    margin-bottom: 12px;
+    font-size: 1 rem;
+    color: #7a7a7a;
+    margin-bottom: 24px;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
 }
 
 /* Estilos para las etiquetas (labels) del formulario. */
@@ -159,18 +163,20 @@ body {
 .reserva-form select {
     width: 100%;
     /* Ocupan todo el ancho disponible. */
-    padding: 10px 12px;
+    padding: 14px 16px;
     /* Relleno interno. */
-    border-radius: 10px;
+    border-radius: 12px;
     /* Bordes redondeados. */
-    border: 1px solid #efe0e7;
+    border: 1.5px solid #e9dbe2;
     /* Borde sutil. */
-    background: #fff;
+    background: #f9f6fb;
     /* Fondo blanco. */
-    font-size: 14px;
+    font-size: 1rem;
     /* Tamaño de fuente del texto ingresado. */
     margin-top: 6px;
     /* Espacio superior. */
+    margin-bottom: 12px;
+    /* Espacio inferior. */
     box-sizing: border-box;
     /* Asegura que el padding y borde no aumenten el ancho total. */
 }
@@ -178,8 +184,9 @@ body {
 /* Efecto visual al hacer clic o seleccionar un campo del formulario. */
 .reserva-form input:focus,
 .reserva-form select:focus {
-    outline: 3px solid rgba(194, 24, 91, 0.06);
-    border-color: rgba(194, 24, 91, 0.2);
+    border-color: #d63384;
+    box-shadow: 0 4px 18px rgba(214,51,132,0.10);
+    outline: none;
 }
 
 
@@ -467,7 +474,7 @@ body {
     border-radius: 8px;
     cursor: pointer;
     font-weight: 100;
-    background-color: #204cac;
+    background-color: #e24fa5;
 
 }
 
@@ -476,7 +483,7 @@ body {
     display: flex;
     gap: 10px;
     justify-content: flex-end;
-    margin-top: 14px;
+    margin-top: 28px;
 }
 
 /* Botón de confirmación. */
@@ -484,10 +491,11 @@ body {
     background: var(--accent);
     color: #fff;
     border: none;
-    padding: 10px 16px;
-    border-radius: 10px;
+    padding: 12px 28px;
+    border-radius: 12px;
     font-weight: 700;
     cursor: pointer;
+    font-size: 1.1rem;
 }
 
 /* Botón de cancelación. */
@@ -651,4 +659,5 @@ body {
     }
 
     /* Apila los botones verticalmente. */
+ 
 }

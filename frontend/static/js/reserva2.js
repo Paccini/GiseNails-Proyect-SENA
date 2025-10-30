@@ -58,6 +58,40 @@ document.addEventListener('DOMContentLoaded', function() {
 	const modalClose = document.getElementById('modal-close');
 	const modalCancel = document.getElementById('modal-cancel');
 
+	function selectServicio(s) {
+		servicioInput.value = s.id;
+		resumenImg.src = s.imagen;
+		resumenImg.alt = s.nombre;
+		resumenNombre.textContent = s.nombre;
+		resumenPrecio.textContent = `$${s.precio}`;
+		resumenCategoria.textContent = (currentCategory || '').charAt(0).toUpperCase() + (currentCategory || '').slice(1);
+		resumen.hidden = false;
+
+		// Mostrar botón de cambiar servicio debajo del resumen
+		let changeWrap = document.getElementById('change-wrap');
+		if (!changeWrap) {
+			changeWrap = document.createElement('div');
+			changeWrap.id = 'change-wrap';
+			changeWrap.className = 'change-wrap';
+			resumen.parentNode.appendChild(changeWrap);
+		}
+		changeWrap.innerHTML = '';
+		const changeBtn = document.createElement('button');
+		changeBtn.type = 'button';
+		changeBtn.className = 'btn-change';
+		changeBtn.textContent = 'Cambiar servicio';
+		changeBtn.onclick = function() {
+			openModalForCategory(currentCategory);
+		};
+		changeWrap.appendChild(changeBtn);
+
+		// Enfocar el primer campo del formulario
+		setTimeout(() => {
+			const firstInput = document.querySelector('.reserva-form input:not([type=hidden]), .reserva-form select');
+			if (firstInput) firstInput.focus();
+		}, 300);
+	}
+
 	function openModalForCategory(categoria){
 		const lista = serviciosData[categoria] || [];
 		modalTitle.textContent = categoria ? categoria.charAt(0).toUpperCase()+categoria.slice(1) : 'Servicios';
@@ -67,13 +101,28 @@ document.addEventListener('DOMContentLoaded', function() {
 		} else {
 			lista.forEach(s => {
 				const card = document.createElement('div');
-				card.className = 'modal-servicio-card';
-				card.innerHTML = `<img src="${s.imagen}" alt="${s.nombre}"/><div class="m-nombre">${s.nombre}</div><div class="m-precio">$${s.precio}</div>`;
-				card.addEventListener('click', () => {
+				card.className = 'servicio-card';
+				card.style.cursor = 'pointer';
+				card.innerHTML = `
+					<img src="${s.imagen}" alt="${s.nombre}" class="servicio-img"/>
+					<div class="servicio-body">
+						<div class="servicio-nombre">${s.nombre}</div>
+						<div class="servicio-precio">$${s.precio}</div>
+					</div>
+				`;
+				card.onclick = function() {
+					// Quitar selección previa
+					modalList.querySelectorAll('.servicio-card.selected').forEach(el => el.classList.remove('selected'));
+					card.classList.add('selected');
 					selectServicio(s);
 					closeModal();
-				});
+					// Enfocar el formulario para continuar
+					setTimeout(() => {
+						document.querySelector('.reserva-form input, .reserva-form select').focus();
+					}, 300);
+				};
 				modalList.appendChild(card);
+				
 			});
 		}
 		modal.setAttribute('aria-hidden','false');
@@ -86,30 +135,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	modalCancel.addEventListener('click', closeModal);
 	modal.addEventListener('click', function(e){ if(e.target === modal) closeModal(); });
 
-	function selectServicio(s) {
-		servicioInput.value = s.id;
-		resumenImg.src = s.imagen;
-		resumenImg.alt = s.nombre;
-		resumenNombre.textContent = s.nombre;
-		resumenPrecio.textContent = `$${s.precio}`;
-		resumenCategoria.textContent = (currentCategory || '').charAt(0).toUpperCase() + (currentCategory || '').slice(1);
-		resumen.hidden = false;
-
-		contenedor.innerHTML = '';
-		const changeWrap = document.createElement('div');
-		changeWrap.className = 'change-wrap';
-		const changeBtn = document.createElement('button');
-		changeBtn.type = 'button';
-		changeBtn.className = 'btn-change';
-		changeBtn.textContent = 'Cambiar servicio';
-		changeBtn.addEventListener('click', () => {
-			openModalForCategory(currentCategory);
-			resumen.hidden = true;
-		});
-		changeWrap.appendChild(changeBtn);
-		contenedor.appendChild(changeWrap);
-	}
-
+	
 	tipoSelect.addEventListener('change', function(){
 		const cat = this.value;
 		if(!cat) return;
