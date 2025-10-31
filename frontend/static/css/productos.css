@@ -1,0 +1,112 @@
+/* Estilos específicos para la página de productos (scoped a .productos-page) */
+
+/* Variables de color para esta vista (armonizan con el fondo degradado de la página) */
+:root {
+    --productos-accent: #ff4081;
+    /* color para título y acentos */
+    --productos-card-bg: rgba(255, 255, 255, 0.96);
+    /* fondo claro de cards que contrastan con el fondo oscuro */
+    --productos-card-text: #3b3b3b;
+    /* texto dentro de las cards */
+    --productos-muted: #6b6b6b;
+}
+
+/* Animación scroll-fade (migrada desde la plantilla) */
+.scroll-fade {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    will-change: opacity, transform;
+}
+
+.scroll-fade.visible {
+    opacity: 1;
+    transform: none;
+}
+
+/* Contenedor de la página de productos */
+.productos-page {
+    padding: 40px 18px;
+}
+
+/* Título principal: blanco y grande para sobresalir sobre el fondo */
+.productos-page .productos-title {
+    color: #ffffff;
+    /* letra blanca exacta */
+    font-size: 2.5em;
+    font-family: 'Comic Sans MS', cursive;
+    letter-spacing: 1px;
+    margin-bottom: 0.6rem;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
+}
+
+/* Subtítulo: blanco semi-transparente para lectura */
+.productos-page .productos-subtitle {
+    color: rgba(255, 255, 255, 0.88);
+}
+
+/* Cards: fondo claro para contraste con el fondo degradado oscuro-rosado,
+   borde y acento en rosa para combinar */
+.productos-page .card-gn {
+    background: var(--productos-card-bg);
+    color: var(--productos-card-text);
+    border: 1px solid rgba(255, 64, 129, 0.12);
+}
+
+/* Título dentro de la card (nombre del producto) */
+.productos-page .card-gn .card-title {
+    color: var(--productos-accent);
+    font-weight: 600;
+    font-size: 1.15rem;
+}
+
+/* Texto descriptivo dentro de la card */
+.productos-page .card-gn .card-text,
+.productos-page .card-gn .muted {
+    color: var(--productos-muted);
+    font-size: 0.97rem;
+}
+
+/* Badge (precio) estilo acorde */
+.productos-page .card-gn .badge {
+    background: #fff0f7;
+    color: var(--productos-accent);
+    border: 1px solid rgba(255, 64, 129, 0.12);
+    font-weight: 700;
+}
+
+/* Imagen circular con borde acorde */
+.productos-page .card-gn img {
+    border: 3px solid var(--productos-accent);
+    box-shadow: 0 2px 8px rgba(230, 0, 126, 0.08);
+}
+
+/* Botón dentro de la card (si lo usas) */
+.productos-page .card-gn .btn {
+    background: var(--productos-accent);
+    color: #fff;
+}
+
+/* Paginación: mayor contraste sobre fondo */
+.productos-page .pagination .page-link {
+    color: var(--productos-card-text);
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.productos-page .pagination .page-item.active .page-link {
+    background: var(--productos-accent);
+    color: #fff;
+    border-color: var(--productos-accent);
+}
+
+/* Responsive: mantener legibilidad en móviles */
+@media (max-width: 991px) {
+    .productos-page {
+        padding: 30px 12px;
+    }
+
+    .productos-page .productos-title {
+        font-size: 2.1em;
+    }
+}

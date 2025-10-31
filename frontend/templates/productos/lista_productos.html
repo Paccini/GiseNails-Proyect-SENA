@@ -8,24 +8,12 @@
   {% load static %}
 
   <link rel="stylesheet" href="{% static 'css/card_moderno.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/productos.css' %}" />
 
-  <style>
-    .scroll-fade {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-      will-change: opacity, transform;
-    }
-    .scroll-fade.visible {
-      opacity: 1;
-      transform: none;
-    }
-  </style>
+  <div class="scroll-fade productos-page" data-delay="0.02">
+    <h1 class="productos-title text-center fw-bold mb-4">¡CONOCE TODOS NUESTROS PRODUCTOS!</h1>
 
-  <div class="scroll-fade" data-delay="0.02">
-    <h1 class="text-center fw-bold mb-4" style="color:#ff4081;font-size:2.5em;font-family: 'Comic Sans MS', cursive;">¡CONOCE TODOS NUESTROS PRODUCTOS!</h1>
-
-    <p class="text-center fs-5 mb-4">Descubre nuestra variedad de productos para el cuidado de uñas y belleza, seleccionados para ti con la mejor calidad y seguridad.</p>
+    <p class="productos-subtitle text-center fs-5 mb-4">Descubre nuestra variedad de productos para el cuidado de uñas y belleza, seleccionados para ti con la mejor calidad y seguridad.</p>
 
     <div class="cards">
       {% for producto in productos %}

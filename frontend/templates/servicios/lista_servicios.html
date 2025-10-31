@@ -7,24 +7,12 @@
   {% load static %}
 
   <link rel="stylesheet" href="{% static 'css/card_moderno.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/servicio.css' %}" />
 
-  <style>
-    .scroll-fade {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-      will-change: opacity, transform;
-    }
-    .scroll-fade.visible {
-      opacity: 1;
-      transform: none;
-    }
-  </style>
+  <div class="scroll-fade servicios-page" data-delay="0.02">
+    <h1 class="servicios-title text-center fw-bold mb-4">¡CONOCE TODOS NUESTROS SERVICIOS!</h1>
 
-  <div class="scroll-fade" data-delay="0.02">
-    <h1 class="text-center fw-bold mb-4" style="color:#ff4081;font-size:2.5em;font-family: 'Comic Sans MS', cursive;">¡CONOCE TODOS NUESTROS SERVICIOS!</h1>
-
-    <p class="text-center fs-5 mb-4">Reserva en el mejor spa de uñas de Colombia, donde ofrecemos las técnicas más innovadoras en el cuidado de uñas, un ambiente sofisticado y relajante, protocolos rigurosos de esterilización y productos libres de químicos, seguros para tu salud y respetuosos con el medio ambiente.</p>
+    <p class="servicios-subtitle text-center fs-5 mb-4">Reserva en el mejor spa de uñas de Colombia, donde ofrecemos las técnicas más innovadoras en el cuidado de uñas, un ambiente sofisticado y relajante, protocolos rigurosos de esterilización y productos libres de químicos, seguros para tu salud y respetuosos con el medio ambiente.</p>
 
     <div class="cards">
       {% for servicio in servicios %}
