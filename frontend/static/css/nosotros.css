@@ -479,11 +479,6 @@ ul.nosotros-list li i {
     color: #ffffff !important;
 }
 
-/* mantener el número dentro del corazón legible (ya es blanco en .corazon span),
-   asegurar que el icono/forma conserve su color rosa si aplica */
-#valores .corazon {
-    /* mantiene fondo rosa */
-}
 
 #valores .corazon span {
     color: #ffffff !important;
@@ -493,6 +488,39 @@ ul.nosotros-list li i {
 #valores .corpo p {
     text-shadow: 0 1px 0 rgba(0, 0, 0, 0.18);
 }
+
+/* --- Eliminar línea divisoria entre secciones (sin cambiar color) --- */
+
+/* Quita cualquier margen o borde entre secciones */
+section,
+.section-que-nosotros,
+#valores {
+  margin: 0 !important;
+  border: none !important;
+  background: none !important;
+}
+
+/* Asegura que el color de fondo sea continuo desde el body */
+body, main, .container-fluid {
+  background: inherit !important;
+  border: none !important;
+}
+
+/* Quita espacio extra arriba o abajo si el container agrega padding */
+.container,
+.container-fluid {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* Ajuste fino: evita que haya una “línea” por sombras o diferencias de color */
+.section-que-nosotros::before,
+.section-que-nosotros::after,
+#valores::before,
+#valores::after {
+  display: none !important;
+}
+
 
 /* Fin de adición */
 
