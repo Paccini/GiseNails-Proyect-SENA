@@ -1,133 +1,131 @@
-/* =========================
-   footer.css - Estilos del pie de página y redes sociales
-   ========================= */
+/* ======================
+   FOOTER FINAL – estilo oscuro con rosa
+   ====================== */
 
-
-/* Contenedor principal del pie de página */
-.pierna {
-    text-align: center;
+footer {
+    margin-top: 0 !important;
+    width: 100%;
+    padding: 80px 0 30px;
+    background: linear-gradient(to right, #000000, #1a0d0e);
+    color: var(--letra-pie);
+    border-top-left-radius: 110px;
+    line-height: 22px;
 }
 
-/* Títulos dentro del pie de página */
-.pierna>div>h5 {
-    color: var(--rosado-oscuro);
-    text-align: center;
-    font-weight: bold;
-}
-
-/* Enlaces del footer principales */
-.pierna>div>ul>li>a {
-    color: #ffffff !important;
-    /* negro suave */
-    font-size: 20px !important;
-    text-decoration: none;
-    transition: color 0.2s;
-}
-
-/* Efecto hover para los enlaces principales del footer */
-.pierna>div>ul>li>a:hover {
-    color: var(--rosado-oscuro) !important;
-    font-size: 20px !important;
-    text-decoration: none;
-}
-
-/* Enlaces dentro de las columnas del footer */
-.pierna .footer-column.separador ul.list-unstyled li a {
-    color: #ffffff !important;
-    /* o var(--negro-suave) */
-    font-size: 16px;
-    text-decoration: none;
-}
-
-/* Separador visual entre columnas del footer */
-.pierna>.separador {
-    border-left: 2px solid var(--rosado-oscuro);
-    border-right: 2px solid var(--rosado-oscuro);
-}
-
-/* Contenedor de los íconos sociales */
-.icono_social>ul {
-    justify-items: space-between !important;
+footer .row {
+    width: 85%;
+    margin: auto;
     display: flex;
-    padding-left: 0px;
-    padding-top: 30px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
 
+footer .col {
+    flex-basis: 23%;
+    padding: 10px;
+}
+
+footer .logo {
+    width: 90px;
+    margin-bottom: 30px;
+    filter: drop-shadow(0 0 10px var(--pink-accent));
+}
+
+footer h3 {
+    color: var(--pink-accent);
+    width: fit-content;
+    margin-bottom: 45px;
     position: relative;
-    width: 300px;
-    height: 200px;
-    margin-left: auto;
-    margin-right: auto;
+    font-weight: 600;
 }
 
-/* Estilos de los íconos sociales */
-.icono_social>ul>li>a>i {
-    border-radius: 10px;
+footer ul li {
+    list-style: none;
+    margin: 10px 0;
+}
+
+footer ul li a {
+    color: var(--text-light);
+}
+
+footer ul li a:hover,
+footer .email-id:hover,
+footer .social ion-icon:hover {
+    color: var(--pink-accent);
+}
+
+footer .email-id {
+    color: var(--text-light);
+}
+
+footer .underline {
+    width: 100%;
+    height: 4px;
+    background: #4b1d33;
+    border-radius: 3px;
+    position: absolute;
+    top: 34px;
+    left: 0;
+}
+
+footer .underline span {
+    width: 15px;
+    height: 100%;
+    background: var(--pink-accent);
+    border-radius: 3px;
+    position: absolute;
+    animation: moving 2s linear infinite;
+}
+
+footer .tel {
+    font-size: 1.1rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    color: var(--pink-accent);
+    margin-top: 12px;
+    display: inline-block;
+}
+
+footer .social ion-icon {
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+    color: var(--text-light);
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+footer .social-item {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* espacio entre icono y texto */
+    margin-bottom: 12px; /* separación entre filas */
+}
+
+footer .social-item span {
+    color: var(--text-light);
+    font-size: 15px;
+}
+
+
+footer hr {
+    width: 90%;
+    border: 0;
+    border-bottom: 1px solid #3a0036;
+    margin: 50px auto;
+}
+
+footer .copyright {
     text-align: center;
-    padding: 10px 15px 10px 15px;
-    margin: 12px 12px;
-    border: solid 1px var(--rosado-oscuro);
+    color: var(--text-light);
+    margin-top: 10px;
 }
 
-/* Efecto hover sobre los íconos sociales */
-.icono_social>ul>li a i:hover {
-    border-radius: 10px;
-    text-align: center;
-    padding: 10px 15px 10px 15px;
-    margin: 12px 12px;
-    color: var(--letra-pie);
-    background-color: var(--rosado-oscuro);
+@keyframes moving {
+    0% { left: -20px; }
+    100% { left: 100%; }
 }
 
-/* Posición del ícono social 1 (superior derecha) */
-.social_1 {
-    position: absolute;
-    top: 20px;
-    right: 20px;
+@media (max-width: 700px) {
+    footer .col { flex-basis: 100%; }
 }
-
-/* Posición del ícono social 2 (superior izquierda) */
-.social_2 {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-}
-
-/* Posición del ícono social 3 (inferior izquierda) */
-.social_3 {
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-}
-
-/* Posición del ícono social 4 (inferior derecha) */
-.social_4 {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-}
-
-/* Sección inferior del footer */
-.pie>.pie-2 {
-    color: var(--letra-pie);
-    background-color: var(--rosado-fuerte);
-}
-
-/* Imagen dentro del pie de página */
-.pie>.pie-2 img {
-    width: 100px;
-    border-radius: 22px;
-    /* fuerza color blanco */
-    filter: brightness(0) saturate(100%) invert(1);
-    -webkit-filter: brightness(0) saturate(100%) invert(1);
-}
-
-/* Si el logo está inline como SVG (o conviertes <img> a inline-svg),
-   aplica fill/stroke blanco dentro del SVG */
-.pie>.pie-2 svg,
-.pie>.pie-2 img.inline-svg {
-    fill: #ffffff !important;
-    stroke: #ffffff !important;
-    color: #ffffff !important;
-}
-/* Si el filtro distorsiona mucho la imagen, usa una versión del logo ya en blanco:
-   /static/img/logo-white.png y cambia la ruta en el template. */
