@@ -93,11 +93,43 @@
         <div class="card"><img src="{% static 'img/uñas dipping.jpg' %}"></div>
         <div class="card"><img src="{% static 'img/uñas polygel.jpg' %}"></div>
         <div class="card"><img src="{% static 'img/uñas press-on.jpg' %}"></div>
-        <div class="card"><img src="{% static 'img/uñas uñas semipermanentes.jpg' %}"></div>
+        <div class="card"><img src="{% static 'img/uñas semipermanentes.jpg' %}"></div>
         <div class="card"><img src="{% static 'img/uñas tradicionales.jpg' %}"></div>
       </div>
     </div>
+    <div class="text-center mt-5">
+      <a href="{% url 'reserva:reserva' %}" class="btn btn-danger rounded-pill px-5 py-2 fs-5 shadow">RESERVA AHORA</a>
+    </div>
   </section>
+
+  <section class="reviews-section scroll-fade">
+    <h2>Lo que dicen nuestras clientas</h2>
+    <div class="reviews-container">
+      <div class="review-card">
+        <img src="{% static 'img/clienta.png' %}" alt="Clienta 1" class="review-photo">
+        <p class="review-name">Lucía R.</p>
+        <p class="review-text">“Me dejó el acabado súper delicado, tal como quería.”</p>
+        <div class="stars">★★★★★</div>
+      </div>
+
+      <div class="review-card">
+        <img src="{% static 'img/clienta.png' %}" alt="Clienta 2" class="review-photo">
+        <p class="review-name">Valentina S.</p>
+        <p class="review-text">“La atención fue divina, y las press-on quedaron perfectas.”</p>
+        <div class="stars">★★★★★</div>
+      </div>
+
+      <div class="review-card">
+        <img src="{% static 'img/clienta.png' %}" alt="Clienta 3" class="review-photo">
+        <p class="review-name">Camila D.</p>
+        <p class="review-text">“Volvería sin pensarlo. Todo muy limpio y detallado.”</p>
+        <div class="stars">★★★★★</div>
+      </div>
+
+    </div>
+  </section>
+
+
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js" crossorigin="anonymous"
     referrerpolicy="no-referrer"></script>
