@@ -69,7 +69,18 @@ def producto_detail(request, pk):
 @require_GET
 def lista_productos(request):
     productos_list = Producto.objects.all()
-    paginator = Paginator(productos_list, 2)  # 2 productos por página
+    paginator = Paginator(productos_list, 4)  # 4 productos por página
     page_number = request.GET.get('page')
     productos = paginator.get_page(page_number)
-    return render(request, 'productos/lista_productos.html', {'productos': productos})
+
+    recomendados = Producto.objects.filter(recomendado=True).order_by('-ventas')[:6]
+    en_uso = Producto.objects.filter(en_uso=True)[:6]
+
+    # DEBUG temporal -> revisa la consola donde corre runserver
+    print("DEBUG lista_productos: recomendados=", recomendados.count(), " en_uso=", en_uso.count())
+
+    return render(request, 'productos/lista_productos.html', {
+        'productos': productos,
+        'recomendados': recomendados,
+        'en_uso': en_uso,
+    })

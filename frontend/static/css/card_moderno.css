@@ -6,6 +6,9 @@
   --accent: #e75480;
   --glass-border: rgba(0, 0, 0, 0.06);
   --shadow: 0 10px 30px rgba(20, 30, 60, 0.08);
+  --card-radius: 14px;
+  --card-min-height: 380px;
+  --card-padding: 20px;
 }
 
 [data-theme="dark"] {
@@ -18,23 +21,27 @@
   color: #e6f0f6;
 }
 
+/* Grid layout: columnas responsivas y alineadas */
 .cards {
-  display: flex;
-  gap: 18px;
-  flex-wrap: wrap;
-  justify-content: center;
-  padding: 40px 10px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 22px;
+  justify-items: center;
+  align-items: stretch;
+  padding: 36px 12px;
 }
 
+/* Card moderno: altura consistente, contenido centrado */
 .card-gn {
   background: var(--card);
-  padding: 18px 18px 16px 18px;
-  border-radius: 12px;
+  /* quitar padding para que la imagen pueda ocupar toda la tarjeta */
+  padding: 0;
+  border-radius: var(--card-radius);
   box-shadow: var(--shadow);
   width: 100%;
-  max-width: 270px;
-  min-height: 340px;
-  transition: transform .28s ease, box-shadow .28s ease;
+  max-width: 360px;
+  min-height: var(--card-min-height);
+  transition: transform .32s cubic-bezier(.2, .9, .3, 1), box-shadow .28s ease, filter .28s ease;
   border: 1px solid var(--glass-border);
   text-align: center;
   display: flex;
@@ -42,72 +49,236 @@
   align-items: center;
   position: relative;
   overflow: hidden;
+  justify-content: flex-start;
 }
 
-.card-gn:hover {
-  transform: translateY(-8px) scale(1.03);
-  box-shadow: 0 20px 40px rgba(10, 20, 40, 0.12);
-  z-index: 2;
+/* Front area: imagen ocupa TODO el área de la card */
+.card-front {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  border-radius: inherit;
+  overflow: hidden;
+  background: #000;
+  /* fallback mientras carga la imagen */
 }
 
-.card-gn img {
-  width: 90px;
-  height: 90px;
-  border-radius: 999px;
+/* imagen como cover total (no circular) */
+.card-front img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  margin-bottom: 14px;
-  margin-top: 8px;
-  box-shadow: 0 2px 8px rgba(230, 0, 126, 0.10);
-  border: 3px solid var(--accent);
+  display: block;
+  transition: opacity .45s ease, transform .45s ease, filter .35s ease;
+  opacity: 1;
+  pointer-events: none;
+  transform-origin: center;
 }
 
+/* Info overlay: centrado, mismo comportamiento que antes */
+.card-info {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 22px;
+  text-align: center;
+  gap: 10px;
+  /* fondo oscuro semitransparente para mejor contraste con la imagen */
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.44) 55%, rgba(0, 0, 0, 0.28) 100%);
+  transform: translateY(8px);
+  opacity: 0;
+  transition: opacity .38s ease, transform .38s cubic-bezier(.2, .9, .3, 1);
+  pointer-events: none;
+  color: #fff;
+  /* texto blanco para legibilidad */
+}
+
+/* Titulos y texto del overlay: colores blancos y contrastados */
+.card-info .card-title {
+  font-size: 1.15rem;
+  color: #fff;
+  /* título en blanco */
+  margin: 4px 0;
+  line-height: 1.18;
+  max-width: 88%;
+  word-wrap: break-word;
+}
+
+.card-info .card-text {
+  color: rgba(255, 255, 255, 0.92);
+  /* descripción en blanco translúcido */
+  font-size: 0.96rem;
+  line-height: 1.35;
+  max-width: 86%;
+  margin: 6px auto 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-align: center;
+}
+
+/* Ajuste de badge para verse sobre fondo oscuro */
+.card-info .badge {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-weight: 800;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: none;
+}
+
+/* On hover: fade imagen, show info (igual que antes) */
+.card-gn:hover .card-front img {
+  opacity: 0.12;
+  transform: scale(1.04);
+  filter: blur(0.6px) saturate(1.05);
+}
+
+.card-gn:hover .card-info {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+/* ensure title/desc/price align exactly across cards */
+.card-info .card-title {
+  font-size: 1.15rem;
+  color: var(--accent);
+  margin: 4px 0;
+  line-height: 1.18;
+  max-width: 88%;
+  word-wrap: break-word;
+}
+
+.card-info .card-text {
+  color: var(--muted);
+  font-size: 0.96rem;
+  line-height: 1.35;
+  max-width: 86%;
+  margin: 6px auto 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-align: center;
+}
+
+/* Place price centered and consistent */
+.card-info .card-bottom {
+  margin-top: 8px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* Slight visual refinement for badge on the overlay */
+.card-info .badge {
+  background: linear-gradient(180deg, #fff0f7, #ffe6f0);
+  color: var(--accent);
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-weight: 800;
+  border: 1px solid rgba(231, 84, 128, 0.12);
+  box-shadow: 0 6px 18px rgba(231, 84, 128, 0.06);
+}
+
+/* Hover: elevación y sutil fondo degradado */
+.card-gn:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 22px 48px rgba(10, 20, 40, 0.18);
+  z-index: 3;
+  filter: hue-rotate(0deg) saturate(1.05);
+}
+
+/* Título centrado y homogéneo */
 .card-gn strong,
 .card-gn .card-title {
   display: block;
-  margin-bottom: 6px;
+  margin: 8px 0;
   font-size: 1.15rem;
   color: var(--accent);
   font-family: 'Pacifico', cursive, 'Century Gothic', 'Lato', sans-serif;
+  text-align: center;
+  line-height: 1.2;
 }
 
+/* Descripción centrada y consistente: limitar líneas para evitar desajustes */
 .card-gn .muted,
 .card-gn .card-text {
   color: var(--muted);
-  font-size: 0.97rem;
-  margin-bottom: 8px;
+  font-size: 0.98rem;
+  margin: 6px 0 12px;
+  text-align: center;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  /* muestra hasta 4 líneas */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.35;
 }
 
+/* Alinear el badge y acciones abajo para consistencia */
+.card-gn .card-bottom {
+  margin-top: auto;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  align-items: center;
+  padding-top: 8px;
+}
+
+/* Badge centrado y pulido */
 .card-gn .badge {
-  background: #fff0f7;
-  color: #e75480;
-  font-weight: 700;
-  font-size: 1.05rem;
-  border-radius: 8px;
-  padding: 6px 14px;
-  margin-bottom: 8px;
-  margin-top: 4px;
+  background: linear-gradient(180deg, #fff0f7, #ffe6f0);
+  color: var(--accent);
+  font-weight: 800;
+  font-size: 1rem;
+  border-radius: 999px;
+  padding: 8px 14px;
   display: inline-block;
-  border: 1px solid var(--accent);
+  border: 1px solid rgba(231, 84, 128, 0.12);
+  box-shadow: 0 4px 12px rgba(231, 84, 128, 0.06);
 }
 
+/* Acciones: botón moderno */
 .card-gn .btn {
-  margin-top: 10px;
-  background: var(--accent);
+  margin-top: 0;
+  background: linear-gradient(180deg, var(--accent), #c93b67);
   color: white;
-  padding: 8px 16px;
+  padding: 8px 14px;
+  border-radius: 10px;
   border: none;
-  border-radius: 8px;
   cursor: pointer;
-  font-weight: 600;
-  transition: background .25s;
-  font-size: 1rem;
-  box-shadow: 0 2px 8px rgba(230, 0, 126, 0.10);
+  font-weight: 700;
+  transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+  box-shadow: 0 6px 18px rgba(199, 59, 103, 0.12);
+  font-size: 0.98rem;
 }
 
 .card-gn .btn:hover {
-  background: #c93b67;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 26px rgba(199, 59, 103, 0.18);
 }
 
+.card-gn .btn:active {
+  transform: translateY(-1px) scale(.997);
+}
+
+/* Accesibilidad: foco visible */
+.card-gn .btn:focus {
+  outline: 3px solid rgba(255, 64, 129, 0.18);
+  outline-offset: 2px;
+}
+
+/* Tipografía consistente */
 .cards,
 .card-gn,
 .card-gn strong,
@@ -118,23 +289,112 @@
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
 
+/* Responsive adjustments */
 @media (max-width: 991px) {
   .cards {
-    gap: 12px;
+    gap: 16px;
+    padding: 28px 10px;
   }
 
   .card-gn {
-    max-width: 320px;
+    max-width: 340px;
+    min-height: 360px;
+  }
+
+  .card-gn img {
+    width: 96px;
+    height: 96px;
+  }
+
+  .card-front {
+    flex: 0 0 200px;
+  }
+
+  .card-gn {
+    min-height: 340px;
+    max-width: 340px;
+  }
+
+  .card-front img {
+    object-position: center;
   }
 }
 
 @media (max-width: 600px) {
   .cards {
-    flex-direction: column;
-    align-items: center;
+    grid-template-columns: 1fr;
+    padding: 22px 8px;
   }
 
   .card-gn {
     max-width: 95vw;
+    min-height: auto;
+    padding: 16px;
   }
+
+  .card-gn .card-text {
+    -webkit-line-clamp: 6;
+  }
+
+  .card-front {
+    flex: 0 0 160px;
+  }
+
+  .card-gn {
+    min-height: auto;
+  }
+
+  .card-info {
+    padding: 16px;
+  }
+}
+
+/* Prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+
+  .card-gn,
+  .card-gn img,
+  .card-gn .btn {
+    transition: none !important;
+    transform: none !important;
+  }
+
+  .card-front img,
+  .card-info,
+  .card-gn {
+    transition: none !important;
+  }
+}
+
+/* Forzar texto blanco en las cards y overlays para mejor legibilidad */
+.card-gn,
+.card-gn .card-title,
+.card-gn strong,
+.card-gn .muted,
+.card-gn .card-text,
+.card-info,
+.card-info .card-title,
+.card-info .card-text,
+.card-info .badge {
+  color: #ffffff !important;
+}
+
+/* Ajuste visual del badge sobre overlay oscuro (opcional) */
+.card-info .badge {
+  background: rgba(255, 255, 255, 0.10) !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+  box-shadow: none !important;
+}
+
+/* Asegurar títulos y subtítulos de sección en blanco */
+.productos-title,
+.productos-subtitle,
+.productos-section-title {
+  color: #ffffff !important;
+}
+
+/* Paginación dentro de la sección principal (si aplica) */
+.pagination-wrapper .page-link,
+.pagination-wrapper .page-item .page-link {
+  color: #ffffff !important;
 }
