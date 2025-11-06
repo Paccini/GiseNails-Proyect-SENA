@@ -25,16 +25,7 @@
     --shadow-btn: 0 2px 12px 0 rgba(255, 79, 159, 0.25);
 }
 
-body {
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    background-image: url('https://www.transparenttextures.com/patterns/diamond-upholstery.png');
-    background-size: 400px 400px;
-    backdrop-filter: var(--glass-blur);
-    margin: 0;
-    padding: 0;
-}
+
 
 .reserva-container {
     background: var(--glass);
@@ -304,6 +295,9 @@ body {
     max-height: 60vh;
     overflow: auto;
 }
+.servicio-img{
+    width: 150px;
+}
 .modal-servicios-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -434,8 +428,9 @@ body {
 }
 .btn-change:hover {
     background: var(--btn-hover);
-    box-shadow: 0 0 24px #ffb6e6;
+    box-shadow: 0 0 20px #ffb6e6;
     transform: scale(1.05);
 }
+
 
 /* Responsive y detalles extra puedes agregar según tu preferencia */
