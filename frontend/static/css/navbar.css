@@ -57,11 +57,29 @@
     opacity: 0;
 }
 
+
 @keyframes logoBounceIn {
     0% { transform: translateY(-50px) scale(0.5); opacity: 0; }
     60% { transform: translateY(10px) scale(1.05); opacity: 1; }
     80% { transform: translateY(-5px) scale(0.98); }
     100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.brand .title {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.brand .title .navbar-logo {
+    height: 40px; /* Ajusta según necesites */
+    width: auto;
+    filter: brightness(0) saturate(100%) invert(1); /* Hace el logo blanco */
+    transition: transform 0.3s ease;
+}
+
+.brand .title:hover .navbar-logo {
+    transform: scale(1.05);
 }
 
 .brand .title h1:hover {
