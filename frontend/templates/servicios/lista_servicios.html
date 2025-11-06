@@ -17,16 +17,26 @@
     <div class="cards">
       {% for servicio in servicios %}
         <div class="card-gn scroll-fade" data-delay="{{ forloop.counter0|floatformat:2|add:'0.03' }}">
-          {% if servicio.imagen %}
-            <img src="{{ servicio.imagen.url }}" alt="{{ servicio.nombre }}" />
-          {% endif %}
-          <span class="card-title">{{ servicio.nombre }}</span>
-          <div class="card-text mb-2">{{ servicio.descripcion }}</div>
-          {% if servicio.recomendaciones %}
-            <div class="muted mb-2">Recomendaciones: {{ servicio.recomendaciones }}</div>
-          {% endif %}
-          <span class="badge">${{ servicio.precio }}</span>
-          <a href="{% url 'reserva:reserva' %}" class="btn">Reservar</a>
+          <div class="card-front">
+            {% if servicio.imagen %}
+              <img src="{{ servicio.imagen.url }}" alt="{{ servicio.nombre }}" />
+            {% endif %}
+          </div>
+
+          <div class="card-info" aria-hidden="true">
+            <strong class="card-title">{{ servicio.nombre }}</strong>
+
+            <div class="card-text mb-2">{{ servicio.descripcion }}</div>
+
+            {% if servicio.recomendaciones %}
+              <div class="muted mb-2">Recomendaciones: {{ servicio.recomendaciones }}</div>
+            {% endif %}
+
+            <div class="card-bottom">
+              <span class="badge">${{ servicio.precio }}</span>
+              <a href="{% url 'reserva:reserva' %}" class="btn">Reservar</a>
+            </div>
+          </div>
         </div>
       {% endfor %}
     </div>

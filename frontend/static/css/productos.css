@@ -33,16 +33,30 @@
 .productos-page .productos-title {
     color: #ffffff;
     /* letra blanca exacta */
-    font-size: 2.5em;
+    font-size: 2.8em;
+    /* aumentado (antes 2.5em) */
     font-family: 'Comic Sans MS', cursive;
     letter-spacing: 1px;
     margin-bottom: 0.6rem;
     text-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
 }
 
+/* APLICAR color del título también cuando el h1 está fuera de .productos-page */
+.productos-title {
+    color: #ffffff !important;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
+}
+
 /* Subtítulo: blanco semi-transparente para lectura */
 .productos-page .productos-subtitle {
     color: rgba(255, 255, 255, 0.88);
+    font-size: 1.12rem;
+    /* aumentado (antes heredado) */
+}
+
+/* Subtítulo global */
+.productos-subtitle {
+    color: rgba(255, 255, 255, 0.92) !important;
 }
 
 /* Cards: fondo claro para contraste con el fondo degradado oscuro-rosado,
@@ -57,14 +71,17 @@
 .productos-page .card-gn .card-title {
     color: var(--productos-accent);
     font-weight: 600;
-    font-size: 1.15rem;
+    font-size: 1.22rem;
+    /* aumentado (antes 1.15rem) */
 }
 
 /* Texto descriptivo dentro de la card */
 .productos-page .card-gn .card-text,
 .productos-page .card-gn .muted {
     color: var(--productos-muted);
-    font-size: 0.97rem;
+    font-size: 1.03rem;
+    /* aumentado (antes 0.97rem) */
+    line-height: 1.35;
 }
 
 /* Badge (precio) estilo acorde */
@@ -100,6 +117,134 @@
     border-color: var(--productos-accent);
 }
 
+/* Ajustes para el grid de cards principal */
+.cards {
+    justify-content: center;
+    gap: 18px;
+    margin-bottom: 12px;
+    /* espacio antes de la paginación */
+}
+
+/* Paginación centrada justo debajo de las cards */
+.pagination-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 28px;
+}
+
+/* Secciones recomendadas / en uso */
+.productos-section-title {
+    color: #fff;
+    font-size: 1.75rem;
+    /* aumentado (antes 1.4rem) */
+    text-align: center;
+    margin: 20px 0 8px;
+}
+
+/* Mantengo estilos originales para los lists horizontales (recomendados) */
+.recomendados-cards,
+.en-uso-cards {
+    display: flex;
+    gap: 14px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 10px 6px;
+    margin-bottom: 16px;
+}
+
+/* Si usas .card-gn dentro de esos contenedores */
+.recomendados-cards .card-gn,
+.en-uso-cards .card-gn {
+    min-width: 220px;
+    max-width: 240px;
+    flex: 0 0 auto;
+}
+
+/* Estilos informativos (listas para recomendados y en uso) */
+.info-list {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    /* wrap para que no quede una fila única larga */
+    overflow-x: visible;
+    /* quita la barra de scroll horizontal */
+    padding: 8px 6px;
+    align-items: flex-start;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+/* SOLO para la sección "En uso en el estudio" — evitar scroll horizontal y organizar en rejilla */
+.en-uso-list {
+    flex-wrap: wrap;
+    /* permite que los items pasen a la siguiente fila */
+    overflow-x: visible;
+    /* quita la barra de scroll horizontal */
+    justify-content: center;
+    /* centra las tarjetas */
+    gap: 18px;
+    /* un poquito más de separación */
+    padding: 12px 6px;
+}
+
+/* Ajuste de tamaños para permitir varias columnas responsivas */
+.en-uso-list .info-item {
+    flex: 0 1 260px;
+    /* base 260px, puede encoger */
+    max-width: 320px;
+    min-width: 0;
+    /* permitir encoger correctamente */
+}
+
+/* Estilo general de cada item informativo */
+.info-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    background: rgba(0, 0, 0, 0.18);
+    /* más oscuro para mejor contraste con texto blanco */
+    border-radius: 10px;
+    padding: 10px 12px;
+    /* quitar min-width: 300px; para evitar overflow */
+    max-width: 520px;
+    flex: 0 0 auto;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    color: #fff;
+}
+
+/* Imagen de info más contenida */
+.info-img {
+    width: 56px;
+    height: 56px;
+    border-radius: 999px;
+    object-fit: cover;
+    border: 2px solid rgba(255, 64, 129, 0.14);
+    flex-shrink: 0;
+}
+
+/* Mejor legibilidad de descripción */
+.info-desc {
+    color: #ffffff;
+    font-size: 1.02rem;
+    /* aumentado (antes 0.95rem) */
+    line-height: 1.3;
+}
+
+/* small screens: stack info items */
+@media (max-width: 768px) {
+    .info-list {
+        flex-direction: column;
+        gap: 12px;
+        align-items: center;
+    }
+
+    .info-item {
+        width: 95%;
+        max-width: 95%;
+        flex: 0 0 auto;
+    }
+}
+
 /* Responsive: mantener legibilidad en móviles */
 @media (max-width: 991px) {
     .productos-page {
@@ -108,5 +253,77 @@
 
     .productos-page .productos-title {
         font-size: 2.1em;
+    }
+}
+
+/* OBJETIVO DE NUESTROS PRODUCTOS - ajuste visual y espaciado */
+.objetivo-section {
+    box-sizing: border-box;
+    padding: 28px 20px;
+    /* separación superior/inferior y laterales */
+    margin: 0 auto 18px;
+    max-width: 1200px;
+    /* evita que el texto ocupe todo el ancho en pantallas grandes */
+    text-align: center;
+}
+
+.objetivo-section .productos-section-title {
+    color: #ffffff;
+    font-size: 1.75rem;
+    /* aumentado (antes 1.6rem) */
+    letter-spacing: 1px;
+    margin: 0 0 10px;
+    text-transform: uppercase;
+    font-weight: 700;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+/* Texto descriptivo del objetivo: tamaño y restricción de ancho para mejorar legibilidad */
+.objetivo-section .productos-subtitle {
+    color: rgba(255, 255, 255, 0.94);
+    font-size: 1.08rem;
+    /* aumentado (antes 1.02rem) */
+    line-height: 1.55;
+    margin: 0 auto;
+    max-width: 980px;
+    /* restringe la línea para mejor lectura */
+    padding: 0 8px;
+    /* margen interior adicional en móviles */
+}
+
+/* Mantener el span acento con el color ya definido */
+.objetivo-section .productos-subtitle span {
+    color: var(--productos-accent);
+    font-weight: 700;
+}
+
+/* Responsive: reducir tamaño en pantallas pequeñas */
+@media (max-width: 991px) {
+    .objetivo-section {
+        padding: 22px 16px;
+    }
+
+    .objetivo-section .productos-section-title {
+        font-size: 1.45rem;
+    }
+
+    .objetivo-section .productos-subtitle {
+        font-size: 0.99rem;
+        max-width: 92%;
+    }
+}
+
+@media (max-width: 600px) {
+    .objetivo-section {
+        padding: 18px 12px;
+    }
+
+    .objetivo-section .productos-section-title {
+        font-size: 1.25rem;
+    }
+
+    .objetivo-section .productos-subtitle {
+        font-size: 0.95rem;
+        line-height: 1.45;
     }
 }
