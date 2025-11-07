@@ -69,7 +69,7 @@ def producto_detail(request, pk):
 @require_GET
 def lista_productos(request):
     productos_list = Producto.objects.all()
-    paginator = Paginator(productos_list, 4)  # 4 productos por página
+    paginator = Paginator(productos_list, 3)  # 4 productos por página
     page_number = request.GET.get('page')
     productos = paginator.get_page(page_number)
 
