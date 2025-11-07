@@ -10,6 +10,14 @@
   <link rel="stylesheet" href="{% static 'css/servicio.css' %}" />
 
   <div class="scroll-fade servicios-page" data-delay="0.02">
+    {# --- NUEVA SECCIÓN: OBJETIVO DE NUESTROS SERVICIOS (antes del título) --- #}
+    <div class="scroll-fade objetivo-section" data-delay="0.01">
+      <h2 class="servicios-section-title text-center fw-bold mb-3">OBJETIVO DE NUESTROS SERVICIOS</h2>
+      <p class="servicios-subtitle text-center mb-4">
+        Elegimos protocolos y productos profesionales para ofrecer resultados visibles, seguros y duraderos. Nuestros servicios están diseñados para cuidar la salud de tus uñas y piel, utilizando técnicas avanzadas y productos de primera calidad. Son los mismos tratamientos que nuestras clientas piden una y otra vez por su efectividad y acabado impecable — <span style="color:var(--servicios-accent); font-weight:700;">confianza, profesionalismo y resultados que enamoran</span>.
+      </p>
+    </div>
+
     <h1 class="servicios-title text-center fw-bold mb-4">¡CONOCE TODOS NUESTROS SERVICIOS!</h1>
 
     <p class="servicios-subtitle text-center fs-5 mb-4">Reserva en el mejor spa de uñas de Colombia, donde ofrecemos las técnicas más innovadoras en el cuidado de uñas, un ambiente sofisticado y relajante, protocolos rigurosos de esterilización y productos libres de químicos, seguros para tu salud y respetuosos con el medio ambiente.</p>
@@ -76,6 +84,26 @@
         </ul>
       </nav>
     </div>
+
+    {# --- NUEVA SECCIÓN: SERVICIOS MAS SOLICITADOS (informativo similar a productos) --- #}
+    {% if mas_solicitados %}
+      <div class="scroll-fade mt-5" data-delay="0.02">
+        <h2 class="servicios-section-title text-center">SERVICIOS MÁS SOLICITADOS</h2>
+        <div class="info-list recomendados-cards">
+          {% for s in mas_solicitados %}
+            <div class="info-item scroll-fade" data-delay="{{ forloop.counter0|floatformat:2|add:'0.02' }}">
+              {% if s.imagen %}
+                <img src="{{ s.imagen.url }}" alt="{{ s.nombre }}" class="info-img" />
+              {% endif %}
+              <div class="info-body">
+                <strong class="info-title">{{ s.nombre }}</strong>
+                <div class="info-desc">{{ s.descripcion|truncatechars:140 }}</div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
   </div>
 
   <script>
