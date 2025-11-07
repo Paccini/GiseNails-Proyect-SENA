@@ -89,16 +89,114 @@
 }
 
 /* Paginación: contraste */
+.servicios-page .pagination {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
 .servicios-page .pagination .page-link {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: transform .22s cubic-bezier(.2, .9, .3, 1), box-shadow .22s ease, background-color .18s ease;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.16);
+    border: none;
+    background: rgba(255, 255, 255, 0.96);
     color: var(--servicios-card-text);
-    background: #fff;
-    border: 1px solid rgba(0, 0, 0, 0.06);
+    font-weight: 700;
+}
+
+.servicios-page .pagination .page-link:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 30px rgba(0, 0, 0, 0.22);
 }
 
 .servicios-page .pagination .page-item.active .page-link {
     background: var(--servicios-accent);
     color: #fff;
-    border-color: var(--servicios-accent);
+    transform: scale(1.06);
+    box-shadow: 0 20px 40px rgba(255, 64, 129, 0.14);
+}
+
+/* Prev/next arrows circular */
+.servicios-page .pagination .page-link[aria-label] {
+    width: 44px;
+    height: 44px;
+}
+
+/* click/pulse animation */
+.servicios-page .pagination .page-link.pulse {
+    animation: paginator-pulse .38s cubic-bezier(.2, .9, .3, 1);
+}
+
+@keyframes paginator-pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    40% {
+        transform: scale(1.18);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Fade page content while navigating */
+body.pag-navigating .servicios-page {
+    opacity: 0;
+    transition: opacity .28s ease;
+}
+
+/* FORZAR estilos del paginador específico para evitar overrides */
+.servicios-page .animated-paginator,
+.animated-paginator {
+    display: flex !important;
+    gap: 10px !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.animated-paginator .page-link,
+.servicios-page .animated-paginator .page-link {
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 50% !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    transition: transform .22s cubic-bezier(.2, .9, .3, 1) !important;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.16) !important;
+    border: none !important;
+    background: rgba(255, 255, 255, 0.96) !important;
+    color: var(--servicios-card-text) !important;
+    font-weight: 700 !important;
+}
+
+/* FORZAR color y legibilidad del paginador (servicios) */
+.animated-paginator .page-link,
+.servicios-page .animated-paginator .page-link {
+    color: #333333 !important;
+    font-size: 1rem !important;
+    line-height: 1 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-decoration: none !important;
+}
+
+.servicios-page .animated-paginator .page-item.active .page-link {
+    background: var(--servicios-accent) !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
 }
 
 /* Responsive */

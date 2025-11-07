@@ -117,6 +117,73 @@
     border-color: var(--productos-accent);
 }
 
+/* PAGINATOR: circular, interactivo y animado (productos) */
+.productos-page .pagination {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+.productos-page .pagination .page-link {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: transform .22s cubic-bezier(.2, .9, .3, 1), box-shadow .22s ease, background-color .18s ease;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.16);
+    border: none;
+    background: rgba(255, 255, 255, 0.96);
+    color: var(--productos-card-text);
+    font-weight: 700;
+}
+
+.productos-page .pagination .page-link:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 30px rgba(0, 0, 0, 0.22);
+}
+
+.productos-page .pagination .page-item.active .page-link {
+    background: var(--productos-accent);
+    color: #fff;
+    transform: scale(1.06);
+    box-shadow: 0 20px 40px rgba(255, 64, 129, 0.14);
+}
+
+/* small arrows (prev/next) keep circular too */
+.productos-page .pagination .page-link[aria-label] {
+    width: 44px;
+    height: 44px;
+}
+
+/* click/pulse animation applied before navigation */
+.productos-page .pagination .page-link.pulse {
+    animation: paginator-pulse .38s cubic-bezier(.2, .9, .3, 1);
+}
+
+@keyframes paginator-pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    40% {
+        transform: scale(1.18);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Fade page content slightly while navigating */
+body.pag-navigating .productos-page {
+    opacity: 0;
+    transition: opacity .28s ease;
+}
+
 /* Ajustes para el grid de cards principal */
 .cards {
     justify-content: center;
@@ -174,29 +241,124 @@
     margin-bottom: 16px;
 }
 
-/* SOLO para la sección "En uso en el estudio" — evitar scroll horizontal y organizar en rejilla */
+/* ==========================
+   ACTUALIZACIÓN: "En uso en el estudio"
+   Reemplaza la versión previa para que los cuadros sean uniformes,
+   sin descripción, con imagen grande y título centrado.
+   ========================== */
+
+/* Organización en rejilla responsiva para evitar scroll horizontal */
 .en-uso-list {
-    flex-wrap: wrap;
-    /* permite que los items pasen a la siguiente fila */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    justify-items: center;
+    align-items: start;
+    padding: 18px 12px;
+    margin-bottom: 22px;
     overflow-x: visible;
-    /* quita la barra de scroll horizontal */
-    justify-content: center;
-    /* centra las tarjetas */
-    gap: 18px;
-    /* un poquito más de separación */
-    padding: 12px 6px;
 }
 
-/* Ajuste de tamaños para permitir varias columnas responsivas */
+/* Tarjeta uniforme: imagen arriba, título debajo, misma altura visual */
 .en-uso-list .info-item {
-    flex: 0 1 260px;
-    /* base 260px, puede encoger */
-    max-width: 320px;
-    min-width: 0;
-    /* permitir encoger correctamente */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 300px;
+    /* ancho consistente */
+    min-height: 220px;
+    /* altura uniforme para todos */
+    padding: 18px;
+    gap: 12px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.12));
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    transition: transform .28s ease, box-shadow .28s ease;
+    color: #fff;
+    text-align: center;
 }
 
-/* Estilo general de cada item informativo */
+/* Hover sutil para destacar */
+.en-uso-list .info-item:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.32);
+}
+
+/* Imagen más grande, centrada y circular */
+.en-uso-list .info-img {
+    width: 88px;
+    height: 88px;
+    border-radius: 999px;
+    object-fit: cover;
+    border: 3px solid rgba(255, 64, 129, 0.15);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.24);
+    flex-shrink: 0;
+}
+
+/* Título centrado y con tamaño uniforme */
+.en-uso-list .info-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+    line-height: 1.2;
+    max-width: 92%;
+}
+
+/* Ocultar cualquier descripción residual para evitar desajustes */
+.en-uso-list .info-desc {
+    display: none !important;
+}
+
+/* Ajustes responsivos: reducir altura mínima en pantallas pequeñas */
+@media (max-width: 991px) {
+    .en-uso-list .info-item {
+        min-height: 200px;
+        max-width: 260px;
+        padding: 14px;
+    }
+
+    .en-uso-list .info-img {
+        width: 76px;
+        height: 76px;
+    }
+
+    .en-uso-list .info-title {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .en-uso-list {
+        grid-template-columns: 1fr;
+        padding: 14px;
+    }
+
+    .en-uso-list .info-item {
+        width: 95%;
+        max-width: 95%;
+        min-height: auto;
+        padding: 12px;
+    }
+
+    .en-uso-list .info-img {
+        width: 64px;
+        height: 64px;
+    }
+
+    .en-uso-list .info-title {
+        font-size: 0.98rem;
+    }
+}
+
+/* ==========================
+   FIN de la actualización "En uso en el estudio"
+   ========================== */
+
+/* Estilo general de cada item informativo (para otras listas que sí muestran descripción) */
 .info-item {
     display: flex;
     gap: 12px;
@@ -205,14 +367,13 @@
     /* más oscuro para mejor contraste con texto blanco */
     border-radius: 10px;
     padding: 10px 12px;
-    /* quitar min-width: 300px; para evitar overflow */
     max-width: 520px;
     flex: 0 0 auto;
     border: 1px solid rgba(255, 255, 255, 0.04);
     color: #fff;
 }
 
-/* Imagen de info más contenida */
+/* Imagen de info más contenida (para listados con descripción) */
 .info-img {
     width: 56px;
     height: 56px;
@@ -222,7 +383,7 @@
     flex-shrink: 0;
 }
 
-/* Mejor legibilidad de descripción */
+/* Mejor legibilidad de descripción (para recomendados u otros listados) */
 .info-desc {
     color: #ffffff;
     font-size: 1.02rem;
@@ -326,4 +487,93 @@
         font-size: 0.95rem;
         line-height: 1.45;
     }
+}
+
+/* FORZAR estilos del paginador específico para evitar overrides */
+.animated-paginator,
+.productos-page .animated-paginator {
+    display: flex !important;
+    gap: 10px !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.animated-paginator .page-link,
+.productos-page .animated-paginator .page-link {
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 50% !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    transition: transform .22s cubic-bezier(.2, .9, .3, 1) !important;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.16) !important;
+    border: none !important;
+    background: rgba(255, 255, 255, 0.96) !important;
+    color: var(--productos-card-text) !important;
+    font-weight: 700 !important;
+}
+
+.productos-page .animated-paginator .page-item.active .page-link {
+    background: var(--productos-accent) !important;
+    color: #fff !important;
+    transform: scale(1.06) !important;
+    box-shadow: 0 20px 40px rgba(255, 64, 129, 0.14) !important;
+}
+
+/* mantener flechas circulares */
+.productos-page .animated-paginator .page-link[aria-label] {
+    width: 44px !important;
+    height: 44px !important;
+}
+
+/* pulse animation */
+.animated-paginator .page-link.pulse {
+    animation: paginator-pulse .38s cubic-bezier(.2, .9, .3, 1) !important;
+}
+
+/* FORZAR color y legibilidad del paginador (productos) */
+.animated-paginator .page-link,
+.productos-page .animated-paginator .page-link {
+    color: #333333 !important;
+    /* número visible en estado normal */
+    font-size: 1rem !important;
+    line-height: 1 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-decoration: none !important;
+}
+
+/* Refuerzo final: asegurar números visibles y comportamiento del paginador */
+.animated-paginator .page-link,
+.productos-page .animated-paginator .page-link {
+    font-size: 1rem !important;
+    line-height: 1 !important;
+    color: #333333 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+}
+
+/* Forzar que cualquier elemento interno herede color/tamaño */
+.animated-paginator .page-link * {
+    color: inherit !important;
+    font-size: inherit !important;
+    line-height: inherit !important;
+}
+
+/* Asegurar visibilidad de página activa y de disabled */
+.productos-page .animated-paginator .page-item.active .page-link {
+    background: var(--productos-accent) !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+}
+
+.animated-paginator .page-item.disabled .page-link {
+    opacity: 0.6 !important;
+    pointer-events: none !important;
 }

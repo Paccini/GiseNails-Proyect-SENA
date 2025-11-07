@@ -10,120 +10,121 @@
   <link rel="stylesheet" href="{% static 'css/card_moderno.css' %}" />
   <link rel="stylesheet" href="{% static 'css/productos.css' %}" />
 
-  <!-- NUEVA SECCIÓN: Objetivo de nuestros productos (antes de 'Conoce todos nuestros productos') -->
-  <div class="scroll-fade objetivo-section" data-delay="0.01">
-    <h2 class="productos-section-title text-center fw-bold mb-3">OBJETIVO DE NUESTROS PRODUCTOS</h2>
-    <p class="productos-subtitle text-center mb-4">
-      En Gise Nails seleccionamos únicamente productos profesionales que cuidan, reparan y realzan la belleza de uñas y piel.
-      Elegimos fórmulas seguras, efectivas y respetuosas con el medio ambiente, para ofrecer resultados visibles y duraderos.
-      Son los mismos productos que nuestras clientas piden una y otra vez por su calidad y rendimiento —<span style="color:var(--productos-accent);font-weight:700;">confianza y satisfacción en cada servicio</span>.
-      Nuestro objetivo es garantizar salud, belleza y experiencias que invitan a volver.
-    </p>
-  </div>
+  <!-- ADD: comenzar wrapper que asegura que las reglas de .productos-page se apliquen -->
+  <div class="productos-page">
+    <!-- NUEVA SECCIÓN: Objetivo de nuestros productos (antes de 'Conoce todos nuestros productos') -->
+    <div class="scroll-fade objetivo-section" data-delay="0.01">
+      <h2 class="productos-section-title text-center fw-bold mb-3">OBJETIVO DE NUESTROS PRODUCTOS</h2>
+      <p class="productos-subtitle text-center mb-4">
+        En Gise Nails seleccionamos únicamente productos profesionales que cuidan, reparan y realzan la belleza de uñas y piel. Elegimos fórmulas seguras, efectivas y respetuosas con el medio ambiente, para ofrecer resultados visibles y duraderos. Son los mismos productos que nuestras clientas piden una y otra vez por su calidad y rendimiento —<span style="color:var(--productos-accent);font-weight:700;">confianza y satisfacción en cada servicio</span>. Nuestro objetivo es garantizar salud, belleza y experiencias que invitan a volver.
+      </p>
+    </div>
 
-  <h1 class="productos-title text-center fw-bold mb-4">¡CONOCE TODOS NUESTROS PRODUCTOS!</h1>
+    <h1 class="productos-title text-center fw-bold mb-4">¡CONOCE TODOS NUESTROS PRODUCTOS!</h1>
 
-  <p class="productos-subtitle text-center fs-5 mb-4">Descubre nuestra variedad de productos para el cuidado de uñas y belleza, seleccionados para ti con la mejor calidad y seguridad.</p>
+    <p class="productos-subtitle text-center fs-5 mb-4">Descubre nuestra variedad de productos para el cuidado de uñas y belleza, seleccionados para ti con la mejor calidad y seguridad.</p>
 
-  <div class="cards">
-    {% for producto in productos %}
-      <div class="card-gn scroll-fade" data-delay="{{ forloop.counter0|floatformat:2|add:'0.03' }}">
-        <div class="card-front">
-          {% if producto.imagen %}
-            <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" />
-          {% endif %}
-        </div>
+    <div class="cards">
+      {% for producto in productos %}
+        <div class="card-gn scroll-fade" data-delay="{{ forloop.counter0|floatformat:2|add:'0.03' }}">
+          <div class="card-front">
+            {% if producto.imagen %}
+              <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" />
+            {% endif %}
+          </div>
 
-        <div class="card-info" aria-hidden="true">
-          <strong class="card-title">{{ producto.nombre }}</strong>
-          <div class="card-text mb-2">{{ producto.descripcion }}</div>
-          <div class="card-bottom">
-            <span class="badge">${{ producto.precio }}</span>
+          <div class="card-info" aria-hidden="true">
+            <strong class="card-title">{{ producto.nombre }}</strong>
+            <div class="card-text mb-2">{{ producto.descripcion }}</div>
+            <div class="card-bottom">
+            </div>
           </div>
         </div>
-      </div>
-    {% endfor %}
-  </div>
+      {% endfor %}
+    </div>
 
-  <!-- PAGINACIÓN: ahora dentro de la sección principal (debajo de las cards) -->
-  <div class="pagination-wrapper scroll-fade" data-delay="0.02">
-    <div class="d-flex justify-content-center mt-3">
-      <nav aria-label="Page navigation">
-        <ul class="pagination">
-          {% if productos.has_previous %}
-            <li class="page-item">
-              <a class="page-link" href="?page={{ productos.previous_page_number }}" aria-label="Anterior"><span aria-hidden="true">&laquo;</span></a>
-            </li>
-          {% else %}
-            <li class="page-item disabled">
-              <span class="page-link">&laquo;</span>
-            </li>
-          {% endif %}
-          {% for num in productos.paginator.page_range %}
-            {% if productos.number == num %}
-              <li class="page-item active">
-                <span class="page-link">{{ num }}</span>
+    <!-- PAGINACIÓN: ahora dentro de la sección principal (debajo de las cards) -->
+    <div class="pagination-wrapper scroll-fade" data-delay="0.02">
+      <div class="d-flex justify-content-center mt-3">
+        <nav aria-label="Page navigation">
+          <ul class="pagination animated-paginator">
+            {% if productos.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ productos.previous_page_number }}" aria-label="Anterior"><span aria-hidden="true">&laquo;</span></a>
               </li>
             {% else %}
-              <li class="page-item">
-                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+              <li class="page-item disabled">
+                <span class="page-link">&laquo;</span>
               </li>
             {% endif %}
-          {% endfor %}
-          {% if productos.has_next %}
-            <li class="page-item">
-              <a class="page-link" href="?page={{ productos.next_page_number }}" aria-label="Siguiente"><span aria-hidden="true">&raquo;</span></a>
-            </li>
-          {% else %}
-            <li class="page-item disabled">
-              <span class="page-link">&raquo;</span>
-            </li>
-          {% endif %}
-        </ul>
-      </nav>
+            {% for num in productos.paginator.page_range %}
+              {% if productos.number == num %}
+                <li class="page-item active">
+                  <span class="page-link">{{ num }}</span>
+                </li>
+              {% else %}
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                </li>
+              {% endif %}
+            {% endfor %}
+            {% if productos.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ productos.next_page_number }}" aria-label="Siguiente"><span aria-hidden="true">&raquo;</span></a>
+              </li>
+            {% else %}
+              <li class="page-item disabled">
+                <span class="page-link">&raquo;</span>
+              </li>
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
     </div>
-  </div>
 
-  <div class="scroll-fade productos-page" data-delay="0.02">
-    <!-- Sección: Recomendados / Más vendidos -->
-    {% if recomendados %}
-      <h2 class="productos-section-title">Recomendados / Más vendidos</h2>
-      <div class="info-list recomendados-list">
-        {% for p in recomendados %}
-          <div class="info-item scroll-fade" data-delay="{{ forloop.counter0|floatformat:2|add:'0.02' }}">
-            {% if p.imagen %}
-              <img src="{{ p.imagen.url }}" alt="{{ p.nombre }}" class="info-img" />
-            {% endif %}
-            <div class="info-body">
-              <strong class="info-title">{{ p.nombre }}</strong>
-              <div class="info-desc">{{ p.descripcion|truncatechars:140 }}</div>
+    <div class="scroll-fade productos-page" data-delay="0.02">
+      <!-- Sección: Recomendados / Más vendidos -->
+      {% if recomendados %}
+        <h2 class="productos-section-title">Recomendados / Más vendidos</h2>
+        <div class="info-list recomendados-list">
+          {% for p in recomendados %}
+            <div class="info-item scroll-fade" data-delay="{{ forloop.counter0|floatformat:2|add:'0.02' }}">
+              {% if p.imagen %}
+                <img src="{{ p.imagen.url }}" alt="{{ p.nombre }}" class="info-img" />
+              {% endif %}
+              <div class="info-body">
+                <strong class="info-title">{{ p.nombre }}</strong>
+                <div class="info-desc">{{ p.descripcion|truncatechars:140 }}</div>
+              </div>
             </div>
-          </div>
-        {% endfor %}
-      </div>
-    {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
 
-    <!-- Sección: En uso en el estudio / Experiencia -->
-    {% if en_uso %}
-      <h2 class="productos-section-title">En uso en el estudio</h2>
-      <div class="info-list en-uso-list">
-        {% for p in en_uso %}
-          <div class="info-item scroll-fade" data-delay="{{ forloop.counter0|floatformat:2|add:'0.02' }}">
-            {% if p.imagen %}
-              <img src="{{ p.imagen.url }}" alt="{{ p.nombre }}" class="info-img" />
-            {% endif %}
-            <div class="info-body">
-              <strong class="info-title">{{ p.nombre }}</strong>
-              <div class="info-desc">{{ p.descripcion|truncatechars:140 }}</div>
+      <!-- Sección: En uso en el estudio / Experiencia -->
+      {% if en_uso %}
+        <h2 class="productos-section-title">En uso en el estudio</h2>
+        <div class="info-list en-uso-list">
+          {% for p in en_uso %}
+            <div class="info-item scroll-fade" data-delay="{{ forloop.counter0|floatformat:2|add:'0.02' }}">
+              {% if p.imagen %}
+                <img src="{{ p.imagen.url }}" alt="{{ p.nombre }}" class="info-img" />
+              {% endif %}
+              <div class="info-body">
+                <strong class="info-title">{{ p.nombre }}</strong>
+              </div>
             </div>
-          </div>
-        {% endfor %}
-      </div>
-    {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- ADD: cerrar wrapper justo antes del script final -->
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
+      // IntersectionObserver (mantener)
       const observer = new IntersectionObserver(
         (entries, obs) => {
           entries.forEach((entry) => {
@@ -141,8 +142,28 @@
         },
         { threshold: 0.15 }
       )
-    
       document.querySelectorAll('.scroll-fade').forEach((el) => observer.observe(el))
+    
+      // PAGINATOR: delegación para animar y navegar (targets .animated-paginator)
+      document.addEventListener('click', function (e) {
+        const link = e.target.closest('.animated-paginator .page-link')
+        if (!link) return
+        const href = link.getAttribute('href')
+        if (!href || href === '#') return
+        e.preventDefault()
+        // pulso visual + fade
+        link.classList.add('pulse')
+        document.body.classList.add('pag-navigating')
+        setTimeout(() => {
+          window.location.href = href
+        }, 260)
+      })
+    
+      // Make paginator links always show pointer and be focusable
+      document.querySelectorAll('.animated-paginator .page-link').forEach((l) => {
+        l.style.cursor = 'pointer'
+        l.setAttribute('tabindex', '0')
+      })
     })
   </script>
 {% endblock %}
