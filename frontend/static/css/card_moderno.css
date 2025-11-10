@@ -398,3 +398,170 @@
 .pagination-wrapper .page-item .page-link {
   color: #ffffff !important;
 }
+
+/* ===== Fix: asegurar que la imagen de la cara frontal (card-front) ocupe toda la card en móviles ===== */
+/* Más específica que .card-gn img para anular reglas globales en media queries */
+.card-front {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.card-front img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+  display: block !important;
+}
+
+/* Si hay reglas en media queries que hacen más pequeña la imagen, sobreescribimos también ahí */
+@media (max-width: 991px) {
+
+  .card-front,
+  .card-front img {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  /* Evitar que reglas genéricas .card-gn img reduzcan el tamaño del frontal */
+  .card-gn img:not(.card-info img) {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
+@media (max-width: 600px) {
+
+  .card-front,
+  .card-front img {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+}
+
+/* ===== end fix ===== */
+/* ===== Responsive fixes: asegurar que la imagen ocupe toda la card en pantallas pequeñas ===== */
+/* Forzar tamaño/cover y eliminar reglas antiguas que reducían el thumbnail */
+.card-gn {
+  /* usar proporción en vez de min-height para consistencia en móviles */
+  aspect-ratio: 3 / 4;
+  min-height: auto !important;
+  max-width: 95vw !important;
+  width: 100% !important;
+}
+
+/* Asegurar que el front cubre totalmente la tarjeta */
+.card-front {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 1 !important;
+  display: block !important;
+  background: #000;
+  /* fallback mientras carga */
+}
+
+/* Imagen: cover total siempre */
+.card-front img,
+.card-gn>.card-front img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+  pointer-events: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* Evitar reglas que dejaban la imagen pequeña en esquinas */
+.card-gn img {
+  max-width: 100% !important;
+  max-height: 100% !important;
+}
+
+/* Overlay (info) permanece encima y centrada */
+.card-info {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 2 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 18px !important;
+  gap: 8px !important;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.56) 0%, rgba(0, 0, 0, 0.30) 60%, rgba(0, 0, 0, 0.18) 100%) !important;
+  transition: opacity .28s ease, transform .28s cubic-bezier(.2, .9, .3, 1) !important;
+}
+
+/* En móviles no dependemos de hover: mostrar overlay con mayor contraste al tocar */
+@media (hover: none),
+(pointer: coarse) {
+  .card-info {
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto !important;
+  }
+
+  .card-gn:hover .card-front img {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+}
+
+/* Grid: columna única en pantallas pequeñas (ya existía, reforzamos) */
+@media (max-width: 600px) {
+  .cards {
+    grid-template-columns: 1fr !important;
+    padding: 18px 10px !important;
+    gap: 18px !important;
+  }
+
+  .card-gn {
+    aspect-ratio: 4 / 5;
+    max-width: 100% !important;
+    border-radius: 12px !important;
+  }
+
+  .card-front img {
+    border-radius: inherit !important;
+  }
+
+  .card-info {
+    padding: 14px !important;
+  }
+}
+
+/* Sobre-escribir reglas específicas que causaban el thumbnail pequeño */
+@media (max-width: 991px) {
+
+  .card-gn img,
+  .card-front img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  .card-front {
+    position: absolute !important;
+    inset: 0 !important;
+  }
+}
+
+/* Pequeño ajuste para que el badge / botones no queden pegados al borde */
+.card-info .card-bottom {
+  padding-bottom: 10px;
+}
+
+/* Fin de fixes */

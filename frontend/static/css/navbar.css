@@ -40,6 +40,7 @@
     transition: 0.7s ease-in-out;
     pointer-events: none;
 }
+
 .gn-navbar:hover::before {
     left: 100%;
 }
@@ -59,10 +60,24 @@
 
 
 @keyframes logoBounceIn {
-    0% { transform: translateY(-50px) scale(0.5); opacity: 0; }
-    60% { transform: translateY(10px) scale(1.05); opacity: 1; }
-    80% { transform: translateY(-5px) scale(0.98); }
-    100% { transform: translateY(0) scale(1); opacity: 1; }
+    0% {
+        transform: translateY(-50px) scale(0.5);
+        opacity: 0;
+    }
+
+    60% {
+        transform: translateY(10px) scale(1.05);
+        opacity: 1;
+    }
+
+    80% {
+        transform: translateY(-5px) scale(0.98);
+    }
+
+    100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
 }
 
 .brand .title {
@@ -72,9 +87,11 @@
 }
 
 .brand .title .navbar-logo {
-    height: 40px; /* Ajusta según necesites */
+    height: 40px;
+    /* Ajusta según necesites */
     width: auto;
-    filter: brightness(0) saturate(100%) invert(1); /* Hace el logo blanco */
+    filter: brightness(0) saturate(100%) invert(1);
+    /* Hace el logo blanco */
     transition: transform 0.3s ease;
 }
 
@@ -105,16 +122,40 @@
     animation: navLinkFadeIn 0.6s ease-out forwards;
 }
 
-.nav-links a:nth-child(1) { animation-delay: 0.5s; }
-.nav-links a:nth-child(2) { animation-delay: 0.6s; }
-.nav-links a:nth-child(3) { animation-delay: 0.7s; }
-.nav-links a:nth-child(4) { animation-delay: 0.8s; }
-.nav-links a:nth-child(5) { animation-delay: 0.9s; }
-.nav-links a:nth-child(6) { animation-delay: 1s; }
+.nav-links a:nth-child(1) {
+    animation-delay: 0.5s;
+}
+
+.nav-links a:nth-child(2) {
+    animation-delay: 0.6s;
+}
+
+.nav-links a:nth-child(3) {
+    animation-delay: 0.7s;
+}
+
+.nav-links a:nth-child(4) {
+    animation-delay: 0.8s;
+}
+
+.nav-links a:nth-child(5) {
+    animation-delay: 0.9s;
+}
+
+.nav-links a:nth-child(6) {
+    animation-delay: 1s;
+}
 
 @keyframes navLinkFadeIn {
-    0% { transform: translateY(20px); opacity: 0; }
-    100% { transform: translateY(0); opacity: 1; }
+    0% {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 /* Subrayado animado y efecto brillante */
@@ -152,9 +193,11 @@
     transform: translateY(-2px);
     transition: all 0.3s ease-in-out;
 }
+
 .nav-links a:hover::before {
     transform: scaleX(1);
 }
+
 .nav-links a:hover::after {
     transform: translate(-50%, -50%) scale(1.5);
     opacity: 1;
@@ -175,54 +218,202 @@
     color: var(--pink-accent);
 }
 
-/* === MENÚ MÓVIL === */
+/* === MENÚ MÓVIL (consolidado) ===
+   Mantiene la caja compacta a la derecha (como la original),
+   texto blanco y alto z-index. Evita duplicados/efectos que blanqueaban el texto.
+*/
 .mobile-menu {
     display: none;
+    /* oculto por defecto hasta remover la clase .hidden en JS */
     flex-direction: column;
     background: rgba(26, 26, 26, 0.95);
-    backdrop-filter: blur(10px);
+    /* fondo oscuro para legibilidad */
+    /* elimina gradientes/transparencias que pueden hacer el texto difícil de leer */
+    /* evita backdrop-filter que difumina el fondo y reduce contraste */
     position: absolute;
     top: 100%;
+    /* se abre justo debajo del navbar (comportamiento original) */
     right: 0;
     width: 220px;
+    /* caja compacta a la derecha como antes */
     border-left: 2px solid var(--pink-accent);
     border-bottom: 2px solid var(--pink-accent);
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.6);
-    padding: 15px;
-    z-index: 999;
-    transition: all 0.4s ease;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+    padding: 12px;
+    border-radius: 10px;
+    z-index: 1200;
+    /* más alto para que esté por encima de otros elementos */
+    transition: transform 0.18s ease, opacity 0.18s ease;
+    transform-origin: top right;
 }
 
+/* Ocultar usando la clase hidden (la lógica JS ya la usa) */
+.mobile-menu.hidden {
+    display: none;
+    opacity: 0;
+    transform: scale(.98);
+}
+
+/* Enlaces del menú: blancos y con suficiente tamaño */
 .mobile-menu a {
-    color: var(--text-light);
+    color: #fff !important;
+    font-weight: 600;
+    padding: 10px 8px;
+    border-radius: 8px;
     text-decoration: none;
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    transition: color 0.3s ease;
-}
-.mobile-menu a:hover {
-    color: var(--pink-accent);
+    display: block;
+    transition: background .12s ease;
 }
 
-.mobile-menu.show {
-    display: flex;
+/* Estado hover/activo para contraste */
+.mobile-menu a:hover,
+.mobile-menu a:focus {
+    background: rgba(255, 255, 255, 0.06);
+    outline: none;
 }
 
-/* === RESPONSIVE === */
+/* Asegura que el icono del botón hamburguesa sea visible */
+.icon-btn.mobile-toggle {
+    color: #fff;
+    background: transparent;
+    border: none;
+}
+
+/* === OVERRIDES: asegurar que SOLO exista el menú móvil oscuro y legible === */
+header.gn-navbar nav>.mobile-menu {
+    background-color: rgba(18, 6, 18, 0.98) !important;
+    background-image: none !important;
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+    backdrop-filter: none !important;
+    mix-blend-mode: normal !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6) !important;
+    border: 1px solid rgba(255, 105, 180, 0.12) !important;
+    width: 220px;
+    padding: 12px !important;
+    border-radius: 10px !important;
+    z-index: 1200 !important;
+}
+
+/* Forzar color y opacidad en todos los descendientes (íconos, spans, svg) */
+header.gn-navbar nav>.mobile-menu,
+header.gn-navbar nav>.mobile-menu a,
+header.gn-navbar nav>.mobile-menu a * {
+    color: #fff !important;
+    opacity: 1 !important;
+}
+
+/* Evitar que Bootstrap/otras clases muestren un offcanvas/collapse extra al abrir */
+header.gn-navbar .offcanvas,
+header.gn-navbar .navbar-collapse,
+header.gn-navbar .collapse {
+    display: none !important;
+}
+
+/* Si el menú sigue mostrándose doble, obliga a que solo se muestre el #mobileMenu */
+#mobileMenu {
+    display: flex !important;
+}
+
+#mobileMenu.hidden {
+    display: none !important;
+}
+
+/* ===== Forzar que SOLO se muestre nuestro menú móvil #mobileMenu ===== */
+.mobile-menu:not(#mobileMenu),
+[role="menu"]:not(#mobileMenu),
+.offcanvas,
+.offcanvas-backdrop {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+/* Asegurar que nuestro menú sea visible y por encima de todo */
+#mobileMenu {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    z-index: 3000 !important;
+    background-color: rgba(18, 6, 18, 0.98) !important;
+    color: #fff !important;
+}
+
+/* Protege el menú real contra transform/blur que lo hicieran ilegible */
+#mobileMenu,
+#mobileMenu * {
+    -webkit-text-fill-color: #fff !important;
+    color: #fff !important;
+    mix-blend-mode: normal !important;
+    backdrop-filter: none !important;
+}
+
+/* Ajustes específicos para pantallas muy pequeñas */
+@media (max-width: 420px) {
+    .mobile-menu {
+        top: 56px;
+        right: 8px;
+        width: calc(100% - 16px);
+        /* ocupa ancho casi completo en móviles muy pequeños */
+        left: 8px;
+        padding: 10px;
+    }
+
+    .mobile-menu a {
+        padding: 12px 10px;
+        font-size: 0.98rem;
+    }
+}
+
 @media (max-width: 992px) {
     .nav-links {
         display: none;
     }
+
     .actions .mobile-toggle {
         display: block;
     }
 }
 
-@media (max-width: 600px) {
-    .gn-navbar {
-        padding: 15px 30px;
+/* ===== Corregir doble menú: ocultar #navLinks en móvil y proteger contra offcanvas blancos ===== */
+@media (max-width: 992px) {
+
+    /* Forzamos que el contenedor de enlaces desktop no muestre nada en móvil */
+    #navLinks,
+    .nav-links,
+    .navbar-collapse,
+    .collapse {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        border: none !important;
     }
-    .brand .title h1 {
-        font-size: 22px;
+
+    /* Asegurar que nuestro menú móvil personalizado esté por encima */
+    #mobileMenu {
+        display: flex !important;
+        z-index: 4000 !important;
+        position: fixed !important;
+        /* evita que contenido subyacente muestre bordes */
+        top: 72px;
+        /* ajusta si tu header cambia de altura */
+        right: 12px;
+        left: auto;
+        width: 220px;
+    }
+
+    /* Si alguna librería añade un offcanvas / backdrop, lo escondemos */
+    .offcanvas,
+    .offcanvas-backdrop,
+    [data-bs-offcanvas] {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
     }
 }
