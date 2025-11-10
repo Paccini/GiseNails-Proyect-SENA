@@ -1,200 +1,272 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>
-    {% block title %}
-    Gise Nails
-    {% endblock %}
-  </title>
-
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <!-- Bootstrap Icons -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Great+Vibes&family=Dancing+Script&display=swap"
-    rel="stylesheet" />
-  <!-- CSS personalizado -->
-  <link rel="stylesheet" href="{% static 'css/base.css' %}" />
-  <link rel="stylesheet" href="{% static 'css/navbar.css' %}" />
-  <link rel="stylesheet" href="{% static 'css/footer.css' %}" />
-  {% block extra_head %}
-  {% endblock %}
-</head>
-
-<body>
-  <!-- Nuevo Navbar Moderno -->
-  <header class="gn-navbar" id="gnNavbar">
-    <div class="brand" onclick="window.location.href='{% url 'inicio' %}'" role="button" aria-label="Gise Nails">
-      <div class="title">
-        <img src="{% static 'img/logo_blanco.png' %}" alt="Gise Nails Logo" class="navbar-logo">
-        <h1>GISE NAILS</h1>
-      </div>
-    </div>
-
-    <nav>
-      {% if request.resolver_match %}
-      {% with current_view=request.resolver_match.view_name %}
-      <div class="nav-links" id="navLinks">
-        <a class="underline {% if current_view == 'inicio' %}active{% endif %}" href="{% url 'inicio' %}"><i
-            class="bi bi-house-door"></i> Inicio</a>
-        <a class="underline {% if current_view == 'reserva:reserva' %}active{% endif %}"
-          href="{% url 'reserva:reserva' %}"><i class="bi bi-calendar-check"></i> Reserva</a>
-        <a class="underline {% if current_view == 'nosotros' %}active{% endif %}" href="{% url 'nosotros' %}"><i
-            class="bi bi-people"></i> Nosotros</a>
-        <a class="underline {% if current_view == 'productos:lista_productos' %}active{% endif %}"
-          href="{% url 'productos:lista_productos' %}"><i class="bi bi-bag-heart"></i> Productos</a>
-        <a class="underline {% if current_view == 'servicio:lista_servicios' %}active{% endif %}"
-          href="{% url 'servicio:lista_servicios' %}"><i class="bi bi-star"></i> Servicios</a>
-        <a class="underline {% if current_view == 'login:login' %}active{% endif %}" href="{% url 'login:login' %}"><i
-            class="bi bi-person-circle"></i> Inicia sesión</a>
-      </div>
-      {% endwith %}
-      {% else %}
-      {# Fallback si request.resolver_match no está disponible: simple enlaces sin active dinámico #}
-      <div class="nav-links" id="navLinks">
-        <a class="underline" href="{% url 'inicio' %}"><i class="bi bi-house-door"></i> Inicio</a>
-        <a class="underline" href="{% url 'reserva:reserva' %}"><i class="bi bi-calendar-check"></i> Reserva</a>
-        <a class="underline" href="{% url 'nosotros' %}"><i class="bi bi-people"></i> Nosotros</a>
-        <a class="underline" href="{% url 'productos:lista_productos' %}"><i class="bi bi-bag-heart"></i> Productos</a>
-        <a class="underline" href="{% url 'servicio:lista_servicios' %}"><i class="bi bi-star"></i> Servicios</a>
-        <a class="underline" href="{% url 'login:login' %}"><i class="bi bi-person-circle"></i> Inicia sesión</a>
-      </div>
-      {% endif %}
-
-      <div class="actions">
-        <button class="icon-btn mobile-toggle" id="mobileToggle" aria-expanded="false" aria-controls="mobileMenu"><i
-            class="bi bi-list"></i></button>
-      </div>
-
-      <!-- Mobile menu (hidden on desktop) -->
-      <div class="mobile-menu hidden" id="mobileMenu" role="menu" aria-hidden="true">
-        <a href="{% url 'inicio' %}">Inicio</a>
-        <a href="{% url 'reserva:reserva' %}">Reserva</a>
-        <a href="{% url 'nosotros' %}">Nosotros</a>
-        <a href="{% url 'productos:lista_productos' %}">Productos</a>
-        <a href="{% url 'servicio:lista_servicios' %}">Servicios</a>
-        <a href="{% url 'login:login' %}">Inicia sesión</a>
-      </div>
-    </nav>
-  </header>
-  <div style="height: 80px;"></div>
-  <!-- Contenido principal -->
-  <main class="main-content">
-    <div class="container-fluid">
-      {% block content %}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      {% block title %}
+        Gise Nails
       {% endblock %}
-    </div>
-  </main>
+    </title>
 
-  <!-- Pie de página -->
-  <footer>
-    <div class="row">
-      <div class="col">
-        <img src="{% static 'img/logo_blanco.png' %}" class="logo">
-        <p>Diseños profesionales de uñas acrílicas, gel y press-on.
-          Calidad premium – estilo único para mujeres que aman verse perfectas.</p>
-      </div>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Great+Vibes&family=Dancing+Script&display=swap" rel="stylesheet" />
+    <!-- CSS personalizado -->
+    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}" />
+    {% block extra_head %}
 
-      <div class="col">
-        <h3>Estudio <div class="underline"><span></span></div>
-        </h3>
-        <p>Cra 9 a #42-44 Barrio Calarca</p>
-        <p>Ibagué - Colombia</p>
-        <p class="email-id">giselav489@gmail.com</p>
-        <p class="tel">+57 300 204 05 38</p>
-      </div>
+    {% endblock %}
+  </head>
 
-      <div class="col">
-        <h3>Enlaces <div class="underline"><span></span></div>
-        </h3>
-        <ul>
-          <li><a href="{% url 'inicio' %}">Inicio</a></li>
-          <li><a href="{% url 'reserva:reserva' %}">Reserva</a></li>
-          <li><a href="{% url 'nosotros' %}">Nosotros</a></li>
-          <li><a href="{% url 'productos:lista_productos' %}">Productos</a></li>
-          <li><a href="{% url 'servicio:lista_servicios' %}">Servicios</a></li>
-        </ul>
-      </div>
+  <body>
+    <!-- quick fix: hide/remove any offcanvas/duplicate mobile menu as soon as possible -->
+    <style>
+      /* escondemos cualquier offcanvas/overlay por defecto (prioridad máxima) */
+      .offcanvas,
+      .offcanvas-backdrop,
+      [class*='offcanvas'],
+      [data-bs-offcanvas],
+      .mobile-menu:not(#mobileMenu),
+      [role='menu']:not(#mobileMenu) {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+      }
+    </style>
 
-      <div class="col">
-        <h3>Newsletter <div class="underline"><span></span></div>
-        </h3>
-        <div class="social">
-          <a class="social-item" href="https://www.instagram.com/gise_nails07?igsh=MTZvc3J5d3J3MnY1Yw==" target="_blank">
-            <ion-icon name="logo-instagram"></ion-icon>
-            <span>Instagram</span>
-          </a>
+    <script>
+      ;(function () {
+        // elimina duplicados ya existentes y protege contra nuevos añadidos dinámicamente
+        function removeDupMenus() {
+          document.querySelectorAll('.mobile-menu:not(#mobileMenu), .offcanvas, .offcanvas-backdrop, [data-bs-offcanvas], [role="menu"]:not(#mobileMenu)').forEach((el) => {
+            try {
+              el.remove()
+            } catch (e) {}
+          })
+        }
+      
+        // limpieza inmediata
+        removeDupMenus()
+      
+        // observador que borra menús añadidos posteriormente (por librerías o Bootstrap)
+        const mo = new MutationObserver(() => removeDupMenus())
+        mo.observe(document.documentElement || document.body, { childList: true, subtree: true })
+      
+        // Interceptar clicks en captura para asegurarnos de que no se abra un offcanvas
+        document.addEventListener(
+          'click',
+          (e) => {
+            const btn = document.getElementById('mobileToggle')
+            if (btn && (btn === e.target || btn.contains(e.target))) {
+              removeDupMenus() // limpia justo antes de que otros listeners actúen
+            }
+          },
+          true
+        )
+      })()
+    </script>
 
-          <a class="social-item" href="https://www.tiktok.com/@TU_USUARIO" target="_blank">
-            <ion-icon name="logo-tiktok"></ion-icon>
-            <span>TikTok</span>
-          </a>
-
-          <a class="social-item" href="https://www.facebook.com/share/18rBpCmAT6/" target="_blank">
-            <ion-icon name="logo-facebook"></ion-icon>
-            <span>Facebook</span>
-          </a>
-
-          <a class="social-item" href="https://wa.me/3002040538" target="_blank">
-            <ion-icon name="logo-whatsapp"></ion-icon>
-            <span>WhatsApp</span>
-          </a>
+    <!-- Nuevo Navbar Moderno -->
+    <header class="gn-navbar" id="gnNavbar">
+      <div class="brand" onclick="window.location.href='{% url 'inicio' %}'" role="button" aria-label="Gise Nails">
+        <div class="title">
+          <img src="{% static 'img/logo_blanco.png' %}" alt="Gise Nails Logo" class="navbar-logo" />
+          <h1>GISE NAILS</h1>
         </div>
       </div>
-    </div>
-    <hr>
-    <p class="copyright">Gise Nails © 2025 – Todos los derechos reservados</p>
-  </footer>
-  {% block scripts %}
-  <!-- JQuery (necesario para main.js) -->
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <!-- JS personalizado -->
-  <script src="{% static 'js/home.js' %}"></script>
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
-  {% block extra_js %}
-  <script>
-    ; (function () {
-      const btn = document.getElementById('mobileToggle')
-      const menu = document.getElementById('mobileMenu')
-      btn &&
-        btn.addEventListener('click', function (e) {
-          const open = !menu.classList.contains('hidden')
-          if (open) {
-            menu.classList.add('hidden')
-            btn.setAttribute('aria-expanded', 'false')
-            menu.setAttribute('aria-hidden', 'true')
-          } else {
-            menu.classList.remove('hidden')
-            btn.setAttribute('aria-expanded', 'true')
-            menu.setAttribute('aria-hidden', 'false')
-          }
-        })
-      document.addEventListener('click', function (e) {
-        if (!menu || !btn) return
-        if (!menu.classList.contains('hidden') && !menu.contains(e.target) && !btn.contains(e.target)) {
-          menu.classList.add('hidden')
-          btn.setAttribute('aria-expanded', 'false')
-          menu.setAttribute('aria-hidden', 'true')
-        }
-      })
-      const navbar = document.getElementById('gnNavbar')
-      window.addEventListener('scroll', function () {
-        if (window.scrollY > 20) navbar.classList.add('scrolled')
-        else navbar.classList.remove('scrolled')
-      })
-    })()
-  </script>
-  {% endblock %}
-  {% endblock %}
-</body>
+      <nav>
+        {% if request.resolver_match %}
+          {% with current_view=request.resolver_match.view_name %}
+            <div class="nav-links" id="navLinks">
+              <a class="underline {% if current_view == 'inicio' %}active{% endif %}" href="{% url 'inicio' %}"><i class="bi bi-house-door"></i> Inicio</a>
+              <a class="underline {% if current_view == 'reserva:reserva' %}active{% endif %}" href="{% url 'reserva:reserva' %}"><i class="bi bi-calendar-check"></i> Reserva</a>
+              <a class="underline {% if current_view == 'nosotros' %}active{% endif %}" href="{% url 'nosotros' %}"><i class="bi bi-people"></i> Nosotros</a>
+              <a class="underline {% if current_view == 'productos:lista_productos' %}active{% endif %}" href="{% url 'productos:lista_productos' %}"><i class="bi bi-bag-heart"></i> Productos</a>
+              <a class="underline {% if current_view == 'servicio:lista_servicios' %}active{% endif %}" href="{% url 'servicio:lista_servicios' %}"><i class="bi bi-star"></i> Servicios</a>
+              <a class="underline {% if current_view == 'login:login' %}active{% endif %}" href="{% url 'login:login' %}"><i class="bi bi-person-circle"></i> Inicia sesión</a>
+            </div>
+          {% endwith %}
+        {% else %}
+          {# Fallback si request.resolver_match no está disponible: simple enlaces sin active dinámico #}
+          <div class="nav-links" id="navLinks">
+            <a class="underline" href="{% url 'inicio' %}"><i class="bi bi-house-door"></i> Inicio</a>
+            <a class="underline" href="{% url 'reserva:reserva' %}"><i class="bi bi-calendar-check"></i> Reserva</a>
+            <a class="underline" href="{% url 'nosotros' %}"><i class="bi bi-people"></i> Nosotros</a>
+            <a class="underline" href="{% url 'productos:lista_productos' %}"><i class="bi bi-bag-heart"></i> Productos</a>
+            <a class="underline" href="{% url 'servicio:lista_servicios' %}"><i class="bi bi-star"></i> Servicios</a>
+            <a class="underline" href="{% url 'login:login' %}"><i class="bi bi-person-circle"></i> Inicia sesión</a>
+          </div>
+        {% endif %}
 
+        <div class="actions">
+          <button class="icon-btn mobile-toggle" id="mobileToggle" aria-expanded="false" aria-controls="mobileMenu"><i class="bi bi-list"></i></button>
+        </div>
+
+        <!-- Mobile menu (hidden on desktop) -->
+        <div class="mobile-menu hidden" id="mobileMenu" role="menu" aria-hidden="true">
+          <a href="{% url 'inicio' %}">Inicio</a>
+          <a href="{% url 'reserva:reserva' %}">Reserva</a>
+          <a href="{% url 'nosotros' %}">Nosotros</a>
+          <a href="{% url 'productos:lista_productos' %}">Productos</a>
+          <a href="{% url 'servicio:lista_servicios' %}">Servicios</a>
+          <a href="{% url 'login:login' %}">Inicia sesión</a>
+        </div>
+      </nav>
+    </header>
+    <div style="height: 80px;"></div>
+    <!-- Contenido principal -->
+    <main class="main-content">
+      <div class="container-fluid">
+        {% block content %}
+
+        {% endblock %}
+      </div>
+    </main>
+
+    <!-- Pie de página -->
+    <footer>
+      <div class="row">
+        <div class="col">
+          <img src="{% static 'img/logo_blanco.png' %}" class="logo" />
+          <p>Diseños profesionales de uñas acrílicas, gel y press-on. Calidad premium – estilo único para mujeres que aman verse perfectas.</p>
+        </div>
+
+        <div class="col">
+          <h3>
+            Estudio<div class="underline">
+              <span></span>
+            </div>
+          </h3>
+          <p>Cra 9 a #42-44 Barrio Calarca</p>
+          <p>Ibagué - Colombia</p>
+          <p class="email-id">giselav489@gmail.com</p>
+          <p class="tel">+57 300 204 05 38</p>
+        </div>
+
+        <div class="col">
+          <h3>
+            Enlaces<div class="underline">
+              <span></span>
+            </div>
+          </h3>
+          <ul>
+            <li>
+              <a href="{% url 'inicio' %}">Inicio</a>
+            </li>
+            <li>
+              <a href="{% url 'reserva:reserva' %}">Reserva</a>
+            </li>
+            <li>
+              <a href="{% url 'nosotros' %}">Nosotros</a>
+            </li>
+            <li>
+              <a href="{% url 'productos:lista_productos' %}">Productos</a>
+            </li>
+            <li>
+              <a href="{% url 'servicio:lista_servicios' %}">Servicios</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="col">
+          <h3>
+            Newsletter<div class="underline">
+              <span></span>
+            </div>
+          </h3>
+          <div class="social">
+            <a class="social-item" href="https://www.instagram.com/gise_nails07?igsh=MTZvc3J5d3J3MnY1Yw==" target="_blank">
+              <ion-icon name="logo-instagram"></ion-icon>
+              <span>Instagram</span>
+            </a>
+
+            <a class="social-item" href="https://www.tiktok.com/@TU_USUARIO" target="_blank">
+              <ion-icon name="logo-tiktok"></ion-icon>
+              <span>TikTok</span>
+            </a>
+
+            <a class="social-item" href="https://www.facebook.com/share/18rBpCmAT6/" target="_blank">
+              <ion-icon name="logo-facebook"></ion-icon>
+              <span>Facebook</span>
+            </a>
+
+            <a class="social-item" href="https://wa.me/3002040538" target="_blank">
+              <ion-icon name="logo-whatsapp"></ion-icon>
+              <span>WhatsApp</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <hr />
+      <p class="copyright">Gise Nails © 2025 – Todos los derechos reservados</p>
+    </footer>
+    {% block scripts %}
+      <!-- JQuery (necesario para main.js) -->
+      <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+      <!-- JS personalizado -->
+      <script src="{% static 'js/home.js' %}"></script>
+      <!-- Bootstrap JS -->
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+      <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+      <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+      {% block extra_js %}
+        <script>
+          ;(function () {
+            const btn = document.getElementById('mobileToggle')
+            const menu = document.getElementById('mobileMenu')
+            const navLinks = document.getElementById('navLinks')
+          
+            function removeWhitePanel() {
+              // ocultar #navLinks en móviles (doble protección)
+              if (window.innerWidth <= 992 && navLinks) {
+                navLinks.style.display = 'none'
+                navLinks.style.visibility = 'hidden'
+                navLinks.style.opacity = '0'
+                navLinks.style.pointerEvents = 'none'
+              }
+              // eliminar posibles offcanvas/backdrops añadidos por librerías
+              document.querySelectorAll('.offcanvas, .offcanvas-backdrop, [data-bs-offcanvas], .mobile-menu:not(#mobileMenu)').forEach((el) => el.remove())
+            }
+          
+            // limpieza inicial
+            removeWhitePanel()
+          
+            // observar DOM para eliminar paneles que aparezcan dinámicamente
+            const mo = new MutationObserver(() => removeWhitePanel())
+            mo.observe(document.body, { childList: true, subtree: true })
+          
+            if (btn && menu) {
+              btn.addEventListener('click', (e) => {
+                e.stopPropagation()
+                // siempre ocultar navLinks justo antes de abrir el menú
+                removeWhitePanel()
+                menu.classList.toggle('hidden')
+                btn.setAttribute('aria-expanded', String(!menu.classList.contains('hidden')))
+                menu.setAttribute('aria-hidden', String(menu.classList.contains('hidden')))
+              })
+          
+              // cerrar si hace click fuera
+              document.addEventListener('click', (e) => {
+                if (!menu.classList.contains('hidden') && !menu.contains(e.target) && !btn.contains(e.target)) {
+                  menu.classList.add('hidden')
+                  btn.setAttribute('aria-expanded', 'false')
+                  menu.setAttribute('aria-hidden', 'true')
+                }
+              })
+            }
+          })()
+        </script>
+      {% endblock %}
+    {% endblock %}
+  </body>
 </html>

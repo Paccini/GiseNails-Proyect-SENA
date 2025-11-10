@@ -1,9 +1,34 @@
 /* Banner principal */
 .cont-bn {
-    background: url("../img/banner_inicio.png") no-repeat center center;
+    background: url("../img/banner_inicio.png") no-repeat center top;
     background-size: cover;
-    height: 50vh;
+    /* conserva cobertura en pantallas grandes */
     width: 100%;
+    height: 50vh;
+    min-height: 300px;
+    display: block;
+}
+
+/* En pantallas pequeñas evitar recorte: mostrar la imagen completa y mantener proporción */
+@media (max-width: 768px) {
+    .cont-bn {
+        background-position: center top;
+        background-size: contain;
+        /* muestra toda la imagen */
+        height: auto;
+        padding-top: 56.25%;
+        /* reserva espacio según aspecto (16:9). Ajusta si tu imagen tiene otra proporción */
+        min-height: 220px;
+        background-repeat: no-repeat;
+    }
+}
+
+/* Opcional: para móviles muy estrechos */
+@media (max-width: 420px) {
+    .cont-bn {
+        padding-top: 70%;
+        /* aumentar si la imagen sigue viéndose cortada verticalmente */
+    }
 }
 
 /* Iconos inicio */
@@ -247,93 +272,118 @@
 }
 
 .reviews h2 {
-  font-weight: 600;
-  letter-spacing: .5px;
-  margin-bottom: 1.5rem;
+    font-weight: 600;
+    letter-spacing: .5px;
+    margin-bottom: 1.5rem;
 }
 
 .reviews-section {
-  background: #2a0d2e;
-  padding: 60px 0;
-  color: #fff;
-  text-align: center;
+    background: #2a0d2e;
+    padding: 60px 0;
+    color: #fff;
+    text-align: center;
 }
 
 .reviews-container {
-  width: 90%;
-  margin: 0 auto;
-  display: flex;
-  gap: 30px;
-  justify-content: center;
-  flex-wrap: wrap;
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .review-card {
-  background: rgba(255,255,255,0.06);
-  border-radius: 14px;
-  padding: 28px 34px;        /* más espacio interno */
-  width: 320px;              /* mayor ancho */
-  min-width: 280px;
-  transition: .3s ease;
-  backdrop-filter: blur(6px);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    padding: 28px 34px;
+    /* más espacio interno */
+    width: 320px;
+    /* mayor ancho */
+    min-width: 280px;
+    transition: .3s ease;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
 
 .review-card:hover {
-  transform: translateY(-6px) scale(1.035);
-  box-shadow: 0 20px 45px rgba(0,0,0,0.45);
+    transform: translateY(-6px) scale(1.035);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
 }
 
 .review-photo {
-  width: 96px;               /* foto más grande */
-  height: 96px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 12px;
-  border: 2px solid rgba(255,255,255,0.45);
+    width: 96px;
+    /* foto más grande */
+    height: 96px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.45);
 }
 
 .review-name {
-  font-weight: 700;
-  margin-bottom: 8px;
-  font-size: 1rem;           /* texto un poco mayor */
+    font-weight: 700;
+    margin-bottom: 8px;
+    font-size: 1rem;
+    /* texto un poco mayor */
 }
 
 /* ajustar respuesta en móvil para no saturar el ancho */
 @media (max-width: 768px) {
-  .reviews-container { gap: 18px; }
-  .review-card { width: 100%; max-width: 340px; padding: 20px; }
-  .review-photo { width: 80px; height: 80px; }
+    .reviews-container {
+        gap: 18px;
+    }
+
+    .review-card {
+        width: 100%;
+        max-width: 340px;
+        padding: 20px;
+    }
+
+    .review-photo {
+        width: 80px;
+        height: 80px;
+    }
 }
 
 /* Reutiliza la animación h2shine (ya definida más arriba) */
 /* Estilo animado para todos los títulos */
-h1, h2, h3, h4, h5, h6,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
 .animated-title {
-  display: inline-block;
-  background: linear-gradient(
-    90deg,
-    #ffffff 0%,
-    #ffd6ef 25%,
-    #ff7ec9 50%,
-    #d1006e 75%,
-    #ffffff 100%
-  );
-  background-size: 220% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: transparent;
-  animation: h2shine 4.5s ease-in-out infinite;
-  font-weight: 600;
-  will-change: background-position;
+    display: inline-block;
+    background: linear-gradient(90deg,
+            #ffffff 0%,
+            #ffd6ef 25%,
+            #ff7ec9 50%,
+            #d1006e 75%,
+            #ffffff 100%);
+    background-size: 220% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    animation: h2shine 4.5s ease-in-out infinite;
+    font-weight: 600;
+    will-change: background-position;
 }
 
 /* Fallback para evitar texto invisible en navegadores sin soporte */
 @supports not (-webkit-background-clip: text) {
-  h1, h2, h3, h4, h5, h6, .animated-title {
-    color: #fff;
-    background: none;
-    -webkit-text-fill-color: initial;
-  }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    .animated-title {
+        color: #fff;
+        background: none;
+        -webkit-text-fill-color: initial;
+    }
 }
