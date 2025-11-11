@@ -104,6 +104,7 @@ def reserva(request):
 
 def horarios_disponibles(request):
     fecha = request.GET.get('fecha')
+    gestora_id = request.GET.get('gestora_id')
     horarios = HorarioDisponible.objects.all()
     from datetime import datetime
     try:
@@ -115,7 +116,10 @@ def horarios_disponibles(request):
     except Exception:
         return JsonResponse({'horarios': []})
 
-    ocupados = Reserva.objects.filter(fecha=fecha_obj).values_list('hora_id', flat=True)
+    ocupados_qs = Reserva.objects.filter(fecha=fecha_obj)
+    if gestora_id:
+        ocupados_qs = ocupados_qs.filter(gestora_id=gestora_id)
+    ocupados = ocupados_qs.values_list('hora_id', flat=True)
     disponibles = horarios.exclude(id__in=ocupados)
     data = [{'id': h.id, 'hora': h.hora.strftime('%H:%M')} for h in disponibles]
     return JsonResponse({'horarios': data})

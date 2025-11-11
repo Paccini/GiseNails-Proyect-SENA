@@ -341,4 +341,58 @@ document.addEventListener('DOMContentLoaded', function() {
 			alert('Error de red al intentar crear la reserva.');
 		});
 	});
+
+	// --- Actualización dinámica de horarios ---
+	const gestoraSelect = document.getElementById('gestora-select');
+	const fechaInput = document.getElementById('fecha-select');
+	const horarioSelect = document.getElementById('horario-select');
+
+	function cargarHorariosDisponibles() {
+        if (!gestoraSelect || !fechaInput || !horarioSelect) return;
+        const gestoraId = gestoraSelect.value;
+        const fecha = fechaInput.value;
+        // Deshabilitar y mostrar opción de carga
+        horarioSelect.innerHTML = '<option>Cargando...</option>';
+        horarioSelect.disabled = true;
+        if (!gestoraId || !fecha) {
+            horarioSelect.innerHTML = '<option value="">Seleccione gestora y fecha</option>';
+            horarioSelect.disabled = true;
+            return;
+        }
+        fetch(`/reserva/horarios-disponibles/?gestora_id=${gestoraId}&fecha=${fecha}`, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(r => r.json())
+        .then(data => {
+            horarioSelect.innerHTML = '';
+            // --- CORRECCIÓN: leer data.horarios y mostrar error si existe ---
+            if (data.error) {
+                horarioSelect.innerHTML = `<option value="">${data.error}</option>`;
+                horarioSelect.disabled = true;
+                return;
+            }
+            const horarios = Array.isArray(data.horarios) ? data.horarios : [];
+            if (horarios.length > 0) {
+                horarios.forEach(h => {
+                    const opt = document.createElement('option');
+                    opt.value = h.id;
+                    opt.textContent = h.hora;
+                    horarioSelect.appendChild(opt);
+                });
+                horarioSelect.disabled = false;
+            } else {
+                horarioSelect.innerHTML = '<option value="">No hay horarios disponibles</option>';
+                horarioSelect.disabled = true;
+            }
+        })
+        .catch(err => {
+            horarioSelect.innerHTML = '<option value="">Error al cargar horarios</option>';
+            horarioSelect.disabled = true;
+        });
+    }
+
+	if (gestoraSelect && fechaInput) {
+		gestoraSelect.addEventListener('change', cargarHorariosDisponibles);
+		fechaInput.addEventListener('change', cargarHorariosDisponibles);
+	}
 });
