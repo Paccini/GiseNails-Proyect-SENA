@@ -10,7 +10,7 @@
 
 <div class="reserva-container">
     <header class="reserva-header">
-        <img src="{% static 'img/Logo gisel-nails.png' %}" alt="Gise-Nails" class="logo">
+        <img src="{% static 'img/logo_blanco.png' %}" alt="Gise-Nails" class="logo">
         <div class="marca-texto">
             <h2 >Reserva tu cita</h2>
             <p class="direccion">
@@ -98,11 +98,22 @@
                       <div class="modal-body">
                         <div id="modal-servicios-list" class="modal-servicios-list"></div>
                       </div>
-                                                                    <div class="modal-footer">
-                                                                        <button id="modal-cancel" class="modal-btn cancelar"><span class="icon">&#10006;</span>Cancelar</button>
-                                                                    </div>
+                        <div class="modal-footer">
+                            <button id="modal-cancel" class="modal-btn cancelar"><span class="icon">&#10006;</span>Cancelar</button>
+                        </div>
                     </div>
                   </div>
+                    <div id="validation-modal" class="modal-validation" aria-hidden="true" role="alertdialog" aria-modal="true">
+                        <div class="modal-panel validation-panel" role="document">
+                                <div class="validation-body">
+                                    <div class="validation-icon" aria-hidden="true">⚠️</div>
+                                    <div class="validation-message" id="validation-message">Mensaje</div>
+                                </div>
+                                <div class="modal-footer">
+                                        <button id="validation-ok" type="button" class="modal-btn confirmar">Aceptar</button>
+                                </div>
+                        </div>
+                    </div>
 
                 <div class="acciones">
                     <button type="submit" class="modal-btn confirmar"><span class="icon">&#10004;</span>Confirmar cita</button>

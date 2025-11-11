@@ -1,10 +1,17 @@
 document.addEventListener("DOMContentLoaded", function () {
     const tipoSelect = document.getElementById('tipo-servicio');
     const serviciosContenedor = document.getElementById('servicios-contenedor');
-    const serviciosPorCategoria = JSON.parse(document.getElementById('servicios-data').textContent);
+    const serviciosDataElement = document.getElementById('servicios-data');
     const gestoraSelect = document.getElementById('gestora-select');
     const fechaSelect = document.getElementById('fecha-select');
     const horarioSelect = document.getElementById('horario-select');
+
+    if (!tipoSelect || !serviciosContenedor || !serviciosDataElement || !gestoraSelect || !fechaSelect || !horarioSelect) {
+        console.error("Algunos elementos necesarios no están presentes en el DOM.");
+        return;
+    }
+
+    const serviciosPorCategoria = JSON.parse(serviciosDataElement.textContent || '{}');
 
     function mostrarServicios(tipo) {
         serviciosContenedor.innerHTML = '';
@@ -18,7 +25,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     </div>
                 `;
             });
-            // Auto-seleccionar el primer servicio disponible para evitar que el input hidden quede vacío
             setTimeout(() => {
                 const first = serviciosContenedor.querySelector('.servicio-card');
                 const servicioInput = document.getElementById('servicio-input');
@@ -40,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 .then(data => {
                     data.horarios.forEach(item => {
                         const option = document.createElement('option');
-                        option.value = item.id; // usamos el id del HorarioDisponible
+                        option.value = item.id;
                         option.textContent = item.hora;
                         horarioSelect.appendChild(option);
                     });
@@ -49,31 +55,34 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     tipoSelect.addEventListener('change', function () {
-                mostrarServicios(this.value);
-                // Mostrar todas las tarjetas y quitar selección
-                setTimeout(() => {
-                    document.querySelectorAll('.servicio-card').forEach(el => {
-                        el.style.display = '';
-                        el.classList.remove('selected');
-                    });
-                }, 10);
+        mostrarServicios(this.value);
+        setTimeout(() => {
+            document.querySelectorAll('.servicio-card').forEach(el => {
+                el.style.display = '';
+                el.classList.remove('selected');
+            });
+        }, 10);
     });
 
     gestoraSelect.addEventListener('change', cargarHorarios);
     fechaSelect.addEventListener('change', cargarHorarios);
 
-    // Mostrar los servicios de manicure al cargar si está seleccionado
     if (tipoSelect.value === "manicure") {
         mostrarServicios("manicure");
     }
 });
 
 // Selección automática del tipo de servicio al hacer clic en una tarjeta
+
 document.addEventListener('DOMContentLoaded', function() {
     const serviciosContenedor = document.getElementById('servicios-contenedor');
     const selectServicio = document.getElementById('tipo-servicio');
 
-    // Delegación de eventos para tarjetas generadas dinámicamente
+    if (!serviciosContenedor || !selectServicio) {
+        console.error("Elementos necesarios para la selección automática no están presentes en el DOM.");
+        return;
+    }
+
     serviciosContenedor.addEventListener('click', function(e) {
         const card = e.target.closest('.servicio-card');
         if (!card) return;
