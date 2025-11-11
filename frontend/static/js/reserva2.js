@@ -130,7 +130,20 @@ document.addEventListener('DOMContentLoaded', function() {
 	function closeModal(){ modal.setAttribute('aria-hidden','true'); }
 
 	modalClose.addEventListener('click', closeModal);
-	modalCancel.addEventListener('click', closeModal);
+	// Cancelar debe cerrar el modal y limpiar la selección de categoría/servicio
+	function cancelModal() {
+		closeModal();
+		// limpiar el select de categoría para que el formulario quede en blanco
+		if (tipoSelect) tipoSelect.value = '';
+		// limpiar servicio seleccionado y resumen
+		if (servicioInput) servicioInput.value = '';
+		if (resumen) resumen.hidden = true;
+		// eliminar el botón de cambiar servicio si existe
+		const changeWrap = document.getElementById('change-wrap');
+		if (changeWrap && changeWrap.parentNode) changeWrap.parentNode.removeChild(changeWrap);
+		currentCategory = '';
+	}
+	modalCancel.addEventListener('click', cancelModal);
 	modal.addEventListener('click', function(e){ if(e.target === modal) closeModal(); });
 
 	
@@ -149,13 +162,157 @@ document.addEventListener('DOMContentLoaded', function() {
 	if (!form) return;
 	form.addEventListener('submit', function(e) {
 		e.preventDefault();
+		const missing = new Set(); // Usar Set para evitar duplicados
+
+		// Validar todos los campos visibles y requeridos
+		const requiredFields = form.querySelectorAll('input[required], select[required]');
+		requiredFields.forEach(function(field) {
+			if (!field.value || field.value.trim() === '') {
+				let label = '';
+				// Buscar el label asociado
+				const labelEl = form.querySelector('label[for="' + field.id + '"]');
+				if (labelEl) {
+					label = labelEl.textContent.trim();
+				} else if (field.name) {
+					label = field.name;
+				}
+				missing.add(label || field.id || 'campo');
+			}
+		});
+
+		// Validar el campo oculto servicio
 		const servicioVal = form.querySelector('input[name="servicio"]') ? form.querySelector('input[name="servicio"]').value : null;
+		if (!servicioVal) missing.add('servicio');
+
+		// Validar el select de horario
 		const horaVal = form.querySelector('#horario-select') ? form.querySelector('#horario-select').value : null;
-		const missing = [];
-		if (!servicioVal) missing.push('servicio');
-		if (!horaVal) missing.push('horario');
-		if (missing.length) {
-			alert('Falta: ' + missing.join(', ') + '. Por favor completa antes de continuar.');
+		if (!horaVal) missing.add('horario');
+
+		if (missing.size) {
+			const msg = 'Falta: ' + Array.from(missing).join(', ') + '. Por favor completa antes de continuar.';
+			// Mostrar modal de validación si existe, si no usar alert() como fallback
+			const validationModal = document.getElementById('validation-modal');
+			const validationMsg = document.getElementById('validation-message');
+			if (validationModal && validationMsg) {
+				validationMsg.textContent = msg;
+				validationModal.setAttribute('aria-hidden', 'false');
+				const okBtn = document.getElementById('validation-ok');
+				const closeValidation = () => validationModal.setAttribute('aria-hidden', 'true');
+				// cerrar al hacer click en Aceptar
+				if (okBtn) {
+					okBtn.addEventListener('click', closeValidation, { once: true });
+				}
+				// cerrar al click fuera del panel
+				validationModal.addEventListener('click', function(e){ if (e.target === validationModal) closeValidation(); }, { once: true });
+			} else {
+				alert(msg);
+			}
+			return;
+		}
+		const formData = new FormData(form);
+		fetch(window.location.pathname, {
+			method: 'POST',
+			headers: {
+				'X-Requested-With': 'XMLHttpRequest'
+			},
+			body: formData
+		}).then(r => r.json()).then(data => {
+			if (data.success) {
+				if (data.next) {
+					window.location.href = data.next;
+				} else {
+					window.location.href = window.location.pathname + '?success=1';
+				}
+			} else if (data.need && data.next) {
+				window.location.href = data.next;
+			} else if (data.next) {
+				window.location.href = data.next;
+			} else {
+				alert('Error: ' + (data.error || 'No se pudo procesar la reserva'));
+			}
+		}).catch(err => {
+			console.error(err);
+			alert('Error de red al intentar crear la reserva.');
+		});
+	});
+
+	const modalCancelBtn = document.getElementById('modal-cancel');
+	const modalServicios = document.getElementById('modal-servicios');
+	const warningModal = document.getElementById('warning-modal');
+	const warningMessage = document.getElementById('warning-message');
+	const warningOkBtn = document.getElementById('warning-ok');
+
+	let warningJustShown = false;
+
+	if (modalCancelBtn && modalServicios && warningModal && warningMessage && warningOkBtn) {
+		modalCancelBtn.addEventListener('click', function() {
+			const servicioInput = document.getElementById('servicio-input');
+			if (!servicioInput || !servicioInput.value) {
+				warningMessage.textContent = 'Debe escoger un servicio antes de continuar.';
+				warningModal.setAttribute('aria-hidden', 'false');
+				warningOkBtn.addEventListener('click', function() {
+					warningModal.setAttribute('aria-hidden', 'true');
+					warningJustShown = false;
+				}, { once: true });
+				warningJustShown = true;
+				return true;
+			}
+			modalServicios.setAttribute('aria-hidden', 'true');
+		});
+	}
+
+	form.addEventListener('submit', function(e) {
+		if (warningJustShown) {
+			warningJustShown = false;
+			e.preventDefault();
+			return;
+		}
+		e.preventDefault();
+		const missing = new Set(); // Usar Set para evitar duplicados
+
+		// Validar todos los campos visibles y requeridos
+		const requiredFields = form.querySelectorAll('input[required], select[required]');
+		requiredFields.forEach(function(field) {
+			if (!field.value || field.value.trim() === '') {
+				let label = '';
+				// Buscar el label asociado
+				const labelEl = form.querySelector('label[for="' + field.id + '"]');
+				if (labelEl) {
+					label = labelEl.textContent.trim();
+				} else if (field.name) {
+					label = field.name;
+				}
+				missing.add(label || field.id || 'campo');
+			}
+		});
+
+		// Validar el campo oculto servicio
+		const servicioVal = form.querySelector('input[name="servicio"]') ? form.querySelector('input[name="servicio"]').value : null;
+		if (!servicioVal) missing.add('servicio');
+
+		// Validar el select de horario
+		const horaVal = form.querySelector('#horario-select') ? form.querySelector('#horario-select').value : null;
+		if (!horaVal) missing.add('horario');
+
+		if (missing.size) {
+			const msg = 'Falta: ' + Array.from(missing).join(', ') + '. Por favor completa antes de continuar.';
+			// Mostrar modal de validación si existe, si no usar alert() como fallback
+			const validationModal = document.getElementById('validation-modal');
+			const validationMsg = document.getElementById('validation-message');
+			if (validationModal && validationMsg) {
+				validationMsg.textContent = msg;
+				validationModal.setAttribute('aria-hidden', 'false');
+				const okBtn = document.getElementById('validation-ok');
+				const closeValidation = () => validationModal.setAttribute('aria-hidden', 'true');
+				// cerrar al hacer click en Aceptar
+				if (okBtn) {
+					okBtn.addEventListener('click', closeValidation, { once: true });
+				}
+				// cerrar al click fuera del panel
+				validationModal.addEventListener('click', function(e){ if (e.target === validationModal) closeValidation(); }, { once: true });
+			} else {
+				alert(msg);
+			}
 			return;
 		}
 		const formData = new FormData(form);
