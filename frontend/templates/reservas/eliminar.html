@@ -14,7 +14,7 @@
     <div class="card-header bg-danger text-white">
         <h2 class="mb-0">
             <i class="bi bi-exclamation-triangle-fill me-2"></i>
-            Eliminar Cita
+            Cancelar Cita
         </h2>
     </div>
 
@@ -22,7 +22,7 @@
     <div class="card-body">
         <!-- Mensaje de confirmación dinámico -->
         <p>
-            ¿Estás seguro que deseas eliminar la cita de 
+            ¿Estás seguro que deseas cancelar la cita de 
             <strong>{{ cita.cliente }}</strong>
             para el servicio 
             <strong>{{ cita.servicio.nombre }}</strong>?
@@ -34,12 +34,12 @@
             
             <!-- Botón principal de acción -->
             <button type="submit" class="btn btn-danger">
-                <i class="bi bi-trash me-1"></i> Eliminar
+                <i class="bi bi-trash me-1"></i> Cancelar cita
             </button>
 
             <!-- Botón de cancelación -->
             <a href="{% url 'reserva:home' %}" class="btn btn-secondary">
-                <i class="bi bi-x-circle me-1"></i> Cancelar
+                <i class="bi bi-x-circle me-1"></i> Regresar
             </a>
         </form>
     </div>
