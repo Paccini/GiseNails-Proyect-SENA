@@ -86,7 +86,6 @@
                     </div>
                 </div>
 
-                <h3 class="servicios-titulo">Servicios disponibles</h3>
                 <!-- <div id="servicios-contenedor" class="servicios-list" role="list"></div> -->
 
                 <div id="modal-servicios" class="modal-servicios" aria-hidden="true" role="dialog" aria-modal="true">
@@ -114,6 +113,17 @@
                                 </div>
                         </div>
                     </div>
+                    <div id="warning-modal" class="modal-validation" aria-hidden="true" role="alertdialog" aria-modal="true">
+                    <div class="modal-panel validation-panel" role="document">
+                    <div class="validation-body">
+            <div class="validation-icon" aria-hidden="true">⚠️</div>
+            <div class="validation-message" id="warning-message">Por favor selecciona un servicio para continuar con tu reserva.</div>
+        </div>
+        <div class="modal-footer">
+            <button id="warning-ok" type="button" class="modal-btn confirmar">Aceptar</button>
+        </div>
+    </div>
+</div>
 
                 <div class="acciones">
                     <button type="submit" class="modal-btn confirmar"><span class="icon">&#10004;</span>Confirmar cita</button>
