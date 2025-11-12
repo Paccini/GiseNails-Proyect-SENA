@@ -79,6 +79,9 @@ document.addEventListener('DOMContentLoaded', function() {
 		changeBtn.className = 'btn-change';
 		changeBtn.textContent = 'Cambiar servicio';
 		changeBtn.onclick = function() {
+			// Limpiar el campo oculto y el resumen antes de abrir el modal
+			if (servicioInput) servicioInput.value = '';
+			if (resumen) resumen.hidden = true;
 			openModalForCategory(currentCategory);
 		};
 		changeWrap.appendChild(changeBtn);
@@ -131,19 +134,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	modalClose.addEventListener('click', closeModal);
 	// Cancelar debe cerrar el modal y limpiar la selección de categoría/servicio
-	function cancelModal() {
+	// MODIFICADO: Solo mostrar advertencia personalizada al cancelar si no hay servicio
+	// Eliminar declaración duplicada, warningJustShown ya está definida arriba
+	modalCancel.addEventListener('click', function() {
+		if (!servicioInput || !servicioInput.value) {
+			// Mostrar solo la alerta personalizada y evitar que el formulario lance la validación general
+			const warningModal = document.getElementById('warning-modal');
+			const warningMessage = document.getElementById('warning-message');
+			const warningOkBtn = document.getElementById('warning-ok');
+			warningMessage.textContent = 'Por favor selecciona un servicio para continuar con tu reserva.';
+			warningModal.setAttribute('aria-hidden', 'false');
+			warningOkBtn.onclick = function() {
+				warningModal.setAttribute('aria-hidden', 'true');
+				warningJustShown = false;
+			};
+			warningJustShown = true;
+			return;
+		}
 		closeModal();
-		// limpiar el select de categoría para que el formulario quede en blanco
-		if (tipoSelect) tipoSelect.value = '';
-		// limpiar servicio seleccionado y resumen
-		if (servicioInput) servicioInput.value = '';
-		if (resumen) resumen.hidden = true;
-		// eliminar el botón de cambiar servicio si existe
-		const changeWrap = document.getElementById('change-wrap');
-		if (changeWrap && changeWrap.parentNode) changeWrap.parentNode.removeChild(changeWrap);
-		currentCategory = '';
-	}
-	modalCancel.addEventListener('click', cancelModal);
+	});
 	modal.addEventListener('click', function(e){ if(e.target === modal) closeModal(); });
 
 	
@@ -161,6 +170,11 @@ document.addEventListener('DOMContentLoaded', function() {
 	const form = document.querySelector('.form-section form');
 	if (!form) return;
 	form.addEventListener('submit', function(e) {
+		if (typeof warningJustShown !== 'undefined' && warningJustShown) {
+			warningJustShown = false;
+			e.preventDefault();
+			return;
+		}
 		e.preventDefault();
 		const missing = new Set(); // Usar Set para evitar duplicados
 
@@ -189,6 +203,8 @@ document.addEventListener('DOMContentLoaded', function() {
 		if (!horaVal) missing.add('horario');
 
 		if (missing.size) {
+			// Si solo falta servicio y se acaba de mostrar advertencia, no mostrar la general
+			if (missing.size === 1 && missing.has('servicio')) return;
 			const msg = 'Falta: ' + Array.from(missing).join(', ') + '. Por favor completa antes de continuar.';
 			// Mostrar modal de validación si existe, si no usar alert() como fallback
 			const validationModal = document.getElementById('validation-modal');
@@ -248,12 +264,13 @@ document.addEventListener('DOMContentLoaded', function() {
 		modalCancelBtn.addEventListener('click', function() {
 			const servicioInput = document.getElementById('servicio-input');
 			if (!servicioInput || !servicioInput.value) {
-				warningMessage.textContent = 'Debe escoger un servicio antes de continuar.';
+				// Mostrar solo la alerta personalizada y evitar que el formulario lance la validación general
+				warningMessage.textContent = 'Por favor selecciona un servicio para continuar con tu reserva.';
 				warningModal.setAttribute('aria-hidden', 'false');
-				warningOkBtn.addEventListener('click', function() {
+				warningOkBtn.onclick = function() {
 					warningModal.setAttribute('aria-hidden', 'true');
 					warningJustShown = false;
-				}, { once: true });
+				};
 				warningJustShown = true;
 				return true;
 			}
@@ -264,6 +281,12 @@ document.addEventListener('DOMContentLoaded', function() {
 	form.addEventListener('submit', function(e) {
 		if (warningJustShown) {
 			warningJustShown = false;
+			e.preventDefault();
+			return;
+		}
+		// Si el campo servicio está vacío, no mostrar la validación general
+		const servicioVal = form.querySelector('input[name="servicio"]') ? form.querySelector('input[name="servicio"]').value : null;
+		if (!servicioVal) {
 			e.preventDefault();
 			return;
 		}
@@ -287,8 +310,8 @@ document.addEventListener('DOMContentLoaded', function() {
 		});
 
 		// Validar el campo oculto servicio
-		const servicioVal = form.querySelector('input[name="servicio"]') ? form.querySelector('input[name="servicio"]').value : null;
-		if (!servicioVal) missing.add('servicio');
+		const servicioVal2 = form.querySelector('input[name="servicio"]') ? form.querySelector('input[name="servicio"]').value : null;
+		if (!servicioVal2) missing.add('servicio');
 
 		// Validar el select de horario
 		const horaVal = form.querySelector('#horario-select') ? form.querySelector('#horario-select').value : null;
@@ -395,4 +418,21 @@ document.addEventListener('DOMContentLoaded', function() {
 		gestoraSelect.addEventListener('change', cargarHorariosDisponibles);
 		fechaInput.addEventListener('change', cargarHorariosDisponibles);
 	}
+
+    // Marcar campos llenos con clase 'filled'
+    function marcarCamposLlenos() {
+        document.querySelectorAll('.reserva-form input, .reserva-form select').forEach(function(el) {
+            if (el.value && el.value.trim() !== '') {
+                el.classList.add('filled');
+            } else {
+                el.classList.remove('filled');
+            }
+        });
+    }
+    document.querySelectorAll('.reserva-form input, .reserva-form select').forEach(function(el) {
+        el.addEventListener('input', marcarCamposLlenos);
+        el.addEventListener('change', marcarCamposLlenos);
+    });
+    // Ejecutar al cargar
+    marcarCamposLlenos();
 });

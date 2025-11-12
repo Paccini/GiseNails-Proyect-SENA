@@ -1,3 +1,4 @@
+
 /* =========================
    reserva.css - Glassmorphism Moderno Negro & Rosado
    ========================= */
@@ -28,7 +29,7 @@
 
 
 .reserva-container {
-    background: var(--glass);
+  background: inherit !important;
     border-radius: var(--radius);
     box-shadow: var(--shadow-glass);
     padding: 40px 32px;
@@ -42,6 +43,8 @@
     margin-bottom: 40px;
     min-height: 600px;
     padding-bottom: 40px;
+    box-shadow: var(--shadow-glass);
+
 }
 @keyframes glassFadeIn {
     from { opacity: 0; transform: scale(0.98) translateY(30px); }
@@ -78,10 +81,8 @@
 }
 
 .form-section {
-    background: var(--glass);
+    background: #340b2e53;
     border-radius: var(--radius);
-    box-shadow: var(--shadow-glass);
-    border: var(--border-glass);
     backdrop-filter: var(--glass-blur);
     padding: 32px 28px;
     margin-bottom: 32px;
@@ -98,7 +99,7 @@
 .instrucciones {
     color: var(--rosa-claro);
     font-size: 1.15rem;
-    text-shadow: 0 1px 8px #ffb6e6;
+    text-shadow: 0 1px 3px #ffb6e6;
     margin-bottom: 24px;
     text-align: center;
     font-family: 'Montserrat', sans-serif;
@@ -108,9 +109,8 @@
     display: block;
     font-weight: 600;
     margin-top: 10px;
-    font-size: 13px;
+    font-size: 15px;
     color: var(--accent);
-    text-shadow: 0 1px 8px #ffb6e6;
 }
 
 .reserva-form input,
@@ -118,7 +118,7 @@
     width: 100%;
     padding: 14px 16px;
     border-radius: 12px;
-    background: rgba(30,24,40,0.45);
+    background: rgba(30,24,40,0.65); /* fondo oscuro/transparente, NO blanco */
     color: var(--text);
     border: var(--border-glass);
     box-shadow: 0 2px 12px 0 rgba(255, 79, 159, 0.10);
@@ -135,6 +135,16 @@
     border: var(--border-glass-focus);
     box-shadow: 0 0 0 2px #ffb6e6, 0 2px 12px 0 rgba(255, 79, 159, 0.18);
     outline: none;
+}
+
+.reserva-form input.filled,
+.reserva-form select.filled {
+    background: rgba(30,24,40,0.65) !important; /* fondo oscuro, nunca blanco */
+    border: 2px solid var(--rosa-claro);
+    color: var(--text);
+    box-shadow: 0 2px 12px 0 rgba(255, 182, 230, 0.18);
+    font-weight: 600;
+    transition: background 0.3s, border 0.3s;
 }
 
 .reserva-form select {
@@ -171,7 +181,7 @@
 .reserva-form select option:hover,
 .reserva-form select option:focus {
     background: var(--accent);
-    color: #fff;
+    color: #ffffff;
 }
 /* Icono personalizado para el select */
 .reserva-form select {
@@ -415,9 +425,10 @@
     box-shadow: 0 0 2px #c2185b;
 }
 .modal-btn:hover, .modal-btn:focus {
-    background: var(--btn-hover);
-    box-shadow: 0 0 0.5px #ffb6e6;
+    background: #791a40;
+    box-shadow: 0 0 0.0px #ffb6e6;
 }
+
 .modal-btn:active {
     transform: scale(0.97);
     box-shadow: 0 0 4px #ff4f9f;
@@ -432,6 +443,8 @@
     background: var(--btn);
     color: var(--text);
     border: none;
+    width: 209px;
+    margin-top: 5PX;
     border-radius: 10px;
     padding: 12px 24px;
     font-size: 1.1rem;
@@ -578,4 +591,27 @@
         font-size: 0.9rem;
         padding: 8px 16px;
     }
+}
+.reserva-form input:-webkit-autofill,
+.reserva-form input:-webkit-autofill:focus,
+.reserva-form input:-webkit-autofill:hover {
+    background: #380626 !important;
+    -webkit-box-shadow: 0 0 0px 1000px #2d0c28c1 inset !important;
+    color: #c2185b !important;
+}
+.reserva-form input::placeholder {
+    color: var(--rosa-claro);
+    opacity: 1;
+}
+.reserva-form input:-moz-placeholder {
+    color: var(--rosa-claro);
+    opacity: 1;
+}
+.reserva-form input::-ms-input-placeholder {
+    color: var(--rosa-claro);
+    opacity: 1;
+}
+.reserva-form input.filled {
+    background: rgba(36, 22, 50, 0.65) !important;
+    color: var(--text) !important;
 }
