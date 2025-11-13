@@ -1,483 +1,264 @@
-/* --- ESTILOS GENERALES DEL SISTEMA --- */
+/* ---------------------------
+   PANEL CLIENTE GISE NAILS
+   Diseño Moderno con Animaciones y Modo Oscuro
+   Autor: ChatGPT - GPT-5
+---------------------------- */
 
-/* Define altura completa para html y body */
-html,
+/* === VARIABLES DE COLOR === */
+:root {
+  --primary-color: #3b82f6; /* Azul principal */
+  --primary-light: #60a5fa;
+  --accent-color: #e2e8f0; /* Azul grisáceo claro */
+  --text-color: #222;
+  --bg-color: #fff;
+  --dark-bg: #1b1b1f;
+  --dark-card: #262630;
+  --dark-text: #e6e6e6;
+  --transition-speed: 0.3s;
+}
+
+/* === RESET GENERAL === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  transition: background var(--transition-speed), color var(--transition-speed),
+    transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+
 body {
-    height: 100%;
+  background: var(--bg-color);
+  color: var(--text-color);
+  overflow-x: hidden;
 }
 
-/* Establece altura mínima y dirección de flex para el body */
-body {
-    min-height: 100vh;
-    background: #f6f8fc;
-    color: #232c36;
-    font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+/* === MODO OSCURO === */
+body.dark-mode {
+  background: var(--dark-bg);
+  color: var(--dark-text);
 }
 
-/* El main ocupa el espacio restante en el layout flex */
-main.container {
-    flex: 1;
+/* === BARRA SUPERIOR === */
+.topbar {
+  background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+  padding: 1rem 2rem;
+  color: #fff;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Hace que el contenedor principal crezca y se apile en columna */
-.flex-grow-1.d-flex.flex-column {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+.dark-mode .topbar {
+  background: linear-gradient(90deg, #2a2a34, #3b3b47);
 }
 
-/* Ajusta el main para que crezca y ocupe el espacio disponible */
-main.container.flex-grow-1 {
-    flex: 1 0 auto;
+/* === NAV LATERAL === */
+.nav {
+  width: 260px;
+  background: linear-gradient(180deg, var(--primary-light), var(--primary-color));
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  padding-top: 2rem;
+  transition: width var(--transition-speed);
 }
 
-/* El footer no se encoge y se mantiene al fondo */
-footer {
-    flex-shrink: 0;
-    margin-top: auto;
-    background: #e0e7ff;
-    color: #232c36;
-    border-top: 1px solid #e5e7eb;
-    box-shadow: 0 -2px 12px rgba(44, 62, 80, 0.07);
-    font-size: 1.05rem;
+.nav ul {
+  list-style: none;
+  padding: 0;
 }
 
-/* Card efecto para el contenido principal: fondo blanco, bordes redondeados y sombra */
-main.container>div,
-main.container>.card,
-main.container>form,
-main.container>table {
-    background: #fff;
-    border-radius: 18px;
-    box-shadow: 0 6px 32px rgba(44, 62, 80, 0.10);
-    padding: 28px;
-    margin-top: 36px;
-    border: 1px solid #e3e8ee;
+.nav ul li {
+  margin: 1rem 0;
+  text-align: center;
 }
 
-/* --- COLORES AMIGABLES Y MODERNOS --- */
-body {
-    background: #f6f8fc;
-    color: #232c36;
-    font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+.nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  display: block;
+  padding: 0.8rem;
+  border-radius: 10px;
+  transition: background 0.3s, transform 0.3s;
 }
 
-main.container>div,
-main.container>.card,
-main.container>form,
-main.container>table {
-    background: #fff;
-    border-radius: 18px;
-    box-shadow: 0 6px 32px rgba(44, 62, 80, 0.10);
-    padding: 28px;
-    margin-top: 36px;
-    border: 1px solid #e3e8ee;
+.nav ul li a:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
 }
 
-.card-header {
-    background: linear-gradient(90deg, #e0e7ff 0%, #f0fdfa 100%) !important;
-    border-bottom: 1px solid #e5e7eb !important;
-    border-radius: 18px 18px 0 0 !important;
-    color: #3b82f6 !important;
-    font-size: 1.25rem;
-    font-weight: 600;
+.dark-mode .nav {
+  background: linear-gradient(180deg, #272731, #1b1b22);
 }
 
-/* Encabezado de tabla: fondo oscuro y texto blanco */
-.table thead {
-    background: #232c36;
-    color: #fff;
+/* === CONTENIDO PRINCIPAL === */
+.main {
+  margin-left: 260px;
+  padding: 2rem;
+  min-height: 100vh;
 }
 
-/* Encabezado de tabla: fondo claro, texto oscuro, borde inferior */
-.table thead th {
-    background: #f0fdfa !important;
-    color: #2563eb !important;
-    font-weight: 600;
-    border-bottom: 2px solid #e5e7eb !important;
-    position: sticky;
-    top: 0;
-    z-index: 2;
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
 }
 
-/* Celdas de tabla: alineación, no cortar palabras, elipsis si se desborda, ancho máximo */
-.table th,
-.table td {
-    vertical-align: middle !important;
-    white-space: nowrap;
-    /* No cortar palabras */
-    overflow: hidden;
-    /* Oculta el desbordamiento */
-    text-overflow: ellipsis;
-    /* Muestra ... si se desborda */
-    max-width: 180px;
-    padding: 16px 12px !important;
-    font-size: 1.05em;
-}
-
-/* Efecto hover en filas de tabla */
-.table-hover tbody tr:hover {
-    background: #e0e7ff !important;
-    box-shadow: 0 4px 16px rgba(44, 62, 80, 0.15);
-}
-
-/* Filas de tabla: fondo blanco y borde inferior */
-.table tbody tr {
-    background: #f9fafb;
-    border-bottom: 2px solid #e3e8ee;
-    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.07);
-    border-radius: 14px;
-    transition: box-shadow 0.2s;
-}
-
-/* Quita borde en celdas de cuerpo de tabla */
-.table tbody tr td {
-    border: none;
-}
-
-/* Mejor separación y legibilidad para tablas en el panel admin */
-.table {
-    border-collapse: separate !important;
-    border-spacing: 0 12px !important;
-    /* Espacio vertical entre filas */
-    background: transparent;
-    font-size: 0.97em;
-    word-break: break-word;
-}
-
-/* Espaciado y tamaño de fuente en celdas de tabla */
-.table th,
-.table td {
-    padding: 16px 12px !important;
-    /* Más espacio interno */
-    vertical-align: middle !important;
-    font-size: 1.05em;
-}
-
-/* Encabezado de tabla fijo al hacer scroll */
-.table thead th {
-    position: sticky;
-    top: 0;
-    z-index: 2;
-}
-
-/* Sombra y bordes redondeados en filas de tabla */
-.table tbody tr {
-    background: #fff;
-    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.07);
-    border-radius: 12px;
-    transition: box-shadow 0.2s;
-}
-
-/* Modo oscuro: fondo y sombra en filas de tabla */
-body.dark-mode .table tbody tr {
-    background: #23272b !important;
-    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.18);
-}
-
-/* Bordes redondeados en extremos de filas */
-.table tbody tr td:first-child,
-.table tbody tr th:first-child {
-    border-top-left-radius: 12px;
-    border-bottom-left-radius: 12px;
-}
-
-.table tbody tr td:last-child,
-.table tbody tr th:last-child {
-    border-top-right-radius: 12px;
-    border-bottom-right-radius: 12px;
-}
-
-/* Sombra y fondo al hacer hover en filas */
-.table-hover tbody tr:hover {
-    box-shadow: 0 4px 16px rgba(44, 62, 80, 0.15);
-    background: #f3f4f6 !important;
-}
-
-/* Modo oscuro: fondo al hacer hover */
-body.dark-mode .table-hover tbody tr:hover {
-    background: #343a40 !important;
-}
-
-/* Encabezado de tabla: fondo claro, texto oscuro, borde inferior */
-.table thead th {
-    background: #f1f5f9 !important;
-    color: #232c36 !important;
-    border-bottom: 2px solid #e5e7eb !important;
-}
-
-/* Modo oscuro: encabezado de tabla */
-body.dark-mode .table thead th {
-    background: #23272b !important;
-    color: #f8fafc !important;
-    border-bottom: 2px solid #343a40 !important;
-}
-
-/* Espacio entre botones de acciones en tabla */
-.table .btn,
-.table .btn-group .btn {
-    min-width: 40px;
-    padding: 6px 10px;
-    font-size: 1.1em;
-    margin-right: 4px;
-    margin-bottom: 2px;
-}
-
-/* Tamaño de iconos en botones */
-.table .btn i {
-    font-size: 1.2em;
-    vertical-align: middle;
-}
-
-/* Quita margen derecho al último botón */
-.table .btn:last-child {
-    margin-right: 0;
-}
-
-/* Botones de colores personalizados */
-.btn-primary {
-    background: linear-gradient(90deg, #38bdf8 0%, #6366f1 100%);
-    border: none;
-    color: #fff;
-    font-weight: 600;
-    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
-}
-
-.btn-primary:hover {
-    background: linear-gradient(90deg, #6366f1 0%, #38bdf8 100%);
-    color: #fff;
-}
-
-.btn-danger {
-    background: #f87171;
-    border: none;
-    color: #fff;
-    font-weight: 600;
-}
-
-.btn-success {
-    background: #34d399;
-    border: none;
-    color: #fff;
-    font-weight: 600;
-}
-
-.btn-warning {
-    background: #fde68a;
-    color: #232c36;
-    border: none;
-}
-
-.btn-warning:hover {
-    background: #fbbf24;
-    color: #fff;
-}
-
-.btn-outline-primary {
-    border-color: #3b82f6;
-    color: #3b82f6;
-}
-
-.btn-outline-primary:hover {
-    background: #3b82f6;
-    color: #fff;
-}
-
-.btn-outline-danger {
-    border-color: #ef4444;
-    color: #ef4444;
-}
-
-.btn-outline-danger:hover {
-    background: #ef4444;
-    color: #fff;
-}
-
-.badge-pendiente {
-    background: #22d3ee;
-    color: #fff;
-}
-
-.badge-activo {
-    background: #22c55e;
-    color: #fff;
-}
-
-.badge-inactivo {
-    background: #fca5a5 !important;
-    color: #232c36 !important;
-}
-
-.card-body .fw-bold,
-.card-body strong {
-    color: #2563eb !important;
-}
-
-.card-body .text-muted {
-    color: #64748b !important;
-}
-
-.form-label {
-    color: #6366f1 !important;
-    font-weight: 600;
-}
-
-.form-control,
-.form-select {
-    border-radius: 10px;
-    border: 1px solid #e3e8ee;
-    background: #f9fafb;
-    color: #232c36;
-    font-size: 1.07em;
-}
-
-.form-control:focus,
-.form-select:focus {
-    border-color: #6366f1;
-    box-shadow: 0 0 0 2px #a5b4fc33;
-}
-
-.modal-content {
-    border-radius: 18px;
-    box-shadow: 0 8px 32px rgba(44, 62, 80, 0.18);
-    background: #fff;
-    color: #232c36;
-    border: 1px solid #e3e8ee;
-}
-
-footer {
-    background: #e0e7ff;
-    color: #232c36;
-    border-top: 1px solid #e5e7eb;
-    box-shadow: 0 -2px 12px rgba(44, 62, 80, 0.07);
-    font-size: 1.05rem;
-}
-
-h3.fw-bold {
-    color: #6366f1 !important;
-}
-
-@media (max-width: 768px) {
-
-    main.container>div,
-    main.container>.card {
-        padding: 14px;
-        margin-top: 18px;
-    }
-
-    .card-header {
-        font-size: 1.1rem;
-    }
-}
-
-body.dark-mode,
-body.dark-mode main.container,
-body.dark-mode .card,
-body.dark-mode .card-header,
-body.dark-mode .table,
-body.dark-mode .table th,
-body.dark-mode .table td,
-body.dark-mode .modal-content,
-body.dark-mode footer,
-body.dark-mode .dropdown-menu,
-body.dark-mode .form-control,
-body.dark-mode .form-select {
-    background: #181a1b !important;
-    color: #f8fafc !important;
-    border-color: #343a40 !important;
-}
-
-body.dark-mode .btn,
-body.dark-mode .btn-outline-secondary,
-body.dark-mode .btn-outline-primary,
-body.dark-mode .btn-outline-danger {
-    color: #f8fafc !important;
-    border-color: #f8fafc !important;
-}
-
-body.dark-mode .icon,
-body.dark-mode .bi {
-    color: #f8fafc !important;
-}
-
-body.dark-mode .card input,
-body.dark-mode .card textarea,
-body.dark-mode .card select,
-body.dark-mode .modal-body input.form-control {
-    background: #23272b !important;
-    color: #f8fafc !important;
-    border: 1px solid #343a40 !important;
-}
-
-html,
-body,
-main,
-.card,
-.table,
-.btn,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-}
-
-/* Toggle switch moderno */
-.switch {
-  --w: 44px;
-  --h: 24px;
-  --pad: 3px;
-  display: inline-block;
-  vertical-align: middle;
-}
-.switch-input {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
-}
-.switch-label {
-  display: inline-block;
-  width: var(--w);
-  height: var(--h);
-  background: #e6e7ea;
-  border-radius: calc(var(--h) / 2);
-  position: relative;
-  transition: background 200ms ease;
+/* === TARJETAS === */
+.card {
+  background: var(--bg-color);
+  border-radius: 20px;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  box-shadow: inset 0 1px 2px rgba(0,0,0,0.04);
+  transform: translateY(0);
 }
-.switch-label::after {
-  content: "";
-  position: absolute;
-  top: var(--pad);
-  left: var(--pad);
-  width: calc(var(--h) - var(--pad) * 2);
-  height: calc(var(--h) - var(--pad) * 2);
-  background: #fff;
-  border-radius: 50%;
-  box-shadow: 0 2px 6px rgba(16,24,40,0.12);
-  transition: transform 200ms cubic-bezier(.2,.9,.2,1);
-  will-change: transform;
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
-/* checked state */
-.switch-input:checked + .switch-label {
-  background: linear-gradient(90deg, #34d399 0%, #10b981 100%);
+
+.dark-mode .card {
+  background: var(--dark-card);
 }
-.switch-input:checked + .switch-label::after {
-  transform: translateX(calc(var(--w) - var(--h)));
+
+/* === BOTONES (Azules) === */
+button,
+.btn {
+  background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+  border: none;
+  color: #fff;
+  border-radius: 10px;
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
 }
-/* small accessible focus */
-.switch-input:focus + .switch-label {
-  box-shadow: 0 0 0 4px rgba(59,130,246,0.12);
-  outline: none;
+
+button:hover,
+.btn:hover {
+  background: var(--primary-light);
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(59, 130, 246, 0.4);
 }
-/* optional text */
-.switch-text {
-  display:inline-block;
-  margin-left:8px;
-  font-size:0.95rem;
-  vertical-align:middle;
-  color:#374151;
+
+.dark-mode button,
+.dark-mode .btn {
+  background: linear-gradient(90deg, #2563eb, #1e40af);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
 }
+
+/* === TABLAS === */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 1rem;
+}
+
+table thead {
+  background: var(--primary-color);
+  color: #fff;
+}
+
+table th,
+table td {
+  padding: 1rem;
+  text-align: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+tr:hover {
+  background: var(--accent-color);
+}
+
+.dark-mode table thead {
+  background: #1e3a8a;
+}
+
+.dark-mode tr:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* === MODALES === */
+.modal-content {
+  background: var(--bg-color);
+  border-radius: 15px;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode .modal-content {
+  background: var(--dark-card);
+}
+
+/* === ANIMACIONES === */
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.8s forwards ease;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+/* === BOTÓN DE MODO OSCURO === */
+.toggle-darkmode {
+  background: transparent;
+  border: 2px solid #fff;
+  color: #fff;
+  border-radius: 50px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.toggle-darkmode:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* === SCROLLBAR PERSONALIZADO === */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-light);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .nav {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+
+  .main {
+    margin-left: 0;
+    padding: 1rem;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+
