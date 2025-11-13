@@ -26,24 +26,27 @@
 </div>
 
 <div class="card mb-3">
-  <div class="card-header d-flex justify-content-between align-items-center">
-    <h3 class="fw-bold mb-0"><i class="bi bi-calendar-heart me-2"></i> Mis citas</h3>
-    <!-- Formulario de filtros: estado + fecha -->
-    <form method="get" class="d-flex gap-2 align-items-center">
-      <select name="estado" class="form-select form-select-sm" aria-label="Filtrar por estado">
-        <option value="all" {% if filter_estado == 'all' %}selected{% endif %}>Todos</option>
-        <option value="pendiente" {% if filter_estado == 'pendiente' %}selected{% endif %}>Pendiente</option>
-        <option value="confirmada" {% if filter_estado == 'confirmada' %}selected{% endif %}>Confirmada</option>
-        <option value="cancelada" {% if filter_estado == 'cancelada' %}selected{% endif %}>Cancelada</option>
-        <option value="realizada" {% if filter_estado == 'realizada' %}selected{% endif %}>Realizada</option>
+  <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+  <h3>Mis citas</h3>
+
+  <div class="d-flex align-items-center gap-2 flex-wrap">
+    <form method="get" class="d-flex align-items-center gap-2">
+      <select class="form-select" name="estado">
+        <option value="">Todos los estados</option>
+        <option value="pendiente">Pendiente</option>
+        <option value="completada">Completada</option>
+        <option value="cancelada">Cancelada</option>
       </select>
-
-      <input type="date" name="fecha" class="form-control form-control-sm" value="{{ filter_fecha }}">
-
-      <button type="submit" class="btn btn-sm btn-primary">Filtrar</button>
-      <a href="{% url 'clientes:panel' %}" class="btn btn-sm btn-outline-secondary">Limpiar</a>
+      <input type="date" name="fecha" class="form-control" />
+      <button type="submit" class="btn btn-primary">Filtrar</button>
+      <a href="{% url 'clientes:panel' %}" class="btn btn-secondary">Limpiar</a>
     </form>
+
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agendarCitaModal">
+      Agendar cita
+    </button>
   </div>
+</div>
 
   <div class="card-body">
     {% if reservas %}
@@ -121,11 +124,6 @@
   </div>
 </div>
 
-<div class="d-flex justify-content-end mb-3">
-  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agendarCitaModal">
-    <i class="bi bi-calendar-plus"></i> Agendar cita
-  </button>
-</div>
 
 <!-- Modal para actualizar datos del cliente -->
 <div class="modal fade" id="updateClienteModal" tabindex="-1" aria-labelledby="updateClienteModalLabel"
