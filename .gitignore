@@ -33,3 +33,5 @@ coverage.xml
 # Migrations (opcional, si no quieres subirlas)
 */migrations/*.py
 */migrations/*.pyc
+
+.env
