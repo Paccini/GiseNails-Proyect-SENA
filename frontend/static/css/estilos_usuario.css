@@ -1,0 +1,264 @@
+/* ---------------------------
+   PANEL CLIENTE GISE NAILS
+   Diseño Moderno con Animaciones y Modo Oscuro
+   Autor: ChatGPT - GPT-5
+---------------------------- */
+
+/* === VARIABLES DE COLOR === */
+:root {
+  --primary-color: #3b82f6; /* Azul principal */
+  --primary-light: #60a5fa;
+  --accent-color: #e2e8f0; /* Azul grisáceo claro */
+  --text-color: #222;
+  --bg-color: #fff;
+  --dark-bg: #1b1b1f;
+  --dark-card: #262630;
+  --dark-text: #e6e6e6;
+  --transition-speed: 0.3s;
+}
+
+/* === RESET GENERAL === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  transition: background var(--transition-speed), color var(--transition-speed),
+    transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+body {
+  background: var(--bg-color);
+  color: var(--text-color);
+  overflow-x: hidden;
+}
+
+/* === MODO OSCURO === */
+body.dark-mode {
+  background: var(--dark-bg);
+  color: var(--dark-text);
+}
+
+/* === BARRA SUPERIOR === */
+.topbar {
+  background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+  padding: 1rem 2rem;
+  color: #fff;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode .topbar {
+  background: linear-gradient(90deg, #2a2a34, #3b3b47);
+}
+
+/* === NAV LATERAL === */
+.nav {
+  width: 260px;
+  background: linear-gradient(180deg, var(--primary-light), var(--primary-color));
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  padding-top: 2rem;
+  transition: width var(--transition-speed);
+}
+
+.nav ul {
+  list-style: none;
+  padding: 0;
+}
+
+.nav ul li {
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  display: block;
+  padding: 0.8rem;
+  border-radius: 10px;
+  transition: background 0.3s, transform 0.3s;
+}
+
+.nav ul li a:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.dark-mode .nav {
+  background: linear-gradient(180deg, #272731, #1b1b22);
+}
+
+/* === CONTENIDO PRINCIPAL === */
+.main {
+  margin-left: 260px;
+  padding: 2rem;
+  min-height: 100vh;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* === TARJETAS === */
+.card {
+  background: var(--bg-color);
+  border-radius: 20px;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transform: translateY(0);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.dark-mode .card {
+  background: var(--dark-card);
+}
+
+/* === BOTONES (Azules) === */
+button,
+.btn {
+  background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+  border: none;
+  color: #fff;
+  border-radius: 10px;
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+}
+
+button:hover,
+.btn:hover {
+  background: var(--primary-light);
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(59, 130, 246, 0.4);
+}
+
+.dark-mode button,
+.dark-mode .btn {
+  background: linear-gradient(90deg, #2563eb, #1e40af);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+}
+
+/* === TABLAS === */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 1rem;
+}
+
+table thead {
+  background: var(--primary-color);
+  color: #fff;
+}
+
+table th,
+table td {
+  padding: 1rem;
+  text-align: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+tr:hover {
+  background: var(--accent-color);
+}
+
+.dark-mode table thead {
+  background: #1e3a8a;
+}
+
+.dark-mode tr:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* === MODALES === */
+.modal-content {
+  background: var(--bg-color);
+  border-radius: 15px;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode .modal-content {
+  background: var(--dark-card);
+}
+
+/* === ANIMACIONES === */
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.8s forwards ease;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+/* === BOTÓN DE MODO OSCURO === */
+.toggle-darkmode {
+  background: transparent;
+  border: 2px solid #fff;
+  color: #fff;
+  border-radius: 50px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.toggle-darkmode:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* === SCROLLBAR PERSONALIZADO === */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-light);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .nav {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+
+  .main {
+    margin-left: 0;
+    padding: 1rem;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+

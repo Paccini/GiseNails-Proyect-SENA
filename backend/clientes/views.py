@@ -10,12 +10,15 @@ from django.urls import reverse_lazy
 from django.core.paginator import Paginator
 from .forms import RegistroClienteForm, ClienteForm
 from clientes.models import Cliente
+from clientes.forms import RegistroClienteForm
 from reserva.models import Reserva
 from reserva.forms import ReservaForm
 from empleados.models import Empleado
 from servicio.models import Servicio
 from reserva.models import HorarioDisponible
-
+from django.contrib import messages
+from django.http import JsonResponse  # <-- agregar si no está
+from datetime import datetime
 
 @login_required
 @never_cache
@@ -24,84 +27,59 @@ def panel_cliente(request):
         cliente = Cliente.objects.get(user=request.user)
     except Cliente.DoesNotExist:
         return redirect('clientes:registro')
-    reservas = Reserva.objects.filter(
-        cliente=cliente,
-    ).exclude(estado='cancelada')
-    from datetime import date
+
+    # filtros desde querystring
+    estado = request.GET.get('estado', 'all')  # 'all' muestra todos
+    fecha_str = request.GET.get('fecha', '').strip()
+    page = request.GET.get('page', 1)
+
+    reservas_qs = Reserva.objects.filter(cliente=cliente).order_by('-fecha', '-hora')
+
+    if estado and estado != 'all':
+        reservas_qs = reservas_qs.filter(estado=estado)
+
+    if fecha_str:
+        try:
+            fecha_obj = datetime.strptime(fecha_str, '%Y-%m-%d').date()
+            reservas_qs = reservas_qs.filter(fecha=fecha_obj)
+        except Exception:
+            pass
+
+    paginator = Paginator(reservas_qs, 3)  # 4 por página
+    reservas_page = paginator.get_page(page)
+
+    # resto del contexto como antes, + variables de filtro/paginación
+    eliminadas = request.GET.get('notifs_eliminadas', '')
+    eliminadas_ids = [int(x) for x in eliminadas.split(',') if x.isdigit()]
     notificaciones = []
-    for reserva in reservas.order_by('-fecha_creacion')[:5]:
-        if reserva.fecha_creacion.date() == date.today():
+    for reserva in reservas_qs.order_by('-fecha_creacion')[:10]:
+        if reserva.pk not in eliminadas_ids:
             notificaciones.append({
-                'icon': 'bi-calendar-check',
-                'texto': f'Cita agendada para el {reserva.fecha.strftime("%d/%m/%Y")} a las {reserva.hora}',
+                'id': reserva.pk,
+                'icon': 'bi-calendar-check' if reserva.estado == 'confirmada' else 'bi-calendar',
+                'texto': f'Cita {reserva.get_estado_display()} para el {reserva.fecha.strftime("%d/%m/%Y")} a las {reserva.hora}',
                 'fecha': reserva.fecha_creacion.strftime('%d/%m/%Y %H:%M')
             })
+
     form = RegistroClienteForm(instance=cliente)
-    # --- AGREGADO: pasar gestoras, servicios y horarios ---
-    from empleados.models import Empleado
-    from servicio.models import Servicio
-    from reserva.models import HorarioDisponible
     gestoras = Empleado.objects.all()
     servicios = Servicio.objects.all()
     horarios = HorarioDisponible.objects.all()
-    # ------------------------------------------------------
+    show_cita_alert = request.session.pop('show_cita_alert', True)
     return render(request, 'clientes/panel.html', {
         'cliente': cliente,
-        'reservas': reservas,
+        'reservas': reservas_page,
         'form': form,
         'user': request.user,
         'notificaciones': notificaciones,
         'gestoras': gestoras,
         'servicios': servicios,
         'horarios': horarios,
+        'show_cita_alert': show_cita_alert,
+        'filter_estado': estado,
+        'filter_fecha': fecha_str,
     })
 
-def registro_cliente(request):
-    pending = request.session.get('pending_reserva')
-    initial = {}
-    # Solo autocompleta si hay pending y el correo NO está registrado
-    if pending:
-        from clientes.models import Cliente
-        correo = pending.get('correo', '')
-        if not Cliente.objects.filter(correo__iexact=correo).exists():
-            initial = {
-                'nombre': pending.get('nombre', ''),
-                'correo': correo,
-                'telefono': pending.get('telefono', ''),
-            }
-
-    if request.method == 'POST':
-        form = RegistroClienteForm(request.POST)
-        if form.is_valid():
-            cliente = form.save()
-            try:
-                user = cliente.user
-            except Exception:
-                user = None
-            if user:
-                from django.contrib.auth import login as auth_login
-                auth_login(request, user)
-            if request.session.get('pending_reserva'):
-                return redirect('/reserva/completar-reserva/')
-            return redirect('/reserva/?success=1')
-        else:
-            return render(request, 'clientes/registro.html', {
-                'form': form,
-                'prefill_email': initial.get('correo'),
-                'pending_message': bool(pending)
-            })
-    else:
-        form = RegistroClienteForm(initial=initial)
-        if initial.get('correo'):
-            try:
-                form.fields['correo'].widget.attrs['readonly'] = True
-            except Exception:
-                pass
-        return render(request, 'clientes/registro.html', {
-            'form': form,
-            'prefill_email': initial.get('correo'),
-            'pending_message': bool(pending)
-        })
 
 @never_cache
 @login_required(login_url='login:login')
@@ -234,6 +212,25 @@ class ClienteDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         return self.request.user.is_staff
 
+    def delete(self, request, *args, **kwargs):
+        """
+        No eliminar físicamente. Alternar campo 'activo'.
+        No permitir deshabilitar si el cliente tiene reservas pendientes/confirmadas.
+        """
+        self.object = self.get_object()
+        # Si se intenta deshabilitar (object.activo True) comprobamos reservas
+        if self.object.activo:
+            tiene_reservas = Reserva.objects.filter(cliente=self.object, estado__in=['pendiente', 'confirmada']).exists()
+            if tiene_reservas:
+                messages.error(request, "No se puede deshabilitar: el cliente tiene reservas pendientes o confirmadas.")
+                return redirect(self.success_url)
+        # Alterna activo
+        self.object.activo = not self.object.activo
+        self.object.save()
+        estado = "habilitado" if self.object.activo else "deshabilitado"
+        messages.success(request, f"Cliente {self.object.nombre} {estado}.")
+        return redirect(self.success_url)
+
 def registro_cliente(request):
     if request.method == 'POST':
         form = RegistroClienteForm(request.POST)
@@ -300,3 +297,22 @@ def confirmar_reserva(request, pk):
         reserva.estado = 'confirmada'
         reserva.save()
     return redirect('clientes:panel')
+
+def toggle_cliente_activo(request, pk):
+    """
+    Endpoint AJAX: alterna cliente.activo.
+    Si se intenta deshabilitar y tiene reservas pendientes/confirmadas, devuelve error.
+    """
+    if not request.user.is_authenticated or not request.user.is_staff:
+        return JsonResponse({'success': False, 'error': 'No autorizado.'}, status=403)
+
+    cliente = get_object_or_404(Cliente, pk=pk)
+    # Intentamos deshabilitar -> validar reservas activas
+    if cliente.activo:
+        tiene_reservas = Reserva.objects.filter(cliente=cliente, estado__in=['pendiente', 'confirmada']).exists()
+        if tiene_reservas:
+            return JsonResponse({'success': False, 'error': 'El cliente tiene reservas pendientes o confirmadas.'})
+
+    cliente.activo = not cliente.activo
+    cliente.save()
+    return JsonResponse({'success': True, 'activo': cliente.activo})

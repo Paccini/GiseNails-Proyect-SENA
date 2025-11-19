@@ -4,122 +4,143 @@
 {% endblock %}
 
 {% block content %}
-{% load static %}
+  {% load static %}
 
-<!-- Enlace al archivo CSS personalizado para los estilos de las tarjetas -->
-<link rel="stylesheet" href="{% static 'css/servicio.css' %}">
+  <link rel="stylesheet" href="{% static 'css/card_moderno.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/servicio.css' %}" />
 
-<!-- Título principal de la sección de servicios -->
-<h1 class="text-center fw-bold mb-4" 
-    style="color:#ff4081;font-size:2.5em;font-family: 'Comic Sans MS', cursive;">
-    ¡CONOCE TODOS NUESTROS SERVICIOS!
-</h1>
-
-<!-- Descripción introductoria -->
-<p class="text-center fs-5 mb-4">
-    Reserva en el mejor spa de uñas de Colombia, donde ofrecemos las técnicas más innovadoras 
-    en el cuidado de uñas, un ambiente sofisticado y relajante, protocolos rigurosos de 
-    esterilización y productos libres de químicos, seguros para tu salud y respetuosos con 
-    el medio ambiente.
-</p>
-
-<!-- Contenedor de tarjetas de servicios -->
-<div class="row justify-content-center g-4">
-
-    <!-- Bucle que recorre los servicios disponibles -->
-    {% for servicio in servicios %}
-    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-        <div class="flip-card">
-            <div class="flip-card-inner">
-
-                <!-- Lado frontal de la tarjeta con la imagen -->
-                <div class="flip-card-front">
-                    {% if servicio.imagen %}
-                        <img src="{{ servicio.imagen.url }}" 
-                             alt="{{ servicio.nombre }}" 
-                             class="card-img-top rounded" 
-                             style="height:100%;width:100%;object-fit:cover;">
-                    {% endif %}
-                </div>
-
-                <!-- Lado posterior con información del servicio -->
-                <div class="flip-card-back d-flex flex-column justify-content-between align-items-center h-100 w-100 text-center">
-                    <div>
-                        <!-- Nombre del servicio -->
-                        <h3 class="card-title fw-bold mb-2" style="color:#ff4081;">
-                            {{ servicio.nombre }}
-                        </h3>
-
-                        <!-- Descripción -->
-                        <p class="card-text mb-2">{{ servicio.descripcion }}</p>
-
-                        <!-- Recomendaciones (opcional) -->
-                        {% if servicio.recomendaciones %}
-                        <div class="text-secondary mb-2">
-                            Recomendaciones: {{ servicio.recomendaciones }}
-                        </div>
-                        {% endif %}
-                    </div>
-
-                    <!-- Precio -->
-                    <div class="w-100">
-                        <span class="badge bg-light text-dark fs-6 mb-2" style="width:100%;">
-                            ${{ servicio.precio }}
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="scroll-fade servicios-page" data-delay="0.02">
+    {# --- NUEVA SECCIÓN: OBJETIVO DE NUESTROS SERVICIOS (antes del título) --- #}
+    <div class="scroll-fade objetivo-section" data-delay="0.01">
+      <h2 class="servicios-section-title text-center fw-bold mb-3">OBJETIVO DE NUESTROS SERVICIOS</h2>
+      <p class="servicios-subtitle text-center mb-4">
+        Elegimos protocolos y productos profesionales para ofrecer resultados visibles, seguros y duraderos. Nuestros servicios están diseñados para cuidar la salud de tus uñas y piel, utilizando técnicas avanzadas y productos de primera calidad. Son los mismos tratamientos que nuestras clientas piden una y otra vez por su efectividad y acabado impecable — <span style="color:var(--servicios-accent); font-weight:700;">confianza, profesionalismo y resultados que enamoran</span>.
+      </p>
     </div>
-    {% endfor %}
-</div>
-<!-- Fin del contenedor de tarjetas -->
 
-<!-- Navegación de paginación -->
-<div class="d-flex justify-content-center mt-4">
-    <nav aria-label="Page navigation">
-        <ul class="pagination">
-            
-            <!-- Botón Anterior -->
-            {% if servicios.has_previous %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ servicios.previous_page_number }}" aria-label="Anterior">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-            {% else %}
-                <li class="page-item disabled">
-                    <span class="page-link">&laquo;</span>
-                </li>
+    <h1 class="servicios-title text-center fw-bold mb-4">¡CONOCE TODOS NUESTROS SERVICIOS!</h1>
+
+    <p class="servicios-subtitle text-center fs-5 mb-4">Reserva en el mejor spa de uñas de Colombia, donde ofrecemos las técnicas más innovadoras en el cuidado de uñas, un ambiente sofisticado y relajante, protocolos rigurosos de esterilización y productos libres de químicos, seguros para tu salud y respetuosos con el medio ambiente.</p>
+
+    <div class="cards">
+      {% for servicio in servicios %}
+        <div class="card-gn scroll-fade" data-delay="{{ forloop.counter0|floatformat:2|add:'0.03' }}">
+          <div class="card-front">
+            {% if servicio.imagen %}
+              <img src="{{ servicio.imagen.url }}" alt="{{ servicio.nombre }}" />
+            {% endif %}
+          </div>
+
+          <div class="card-info" aria-hidden="true">
+            <strong class="card-title">{{ servicio.nombre }}</strong>
+
+            <div class="card-text mb-2">{{ servicio.descripcion }}</div>
+
+            {% if servicio.recomendaciones %}
+              <div class="muted mb-2">Recomendaciones: {{ servicio.recomendaciones }}</div>
             {% endif %}
 
-            <!-- Números de página -->
-            {% for num in servicios.paginator.page_range %}
-                {% if servicios.number == num %}
-                    <li class="page-item active">
-                        <span class="page-link">{{ num }}</span>
-                    </li>
-                {% else %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
-                    </li>
-                {% endif %}
-            {% endfor %}
+            <div class="card-bottom">
+              <span class="badge">${{ servicio.precio }}</span>
+              <a href="{% url 'reserva:reserva' %}" class="btn">Reservar</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
 
-            <!-- Botón Siguiente -->
-            {% if servicios.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ servicios.next_page_number }}" aria-label="Siguiente">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
+    <div class="d-flex justify-content-center mt-4">
+      <nav aria-label="Page navigation">
+        <ul class="pagination animated-paginator">
+          {% if servicios.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ servicios.previous_page_number }}" aria-label="Anterior"><span aria-hidden="true">&laquo;</span></a>
+            </li>
+          {% else %}
+            <li class="page-item disabled">
+              <span class="page-link">&laquo;</span>
+            </li>
+          {% endif %}
+          {% for num in servicios.paginator.page_range %}
+            {% if servicios.number == num %}
+              <li class="page-item active">
+                <span class="page-link">{{ num }}</span>
+              </li>
             {% else %}
-                <li class="page-item disabled">
-                    <span class="page-link">&raquo;</span>
-                </li>
+              <li class="page-item">
+                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+              </li>
             {% endif %}
+          {% endfor %}
+          {% if servicios.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ servicios.next_page_number }}" aria-label="Siguiente"><span aria-hidden="true">&raquo;</span></a>
+            </li>
+          {% else %}
+            <li class="page-item disabled">
+              <span class="page-link">&raquo;</span>
+            </li>
+          {% endif %}
         </ul>
-    </nav>
-</div>
+      </nav>
+    </div>
 
+    {# --- NUEVA SECCIÓN: SERVICIOS MAS SOLICITADOS (informativo similar a productos) --- #}
+    {% if mas_solicitados %}
+      <div class="scroll-fade mt-5" data-delay="0.02">
+        <h2 class="servicios-section-title text-center">SERVICIOS MÁS SOLICITADOS</h2>
+        <div class="info-list recomendados-cards">
+          {% for s in mas_solicitados %}
+            <div class="info-item scroll-fade" data-delay="{{ forloop.counter0|floatformat:2|add:'0.02' }}">
+              {% if s.imagen %}
+                <img src="{{ s.imagen.url }}" alt="{{ s.nombre }}" class="info-img" />
+              {% endif %}
+              <div class="info-body">
+                <strong class="info-title">{{ s.nombre }}</strong>
+                <div class="info-desc">{{ s.descripcion|truncatechars:140 }}</div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // IntersectionObserver (mantener)
+      const observer = new IntersectionObserver(
+        (entries, obs) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const el = entry.target
+              const delay = parseFloat(el.getAttribute('data-delay') || 0)
+              if (delay > 0) {
+                setTimeout(() => el.classList.add('visible'), Math.round(delay * 1000))
+              } else {
+                el.classList.add('visible')
+              }
+              obs.unobserve(el)
+            }
+          })
+        },
+        { threshold: 0.15 }
+      )
+      document.querySelectorAll('.scroll-fade').forEach((el) => observer.observe(el))
+    
+      // PAGINATOR: delegación para animar y navegar (targets .animated-paginator)
+      document.addEventListener('click', function (e) {
+        const link = e.target.closest('.animated-paginator .page-link')
+        if (!link) return
+        const href = link.getAttribute('href')
+        if (!href || href === '#') return
+        e.preventDefault()
+        link.classList.add('pulse')
+        document.body.classList.add('pag-navigating')
+        setTimeout(() => {
+          window.location.href = href
+        }, 260)
+      })
+    })
+  </script>
 {% endblock %}

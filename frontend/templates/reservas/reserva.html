@@ -3,81 +3,91 @@
 {% block title %}Reserva{% endblock %} 
 
 {% block content %} 
-{% load static %} 
+{% load static %}
 
-
-<link rel="stylesheet" href="{% static 'css/reserva.css' %}">
+<link rel="stylesheet" href="{% static 'css/reserva-glass.css' %}">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
 
 <div class="reserva-container">
-    
     <header class="reserva-header">
-        <div class="marca">
-            <img src="{% static 'img/Logo gisel-nails.png' %}" alt="Gise-Nails" class="logo">
-            <div class="marca-texto">
-                <h1>Gise‑Nails</h1>
-                <p class="direccion">Cra 9a #42-44, B/Calarca · <span class="email">giselav489@gmail.com</span> · <span class="telefono">300 204 0538</span></p>
-            </div>
+        <img src="{% static 'img/logo_blanco.png' %}" alt="Gise-Nails" class="logo">
+        <div class="marca-texto">
+            <h2 >Reserva tu cita</h2>
+            <p class="direccion">
+                Cra 9a #42-44, B/Calarca · <span class="email">giselav489@gmail.com</span> · <span class="telefono">300 204 0538</span>
+            </p>
         </div>
     </header>
 
     <main class="main-content">
         <section class="form-section">
-            <h2>Reserva tu cita</h2>
-            <p class="instrucciones">Rellena tus datos, elige categoría y haz clic en el servicio para ver el resumen antes de confirmar.</p>
-
+            <p class="instrucciones" >
+                Completa tus datos, elige categoría y servicio, selecciona fecha y hora, y confirma tu cita. ¡Fácil y rápido!
+            </p>
             <form method="post" action="" class="reserva-form" novalidate>
                 {% csrf_token %}
-
-          <label for="nombre">Nombre</label>
-          <input id="nombre" type="text" name="nombre" placeholder="Ej. Ana Pérez" required>
-                
-                <label for="telefono">Teléfono</label>
-                <input id="telefono" type="tel" name="telefono" placeholder="300 000 0000" required>
-
-                <label for="correo">Correo (opcional)</label>
-                <input id="correo" type="email" name="correo" placeholder="tu@correo.com">
-
-                <label for="gestora-select">Gestora</label>
-                <select name="gestora" id="gestora-select" required>
-                    <option value="">Selecciona gestora</option>
-                    {% for gestora in gestoras %}
-                        <option value="{{ gestora.id }}">{{ gestora.nombre }} {{ gestora.apellidos }}</option>
-                    {% endfor %}
-                </select>
-
-                <label for="tipo-servicio">Categoría de servicio</label>
-                <select name="tipo_servicio" id="tipo-servicio" required>
-                    <option value="">Selecciona categoría</option>
-                    <option value="manicure">Manicure</option>
-                    <option value="pedicure">Pedicure</option>
-                    <option value="estructura">Estructura de uñas</option>
-                </select>
-
-                <input type="hidden" name="servicio" id="servicio-input">
-
-                <label for="fecha-select">Fecha</label>
-                <input id="fecha-select" type="text" name="fecha" required placeholder="DD/MM/AAAA">
-
-                <label for="horario-select">Horario</label>
-                <select name="hora" id="horario-select" required>
-                    <option value="">Selecciona horario</option>
-                </select>
-
-                <!-- resumen del servicio seleccionado -->
-                <div id="resumen-servicio" class="selected-summary" aria-live="polite" hidden>
-                    <img id="resumen-img" src="" alt="" />
-                    <div class="meta">
-                        <strong id="resumen-nombre">Sin servicio</strong>
-                        <div class="precio" id="resumen-precio"></div>
-                        <div class="categoria" id="resumen-categoria"></div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="nombre">Nombre</label>
+                        <input id="nombre" type="text" name="nombre" placeholder="Ej. Ana Pérez" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="telefono">Teléfono</label>
+                        <input id="telefono" type="tel" name="telefono" placeholder="300 000 0000" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="correo">Correo</label>
+                        <input id="correo" type="email" name="correo" placeholder="tu@correo.com">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="gestora-select">Gestora</label>
+                        <select name="gestora" id="gestora-select" required>
+                            <option value="">Selecciona gestora</option>
+                            {% for gestora in gestoras %}
+                                <option value="{{ gestora.id }}">{{ gestora.nombre }} {{ gestora.apellidos }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="tipo-servicio">Categoría de servicio</label>
+                        <select name="tipo_servicio" id="tipo-servicio" required>
+                            <option value="">Selecciona categoría</option>
+                            <option value="manicure">Manicure</option>
+                            <option value="pedicure">Pedicure</option>
+                            <option value="estructura">Estructura de uñas</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="fecha-select">Fecha</label>
+                        <input id="fecha-select" type="text" name="fecha" required placeholder="DD/MM/AAAA">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="horario-select">Horario</label>
+                        <select name="hora" id="horario-select" required>
+                            <option value="">Selecciona horario</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="hidden" name="servicio" id="servicio-input">
+                        <div id="resumen-servicio" class="selected-summary" aria-live="polite" hidden>
+                            <img id="resumen-img" src="" alt="" />
+                            <div class="meta">
+                                <strong id="resumen-nombre">Sin servicio</strong>
+                                <div class="precio" id="resumen-precio"></div>
+                                <div class="categoria" id="resumen-categoria"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- contenedor de tarjetas -->
-                <h3 class="servicios-titulo">Servicios disponibles</h3>
-                <div id="servicios-contenedor" class="servicios-list" role="list"></div>
+                <!-- <div id="servicios-contenedor" class="servicios-list" role="list"></div> -->
 
-                <!-- Modal: lista de servicios por categoría -->
                 <div id="modal-servicios" class="modal-servicios" aria-hidden="true" role="dialog" aria-modal="true">
                   <div class="modal-panel" role="document">
                       <div class="modal-header">
@@ -87,36 +97,42 @@
                       <div class="modal-body">
                         <div id="modal-servicios-list" class="modal-servicios-list"></div>
                       </div>
-                      <div class="modal-footer">
-                        <button id="modal-cancel" class="btn-cancel">Cancelar</button>
-                      </div>
+                        <div class="modal-footer">
+                            <button id="modal-cancel" class="modal-btn cancelar"><span class="icon">&#10006;</span>Cancelar</button>
+                        </div>
                     </div>
                   </div>
+                    <div id="validation-modal" class="modal-validation" aria-hidden="true" role="alertdialog" aria-modal="true">
+                        <div class="modal-panel validation-panel" role="document">
+                                <div class="validation-body">
+                                    <div class="validation-icon" aria-hidden="true">⚠️</div>
+                                    <div class="validation-message" id="validation-message">Mensaje</div>
+                                </div>
+                                <div class="modal-footer">
+                                        <button id="validation-ok" type="button" class="modal-btn confirmar">Aceptar</button>
+                                </div>
+                        </div>
+                    </div>
+                    <div id="warning-modal" class="modal-validation" aria-hidden="true" role="alertdialog" aria-modal="true">
+                    <div class="modal-panel validation-panel" role="document">
+                    <div class="validation-body">
+            <div class="validation-icon" aria-hidden="true">⚠️</div>
+            <div class="validation-message" id="warning-message">Por favor selecciona un servicio para continuar con tu reserva.</div>
+        </div>
+        <div class="modal-footer">
+            <button id="warning-ok" type="button" class="modal-btn confirmar">Aceptar</button>
+        </div>
+    </div>
+</div>
 
                 <div class="acciones">
-                    <button type="submit" class="btn-confirm">Confirmar cita</button>
-                    <a href="{% url 'inicio' %}" class="btn-cancel">Volver</a>
+                    <button type="submit" class="modal-btn confirmar"><span class="icon">&#10004;</span>Confirmar cita</button>
                 </div>
             </form>
         </section>
-  
     </main>
-    <!-- { end changed code } -->
-</div>
-<!-- Mensaje de confirmación de cita (añadir dentro de block content) -->
-<div id="reserva-success-modal" class="reserva-success-modal" aria-hidden="true">
-  <div class="reserva-success-card">
-    <button id="reserva-success-close" class="reserva-success-close" aria-label="Cerrar">&times;</button>
-    <img src="{% static 'img/Logo gisel-nails.png' %}" alt="Logo" class="reserva-success-logo" />
-    <h2>¡Cita reservada!</h2>
-    <p class="reserva-success-text">Tu cita se ha guardado correctamente. Te hemos enviado un correo de confirmación (revisa tu bandeja y spam).</p>
-    <div class="reserva-success-actions">
-      <a href="{% url 'inicio' %}" class="btn btn-secondary">Volver al inicio</a>
-    </div>
-  </div>
 </div>
 
-<!-- Servicios agrupados por categoría en formato JSON seguro -->
 <script id="servicios-data" type="application/json">
     {
         "manicure": [
@@ -152,7 +168,6 @@
     }
 </script>
 
-<!-- Flatpickr CSS y JS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
@@ -167,12 +182,4 @@
     });
   });
 </script>
-
-
-
-
-
-<!-- pequeño script para renderizar tarjetas y actualizar resumen -->
-
-
 {% endblock %}

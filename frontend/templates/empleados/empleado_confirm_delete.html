@@ -2,39 +2,60 @@
 <!-- Extiende la plantilla base del panel de administración -->
 
 {% block content %}
-<!-- Inicio del bloque principal de contenido -->
+  <!-- Inicio del bloque principal de contenido -->
 
-<div class="card shadow mb-4">
+  <div class="card shadow mb-4">
     <!-- Tarjeta principal con sombra y margen inferior -->
-    
-    <div class="card-header bg-danger text-white">
-        <!-- Encabezado de la tarjeta con fondo rojo y texto blanco -->
-        <h2 class="mb-0">Eliminar Empleado</h2>
-        <!-- Título del formulario -->
+
+    <div class="card-header {% if empleado.activo %}
+        bg-danger text-white
+      {% else %}
+        bg-success text-white
+      {% endif %}">
+      <!-- Encabezado de la tarjeta con fondo según estado -->
+      <h2 class="mb-0">
+        {% if empleado.activo %}
+          <i class="bi bi-person-x me-2"></i> Deshabilitar Empleado
+        {% else %}
+          <i class="bi bi-person-check me-2"></i> Habilitar Empleado
+        {% endif %}
+      </h2>
     </div>
 
     <div class="card-body">
-        <!-- Cuerpo principal del contenido -->
-        
-        <p>
-            <!-- Mensaje de confirmación con el nombre completo del empleado -->
-            ¿Estás seguro que deseas eliminar al empleado 
-            <strong>{{ empleado.nombre }} {{ empleado.apellidos }}</strong>?
-        </p>
+      <!-- Cuerpo principal del contenido -->
 
-        <form method="post">
-            <!-- Formulario de confirmación para eliminar empleado -->
-            {% csrf_token %}
-            <!-- Token de seguridad CSRF obligatorio en formularios POST -->
+      <p>
+        {% if empleado.activo %}
+          ¿Seguro que deseas deshabilitar al empleado <strong>{{ empleado.nombre }} {{ empleado.apellidos }}</strong>? No se eliminarán las reservas.
+        {% else %}
+          ¿Deseas habilitar al empleado <strong>{{ empleado.nombre }} {{ empleado.apellidos }}</strong>?
+        {% endif %}
+      </p>
 
-            <button type="submit" class="btn btn-danger">Eliminar</button>
-            <!-- Botón para confirmar la eliminación -->
+      <form method="post">
+        <!-- Formulario de confirmación para eliminar empleado -->
+        {% csrf_token %}
+        <!-- Token de seguridad CSRF obligatorio en formularios POST -->
 
-            <a href="{% url 'empleados:empleado_list' %}" class="btn btn-secondary">Cancelar</a>
-            <!-- Botón para cancelar y regresar a la lista de empleados -->
-        </form>
+        <button type="submit"
+          class="btn {% if empleado.activo %}
+            btn-danger
+          {% else %}
+            btn-success
+          {% endif %}">
+          {% if empleado.activo %}
+            Deshabilitar
+          {% else %}
+            Habilitar
+          {% endif %}
+        </button>
+        <!-- Botón para confirmar la acción -->
+
+        <a href="{% url 'empleados:empleado_list' %}" class="btn btn-secondary">Cancelar</a>
+        <!-- Botón para cancelar y regresar a la lista de empleados -->
+      </form>
     </div>
-</div>
-
+  </div>
 {% endblock %}
 <!-- Fin del bloque principal de contenido -->

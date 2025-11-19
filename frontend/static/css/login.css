@@ -1,239 +1,204 @@
-/* =========================
-   inicio.css - Estilos específicos para la página de inicio
-   ========================= */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 
-/* =========================
-   Banner principal
-   ========================= */
-
-/* Contenedor del banner principal con degradado, color y forma inferior redondeada */
-.banner-principal {
-    background: linear-gradient(90deg, var(--rosado-pastel) 0%, var(--rosado-oscuro) 100%);
-    color: var(--blanco);
-    padding: 60px 0 40px 0;
-    text-align: center;
-    border-radius: 0 0 40px 40px;
-    box-shadow: 0 8px 32px rgba(230, 0, 126, 0.10);
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
 }
 
-/* Título del banner principal */
-.banner-principal h1 {
-    font-family: 'Pacifico', cursive;
-    font-size: 3rem;
-    margin-bottom: 16px;
-    color: var(--rosa-principal);
+/* Centrar el contenedor */
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 0;
+  min-height: calc(100vh - 120px);
 }
 
-/* Párrafo descriptivo del banner principal */
-.banner-principal p {
-    font-size: 1.3rem;
-    margin-bottom: 24px;
-    color: var(--blanco);
+body {
+  background: url('/static/img/background.jpeg') no-repeat center / cover;
+  background-attachment: fixed;
 }
 
-/* Botón principal dentro del banner */
-.banner-btn {
-    background: var(--rosa-principal);
-    color: var(--blanco);
-    border: none;
-    border-radius: 25px;
-    padding: 12px 36px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    box-shadow: 0 2px 8px rgba(236, 64, 122, 0.12);
-    transition: background 0.2s, transform 0.2s;
+/* Contenedor principal */
+.wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  min-height: 440px;
+  background: rgba(0, 0, 0, 0.55);
+  border: 2px solid rgba(255, 192, 203, 0.3);
+  border-radius: 20px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 0 25px rgba(255, 192, 203, 0.2);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  transition: height 0.2s ease;
 }
 
-/* Efecto hover del botón del banner */
-.banner-btn:hover {
-    background: var(--rosado-oscuro);
-    transform: scale(1.05);
+.wrapper.active {
+  height: 520px;
 }
 
-/* =========================
-   Carrusel de imágenes
-   ========================= */
-
-/* Imágenes dentro del carrusel con ajuste de proporción y bordes redondeados */
-.carousel-inner img {
-    object-fit: cover;
-    border-radius: 18px;
+/* Formularios */
+.wrapper .form-box {
+  width: 100%;
+  padding: 40px;
+  transition: transform 0.3s ease;
 }
 
-/* =========================
-   Iconos y textos destacados
-   ========================= */
-
-/* Iconos circulares destacados con borde y centrado */
-.rounded-circle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    border: 3px solid var(--rosado-pastel);
+.wrapper .form-box.login {
+  transform: translateX(0);
 }
 
-/* Clase para aplicar negrita en textos */
-.fw-bold {
-    font-weight: bold !important;
+.wrapper.active .form-box.login {
+  transform: translateX(-400px);
+  opacity: 0;
 }
 
-/* =========================
-   Sección de servicios destacados
-   ========================= */
-
-/* Contenedor general de los servicios en fila flexible */
-.servicios-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 48px 32px;
-    justify-content: center;
+.wrapper .form-box.register {
+  position: absolute;
+  transform: translateX(400px);
+  opacity: 0;
 }
 
-/* Imagen individual de cada servicio */
-.servicio-img {
-    width: 300px;
-    height: 220px;
-    object-fit: cover;
-    border-radius: 10px;
+.wrapper.active .form-box.register {
+  transform: translateX(0);
+  opacity: 1;
 }
 
-/* Contenedor de lista para las imágenes de servicios */
-.servicio-img-lista {
-    margin: 0px;
+/* Título */
+.form-box h2 {
+  font-size: 2em;
+  color: #ffb6c1;
+  text-align: center;
 }
 
-/* =========================
-   Botón de reserva ahora y ver más servicios
-   ========================= */
-
-/* Estilos generales del botón principal redondeado */
-.btn-danger.rounded-pill {
-    background: var(--rosado-fuerte);
-    border: none;
-    font-weight: bold;
-    font-size: 1.1rem;
-    transition: background 0.2s, transform 0.2s;
+/* Inputs */
+.input-box {
+  position: relative;
+  width: 100%;
+  height: 50px;
+  border-bottom: 2px solid #ffb6c1;
+  margin: 30px 0;
 }
 
-/* Efecto hover para los botones principales */
-.btn-danger.rounded-pill:hover {
-    background: var(--rosado-oscuro);
-    transform: scale(1.05);
+.input-box label {
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  transform: translateY(-50%);
+  color: #fff;
+  font-weight: 500;
+  pointer-events: none;
+  transition: 0.3s;
 }
 
-/* =========================
-   Estilos para la página de inicio de sesión
-   ========================= */
-
-/* Contenedor principal del área de login, centrado vertical y horizontalmente */
-.login-main {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 70vh;
+.input-box input {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 1em;
+  color: #fff;
+  padding: 0 35px 0 5px;
 }
 
-/* Tarjeta que contiene el formulario de inicio de sesión */
-.login-card {
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 4px 24px rgba(228, 106, 173, 0.637);
-    padding: 32px 24px;
-    max-width: 400px;
-    width: 100%;
-    margin: 32px auto;
+/* EFECTO levantar label (compatible con Django forms) */
+.input-box input:focus ~ label,
+.input-box input:valid ~ label {
+  top: -5px;
+  color: #ff69b4;
 }
 
-/* Título principal dentro de la tarjeta de login */
-.login-card h1 {
-    color: #ff4081;
-    font-family: 'Arapey', sans-serif;
-    font-size: 2.2rem;
-    text-align: center;
-    margin-bottom: 24px;
+/* Iconos */
+.input-box .icon {
+  position: absolute;
+  right: 8px;
+  font-size: 1.2em;
+  color: #ffb6c1;
+  line-height: 57px;
 }
 
-/* Contenedor del ícono y el input del formulario */
-.login-input-group {
-    display: flex;
-    align-items: center;
-    margin-bottom: 18px;
+/* Recordarme y olvidar contraseña */
+.remember-forgot {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9em;
+  margin: -15px 0 15px;
+  color: #fff;
 }
 
-/* Ícono decorativo junto al campo de texto */
-.login-icon {
-    margin-right: 8px;
-    color: #ff4081;
-    font-size: 1.2em;
+.remember-forgot label input {
+  accent-color: #ff69b4;
+  margin-right: 3px;
 }
 
-/* Campos de texto (inputs) del formulario */
-.login-input {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1.5px solid #ff4081;
-    border-radius: 8px;
-    font-size: 1em;
-    background: #fff;
-    color: #232c36;
-    margin-bottom: 0;
+.remember-forgot a {
+  color: #ffb6c1;
+  text-decoration: none;
 }
 
-/* Botón principal para enviar el formulario de inicio de sesión */
-.login-btn {
-    width: 100%;
-    background: #ff4081;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    padding: 12px 0;
-    font-size: 1.1em;
-    font-weight: bold;
-    margin-top: 12px;
-    cursor: pointer;
-    transition: background 0.2s;
+.remember-forgot a:hover {
+  text-decoration: underline;
 }
 
-/* Efecto hover para el botón de login */
-.login-btn:hover {
-    background: #ff0077;
+/* Botón */
+.btn {
+  width: 100%;
+  height: 45px;
+  background: #ff69b4;
+  border: none;
+  outline: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1em;
+  color: #fff;
+  font-weight: 600;
+  transition: 0.3s;
 }
 
-/* Enlace de ayuda o registro dentro de la página de login */
-.login-link {
-    color: #ff4081;
-    text-decoration: underline;
+.btn:hover {
+  background: #ff85c1;
+  box-shadow: 0 0 10px #ff69b4;
 }
 
-/* Alerta o mensaje de error dentro del formulario de login */
-.login-alert {
-    color: #c06caa;
-    background: #ffe0ec;
-    border-radius: 8px;
-    padding: 8px;
-    margin-top: 12px;
-    text-align: center;
+/* Enlaces */
+.login-register {
+  font-size: 0.9em;
+  text-align: center;
+  margin: 25px 0 10px;
+  color: #fff;
 }
 
-/* =========================
-   Responsive ajustes
-   ========================= */
+.login-register p a {
+  color: #ffb6c1;
+  text-decoration: none;
+  font-weight: 600;
+}
 
-/* Ajustes para pantallas más pequeñas (tablets o móviles) */
-@media (max-width: 991px) {
-    .banner-principal {
-        padding: 40px 0 24px 0;
-        border-radius: 0 0 20px 20px;
-    }
+.login-register p a:hover {
+  text-decoration: underline;
+}
 
-    .servicios-row {
-        gap: 16px;
-    }
+/* Responsive */
+@media (max-width: 420px) {
+  .wrapper {
+    padding: 20px;
+    min-height: 520px;
+  }
 
-    .servicio-img {
-        width: 98vw;
-        max-width: 340px;
-        padding: 18px 8px;
-    }
+  .form-box {
+    padding: 20px;
+  }
+
+  .input-box {
+    height: 48px;
+    margin: 18px 0;
+  }
 }

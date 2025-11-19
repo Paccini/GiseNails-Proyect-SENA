@@ -13,7 +13,14 @@ def lista_servicios(request):
     paginator = Paginator(servicios_list, 3)  # 3 servicios por página
     page_number = request.GET.get('page')
     servicios = paginator.get_page(page_number)
-    return render(request, 'servicios/lista_servicios.html', {'servicios': servicios})
+
+    # Servicios más solicitados (placeholder: últimos agregados / top por id)
+    mas_solicitados = Servicio.objects.all().order_by('-id')[:6]
+
+    return render(request, 'servicios/lista_servicios.html', {
+        'servicios': servicios,
+        'mas_solicitados': mas_solicitados,
+    })
 
 # Create your views here.
 

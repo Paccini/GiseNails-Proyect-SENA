@@ -1,87 +1,37 @@
-/* =========================
-   inicio.css - Estilos específicos para la página de inicio
-   ========================= */
-
-/* =========================
-   Banner principal
-   ========================= */
-
-/* Sección del banner principal con degradado, centrado y sombra */
-.banner-principal {
-    background: linear-gradient(90deg, var(--rosado-pastel) 0%, var(--rosado-oscuro) 100%);
-    color: var(--blanco);
-    padding: 60px 0 40px 0;
-    text-align: center;
-    box-shadow: 0 8px 32px rgba(230, 0, 126, 0.10);
-}
-
-/* Título principal del banner */
-.banner-principal h1 {
-    font-family: 'Pacifico', cursive;
-    font-size: 3rem;
-    margin-bottom: 16px;
-    color: var(--rosa-principal);
-}
-
-/* Texto descriptivo del banner */
-.banner-principal p {
-    font-size: 1.3rem;
-    margin-bottom: 24px;
-    color: var(--blanco);
-}
-
-/* Botón principal del banner */
-.banner-btn {
-    background: var(--rosa-principal);
-    color: var(--blanco);
-    border: none;
-    border-radius: 25px;
-    padding: 12px 36px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    box-shadow: 0 2px 8px rgba(236, 64, 122, 0.12);
-    transition: background 0.2s, transform 0.2s;
-}
-
-/* Efecto hover para el botón del banner */
-.banner-btn:hover {
-    background: var(--rosado-oscuro);
-    transform: scale(1.05);
-}
-
-/* =========================
-   Carrusel de imágenes
-   ========================= */
-
-/* Contenedor del banner con imagen de fondo */
-.cont-bn{
-    background: url("../img/banner_inicio.png") no-repeat center center;
+/* Banner principal */
+.cont-bn {
+    background: url("../img/banner_inicio.png") no-repeat center top;
     background-size: cover;
+    /* conserva cobertura en pantallas grandes */
+    width: 100%;
     height: 50vh;
-    width: 100%;
-}
-
-/* Imagen dentro del carrusel */
-.carousel-img {
-    background: url;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    min-height: 300px;
     display: block;
 }
 
-/* Ajustes para pantallas pequeñas (celulares) */
+/* En pantallas pequeñas evitar recorte: mostrar la imagen completa y mantener proporción */
 @media (max-width: 768px) {
-  .banner {
-    aspect-ratio: 4 / 3; /* Proporción más cuadrada para celular */
-  }
+    .cont-bn {
+        background-position: center top;
+        background-size: contain;
+        /* muestra toda la imagen */
+        height: auto;
+        padding-top: 56.25%;
+        /* reserva espacio según aspecto (16:9). Ajusta si tu imagen tiene otra proporción */
+        min-height: 220px;
+        background-repeat: no-repeat;
+    }
 }
 
-/* =========================
-   Iconos y textos destacados
-   ========================= */
+/* Opcional: para móviles muy estrechos */
+@media (max-width: 420px) {
+    .cont-bn {
+        padding-top: 70%;
+        /* aumentar si la imagen sigue viéndose cortada verticalmente */
+    }
+}
 
-/* Iconos redondeados en la sección de inicio */
+/* Iconos inicio */
 .rounded-circle {
     display: flex;
     align-items: center;
@@ -90,10 +40,10 @@
     width: 30px;
     height: 30px;
     padding: 50px;
-    object-fit: cover
+    object-fit: cover;
 }
 
-/* Contenedor de los iconos y textos destacados */
+/* Ajustes iconos + textos */
 .container-fluid .row.justify-content-around {
     display: flex;
     justify-content: center;
@@ -101,79 +51,339 @@
     gap: 32px;
 }
 
-/* Organización vertical de iconos y textos */
-.container-fluid .row.justify-content-around > div {
+.container-fluid .row.justify-content-around>div {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
 }
 
-/* Centrar los textos debajo de las imágenes */
 .container-fluid .row.justify-content-around p {
     text-align: center;
     margin-top: 12px;
 }
 
-/* =========================
-   Sección de servicios destacados
-   ========================= */
+/* Fondos del bloque de iconos */
+.container-fluid.py-5.scroll-fade {
+    background: linear-gradient(to bottom, #2a0d2e, #3d1147);
+    color: white;
+    padding: 4rem 0;
+}
 
-/* Fila que contiene los servicios destacados */
-.servicios-row {
+.container-fluid.py-5.scroll-fade p,
+.container-fluid.py-5.scroll-fade h2,
+.container-fluid.py-5.scroll-fade h3 {
+    color: white;
+}
+
+/* sección carrusel horizontal moderno */
+.carousel-section {
+    background-color: #3a0026;
+    padding: 40px 0 30px 0;
+    /* menos padding arriba y abajo */
+    text-align: center;
+}
+
+.carousel-section h2 {
+    color: #fff;
+    margin-bottom: 18px;
+    /* menos espacio debajo del título */
+    font-family: var(--fuente-titulos);
+
+    background: linear-gradient(90deg,
+            #ffffff 0%,
+            #ff7ec9 40%,
+            #ffffff 60%,
+            #ffffff 100%);
+    background-size: 220% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: h2shine 4.5s ease-in-out infinite;
+}
+
+.carousel-second {
+    margin: 0 auto 18px auto;
+    /* menos espacio debajo del carrusel */
+    width: 90%;
     display: flex;
-    flex-wrap: wrap;
-    gap: 48px 32px;
+    overflow-x: auto;
+    gap: 0.5em;
+
+    /* efecto flotado container */
+    padding: 18px 0;
+    border-radius: 22px;
+}
+
+.carousel-second::-webkit-scrollbar {
+    display: none;
+}
+
+.group {
+    display: flex;
+    align-items: center;
     justify-content: center;
+    gap: 1em;
+    animation: spin 18s infinite linear;
+    padding-right: 1em;
 }
 
-/* Imágenes de los servicios */
-.servicio-img {
-    width: 300px;
+/* ---- CARD con destello y box shadow ---- */
+.card {
+    position: relative;
+    flex: 0 0 220px;
     height: 220px;
+    padding: 0;
+    border-radius: .9rem;
+    overflow: hidden;
+    background: transparent;
+    display: block;
+    transition: 0.35s all ease;
+    box-shadow: 0 8px 25px rgba(255, 0, 140, 0.35);
+}
+
+/* highlight glossy */
+.card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.45) 50%,
+            rgba(255, 255, 255, 0) 100%);
+    pointer-events: none;
+    mix-blend-mode: screen;
+    opacity: .4;
+    transform: translateX(-200%) rotate(10deg);
+    /* fuera al inicio */
+    transition: transform .8s ease, opacity .8s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px) scale(1.04);
+    box-shadow: 0 18px 50px rgba(255, 0, 180, 0.55);
+    filter: brightness(1.15);
+}
+
+.card:hover::before {
+    transform: translateX(200%) rotate(10deg);
+    /* cruza la card */
+    opacity: 1;
+}
+
+/* ---- end card ---- */
+
+.carousel-second .card img {
+    display: block;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    border-radius: 10px;
+    object-position: center;
 }
 
-/* Lista que contiene las imágenes de servicios */
-.servicio-img-lista {
-    margin: 0px;
+
+
+.carousel-second:hover .group {
+    animation-play-state: paused;
 }
 
-/* =========================
-   Botón de reserva ahora y ver más servicios
-   ========================= */
+@media (max-width: 768px) {
+    .carousel-second .card {
+        flex: 0 0 140px;
+        height: 140px;
+    }
+}
 
-/* Botones principales de acción en la página */
-.btn-danger.rounded-pill {
-    background: var(--rosado-fuerte);
+@keyframes spin {
+    from {
+        translate: 0;
+    }
+
+    to {
+        translate: -100%;
+    }
+}
+
+
+@keyframes h2shine {
+    0% {
+        background-position: 220% center;
+    }
+
+    100% {
+        background-position: -220% center;
+    }
+}
+
+@keyframes h2shine-bg {
+    0% {
+        background-position: 220% center;
+    }
+
+    100% {
+        background-position: -220% center;
+    }
+}
+
+.carousel-section .btn-danger {
+    background: linear-gradient(to bottom, #4f1257, #5d166d) !important;
+    /* fondo sólido */
+    color: #fff;
     border: none;
-    font-weight: bold;
-    font-size: 1.1rem;
-    transition: background 0.2s, transform 0.2s;
+    font-weight: 600;
+    box-shadow: 0 4px 18px rgba(255, 0, 140, 0.18);
+    border-radius: 50px;
+    padding: 0.75em 2.5em;
+    font-size: 1.2em;
+    position: relative;
+    overflow: hidden;
 }
 
-/* Efecto hover para los botones principales */
-.btn-danger.rounded-pill:hover {
-    background: var(--rosado-oscuro);
-    transform: scale(1.05);
+/* Brillo animado sobre la letra */
+.carousel-section .btn-danger::after {
+    content: "RESERVA AHORA";
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: inherit;
+    font-weight: inherit;
+    background: linear-gradient(90deg,
+            #fff 0%,
+            #ffe6f7 35%,
+            #fff 65%,
+            #ffb3e6 100%);
+    background-size: 220% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    animation: h2shine 4.5s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 2;
 }
 
-/* =========================
-   Responsive ajustes
-   ========================= */
+/* Oculta el texto original para que solo se vea el animado */
+.carousel-section .btn-danger span {
+    opacity: 0;
+}
 
-/* Ajustes para pantallas medianas y pequeñas */
-@media (max-width: 991px) {
-    .banner-principal {
-        padding: 40px 0 24px 0;
+.reviews h2 {
+    font-weight: 600;
+    letter-spacing: .5px;
+    margin-bottom: 1.5rem;
+}
+
+.reviews-section {
+    background: #2a0d2e;
+    padding: 60px 0;
+    color: #fff;
+    text-align: center;
+}
+
+.reviews-container {
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.review-card {
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    padding: 28px 34px;
+    /* más espacio interno */
+    width: 320px;
+    /* mayor ancho */
+    min-width: 280px;
+    transition: .3s ease;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.review-card:hover {
+    transform: translateY(-6px) scale(1.035);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+}
+
+.review-photo {
+    width: 96px;
+    /* foto más grande */
+    height: 96px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.45);
+}
+
+.review-name {
+    font-weight: 700;
+    margin-bottom: 8px;
+    font-size: 1rem;
+    /* texto un poco mayor */
+}
+
+/* ajustar respuesta en móvil para no saturar el ancho */
+@media (max-width: 768px) {
+    .reviews-container {
+        gap: 18px;
     }
-    .servicios-row {
-        gap: 16px;
-    }
-    .servicio-img {
-        width: 98vw;
+
+    .review-card {
+        width: 100%;
         max-width: 340px;
-        padding: 18px 8px;
+        padding: 20px;
+    }
+
+    .review-photo {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+/* Reutiliza la animación h2shine (ya definida más arriba) */
+/* Estilo animado para todos los títulos */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.animated-title {
+    display: inline-block;
+    background: linear-gradient(90deg,
+            #ffffff 0%,
+            #ffd6ef 25%,
+            #ff7ec9 50%,
+            #d1006e 75%,
+            #ffffff 100%);
+    background-size: 220% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    animation: h2shine 4.5s ease-in-out infinite;
+    font-weight: 600;
+    will-change: background-position;
+}
+
+/* Fallback para evitar texto invisible en navegadores sin soporte */
+@supports not (-webkit-background-clip: text) {
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    .animated-title {
+        color: #fff;
+        background: none;
+        -webkit-text-fill-color: initial;
     }
 }
