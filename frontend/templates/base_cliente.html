@@ -25,8 +25,6 @@
           <span class="navbar-brand fw-bold text-dark" style="font-size: 1.5rem;">Panel de Usuario</span>
 
           <div class="d-flex align-items-center gap-2 ms-auto">
-            <!-- Botón de cambio de tema -->
-            <button id="toggleTheme" class="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center" style="width:38px;height:38px;padding:0;" title="Cambiar tema"><i class="bi bi-moon fs-5"></i></button>
 
             <!-- Campana de notificaciones -->
             <div class="dropdown">
@@ -50,7 +48,6 @@
                           {{ notif.texto }}
                           <span class="text-muted ms-2" style="font-size:0.9em;">{{ notif.fecha }}</span>
                         </span>
-                        <button type="button" class="btn btn-sm btn-link text-danger ms-2 notif-close-btn" title="Eliminar notificación" style="font-size:1.2em;padding:0;"><i class="bi bi-x"></i></button>
                       </div>
                     </li>
                   {% endfor %}
