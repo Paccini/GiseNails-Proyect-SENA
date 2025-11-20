@@ -10,9 +10,7 @@
   <link rel="stylesheet" href="{% static 'css/card_moderno.css' %}" />
   <link rel="stylesheet" href="{% static 'css/productos.css' %}" />
 
-  <!-- ADD: comenzar wrapper que asegura que las reglas de .productos-page se apliquen -->
   <div class="productos-page">
-    <!-- NUEVA SECCIÓN: Objetivo de nuestros productos (antes de 'Conoce todos nuestros productos') -->
     <div class="scroll-fade objetivo-section" data-delay="0.01">
       <h2 class="productos-section-title text-center fw-bold mb-3">OBJETIVO DE NUESTROS PRODUCTOS</h2>
       <p class="productos-subtitle text-center mb-4">
@@ -36,14 +34,12 @@
           <div class="card-info" aria-hidden="true">
             <strong class="card-title">{{ producto.nombre }}</strong>
             <div class="card-text mb-2">{{ producto.descripcion }}</div>
-            <div class="card-bottom">
-            </div>
+            <div class="card-bottom"></div>
           </div>
         </div>
       {% endfor %}
     </div>
 
-    <!-- PAGINACIÓN: ahora dentro de la sección principal (debajo de las cards) -->
     <div class="pagination-wrapper scroll-fade" data-delay="0.02">
       <div class="d-flex justify-content-center mt-3">
         <nav aria-label="Page navigation">
@@ -83,7 +79,6 @@
     </div>
 
     <div class="scroll-fade productos-page" data-delay="0.02">
-      <!-- Sección: Recomendados / Más vendidos -->
       {% if recomendados %}
         <h2 class="productos-section-title">Recomendados / Más vendidos</h2>
         <div class="info-list recomendados-list">
@@ -101,7 +96,6 @@
         </div>
       {% endif %}
 
-      <!-- Sección: En uso en el estudio / Experiencia -->
       {% if en_uso %}
         <h2 class="productos-section-title">En uso en el estudio</h2>
         <div class="info-list en-uso-list">
@@ -118,52 +112,7 @@
         </div>
       {% endif %}
     </div>
-
-    <!-- ADD: cerrar wrapper justo antes del script final -->
   </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      // IntersectionObserver (mantener)
-      const observer = new IntersectionObserver(
-        (entries, obs) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              const el = entry.target
-              const delay = parseFloat(el.getAttribute('data-delay') || 0)
-              if (delay > 0) {
-                setTimeout(() => el.classList.add('visible'), Math.round(delay * 1000))
-              } else {
-                el.classList.add('visible')
-              }
-              obs.unobserve(el)
-            }
-          })
-        },
-        { threshold: 0.15 }
-      )
-      document.querySelectorAll('.scroll-fade').forEach((el) => observer.observe(el))
-    
-      // PAGINATOR: delegación para animar y navegar (targets .animated-paginator)
-      document.addEventListener('click', function (e) {
-        const link = e.target.closest('.animated-paginator .page-link')
-        if (!link) return
-        const href = link.getAttribute('href')
-        if (!href || href === '#') return
-        e.preventDefault()
-        // pulso visual + fade
-        link.classList.add('pulse')
-        document.body.classList.add('pag-navigating')
-        setTimeout(() => {
-          window.location.href = href
-        }, 260)
-      })
-    
-      // Make paginator links always show pointer and be focusable
-      document.querySelectorAll('.animated-paginator .page-link').forEach((l) => {
-        l.style.cursor = 'pointer'
-        l.setAttribute('tabindex', '0')
-      })
-    })
-  </script>
+  <script src="{% static 'js/paginacion.js' %}"></script>
 {% endblock %}
