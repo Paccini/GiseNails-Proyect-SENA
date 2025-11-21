@@ -97,30 +97,50 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Mostrar el modal y alertas si corresponde (variables inyectadas por Django)
     if (typeof show_modal !== 'undefined' && show_modal) {
-        var modal = new bootstrap.Modal(document.getElementById('updateClienteModal'));
+        var modalEl = document.getElementById('updateClienteModal');
+        var modal = new bootstrap.Modal(modalEl);
         modal.show();
 
+        // Si hay error: mostrar alerta tipo toast/auto-cierre y dejar el modal abierto
         if (typeof update_error !== 'undefined' && update_error) {
+            console.log('panel_cliente: show_modal=', show_modal, 'update_error=', update_error);
+            var errorTimer = 4000;
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
                 text: update_error,
-                confirmButtonColor: '#3b82f6',
+                timer: errorTimer,
+                timerProgressBar: true,
+                showConfirmButton: false,
                 allowOutsideClick: false,
                 allowEscapeKey: false
-            }).then(function () {
-                modal.hide();
             });
+            // Forzar cierre por si queda con botón OK en algunas condiciones
+            setTimeout(function() {
+                try { Swal.close(); } catch(e) { console.warn('Swal.close error', e); }
+            }, errorTimer + 250);
+            // Asegurar que el mensaje dentro del modal (si existe) sea visible
+            var inlineAlert = modalEl.querySelector('.alert.alert-danger');
+            if (inlineAlert) inlineAlert.style.display = 'block';
+
+            // Enfocar el primer campo con error (si existe)
+            var firstErrorInput = modalEl.querySelector('.is-invalid, .alert');
+            if (firstErrorInput) firstErrorInput.scrollIntoView({behavior: 'smooth', block: 'center'});
+
         } else if (typeof update_success !== 'undefined' && update_success) {
+            // En caso de éxito: cerrar modal y mostrar alerta de éxito que desaparece sola
+            modal.hide();
             Swal.fire({
                 icon: 'success',
                 title: '¡Actualizado!',
                 text: update_success,
-                confirmButtonColor: '#3b82f6',
-                allowOutsideClick: false,
-                allowEscapeKey: false
+                timer: 3500,
+                timerProgressBar: true,
+                showConfirmButton: false,
+                allowOutsideClick: true,
+                allowEscapeKey: true
             }).then(function () {
-                modal.hide();
+                // Recargar la página para reflejar los cambios
                 window.location.href = panel_url || window.location.href;
             });
         }
