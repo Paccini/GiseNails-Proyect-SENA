@@ -1,4 +1,3 @@
-
 /* =========================
    reserva.css - Glassmorphism Moderno Negro & Rosado
    ========================= */
@@ -572,25 +571,97 @@
         width: 100%;
         max-width: 280px;
     }
+
+    /* Mejoras responsivas para botones y selects */
+    .modal-btn,
+    .btn-change,
+    .reserva-form button,
+    .reserva-form select,
+    .reserva-form input {
+        font-size: 1.1rem;
+        padding: 12px 18px;
+        border-radius: 14px;
+    }
+    .modal-btn,
+    .btn-change {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    .reserva-form .acciones {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .reserva-header {
+        flex-direction: column;
+        gap: 12px;
+        padding: 12px 10px;
+    }
+    .marca-texto h2 {
+        font-size: 2rem;
+    }
+    .reserva-form label {
+        font-size: 1rem;
+    }
+    .reserva-form select,
+    .reserva-form input {
+        min-width: 0;
+        width: 100%;
+        box-sizing: border-box;
+    }
 }
 
 @media (max-width: 480px) {
-    .reserva-header .logo {
-        width: 100px;
+    .modal-btn,
+    .btn-change,
+    .reserva-form button {
+        font-size: 1rem;
+        padding: 10px 12px;
+        border-radius: 12px;
     }
-
+    .reserva-header {
+        padding: 8px 4px;
+    }
     .marca-texto h2 {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
     }
+    .reserva-form label {
+        font-size: 0.95rem;
+    }
+}
 
-    .form-section {
-        padding: 16px;
-    }
+/* Mejorar el select en móviles */
+.reserva-form select {
+    background: #2c1a36;
+    color: #fff;
+    font-weight: bold;
+    border: 2px solid var(--rosa-claro);
+    box-shadow: 0 2px 8px rgba(255,79,159,0.10);
+}
+.reserva-form select option {
+    background: #2c1a36;
+    color: #ffb6e6;
+    font-weight: bold;
+}
 
-    .modal-btn {
-        font-size: 0.9rem;
-        padding: 8px 16px;
-    }
+/* Botones con efecto suave */
+.modal-btn,
+.btn-change,
+.reserva-form button {
+    transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+    box-shadow: 0 2px 12px 0 rgba(255, 79, 159, 0.18);
+    border: none;
+    background: var(--btn);
+    color: #fff;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+.modal-btn:hover,
+.btn-change:hover,
+.reserva-form button:hover {
+    background: var(--btn-hover);
+    color: #2c1a36;
+    transform: scale(1.04);
 }
 .reserva-form input:-webkit-autofill,
 .reserva-form input:-webkit-autofill:focus,
