@@ -633,4 +633,36 @@
 /* Si quieres que una sola card sea un poco más ancha (opcional), descomenta:
 .cards > .card-gn:only-child { max-width: 760px; aspect-ratio: 16/9; }
 Nota: :only-child puede no funcionar si el servidor inyecta wrappers.
-*/
+
+/* Fix: estilos cuando solo hay 1 card en el grid */
+.cards.single-card {
+  grid-template-columns: 1fr;
+  justify-items: center;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* centrar y limitar la tarjeta única */
+.cards.single-card .card-gn {
+  max-width: 520px !important;
+  width: 100% !important;
+  aspect-ratio: 16 / 9;
+  margin: 0 auto;
+}
+
+/* asegurar que el paginador siga siendo visible y con buen contraste */
+.pagination-wrapper {
+  z-index: 3;
+  position: relative;
+}
+
+.animated-paginator .page-link {
+  opacity: 1 !important;
+  color: inherit !important;
+}
+
+/* pequeño ajuste para evitar que la imagen se vea recortada gigante en pantallas grandes */
+.card-front img {
+  max-height: 560px;
+  object-fit: cover;
+}
