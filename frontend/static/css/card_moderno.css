@@ -564,4 +564,105 @@
   padding-bottom: 10px;
 }
 
-/* Fin de fixes */
+/* ---------- Fix responsive card sizing (append al final) ---------- */
+
+/* Limita el ancho total del grid y lo centra */
+.cards {
+  max-width: 1200px;
+  margin: 0 auto;
+  grid-auto-rows: 1fr;
+  /* filas uniformes */
+}
+
+/* Tamaño máximo de cada card para que una sola no se vea gigantesca.
+   Mantener width:100% para que el grid reduzca correctamente. */
+.card-gn {
+  max-width: 520px;
+  /* evita cards enormes en pantallas muy anchas */
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  /* relación razonable para imagen + overlay */
+  min-height: 280px;
+  /* evita cards demasiado pequeñas */
+  max-height: 560px;
+  /* límite superior de altura */
+  margin: 0 auto;
+  /* centrar si queda columna única */
+}
+
+/* Asegurar que la imagen y el frontal respeten la altura de la card */
+.card-front,
+.card-front img {
+  height: 100% !important;
+  width: 100% !important;
+  object-fit: cover !important;
+}
+
+/* Cuando hay muchas columnas, reducir un poco la altura para caber mejor */
+@media (min-width: 1200px) {
+  .card-gn {
+    max-width: 440px;
+    max-height: 520px;
+  }
+}
+
+/* En tablets y móviles usar columnas más estrechas y altura menor */
+@media (max-width: 991px) {
+  .card-gn {
+    max-width: 340px;
+    min-height: 300px;
+    aspect-ratio: 3 / 4;
+    max-height: 520px;
+  }
+}
+
+/* En móviles, full width pero con altura controlada */
+@media (max-width: 600px) {
+  .cards {
+    padding: 18px 8px;
+  }
+
+  .card-gn {
+    max-width: 95vw;
+    min-height: 320px;
+    aspect-ratio: 3 / 4;
+    max-height: 640px;
+  }
+}
+
+/* Si quieres que una sola card sea un poco más ancha (opcional), descomenta:
+.cards > .card-gn:only-child { max-width: 760px; aspect-ratio: 16/9; }
+Nota: :only-child puede no funcionar si el servidor inyecta wrappers.
+
+/* Fix: estilos cuando solo hay 1 card en el grid */
+.cards.single-card {
+  grid-template-columns: 1fr;
+  justify-items: center;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* centrar y limitar la tarjeta única */
+.cards.single-card .card-gn {
+  max-width: 520px !important;
+  width: 100% !important;
+  aspect-ratio: 16 / 9;
+  margin: 0 auto;
+}
+
+/* asegurar que el paginador siga siendo visible y con buen contraste */
+.pagination-wrapper {
+  z-index: 3;
+  position: relative;
+}
+
+.animated-paginator .page-link {
+  opacity: 1 !important;
+  color: inherit !important;
+}
+
+/* pequeño ajuste para evitar que la imagen se vea recortada gigante en pantallas grandes */
+.card-front img {
+  max-height: 560px;
+  object-fit: cover;
+}

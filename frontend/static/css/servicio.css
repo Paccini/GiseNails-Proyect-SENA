@@ -332,6 +332,13 @@ body.pag-navigating .servicios-page {
     position: relative;
 }
 
+/* ...existing code... */
+/* AJAX inline loader + soft fade */
+.ajax-inline-loader { display:inline-flex; align-items:center; margin-left:10px; vertical-align:middle; }
+body.pag-navigating .cards { transition: filter 220ms ease, opacity 220ms ease; }
+/* opcional: hacer cards menos transparentes pero con transición */
+body.pag-navigating .productos-page, body.pag-navigating .servicios-page { transition: opacity .22s ease; opacity:0.85; }
+
 /* Responsivo: reducir padding en wrappers en pantallas pequeñas */
 @media (max-width: 991px) {
     .section-wrapper { padding: 14px; margin: 12px; border-radius: 10px; }
