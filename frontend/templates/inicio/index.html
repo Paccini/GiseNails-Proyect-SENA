@@ -31,16 +31,43 @@
     </div>
   </div>
 
-  <!-- SECCIONES envueltas con la clase scroll-fade -->
+  <!-- SECCIÓN DEL CARRUSEL AGREGADO (ÚNICO CAMBIO REALIZADO) -->
   <section class="scroll-fade">
-    <div id="carouselExample" class="carousel slide">
+    <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner carousel-img-container">
+
+        <!-- Imagen principal (activa) -->
         <div class="carousel-item active cont-bn">
-          <!-- <img src="{% static 'img/banner_inicio.png' %}" class="d-block w-100 carousel-img"> -->
+          <img src="{% static 'img/banner1.png' %}" class="d-block w-100 carousel-img" alt="Banner principal">
         </div>
+
+        <!-- Imagen 1 -->
+        <div class="carousel-item">
+          <img src="{% static 'img/carrucesl5 (2).jpg' %}" class="d-block w-100" alt="Carrusel 1" height="400">
+        </div>
+
+        <!-- Imagen 2 -->
+        <div class="carousel-item">
+          <img src="{% static 'img/carrucesl5 (5).jpg' %}" class="d-block w-100" alt="Carrusel 2" height="400">
+        </div>
+
+        <!-- Imagen 3 -->
+        <div class="carousel-item">
+          <img src="{% static 'img/carrucels (3).jpg' %}" class="d-block w-100" alt="Carrusel 3" height="400">
+        </div>
+
       </div>
+
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+      </button>
+
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+      </button>
     </div>
-  </section>
+ </section>
+  <!-- FIN DE LA ÚNICA ADICIÓN -->
 
   <section class="container-fluid py-5 scroll-fade">
     <div class="row justify-content-around">
