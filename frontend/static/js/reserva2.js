@@ -415,4 +415,46 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     // Ejecutar al cargar
     marcarCamposLlenos();
-});
+
+	const params = new URLSearchParams(window.location.search);
+    const servicioId = params.get('servicio');
+
+    if (servicioId) {
+        const serviciosData = JSON.parse(document.getElementById('servicios-data').textContent || '{}');
+        let servicioSeleccionado = null;
+
+        // Buscar el servicio por ID en los datos
+        Object.keys(serviciosData).forEach(categoria => {
+            const servicios = serviciosData[categoria];
+            const servicio = servicios.find(s => s.id === servicioId);
+            if (servicio) {
+                servicioSeleccionado = servicio;
+                currentCategory = categoria;
+            }
+        });
+
+        if (servicioSeleccionado) {
+            selectServicio(servicioSeleccionado);
+
+            // Mostrar la categoría en el formulario
+            const categoriaSelect = document.getElementById('tipo-servicio');
+            if (categoriaSelect) {
+                categoriaSelect.value = currentCategory;
+            }
+        }
+    }
+
+    function clearSelectedService() {
+        const servicioInput = document.getElementById('servicio-input');
+        const resumen = document.getElementById('resumen-servicio');
+
+        if (servicioInput) servicioInput.value = '';
+        if (resumen) resumen.hidden = true;
+    }
+
+    // Agregar evento al botón de selección de servicio
+    const selectServiceButton = document.getElementById('select-service-button');
+    if (selectServiceButton) {
+        selectServiceButton.addEventListener('click', clearSelectedService);
+    }
+})

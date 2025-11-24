@@ -74,7 +74,7 @@
                         </select>
                     </div>
                     <div class="col-md-6">
-                        <input type="hidden" name="servicio" id="servicio-input">
+                        <input type="hidden" name="servicio" id="servicio-input" value="{{ request.GET.servicio|default:'' }}">
                         <div id="resumen-servicio" class="selected-summary" aria-live="polite" hidden>
                             <img id="resumen-img" src="" alt="" />
                             <div class="meta">
