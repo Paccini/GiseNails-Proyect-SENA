@@ -59,6 +59,13 @@
     color: rgba(255, 255, 255, 0.92) !important;
 }
 
+/* Cards: */
+.cards > .card-gn {
+    max-width:  360px !important;
+    max-height: 300px !important;
+    
+}
+
 /* Cards: fondo claro para contraste con el fondo degradado oscuro-rosado,
    borde y acento en rosa para combinar */
 .productos-page .card-gn {
