@@ -267,6 +267,230 @@
           })()
         </script>
       {% endblock %}
+
+      <!-- Botón flotante WhatsApp solo con el logo -->
+      <style>
+        #whatsapp-float-btn {
+          position: fixed;
+          right: 22px;
+          bottom: 22px;
+          z-index: 9999;
+          background: #25d366;
+          color: #fff;
+          border-radius: 50%;
+          box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
+          width: 56px;
+          height: 56px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 2rem;
+          cursor: pointer;
+          transition: box-shadow 0.2s, background 0.2s;
+          border: none;
+          outline: none;
+          text-decoration: none;
+        }
+        #whatsapp-float-btn:hover {
+          background: #1ebe57;
+          box-shadow: 0 6px 24px rgba(0, 0, 0, 0.22);
+          color: #fff;
+        }
+        @media (max-width: 600px) {
+          #whatsapp-float-btn {
+            right: 12px;
+            bottom: 12px;
+            width: 46px;
+            height: 46px;
+            font-size: 1.5rem;
+          }
+        }
+        /* Modal estilos */
+        #wa-modal-backdrop {
+          position: fixed;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.35);
+          z-index: 9998;
+          display: none;
+        }
+        #wa-modal {
+          position: fixed;
+          right: 50%;
+          bottom: 50%;
+          transform: translate(50%, 50%);
+          z-index: 9999;
+          background: #fff;
+          color: #222;
+          border-radius: 18px;
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+          min-width: 320px;
+          max-width: 95vw;
+          width: 360px;
+          padding: 28px 22px 18px 22px;
+          display: none;
+          flex-direction: column;
+          gap: 12px;
+          animation: wa-modal-in 0.22s cubic-bezier(0.5, 1.5, 0.5, 1);
+        }
+        @keyframes wa-modal-in {
+          from {
+            opacity: 0;
+            transform: translate(50%, 60%) scale(0.95);
+          }
+          to {
+            opacity: 1;
+            transform: translate(50%, 50%) scale(1);
+          }
+        }
+        #wa-modal h3 {
+          font-size: 1.3rem;
+          font-weight: 700;
+          margin-bottom: 8px;
+          color: #25d366;
+        }
+        #wa-modal label {
+          font-weight: 500;
+          margin-bottom: 4px;
+          display: block;
+        }
+        #wa-modal input,
+        #wa-modal textarea {
+          width: 100%;
+          border: 1px solid #ddd;
+          border-radius: 7px;
+          padding: 7px 10px;
+          margin-bottom: 10px;
+          font-size: 1rem;
+          resize: vertical;
+        }
+        #wa-modal textarea {
+          min-height: 60px;
+        }
+        #wa-modal .wa-actions {
+          display: flex;
+          justify-content: flex-end;
+          gap: 10px;
+          margin-top: 8px;
+        }
+        #wa-modal .btn-wa-send {
+          background: #25d366;
+          color: #fff;
+          border: none;
+          border-radius: 7px;
+          padding: 7px 18px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: background 0.18s;
+        }
+        #wa-modal .btn-wa-send:hover {
+          background: #1ebe57;
+        }
+        #wa-modal .btn-wa-cancel {
+          background: #eee;
+          color: #222;
+          border: none;
+          border-radius: 7px;
+          padding: 7px 14px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: background 0.18s;
+        }
+        #wa-modal .btn-wa-cancel:hover {
+          background: #ddd;
+        }
+        #wa-modal .wa-success {
+          color: #25d366;
+          font-weight: 600;
+          margin-top: 8px;
+          text-align: center;
+        }
+        #wa-modal .wa-error {
+          color: #d32f2f;
+          font-weight: 600;
+          margin-top: 8px;
+          text-align: center;
+        }
+      </style>
+      <a href="#" id="whatsapp-float-btn" aria-label="Contactanos por WhatsApp"><i class="bi bi-whatsapp"></i></a>
+      <div id="wa-modal-backdrop"></div>
+      <div id="wa-modal" role="dialog" aria-modal="true" aria-labelledby="wa-modal-title">
+        <h3 id="wa-modal-title">Contáctanos por WhatsApp</h3>
+        <form id="wa-form">
+          <label for="wa-nombre">Nombre</label>
+          <input type="text" id="wa-nombre" name="nombre" required maxlength="60" autocomplete="name" />
+          <label for="wa-mensaje">Mensaje</label>
+          <textarea id="wa-mensaje" name="mensaje" required maxlength="500" placeholder="Escribe tu inquietud aquí..."></textarea>
+          <div class="wa-actions">
+            <button type="button" class="btn-wa-cancel">Cancelar</button>
+            <button type="submit" class="btn-wa-send">Enviar</button>
+          </div>
+          <div class="wa-success" style="display:none;"></div>
+          <div class="wa-error" style="display:none;"></div>
+        </form>
+      </div>
+      <script>
+        // WhatsApp modal funcional
+        ;(function () {
+          const btn = document.getElementById('whatsapp-float-btn')
+          const modal = document.getElementById('wa-modal')
+          const backdrop = document.getElementById('wa-modal-backdrop')
+          const form = document.getElementById('wa-form')
+          const successMsg = modal.querySelector('.wa-success')
+          const errorMsg = modal.querySelector('.wa-error')
+          const cancelBtn = modal.querySelector('.btn-wa-cancel')
+          const sendBtn = modal.querySelector('.btn-wa-send')
+          const inputNombre = modal.querySelector('#wa-nombre')
+          const inputMensaje = modal.querySelector('#wa-mensaje')
+          const WA_NUMBER = '3169382622' // Cambia aquí tu número si lo necesitas
+        
+          function openModal() {
+            modal.style.display = 'flex'
+            backdrop.style.display = 'block'
+            document.body.style.overflow = 'hidden'
+            inputNombre.focus()
+          }
+          function closeModal() {
+            modal.style.display = 'none'
+            backdrop.style.display = 'none'
+            document.body.style.overflow = ''
+            form.reset()
+            successMsg.style.display = 'none'
+            errorMsg.style.display = 'none'
+          }
+          btn.addEventListener('click', function (e) {
+            e.preventDefault()
+            openModal()
+          })
+          backdrop.addEventListener('click', closeModal)
+          cancelBtn.addEventListener('click', closeModal)
+        
+          form.addEventListener('submit', function (e) {
+            e.preventDefault()
+            successMsg.style.display = 'none'
+            errorMsg.style.display = 'none'
+            const nombre = inputNombre.value.trim()
+            const mensaje = inputMensaje.value.trim()
+            if (!nombre || !mensaje) {
+              errorMsg.textContent = 'Por favor completa todos los campos.'
+              errorMsg.style.display = 'block'
+              return
+            }
+            // Construir mensaje para WhatsApp
+            const text = encodeURIComponent(`Hola, soy ${nombre}. ${mensaje}`)
+            const waUrl = `https://wa.me/${WA_NUMBER}?text=${text}`
+            // Abrir WhatsApp en nueva pestaña
+            window.open(waUrl, '_blank')
+            successMsg.textContent = '¡Redirigiendo a WhatsApp!'
+            successMsg.style.display = 'block'
+            setTimeout(closeModal, 1800)
+          })
+        
+          // Cerrar con ESC
+          document.addEventListener('keydown', function (e) {
+            if (modal.style.display === 'flex' && e.key === 'Escape') closeModal()
+          })
+        })()
+      </script>
     {% endblock %}
   </body>
 </html>
