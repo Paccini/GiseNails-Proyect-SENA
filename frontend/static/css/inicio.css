@@ -1,35 +1,43 @@
-/* Banner principal */
+/* Banner principal desktop */
 .cont-bn {
     background: url("../img/banner_inicio.png") no-repeat center top;
     background-size: cover;
-    /* conserva cobertura en pantallas grandes */
     width: 100%;
-    height: 50vh;
-    min-height: 300px;
-    display: block;
+    height: 55vh;
+    /* un poco más alto */
+    min-height: 360px;
+    position: relative;
 }
 
-/* En pantallas pequeñas evitar recorte: mostrar la imagen completa y mantener proporción */
+/* Tablets */
+@media (max-width: 1024px) {
+    .cont-bn {
+        height: 48vh;
+        min-height: 300px;
+        background-position: center top;
+    }
+}
+
+/* Móviles */
 @media (max-width: 768px) {
     .cont-bn {
-        background-position: center top;
-        background-size: contain;
-        /* muestra toda la imagen */
-        height: auto;
-        padding-top: 56.25%;
-        /* reserva espacio según aspecto (16:9). Ajusta si tu imagen tiene otra proporción */
-        min-height: 220px;
+        background-image: url("../img/banner_movil.png");
         background-repeat: no-repeat;
+        background-size: contain;
+        background-position: top center;
+
+        width: 100%;
+        
+        /* ← La CLAVE: la altura real de tu banner móvil */
+        height: calc(100vw * (219 / 390));
+
+        /* Limpieza de estilos antiguos */
+        padding-top: 0 !important;
+        min-height: 0 !important;
     }
 }
 
-/* Opcional: para móviles muy estrechos */
-@media (max-width: 420px) {
-    .cont-bn {
-        padding-top: 70%;
-        /* aumentar si la imagen sigue viéndose cortada verticalmente */
-    }
-}
+
 
 /* Iconos inicio */
 .rounded-circle {

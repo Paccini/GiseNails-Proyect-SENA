@@ -137,21 +137,14 @@ document.addEventListener('DOMContentLoaded', function() {
 	// MODIFICADO: Solo mostrar advertencia personalizada al cancelar si no hay servicio
 	// Eliminar declaración duplicada, warningJustShown ya está definida arriba
 	modalCancel.addEventListener('click', function() {
-		if (!servicioInput || !servicioInput.value) {
-			// Mostrar solo la alerta personalizada y evitar que el formulario lance la validación general
-			const warningModal = document.getElementById('warning-modal');
-			const warningMessage = document.getElementById('warning-message');
-			const warningOkBtn = document.getElementById('warning-ok');
-			warningMessage.textContent = 'Por favor selecciona un servicio para continuar con tu reserva.';
-			warningModal.setAttribute('aria-hidden', 'false');
-			warningOkBtn.onclick = function() {
-				warningModal.setAttribute('aria-hidden', 'true');
-				warningJustShown = false;
-			};
-			warningJustShown = true;
-			return;
-		}
-		closeModal();
+		// Cierra el modal al cancelar
+		modal.setAttribute('aria-hidden', 'true');
+		// Limpia la selección del servicio
+		servicioInput.value = '';
+		resumen.hidden = true;
+		// Si tienes un botón de cambiar servicio, también lo puedes ocultar
+		let changeWrap = document.getElementById('change-wrap');
+		if (changeWrap) changeWrap.innerHTML = '';
 	});
 	modal.addEventListener('click', function(e){ if(e.target === modal) closeModal(); });
 
@@ -170,20 +163,14 @@ document.addEventListener('DOMContentLoaded', function() {
 	const form = document.querySelector('.form-section form');
 	if (!form) return;
 	form.addEventListener('submit', function(e) {
-		if (typeof warningJustShown !== 'undefined' && warningJustShown) {
-			warningJustShown = false;
-			e.preventDefault();
-			return;
-		}
 		e.preventDefault();
-		const missing = new Set(); // Usar Set para evitar duplicados
 
-		// Validar todos los campos visibles y requeridos
+		// Validar campos requeridos
+		const missing = new Set();
 		const requiredFields = form.querySelectorAll('input[required], select[required]');
 		requiredFields.forEach(function(field) {
 			if (!field.value || field.value.trim() === '') {
 				let label = '';
-				// Buscar el label asociado
 				const labelEl = form.querySelector('label[for="' + field.id + '"]');
 				if (labelEl) {
 					label = labelEl.textContent.trim();
@@ -203,8 +190,6 @@ document.addEventListener('DOMContentLoaded', function() {
 		if (!horaVal) missing.add('horario');
 
 		if (missing.size) {
-			// Si solo falta servicio y se acaba de mostrar advertencia, no mostrar la general
-			if (missing.size === 1 && missing.has('servicio')) return;
 			const msg = 'Falta: ' + Array.from(missing).join(', ') + '. Por favor completa antes de continuar.';
 			// Mostrar modal de validación si existe, si no usar alert() como fallback
 			const validationModal = document.getElementById('validation-modal');
@@ -225,6 +210,8 @@ document.addEventListener('DOMContentLoaded', function() {
 			}
 			return;
 		}
+
+		// Enviar datos al backend
 		const formData = new FormData(form);
 		fetch(window.location.pathname, {
 			method: 'POST',
@@ -232,21 +219,18 @@ document.addEventListener('DOMContentLoaded', function() {
 				'X-Requested-With': 'XMLHttpRequest'
 			},
 			body: formData
-		}).then(r => r.json()).then(data => {
-			if (data.success) {
-				if (data.next) {
-					window.location.href = data.next;
-				} else {
-					window.location.href = window.location.pathname + '?success=1';
-				}
-			} else if (data.need && data.next) {
+		})
+		.then(r => r.json())
+		.then(data => {
+			if (data.next) {
 				window.location.href = data.next;
-			} else if (data.next) {
-				window.location.href = data.next;
+			} else if (data.error) {
+				alert('Error: ' + data.error);
 			} else {
-				alert('Error: ' + (data.error || 'No se pudo procesar la reserva'));
+				alert('No se pudo procesar la reserva.');
 			}
-		}).catch(err => {
+		})
+		.catch(err => {
 			console.error(err);
 			alert('Error de red al intentar crear la reserva.');
 		});
@@ -269,7 +253,10 @@ document.addEventListener('DOMContentLoaded', function() {
 				warningModal.setAttribute('aria-hidden', 'false');
 				warningOkBtn.onclick = function() {
 					warningModal.setAttribute('aria-hidden', 'true');
-					warningJustShown = false;
+					// Limpiar la categoría de servicio después de la alerta
+					if (tipoSelect) {
+						tipoSelect.value = '';
+					}
 				};
 				warningJustShown = true;
 				return true;
@@ -279,26 +266,14 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 
 	form.addEventListener('submit', function(e) {
-		if (warningJustShown) {
-			warningJustShown = false;
-			e.preventDefault();
-			return;
-		}
-		// Si el campo servicio está vacío, no mostrar la validación general
-		const servicioVal = form.querySelector('input[name="servicio"]') ? form.querySelector('input[name="servicio"]').value : null;
-		if (!servicioVal) {
-			e.preventDefault();
-			return;
-		}
 		e.preventDefault();
-		const missing = new Set(); // Usar Set para evitar duplicados
 
-		// Validar todos los campos visibles y requeridos
+		// Validar campos requeridos
+		const missing = new Set();
 		const requiredFields = form.querySelectorAll('input[required], select[required]');
 		requiredFields.forEach(function(field) {
 			if (!field.value || field.value.trim() === '') {
 				let label = '';
-				// Buscar el label asociado
 				const labelEl = form.querySelector('label[for="' + field.id + '"]');
 				if (labelEl) {
 					label = labelEl.textContent.trim();
@@ -310,8 +285,8 @@ document.addEventListener('DOMContentLoaded', function() {
 		});
 
 		// Validar el campo oculto servicio
-		const servicioVal2 = form.querySelector('input[name="servicio"]') ? form.querySelector('input[name="servicio"]').value : null;
-		if (!servicioVal2) missing.add('servicio');
+		const servicioVal = form.querySelector('input[name="servicio"]') ? form.querySelector('input[name="servicio"]').value : null;
+		if (!servicioVal) missing.add('servicio');
 
 		// Validar el select de horario
 		const horaVal = form.querySelector('#horario-select') ? form.querySelector('#horario-select').value : null;
@@ -338,6 +313,8 @@ document.addEventListener('DOMContentLoaded', function() {
 			}
 			return;
 		}
+
+		// Enviar datos al backend
 		const formData = new FormData(form);
 		fetch(window.location.pathname, {
 			method: 'POST',
@@ -345,7 +322,9 @@ document.addEventListener('DOMContentLoaded', function() {
 				'X-Requested-With': 'XMLHttpRequest'
 			},
 			body: formData
-		}).then(r => r.json()).then(data => {
+		})
+		.then(r => r.json())
+		.then(data => {
 			if (data.success) {
 				if (data.next) {
 					window.location.href = data.next;
@@ -359,7 +338,8 @@ document.addEventListener('DOMContentLoaded', function() {
 			} else {
 				alert('Error: ' + (data.error || 'No se pudo procesar la reserva'));
 			}
-		}).catch(err => {
+		})
+		.catch(err => {
 			console.error(err);
 			alert('Error de red al intentar crear la reserva.');
 		});
@@ -435,4 +415,46 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     // Ejecutar al cargar
     marcarCamposLlenos();
-});
+
+	const params = new URLSearchParams(window.location.search);
+    const servicioId = params.get('servicio');
+
+    if (servicioId) {
+        const serviciosData = JSON.parse(document.getElementById('servicios-data').textContent || '{}');
+        let servicioSeleccionado = null;
+
+        // Buscar el servicio por ID en los datos
+        Object.keys(serviciosData).forEach(categoria => {
+            const servicios = serviciosData[categoria];
+            const servicio = servicios.find(s => s.id === servicioId);
+            if (servicio) {
+                servicioSeleccionado = servicio;
+                currentCategory = categoria;
+            }
+        });
+
+        if (servicioSeleccionado) {
+            selectServicio(servicioSeleccionado);
+
+            // Mostrar la categoría en el formulario
+            const categoriaSelect = document.getElementById('tipo-servicio');
+            if (categoriaSelect) {
+                categoriaSelect.value = currentCategory;
+            }
+        }
+    }
+
+    function clearSelectedService() {
+        const servicioInput = document.getElementById('servicio-input');
+        const resumen = document.getElementById('resumen-servicio');
+
+        if (servicioInput) servicioInput.value = '';
+        if (resumen) resumen.hidden = true;
+    }
+
+    // Agregar evento al botón de selección de servicio
+    const selectServiceButton = document.getElementById('select-service-button');
+    if (selectServiceButton) {
+        selectServiceButton.addEventListener('click', clearSelectedService);
+    }
+})

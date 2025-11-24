@@ -21,11 +21,15 @@
     border-bottom: 2px solid var(--pink-accent);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
     padding: 14px 45px;
+    box-sizing: border-box;
+    gap: 20px;
+    min-height: 70px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     z-index: 1000;
     transition: background 0.4s ease-in-out;
+    overflow: hidden;
 }
 
 /* Efecto de brillo al pasar el mouse */
@@ -116,6 +120,7 @@
     font-size: 16px;
     font-weight: 500;
     position: relative;
+
     text-decoration: none;
     padding: 5px 0;
     opacity: 0;

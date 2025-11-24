@@ -65,7 +65,16 @@ def panel_cliente(request):
     gestoras = Empleado.objects.all()
     servicios = Servicio.objects.all()
     horarios = HorarioDisponible.objects.all()
+    # Manejo de alertas/modales desde la URL (por redirect después de editar perfil)
     show_cita_alert = request.session.pop('show_cita_alert', True)
+    show_modal = False
+    update_error = None
+    update_success = None
+    # Si la URL contiene ?success=1, mostramos modal con mensaje de éxito
+    if request.GET.get('success') == '1':
+        show_modal = True
+        update_success = "¡Datos actualizados correctamente!"
+
     return render(request, 'clientes/panel.html', {
         'cliente': cliente,
         'reservas': reservas_page,
@@ -78,6 +87,9 @@ def panel_cliente(request):
         'show_cita_alert': show_cita_alert,
         'filter_estado': estado,
         'filter_fecha': fecha_str,
+        'show_modal': show_modal,
+        'update_error': update_error,
+        'update_success': update_success,
     })
 
 

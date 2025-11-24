@@ -12,10 +12,7 @@
     <header class="reserva-header">
         <img src="{% static 'img/logo_blanco.png' %}" alt="Gise-Nails" class="logo">
         <div class="marca-texto">
-            <h2 >Reserva tu cita</h2>
-            <p class="direccion">
-                Cra 9a #42-44, B/Calarca · <span class="email">giselav489@gmail.com</span> · <span class="telefono">300 204 0538</span>
-            </p>
+            <h2 >Reserva tu cita online</h2>
         </div>
     </header>
 
@@ -74,7 +71,7 @@
                         </select>
                     </div>
                     <div class="col-md-6">
-                        <input type="hidden" name="servicio" id="servicio-input">
+                        <input type="hidden" name="servicio" id="servicio-input" value="{{ request.GET.servicio|default:'' }}">
                         <div id="resumen-servicio" class="selected-summary" aria-live="polite" hidden>
                             <img id="resumen-img" src="" alt="" />
                             <div class="meta">
@@ -92,7 +89,7 @@
                   <div class="modal-panel" role="document">
                       <div class="modal-header">
                         <h3 id="modal-title">Servicios</h3>
-                        <button id="modal-close" class="modal-close" aria-label="Cerrar">&times;</button>
+                        <button id="modal-close" class="modal-close" aria-label="Cerrar"></button>
                       </div>
                       <div class="modal-body">
                         <div id="modal-servicios-list" class="modal-servicios-list"></div>
