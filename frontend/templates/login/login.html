@@ -19,6 +19,11 @@
       <!-- FORMULARIO LOGIN -->
       <div class="form-box login">
         <h2>Iniciar sesión</h2>
+          {% if pending_message %}
+            <div class="pending-reserva-message" style="margin-bottom:1rem;">
+              <p>Hemos guardado tu cita pendiente. Inicia sesión para confirmarla.</p>
+            </div>
+          {% endif %}
         <form method="post" autocomplete="on">
           {% csrf_token %}
 
@@ -28,11 +33,7 @@
 
           <div class="input-box">
             <span class="icon"><ion-icon name="mail"></ion-icon></span>
-            {% if prefill_email %}
-              <input type="text" name="username" value="{{ prefill_email }}" readonly required />
-            {% else %}
-              <input type="text" name="username" required autofocus />
-            {% endif %}
+            <input type="email" name="email" value="{{ prefill_email|default:'' }}"  required />
             <label>Email</label>
           </div>
 
@@ -56,6 +57,7 @@
       <!-- FORMULARIO REGISTRO -->
       <div class="form-box register">
         <h2>Registro</h2>
+          
         <form method="post" autocomplete="off" action="{% url 'login:registro' %}">
           {% csrf_token %}
 
@@ -71,23 +73,31 @@
 
           <div class="input-box">
             <span class="icon"><ion-icon name="person"></ion-icon></span>
-            <input type="text" name="nombre" id="id_nombre" required />
+              {% if initial.nombre %}
+                <input type="text" name="nombre" id="id_nombre" value="{{ initial.nombre }}" required />
+              {% else %}
+                <input type="text" name="nombre" id="id_nombre" required />
+              {% endif %}
             <label>Nombre</label>
           </div>
 
           <div class="input-box">
             <span class="icon"><ion-icon name="mail"></ion-icon></span>
-            {% if prefill_email %}
-              <input type="email" name="correo" id="id_correo" value="{{ prefill_email }}" readonly required />
-            {% else %}
-              <input type="email" name="correo" id="id_correo" required />
-            {% endif %}
+              {% if prefill_email %}
+                <input type="email" name="correo" id="id_correo" value="{{ prefill_email }}" required />
+              {% else %}
+                <input type="email" name="correo" id="id_correo" required />
+              {% endif %}
             <label>Email</label>
           </div>
 
           <div class="input-box">
             <span class="icon"><ion-icon name="call"></ion-icon></span>
-            <input type="text" name="telefono" id="id_telefono" required />
+              {% if initial.telefono %}
+                <input type="text" name="telefono" id="id_telefono" value="{{ initial.telefono }}" required />
+              {% else %}
+                <input type="text" name="telefono" id="id_telefono" required />
+              {% endif %}
             <label>Teléfono</label>
           </div>
 
@@ -97,13 +107,7 @@
             <label>Password</label>
           </div>
 
-          {% if prefill_email %}
-            <p>
-              <a href="#" id="usar-otro-correo">Usar otro correo</a>
-            </p>
-          {% endif %}
-
-          <button type="submit" class="btn">Registrarme</button>
+          <button type="submit" class="btn" style="display: block; margin-top: 1rem;">Registrarme</button>
 
           {% if register_form.non_field_errors %}
             <div class="error">{{ register_form.non_field_errors }}</div>
@@ -137,4 +141,20 @@
   <script src="{% static 'js/login.js' %}"></script>
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+  {% if register_active %}
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const wrapper = document.querySelector('.wrapper');
+        if (wrapper) {
+          wrapper.classList.add('active');
+        }
+
+        const registerLink = document.querySelector('.register-link');
+        if (registerLink) {
+          registerLink.click();
+        }
+      });
+    </script>
+  {% endif %}
 {% endblock %}

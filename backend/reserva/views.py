@@ -96,6 +96,10 @@ def reserva(request):
         except Exception as e:
             return JsonResponse({"success": False, "error": str(e)})
 
+    # Eliminar la reserva pendiente si el usuario cambia de vista
+    if 'pending_reserva' in request.session:
+        del request.session['pending_reserva']
+
     return render(request, 'reservas/reserva.html', {
         'gestoras': gestoras,
         'horarios': horarios,
@@ -324,4 +328,26 @@ def completar_reserva(request):
     del request.session['pending_reserva']
 
     # Redirige al panel del cliente
+    return redirect('clientes:panel')
+
+from django.contrib.auth.models import User
+
+def confirmar_reserva(request, pk):
+    # Obtener la reserva pendiente
+    reserva = get_object_or_404(Reserva, pk=pk)
+
+    # Verificar si el correo del cliente existe en la base de datos
+    cliente_email = reserva.cliente.correo
+    if not User.objects.filter(username=cliente_email).exists():
+        # Redirigir al login.html con el formulario de registro activo
+        return render(request, 'login/login.html', {
+            'register_active': True,
+            'prefill_email': cliente_email,
+            'pending_message': True
+        })
+
+    # Lógica para confirmar la reserva si el usuario existe
+    reserva.estado = 'confirmada'
+    reserva.save()
+    messages.success(request, 'La reserva ha sido confirmada exitosamente.')
     return redirect('clientes:panel')

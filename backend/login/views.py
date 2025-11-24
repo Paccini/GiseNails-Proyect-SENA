@@ -16,6 +16,7 @@ from empleados.models import Empleado
 from clientes.forms import RegistroClienteForm
 from django.utils.dateparse import parse_date
 import datetime
+from django.contrib import messages
 
 
 # =============================
@@ -25,6 +26,8 @@ def login_view(request):
     error = None
     prefill_email = None
     password_only = False
+    register_active = request.GET.get('register_active') == 'true'
+    pending_message = bool(request.session.get('pending_reserva'))
 
     if request.method == 'POST':
         email = request.POST.get('username')
@@ -77,16 +80,35 @@ def login_view(request):
         else:
             error = "Usuario o contraseña incorrectos."
 
+
     if request.session.get('pending_reserva'):
         pending = request.session.get('pending_reserva')
         prefill_email = pending.get('correo')
         password_only = True
 
+    # Si viene register_active, mostrar el registro
+    if register_active:
+        from clientes.forms import RegistroClienteForm
+        initial = {
+            'nombre': pending.get('nombre', '') if pending else '',
+            'correo': pending.get('correo', '') if pending else '',
+            'telefono': pending.get('telefono', '') if pending else '',
+        }
+        form = RegistroClienteForm(initial=initial)
+        return render(request, 'login/login.html', {
+            'register_form': form,
+            'register_active': True,
+            'pending_message': pending_message,
+            'initial': initial,
+            'prefill_email': initial.get('correo'),
+        })
+
     return render(request, 'login/login.html', {
         'form': {},
         'error': error,
         'prefill_email': prefill_email,
-        'password_only': password_only
+        'password_only': password_only,
+        'pending_message': pending_message,
     })
 
 
@@ -114,9 +136,16 @@ def registro_cliente(request):
                 return redirect('reserva:completar_reserva')
 
             return redirect('clientes:panel')
+        else:
+            # Mostrar alerta si el formulario no es válido
+            messages.error(request, 'Por favor, verifica los datos ingresados. Asegúrate de que el correo sea válido y el número de teléfono tenga exactamente 10 dígitos.')
 
     else:
         form = RegistroClienteForm(initial=initial)
+
+    # Borrar la cita pendiente si se cambia de vista
+    if request.session.get('pending_reserva'):
+        del request.session['pending_reserva']
 
     return render(request, 'login/login.html', {
         'register_form': form,
@@ -205,7 +234,7 @@ def dashboard(request):
                 precio = 0
             totals_by_date[d] = totals_by_date.get(d, 0) + precio
 
-        # construir lista completa de días entre start_date y end_date (incl.)
+        # construir lista completa de días entre start_date and end_date (incl.)
         days = []
         cur = start_date
         while cur <= end_date:
