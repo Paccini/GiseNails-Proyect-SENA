@@ -41,7 +41,7 @@
 
             <div class="card-bottom">
               <span class="badge">${{ servicio.precio }}</span>
-              <a href="{% url 'reserva:reserva' %}" class="btn">Reservar</a>
+              <a href="{% url 'reserva:reserva' %}?servicio={{ servicio.id }}" class="btn">Reservar</a>
             </div>
           </div>
         </div>
