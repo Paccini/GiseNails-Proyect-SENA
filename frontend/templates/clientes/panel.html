@@ -182,6 +182,15 @@
             <div class="form-text" style="color:#6b7280;">Necesaria para cualquier cambio de contraseña</div>
           </div>
 
+
+          <!-- mensage de si la contraseña actual esta al escrita error -->
+
+            {% if update_error %}
+            <div class="alert alert-danger">
+                {{ update_error }}
+            </div>
+            {% endif %}
+
           <!-- Campo: nueva contraseña -->
           <div class="mb-3">
             <label for="id_new_password" class="form-label fw-bold" style="color:#232c36;">Nueva contraseña</label>
@@ -261,12 +270,34 @@
 <!-- Bloque de scripts adicionales -->
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="{% static 'js/panel_cliente.js' %}"></script>
-
-{% if show_cita_alert %}
+<!-- Variables que controlan el modal y mensajes desde el servidor (deben ir antes de cargar panel_cliente.js) -->
 <script>
-    var show_cita_alert = true;
-</script>
-{% endif %}
+  var panel_url = "{% url 'clientes:panel' %}";
+  {% if show_cita_alert %}
+  var show_cita_alert = true;
+  {% else %}
+  var show_cita_alert = false;
+  {% endif %}
 
+  {% if show_modal %}
+  var show_modal = true;
+  {% else %}
+  var show_modal = false;
+  {% endif %}
+
+  {% if update_error %}
+  var update_error = "{{ update_error|escapejs }}";
+  {% else %}
+  var update_error = null;
+  {% endif %}
+
+  {% if update_success %}
+  var update_success = "{{ update_success|escapejs }}";
+  {% else %}
+  var update_success = null;
+  {% endif %}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{% static 'js/panel_cliente.js' %}"></script>
 {% endblock %}
