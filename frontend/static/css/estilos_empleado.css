@@ -166,12 +166,14 @@ h3.fw-bold,
   box-shadow: 0 6px 18px rgba(99, 102, 241, 0.08);
   transition: filter 120ms ease, transform 120ms ease;
   border-radius: 10px;
+  /* width: 190px; */
 }
 
-.btn-primary:hover {
+
+/* .btn-primary:hover {
   filter: brightness(0.95);
   transform: translateY(-1px);
-}
+} */
 
 .btn-outline-primary {
   border-color: var(--color-accent-600);

@@ -38,8 +38,10 @@
         <option value="cancelada">Cancelada</option>
       </select>
       <input type="date" name="fecha" class="form-control" />
-      <button type="submit" class="btn btn-primary">Filtrar</button>
-      <a href="{% url 'clientes:panel' %}" class="btn btn-secondary">Limpiar</a>
+      <button type="submit" class="btn btn-primary"> <i class="bi bi-funnel-fill"></i> </button>
+      <a href="{% url 'clientes:panel' %}" class="btn btn-secondary">
+        <i class="bi bi-brush-fill"></i>
+      </a>
     </form>
   </div>
 </div>

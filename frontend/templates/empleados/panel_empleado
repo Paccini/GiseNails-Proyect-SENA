@@ -43,8 +43,8 @@
 
         <input type="date" name="fecha" class="form-control form-control-sm" value="{{ filter_fecha }}">
 
-        <button type="submit" class="btn btn-sm btn-primary">Filtrar</button>
-        <a href="{% url 'empleados:panel_empleado' %}" class="btn btn-sm btn-outline-secondary">Limpiar</a>
+        <button type="submit" class="btn btn-sm btn-primary">  <i class="bi bi-funnel-fill"></i> </button>
+        <a href="{% url 'empleados:panel_empleado' %}" class="btn btn-sm btn-outline-secondary"> <i class="bi bi-brush-fill"></i> </a>
       </form>
 
       <!-- Botón agendar integrado (derecha) -->
