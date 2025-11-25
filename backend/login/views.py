@@ -30,7 +30,7 @@ def login_view(request):
     pending_message = bool(request.session.get('pending_reserva'))
 
     if request.method == 'POST':
-        email = request.POST.get('username')
+        email = request.POST.get('email')
         password = request.POST.get('password')
 
         user_qs = User.objects.filter(email__iexact=email)
@@ -64,6 +64,9 @@ def login_view(request):
             # Inicio de sesión
             login(request, user)
 
+            # Adding debug messages to identify the failing condition during login redirection
+            print(f"Debug: Cliente: {cliente_obj}, Empleado: {Empleado.objects.filter(correo__iexact=user.email).exists()}, Admin: {user.is_staff or user.is_superuser}")
+
             if cliente_obj:
                 if request.session.get('pending_reserva'):
                     return redirect('/reserva/completar-reserva/')
@@ -77,6 +80,7 @@ def login_view(request):
                 return redirect('login:dashboard')
 
             error = "No tienes permisos para acceder."
+            print("Debug: No matching role found for user.")
         else:
             error = "Usuario o contraseña incorrectos."
 
