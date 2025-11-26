@@ -29,19 +29,29 @@ def panel_cliente(request):
         return redirect('clientes:registro')
 
     # filtros desde querystring
-    estado = request.GET.get('estado', 'all')  # 'all' muestra todos
-    fecha_str = request.GET.get('fecha', '').strip()
+    estado = request.GET.get('estado', '')  # '' muestra todos
+    fecha_inicio = request.GET.get('fecha_inicio', '').strip()
+    fecha_fin = request.GET.get('fecha_fin', '').strip()
     page = request.GET.get('page', 1)
 
     reservas_qs = Reserva.objects.filter(cliente=cliente).order_by('-fecha', '-hora')
 
-    if estado and estado != 'all':
+    # Filtrar por estado
+    if estado:
         reservas_qs = reservas_qs.filter(estado=estado)
 
-    if fecha_str:
+    # Filtrar por rango de fechas
+    if fecha_inicio:
         try:
-            fecha_obj = datetime.strptime(fecha_str, '%Y-%m-%d').date()
-            reservas_qs = reservas_qs.filter(fecha=fecha_obj)
+            fecha_inicio_obj = datetime.strptime(fecha_inicio, '%Y-%m-%d').date()
+            reservas_qs = reservas_qs.filter(fecha__gte=fecha_inicio_obj)
+        except Exception:
+            pass
+    
+    if fecha_fin:
+        try:
+            fecha_fin_obj = datetime.strptime(fecha_fin, '%Y-%m-%d').date()
+            reservas_qs = reservas_qs.filter(fecha__lte=fecha_fin_obj)
         except Exception:
             pass
 
@@ -86,7 +96,8 @@ def panel_cliente(request):
         'horarios': horarios,
         'show_cita_alert': show_cita_alert,
         'filter_estado': estado,
-        'filter_fecha': fecha_str,
+        'filter_fecha_inicio': fecha_inicio,
+        'filter_fecha_fin': fecha_fin,
         'show_modal': show_modal,
         'update_error': update_error,
         'update_success': update_success,
