@@ -165,7 +165,8 @@ def home(request):
         fecha__lte=plazo
     ).update(estado='cancelada')
 
-    fecha = request.GET.get('fecha', '')
+    fecha_inicio = request.GET.get('fecha_inicio', '')
+    fecha_fin = request.GET.get('fecha_fin', '')
     usuario = request.GET.get('usuario', '')
     estado = request.GET.get('estado', '')
 
@@ -176,8 +177,21 @@ def home(request):
     else:
         citas = citas.filter(estado=estado)
 
-    if fecha:
-        citas = citas.filter(fecha=fecha)
+    # Filtrar por rango de fechas
+    if fecha_inicio:
+        try:
+            fecha_inicio_obj = datetime.strptime(fecha_inicio, '%Y-%m-%d').date()
+            citas = citas.filter(fecha__gte=fecha_inicio_obj)
+        except Exception:
+            pass
+    
+    if fecha_fin:
+        try:
+            fecha_fin_obj = datetime.strptime(fecha_fin, '%Y-%m-%d').date()
+            citas = citas.filter(fecha__lte=fecha_fin_obj)
+        except Exception:
+            pass
+    
     if usuario:
         citas = citas.filter(cliente__nombre__icontains=usuario)
 
@@ -188,7 +202,8 @@ def home(request):
     page_obj = paginator.get_page(page_number)
     context = {
         'reservas': page_obj,
-        'fecha': fecha,
+        'fecha_inicio': fecha_inicio,
+        'fecha_fin': fecha_fin,
         'usuario': usuario,
         'estado': estado,
         'is_paginated': page_obj.has_other_pages(),

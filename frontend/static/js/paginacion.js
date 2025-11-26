@@ -26,17 +26,27 @@
 
     async function fetchAndReplace(href, push = true) {
         try {
+            // Pulse animation SOLO en paginador
+            const pag = document.querySelector('.animated-paginator');
+            if (pag) {
+                const active = pag.querySelector('.page-item.active .page-link');
+                if (active) {
+                    active.classList.add('pulse');
+                    setTimeout(() => active.classList.remove('pulse'), 400);
+                }
+            }
+
             const res = await fetch(href, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
             const text = await res.text();
             const parser = new DOMParser();
             const doc = parser.parseFromString(text, 'text/html');
 
-            // 🔥 SIEMPRE reemplazar cards
+            // Reemplazar cards
             const newCards = doc.querySelector('.cards');
             const oldCards = document.querySelector('.cards');
             if (newCards && oldCards) oldCards.replaceWith(newCards);
 
-            // 🔥 SIEMPRE reemplazar paginación (este era el problema)
+            // Reemplazar paginación
             const newPag = doc.querySelector('.pagination-wrapper, .animated-paginator, nav[aria-label="Page navigation"], .pagination');
             const oldPag = document.querySelector('.pagination-wrapper, .animated-paginator, nav[aria-label="Page navigation"], .pagination');
             if (newPag && oldPag) oldPag.replaceWith(newPag);
