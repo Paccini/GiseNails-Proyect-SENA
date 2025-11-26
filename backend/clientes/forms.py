@@ -82,7 +82,8 @@ class RegistroClienteForm(forms.ModelForm):
                     'type': 'password',
                     'class': 'login-input',
                     'style': 'background:transparent;color:#232c36;'
-                })
+                }),
+                required=True
             )
 
     def save(self, commit=True):

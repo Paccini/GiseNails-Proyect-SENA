@@ -368,7 +368,6 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(r => r.json())
         .then(data => {
             horarioSelect.innerHTML = '';
-            // --- CORRECCIÓN: leer data.horarios y mostrar error si existe ---
             if (data.error) {
                 horarioSelect.innerHTML = `<option value="">${data.error}</option>`;
                 horarioSelect.disabled = true;
@@ -380,6 +379,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     const opt = document.createElement('option');
                     opt.value = h.id;
                     opt.textContent = h.hora;
+                    if (h.disabled) {
+                        opt.disabled = true;
+                        opt.style.opacity = '0.5'; // visualmente "apagado"
+                    }
                     horarioSelect.appendChild(opt);
                 });
                 horarioSelect.disabled = false;

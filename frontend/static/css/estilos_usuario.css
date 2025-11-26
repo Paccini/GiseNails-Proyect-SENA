@@ -243,6 +243,64 @@ tr:hover {
   background: var(--primary-light);
 }
 
+/* === FOOTER PANEL === */
+.footer-panel {
+  background: #fff;
+  color: #232c36;
+  border-top: none;
+  box-shadow: 0 -2px 18px rgba(255, 79, 159, 0.1);
+  font-size: 1.08rem;
+  padding: 32px 0 16px 0;
+}
+
+.footer-panel .container {
+  max-width: 1100px;
+  margin: auto;
+}
+
+.footer-panel .row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.footer-panel .col-12,
+.footer-panel .col-md-4 {
+  flex: 1 1 220px;
+  min-width: 220px;
+  margin-bottom: 12px;
+}
+
+.footer-panel img {
+  height: 70px;
+  filter: drop-shadow(0 0 8px #ffb6e6);
+  margin-bottom: 8px;
+}
+
+.footer-panel .fw-bold {
+  font-size: 1.15rem;
+}
+
+.footer-panel .fw-semibold {
+  font-size: 1.08rem;
+}
+
+.footer-panel a {
+  color: #ff4f9f;
+  text-decoration: none;
+  margin-right: 8px;
+  transition: color 0.2s;
+}
+
+.footer-panel a:hover {
+  color: #c2185b;
+}
+
+.footer-panel .mt-2 {
+  color: #232c36;
+}
+
 /* === RESPONSIVE === */
 @media (max-width: 768px) {
   .nav {

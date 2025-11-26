@@ -248,13 +248,13 @@ def registro_cliente(request):
         form = RegistroClienteForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('login:login')  # Si quieres redirigir después de registrar
+            return redirect('clientes:login')
+        else:
+            # Si hay errores, renderiza el formulario con los datos y errores
+            return render(request, 'clientes/registro.html', {'form': form})
     else:
         form = RegistroClienteForm()
-    return render(request, 'clientes/registro.html', {
-        'form': form,
-        'registro': True
-    })
+    return render(request, 'clientes/registro.html', {'form': form})
 
 
 @login_required

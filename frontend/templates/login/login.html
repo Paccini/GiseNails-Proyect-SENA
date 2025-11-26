@@ -3,7 +3,6 @@
 
 {% block extra_head %}
   <link rel="stylesheet" href="{% static 'css/login.css' %}" />
-
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
@@ -19,37 +18,29 @@
       <!-- FORMULARIO LOGIN -->
       <div class="form-box login">
         <h2>Iniciar sesión</h2>
-          {% if pending_message %}
-            <div class="pending-reserva-message" style="margin-bottom:1rem;">
-              <p>Hemos guardado tu cita pendiente. Inicia sesión para confirmarla.</p>
-            </div>
-          {% endif %}
+        {% if pending_message %}
+          <div class="pending-reserva-message" style="margin-bottom:1rem;">
+            <p>Hemos guardado tu cita pendiente. Inicia sesión para confirmarla.</p>
+          </div>
+        {% endif %}
         <form method="post" autocomplete="on">
           {% csrf_token %}
-
           {% if error %}
             <div class="login-alert">{{ error }}</div>
           {% endif %}
-
           <div class="input-box">
             <span class="icon"><ion-icon name="mail"></ion-icon></span>
-            <input type="email" name="email" value="{{ prefill_email|default:'' }}"  required />
+            <input type="email" name="email" value="{{ prefill_email|default:'' }}" required />
             <label>Email</label>
           </div>
-
           <div class="input-box">
             <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
             <input type="password" name="password" required />
             <label>Password</label>
           </div>
-
           <button type="submit" class="btn">Entrar</button>
-
           <div class="login-register">
-            <p>
-              ¿No tienes cuenta?
-              <a href="#" class="register-link">Regístrate</a>
-            </p>
+            <p>¿No tienes cuenta? <a href="#" class="register-link">Regístrate</a></p>
           </div>
         </form>
       </div>
@@ -57,78 +48,51 @@
       <!-- FORMULARIO REGISTRO -->
       <div class="form-box register">
         <h2>Registro</h2>
-          
         <form method="post" autocomplete="off" action="{% url 'login:registro' %}">
           {% csrf_token %}
-
           {% if pending_message %}
             <div class="pending-reserva-message" style="margin-bottom:1rem;">
               <p>Hemos guardado tu cita pendiente. Crea tu cuenta y después completaremos la reserva automáticamente.</p>
             </div>
           {% endif %}
-
           {% if register_form.errors %}
             <div class="login-alert">Por favor revisa los datos ingresados.</div>
           {% endif %}
-
           <div class="input-box">
             <span class="icon"><ion-icon name="person"></ion-icon></span>
-              {% if initial.nombre %}
-                <input type="text" name="nombre" id="id_nombre" value="{{ initial.nombre }}" required />
-              {% else %}
-                <input type="text" name="nombre" id="id_nombre" required />
-              {% endif %}
+            <input type="text" name="nombre" id="id_nombre" value="{{ initial.nombre|default:'' }}" required />
             <label>Nombre</label>
           </div>
-
           <div class="input-box">
             <span class="icon"><ion-icon name="mail"></ion-icon></span>
-              {% if prefill_email %}
-                <input type="email" name="correo" id="id_correo" value="{{ prefill_email }}" required />
-              {% else %}
-                <input type="email" name="correo" id="id_correo" required />
-              {% endif %}
+            <input type="email" name="correo" id="id_correo" value="{{ prefill_email|default:'' }}" required />
             <label>Email</label>
           </div>
-
           <div class="input-box">
             <span class="icon"><ion-icon name="call"></ion-icon></span>
-              {% if initial.telefono %}
-                <input type="text" name="telefono" id="id_telefono" value="{{ initial.telefono }}" required />
-              {% else %}
-                <input type="text" name="telefono" id="id_telefono" required />
-              {% endif %}
+            <input type="text" name="telefono" id="id_telefono" value="{{ initial.telefono|default:'' }}" required />
             <label>Teléfono</label>
           </div>
-
           <div class="input-box">
             <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
             <input type="password" name="password" id="id_password" required />
             <label>Password</label>
           </div>
-
           <button type="submit" class="btn" style="display: block; margin-top: 1rem;">Registrarme</button>
-
           {% if register_form.non_field_errors %}
             <div class="error">{{ register_form.non_field_errors }}</div>
           {% endif %}
-
           {{ register_form.nombre.errors }}
           {{ register_form.correo.errors }}
           {{ register_form.telefono.errors }}
           {{ register_form.password.errors }}
-
           <div class="login-register">
-            <p>
-              ¿Ya tienes cuenta?
-              <a href="#" class="login-link">Inicia sesión</a>
-            </p>
+            <p>¿Ya tienes cuenta? <a href="#" class="login-link">Inicia sesión</a></p>
           </div>
         </form>
       </div>
     </div>
   </main>
-
   <style>
     footer {
       display: none !important;
@@ -141,7 +105,6 @@
   <script src="{% static 'js/login.js' %}"></script>
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-
   {% if register_active %}
     <script>
       document.addEventListener('DOMContentLoaded', function() {
@@ -149,7 +112,6 @@
         if (wrapper) {
           wrapper.classList.add('active');
         }
-
         const registerLink = document.querySelector('.register-link');
         if (registerLink) {
           registerLink.click();
