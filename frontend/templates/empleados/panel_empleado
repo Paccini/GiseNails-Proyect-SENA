@@ -1,4 +1,4 @@
-{% extends 'base_empleado' %}
+{% extends 'base_empleado.html' %}
 {% load static %}
 
 {% block content %}

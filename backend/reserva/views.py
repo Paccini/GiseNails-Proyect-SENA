@@ -112,11 +112,7 @@ def horarios_disponibles(request):
     horarios = HorarioDisponible.objects.all()
     from datetime import datetime
     try:
-        # Acepta formato YYYY-MM-DD (input date) y d/m/Y (flatpickr)
-        try:
-            fecha_obj = datetime.strptime(fecha, '%Y-%m-%d').date()
-        except Exception:
-            fecha_obj = datetime.strptime(fecha, '%d/%m/%Y').date()
+        fecha_obj = datetime.strptime(fecha, '%d/%m/%Y').date()
     except Exception:
         return JsonResponse({'horarios': []})
 
@@ -125,8 +121,21 @@ def horarios_disponibles(request):
         ocupados_qs = ocupados_qs.filter(gestora_id=gestora_id)
     ocupados = ocupados_qs.values_list('hora_id', flat=True)
     disponibles = horarios.exclude(id__in=ocupados)
-    data = [{'id': h.id, 'hora': h.hora.strftime('%H:%M')} for h in disponibles]
-    return JsonResponse({'horarios': data})
+
+    horarios_data = []
+    now = timezone.localtime().time()
+    es_hoy = fecha_obj == timezone.localdate()
+    for h in disponibles:
+        hora_str = h.hora.strftime('%H:%M')
+        disabled = False
+        if es_hoy and h.hora <= now:
+            disabled = True
+        horarios_data.append({
+            'id': h.id,
+            'hora': hora_str,
+            'disabled': disabled
+        })
+    return JsonResponse({'horarios': horarios_data})
 
 @login_required
 @user_passes_test(lambda u: u.is_staff)
