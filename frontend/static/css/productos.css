@@ -1,221 +1,180 @@
-/* Estilos específicos para la página de productos (scoped a .productos-page) */
-
-/* Variables de color para esta vista (armonizan con el fondo degradado de la página) */
+/* ======================== VARIABLES ======================== */
 :root {
     --productos-accent: #ff4081;
-    /* color para título y acentos */
     --productos-card-bg: rgba(255, 255, 255, 0.96);
-    /* fondo claro de cards que contrastan con el fondo oscuro */
     --productos-card-text: #3b3b3b;
-    /* texto dentro de las cards */
     --productos-muted: #6b6b6b;
 }
 
-/* Animación scroll-fade (migrada desde la plantilla) */
+/* ======================== ANIMACIÓN SCROLL ======================== */
 .scroll-fade {
     opacity: 0;
     transform: translateY(30px);
-    transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition: opacity .6s ease, transform .6s cubic-bezier(.2, .8, .2, 1);
     will-change: opacity, transform;
 }
-
 .scroll-fade.visible {
     opacity: 1;
     transform: none;
 }
 
-/* Contenedor de la página de productos */
+/* ======================== CONTENEDOR PRINCIPAL ======================== */
 .productos-page {
     padding: 40px 18px;
 }
 
-/* Título principal: blanco y grande para sobresalir sobre el fondo */
+/* ======================== TITULOS ======================== */
+.productos-title,
 .productos-page .productos-title {
-    color: #ffffff;
-    /* letra blanca exacta */
+    color: #fff !important;
     font-size: 2.8em;
-    /* aumentado (antes 2.5em) */
     font-family: 'Comic Sans MS', cursive;
     letter-spacing: 1px;
-    margin-bottom: 0.6rem;
-    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
+    margin-bottom: .6rem;
+    text-shadow: 0 2px 6px rgba(0,0,0,.45);
 }
 
-/* APLICAR color del título también cuando el h1 está fuera de .productos-page */
-.productos-title {
-    color: #ffffff !important;
-    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
-}
-
-/* Subtítulo: blanco semi-transparente para lectura */
+.productos-subtitle,
 .productos-page .productos-subtitle {
-    color: rgba(255, 255, 255, 0.88);
+    color: rgba(255, 255, 255, .9) !important;
     font-size: 1.12rem;
-    /* aumentado (antes heredado) */
 }
 
-/* Subtítulo global */
-.productos-subtitle {
-    color: rgba(255, 255, 255, 0.92) !important;
+/* ======================== CARDS ======================== */
+.cards {
+    justify-content: center;
+    gap: 18px;
+    margin-bottom: 12px;
 }
 
-/* Cards: */
 .cards > .card-gn {
-    max-width:  360px !important;
+    max-width: 360px !important;
     max-height: 300px !important;
-    
 }
 
-/* Cards: fondo claro para contraste con el fondo degradado oscuro-rosado,
-   borde y acento en rosa para combinar */
 .productos-page .card-gn {
     background: var(--productos-card-bg);
     color: var(--productos-card-text);
-    border: 1px solid rgba(255, 64, 129, 0.12);
+    border: 1px solid rgba(255, 64, 129, .12);
 }
 
-/* Título dentro de la card (nombre del producto) */
 .productos-page .card-gn .card-title {
     color: var(--productos-accent);
     font-weight: 600;
     font-size: 1.22rem;
-    /* aumentado (antes 1.15rem) */
 }
 
-/* Texto descriptivo dentro de la card */
 .productos-page .card-gn .card-text,
 .productos-page .card-gn .muted {
     color: var(--productos-muted);
     font-size: 1.03rem;
-    /* aumentado (antes 0.97rem) */
     line-height: 1.35;
 }
 
-/* Badge (precio) estilo acorde */
+.productos-page .card-gn img {
+    border: 3px solid var(--productos-accent);
+    box-shadow: 0 2px 8px rgba(230, 0, 126, .08);
+}
+
 .productos-page .card-gn .badge {
     background: #fff0f7;
     color: var(--productos-accent);
-    border: 1px solid rgba(255, 64, 129, 0.12);
+    border: 1px solid rgba(255, 64, 129, .12);
     font-weight: 700;
 }
 
-/* Imagen circular con borde acorde */
-.productos-page .card-gn img {
-    border: 3px solid var(--productos-accent);
-    box-shadow: 0 2px 8px rgba(230, 0, 126, 0.08);
-}
-
-/* Botón dentro de la card (si lo usas) */
 .productos-page .card-gn .btn {
     background: var(--productos-accent);
     color: #fff;
 }
 
-/* Paginación: mayor contraste sobre fondo */
-.productos-page .pagination .page-link {
-    color: var(--productos-card-text);
-    background: #fff;
-    border: 1px solid rgba(0, 0, 0, 0.06);
-}
-
-.productos-page .pagination .page-item.active .page-link {
-    background: var(--productos-accent);
-    color: #fff;
-    border-color: var(--productos-accent);
-}
-
-/* PAGINATOR: circular, interactivo y animado (productos) */
-.productos-page .pagination {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    justify-content: center;
-}
-
-.productos-page .pagination .page-link {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    transition: transform .22s cubic-bezier(.2, .9, .3, 1), box-shadow .22s ease, background-color .18s ease;
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.16);
-    border: none;
-    background: rgba(255, 255, 255, 0.96);
-    color: var(--productos-card-text);
-    font-weight: 700;
-}
-
-.productos-page .pagination .page-link:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 16px 30px rgba(0, 0, 0, 0.22);
-}
-
-.productos-page .pagination .page-item.active .page-link {
-    background: var(--productos-accent);
-    color: #fff;
-    transform: scale(1.06);
-    box-shadow: 0 20px 40px rgba(255, 64, 129, 0.14);
-}
-
-/* small arrows (prev/next) keep circular too */
-.productos-page .pagination .page-link[aria-label] {
-    width: 44px;
-    height: 44px;
-}
-
-/* click/pulse animation applied before navigation */
-.productos-page .pagination .page-link.pulse {
-    animation: paginator-pulse .38s cubic-bezier(.2, .9, .3, 1);
-}
-
-@keyframes paginator-pulse {
-    0% {
-        transform: scale(1);
-    }
-
-    40% {
-        transform: scale(1.18);
-    }
-
-    100% {
-        transform: scale(1);
-    }
-}
-
-/* Fade page content slightly while navigating */
-body.pag-navigating .productos-page {
-    opacity: 0;
-    transition: opacity .28s ease;
-}
-
-/* Ajustes para el grid de cards principal */
-.cards {
-    justify-content: center;
-    gap: 18px;
-    margin-bottom: 12px;
-    /* espacio antes de la paginación */
-}
-
-/* Paginación centrada justo debajo de las cards */
+/* ======================== PAGINADOR ======================== */
 .pagination-wrapper {
     display: flex;
     justify-content: center;
     margin-bottom: 28px;
 }
 
-/* Secciones recomendadas / en uso */
+.animated-paginator,
+.productos-page .animated-paginator {
+    display: flex !important;
+    gap: 10px !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* --- ESTILO GENERAL (SIEMPRE NEGRO) --- */
+.animated-paginator .page-link,
+.productos-page .animated-paginator .page-link {
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 50% !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    background: #fff !important;
+    color: #222 !important;
+    font-size: 1.15rem !important;
+    font-weight: 700 !important;
+    border: none !important;
+    box-shadow: 0 6px 14px rgba(0,0,0,.16) !important;
+    transition: transform .22s cubic-bezier(.2,.9,.3,1) !important;
+}
+
+/* --- TODOS LOS ESTADOS (PARA QUE NUNCA SE PONGA BLANCO) --- */
+.animated-paginator .page-link:hover,
+.animated-paginator .page-link:visited,
+.animated-paginator .page-link:focus,
+.animated-paginator .page-link:active,
+.productos-page .animated-paginator .page-link:hover,
+.productos-page .animated-paginator .page-link:visited,
+.productos-page .animated-paginator .page-link:focus,
+.productos-page .animated-paginator .page-link:active {
+    color: #222 !important;
+    background: #fff !important;
+}
+
+/* --- HOVER (solo efecto de movimiento, NO de color) --- */
+.animated-paginator .page-link:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 30px rgba(0,0,0,.22) !important;
+}
+
+/* --- PÁGINA ACTIVA (único que va blanco) --- */
+.animated-paginator .page-item.active .page-link,
+.productos-page .animated-paginator .page-item.active .page-link {
+    background: var(--productos-accent) !important;
+    color: #fff !important; /* este sí va blanco */
+    transform: scale(1.06) !important;
+    box-shadow: 0 20px 40px rgba(255, 64, 129, .14) !important;
+}
+
+/* Animación pulse */
+.animated-paginator .page-link.pulse {
+    animation: paginator-pulse .38s cubic-bezier(.2, .9, .3, 1) !important;
+}
+
+@keyframes paginator-pulse {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.18); }
+    100% { transform: scale(1); }
+}
+
+body.pag-navigating .productos-page {
+    opacity: 0;
+    transition: opacity .28s ease;
+}
+
+/* ======================== SECCIONES ======================== */
 .productos-section-title {
     color: #fff;
     font-size: 1.75rem;
-    /* aumentado (antes 1.4rem) */
     text-align: center;
     margin: 20px 0 8px;
 }
 
-/* Mantengo estilos originales para los lists horizontales (recomendados) */
+/* ======================== LISTAS HORIZONTALES ======================== */
 .recomendados-cards,
 .en-uso-cards {
     display: flex;
@@ -226,368 +185,125 @@ body.pag-navigating .productos-page {
     margin-bottom: 16px;
 }
 
-/* Si usas .card-gn dentro de esos contenedores */
 .recomendados-cards .card-gn,
 .en-uso-cards .card-gn {
     min-width: 220px;
     max-width: 240px;
-    flex: 0 0 auto;
 }
 
-/* Estilos informativos (listas para recomendados y en uso) */
+/* ======================== INFO-LIST GENERICO ======================== */
 .info-list {
     display: flex;
     gap: 14px;
     flex-wrap: wrap;
-    /* wrap para que no quede una fila única larga */
-    overflow-x: visible;
-    /* quita la barra de scroll horizontal */
     padding: 8px 6px;
-    align-items: flex-start;
     justify-content: center;
-    margin-bottom: 16px;
 }
 
-/* ==========================
-   ACTUALIZACIÓN: "En uso en el estudio"
-   Reemplaza la versión previa para que los cuadros sean uniformes,
-   sin descripción, con imagen grande y título centrado.
-   ========================== */
-
-/* Organización en rejilla responsiva para evitar scroll horizontal */
-.en-uso-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
-    justify-items: center;
-    align-items: start;
-    padding: 18px 12px;
-    margin-bottom: 22px;
-    overflow-x: visible;
-}
-
-/* Tarjeta uniforme: imagen arriba, título debajo, misma altura visual */
-.en-uso-list .info-item {
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    max-width: 300px;
-    /* ancho consistente */
-    min-height: 220px;
-    /* altura uniforme para todos */
-    padding: 18px;
-    gap: 12px;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.12));
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.03);
-    transition: transform .28s ease, box-shadow .28s ease;
-    color: #fff;
-    text-align: center;
-}
-
-/* Hover sutil para destacar */
-.en-uso-list .info-item:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.32);
-}
-
-/* Imagen más grande, centrada y circular */
-.en-uso-list .info-img {
-    width: 88px;
-    height: 88px;
-    border-radius: 999px;
-    object-fit: cover;
-    border: 3px solid rgba(255, 64, 129, 0.15);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.24);
-    flex-shrink: 0;
-}
-
-/* Título centrado y con tamaño uniforme */
-.en-uso-list .info-title {
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: #ffffff;
-    margin: 0;
-    line-height: 1.2;
-    max-width: 92%;
-}
-
-/* Ocultar cualquier descripción residual para evitar desajustes */
-.en-uso-list .info-desc {
-    display: none !important;
-}
-
-/* Ajustes responsivos: reducir altura mínima en pantallas pequeñas */
-@media (max-width: 991px) {
-    .en-uso-list .info-item {
-        min-height: 200px;
-        max-width: 260px;
-        padding: 14px;
-    }
-
-    .en-uso-list .info-img {
-        width: 76px;
-        height: 76px;
-    }
-
-    .en-uso-list .info-title {
-        font-size: 1rem;
-    }
-}
-
-@media (max-width: 600px) {
-    .en-uso-list {
-        grid-template-columns: 1fr;
-        padding: 14px;
-    }
-
-    .en-uso-list .info-item {
-        width: 95%;
-        max-width: 95%;
-        min-height: auto;
-        padding: 12px;
-    }
-
-    .en-uso-list .info-img {
-        width: 64px;
-        height: 64px;
-    }
-
-    .en-uso-list .info-title {
-        font-size: 0.98rem;
-    }
-}
-
-/* ==========================
-   FIN de la actualización "En uso en el estudio"
-   ========================== */
-
-/* Estilo general de cada item informativo (para otras listas que sí muestran descripción) */
 .info-item {
     display: flex;
     gap: 12px;
-    align-items: flex-start;
-    background: rgba(0, 0, 0, 0.18);
-    /* más oscuro para mejor contraste con texto blanco */
+    background: rgba(0,0,0,.18);
     border-radius: 10px;
     padding: 10px 12px;
     max-width: 520px;
-    flex: 0 0 auto;
-    border: 1px solid rgba(255, 255, 255, 0.04);
     color: #fff;
+    border: 1px solid rgba(255,255,255,.04);
 }
 
-/* Imagen de info más contenida (para listados con descripción) */
 .info-img {
     width: 56px;
     height: 56px;
     border-radius: 999px;
     object-fit: cover;
-    border: 2px solid rgba(255, 64, 129, 0.14);
-    flex-shrink: 0;
+    border: 2px solid rgba(255, 64, 129, .14);
 }
 
-/* Mejor legibilidad de descripción (para recomendados u otros listados) */
 .info-desc {
-    color: #ffffff;
+    color: #fff;
     font-size: 1.02rem;
-    /* aumentado (antes 0.95rem) */
     line-height: 1.3;
 }
 
-/* small screens: stack info items */
-@media (max-width: 768px) {
-    .info-list {
-        flex-direction: column;
-        gap: 12px;
-        align-items: center;
-    }
-
-    .info-item {
-        width: 95%;
-        max-width: 95%;
-        flex: 0 0 auto;
-    }
+/* ======================== EN USO EN EL ESTUDIO ======================== */
+.en-uso-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    padding: 18px 12px;
+    margin-bottom: 22px;
 }
 
-/* Responsive: mantener legibilidad en móviles */
-@media (max-width: 991px) {
-    .productos-page {
-        padding: 30px 12px;
-    }
-
-    .productos-page .productos-title {
-        font-size: 2.1em;
-    }
+.en-uso-list .info-item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: linear-gradient(180deg, rgba(0,0,0,.18), rgba(0,0,0,.12));
+    min-height: 220px;
+    padding: 18px;
+    border-radius: 12px;
 }
 
-/* OBJETIVO DE NUESTROS PRODUCTOS - ajuste visual y espaciado */
+.en-uso-list .info-img {
+    width: 88px;
+    height: 88px;
+    border: 3px solid rgba(255, 64, 129,.15);
+    box-shadow: 0 6px 18px rgba(0,0,0,.24);
+}
+
+.en-uso-list .info-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.en-uso-list .info-desc {
+    display: none !important;
+}
+
+/* ======================== OBJETIVO ======================== */
 .objetivo-section {
-    box-sizing: border-box;
     padding: 28px 20px;
-    /* separación superior/inferior y laterales */
     margin: 0 auto 18px;
     max-width: 1200px;
-    /* evita que el texto ocupe todo el ancho en pantallas grandes */
     text-align: center;
 }
 
 .objetivo-section .productos-section-title {
-    color: #ffffff;
+    color: #fff;
     font-size: 1.75rem;
-    /* aumentado (antes 1.6rem) */
-    letter-spacing: 1px;
-    margin: 0 0 10px;
-    text-transform: uppercase;
     font-weight: 700;
-    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
-/* Texto descriptivo del objetivo: tamaño y restricción de ancho para mejorar legibilidad */
 .objetivo-section .productos-subtitle {
-    color: rgba(255, 255, 255, 0.94);
+    color: rgba(255,255,255,.94);
     font-size: 1.08rem;
-    /* aumentado (antes 1.02rem) */
     line-height: 1.55;
-    margin: 0 auto;
     max-width: 980px;
-    /* restringe la línea para mejor lectura */
-    padding: 0 8px;
-    /* margen interior adicional en móviles */
+    margin: 0 auto;
 }
 
-/* Mantener el span acento con el color ya definido */
 .objetivo-section .productos-subtitle span {
     color: var(--productos-accent);
     font-weight: 700;
 }
 
-/* Responsive: reducir tamaño en pantallas pequeñas */
+/* ======================== RESPONSIVE ======================== */
 @media (max-width: 991px) {
-    .objetivo-section {
-        padding: 22px 16px;
-    }
+    .productos-page { padding: 30px 12px; }
+    .productos-title { font-size: 2.1em; }
+    .en-uso-list .info-item { min-height: 200px; }
+}
 
-    .objetivo-section .productos-section-title {
-        font-size: 1.45rem;
-    }
-
-    .objetivo-section .productos-subtitle {
-        font-size: 0.99rem;
-        max-width: 92%;
-    }
+@media (max-width: 768px) {
+    .info-list { flex-direction: column; align-items: center; }
+    .info-item { width: 95%; }
 }
 
 @media (max-width: 600px) {
-    .objetivo-section {
-        padding: 18px 12px;
-    }
-
-    .objetivo-section .productos-section-title {
-        font-size: 1.25rem;
-    }
-
-    .objetivo-section .productos-subtitle {
-        font-size: 0.95rem;
-        line-height: 1.45;
-    }
+    .en-uso-list { grid-template-columns: 1fr; }
+    .objetivo-section { padding: 18px 12px; }
+    .objetivo-section .productos-section-title { font-size: 1.25rem; }
 }
-
-/* FORZAR estilos del paginador específico para evitar overrides */
-.animated-paginator,
-.productos-page .animated-paginator {
-    display: flex !important;
-    gap: 10px !important;
-    align-items: center !important;
-    justify-content: center !important;
-}
-
-.animated-paginator .page-link,
-.productos-page .animated-paginator .page-link {
-    width: 44px !important;
-    height: 44px !important;
-    border-radius: 50% !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 0 !important;
-    transition: transform .22s cubic-bezier(.2, .9, .3, 1) !important;
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.16) !important;
-    border: none !important;
-    background: rgba(255, 255, 255, 0.96) !important;
-    color: var(--productos-card-text) !important;
-    font-weight: 700 !important;
-}
-
-.productos-page .animated-paginator .page-item.active .page-link {
-    background: var(--productos-accent) !important;
-    color: #fff !important;
-    transform: scale(1.06) !important;
-    box-shadow: 0 20px 40px rgba(255, 64, 129, 0.14) !important;
-}
-
-/* mantener flechas circulares */
-.productos-page .animated-paginator .page-link[aria-label] {
-    width: 44px !important;
-    height: 44px !important;
-}
-
-/* pulse animation */
-.animated-paginator .page-link.pulse {
-    animation: paginator-pulse .38s cubic-bezier(.2, .9, .3, 1) !important;
-}
-
-/* FORZAR color y legibilidad del paginador (productos) */
-.animated-paginator .page-link,
-.productos-page .animated-paginator .page-link {
-    color: #333333 !important;
-    /* número visible en estado normal */
-    font-size: 1rem !important;
-    line-height: 1 !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    text-decoration: none !important;
-}
-
-/* Refuerzo final: asegurar números visibles y comportamiento del paginador */
-.animated-paginator .page-link,
-.productos-page .animated-paginator .page-link {
-    font-size: 1rem !important;
-    line-height: 1 !important;
-    color: #333333 !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    text-decoration: none !important;
-    cursor: pointer !important;
-}
-
-/* Forzar que cualquier elemento interno herede color/tamaño */
-.animated-paginator .page-link * {
-    color: inherit !important;
-    font-size: inherit !important;
-    line-height: inherit !important;
-}
-
-/* Asegurar visibilidad de página activa y de disabled */
-.productos-page .animated-paginator .page-item.active .page-link {
-    background: var(--productos-accent) !important;
-    color: #ffffff !important;
-    font-weight: 700 !important;
-}
-
-.animated-paginator .page-item.disabled .page-link {
-    opacity: 0.6 !important;
-    pointer-events: none !important;
-}
-
-/* ...existing code... */
-/* AJAX inline loader + soft fade */
-.ajax-inline-loader { display:inline-flex; align-items:center; margin-left:10px; vertical-align:middle; }
-body.pag-navigating .cards { transition: filter 220ms ease, opacity 220ms ease; }
-/* opcional: hacer cards menos transparentes pero con transición */
-body.pag-navigating .productos-page, body.pag-navigating .servicios-page { transition: opacity .22s ease; opacity:0.85; }
