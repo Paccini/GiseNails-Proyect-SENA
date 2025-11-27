@@ -17,6 +17,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Reserva
 from datetime import datetime, time, timedelta
 from django.contrib import messages
+from django.core.mail import send_mail
+from django.conf import settings
 
 def reserva(request):
     gestoras = Empleado.objects.all()
@@ -277,23 +279,18 @@ class ReservaCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         self.object = form.save()
         return super().form_valid(form)
 
-from django.contrib.auth.decorators import login_required
-
 @login_required
-
 def completar_reserva(request):
     from django.core.mail import send_mail
     pending = request.session.get('pending_reserva')
     if not pending:
-        return redirect('clientes:panel')  # Si no hay reserva pendiente, muestra el panel
+        return redirect('clientes:panel')
 
-    # Obtén el cliente autenticado
     from clientes.models import Cliente
     cliente = Cliente.objects.filter(user=request.user).first()
     if not cliente:
         return redirect('clientes:registro')
 
-    # Solo crea la reserva si no existe ya para ese horario y fecha
     from reserva.models import Reserva, HorarioDisponible
     from empleados.models import Empleado
     from servicio.models import Servicio
@@ -337,21 +334,63 @@ def completar_reserva(request):
                 <h2 style="color: #d63384;">¡Recuerda confirmar tu cita 💖!</h2>
                </div>
             """
-            print(f"Enviando correo a {correo_destino}...")
             send_mail(
                 subject="Confirmación de tu cita en Gise-Nails",
-                message=mensaje,  # Texto plano
-                from_email=None,  # Usa el DEFAULT_FROM_EMAIL de settings
+                message=mensaje,
+                from_email=None,
                 recipient_list=[correo_destino],
                 fail_silently=False,
                 html_message=mensaje_html
             )
-    
-
+        # --- ENVÍO DE CORREO AL EMPLEADO ---
+        gestora = reserva_obj.gestora
+        servicio = reserva_obj.servicio
+        from datetime import datetime
+        if isinstance(reserva_obj.fecha, str):
+            fecha_dt = datetime.fromisoformat(reserva_obj.fecha)
+        else:
+            fecha_dt = reserva_obj.fecha
+        fecha = fecha_dt.strftime('%d/%m/%Y')
+        hora = reserva_obj.hora.hora.strftime('%H:%M')
+        mensaje_empleado = (
+            f"¡Nueva cita reservada!\n\n"
+            f"Cliente: {cliente.nombre}\n"
+            f"Teléfono: {cliente.telefono}\n"
+            f"Correo: {cliente.correo}\n"
+            f"Servicio: {servicio.nombre}\n"
+            f"Fecha: {fecha}\n"
+            f"Hora: {hora}\n"
+        )
+        mensaje_html_empleado = f"""
+        <div style="font-family: 'Montserrat', Arial, sans-serif; background: #fff0fa; padding: 32px; border-radius: 18px; box-shadow: 0 2px 18px #ffb6e6;">
+            <h2 style="color: #d63384; margin-bottom: 12px;">¡Nueva cita agendada!</h2>
+            <p style="font-size: 1.15rem; color: #222;">
+                <b>Cliente:</b> {cliente.nombre}<br>
+                <b>Teléfono:</b> {cliente.telefono}<br>
+                <b>Correo:</b> {cliente.correo}<br>
+                <b>Servicio:</b> {servicio.nombre}<br>
+                <b>Fecha:</b> <span style="color:#d63384;">{fecha}</span><br>
+                <b>Hora:</b> <span style="color:#d63384;">{hora}</span>
+            </p>
+            <hr style="margin: 24px 0; border: none; border-top: 2px solid #ffb6e6;">
+         
+            <p style="margin-top: 32px; color: #d63384; font-weight: bold; font-size: 1.2rem;">
+                ¡Gracias por tu dedicación! 💅
+            </p>
+        </div>
+        """
+        send_mail(
+            subject="Nueva cita reservada en Gise-Nails",
+            message=mensaje_empleado,
+            from_email=None,
+            recipient_list=[gestora.correo],
+            fail_silently=False,
+            html_message=mensaje_html_empleado
+        )
     # Limpia la sesión
-    del request.session['pending_reserva']
+    if 'pending_reserva' in request.session:
+        del request.session['pending_reserva']
 
-    # Redirige al panel del cliente
     return redirect('clientes:panel')
 
 from django.contrib.auth.models import User
@@ -375,3 +414,35 @@ def confirmar_reserva(request, pk):
     reserva.save()
     messages.success(request, 'La reserva ha sido confirmada exitosamente.')
     return redirect('clientes:panel')
+
+def crear_reserva(request):
+    # ... código para procesar el formulario ...
+    if request.method == 'POST':
+        # Procesa y guarda la reserva
+        # reserva = Reserva.objects.create(...)
+        # Suponiendo que tienes la instancia reserva creada:
+        gestora = reserva.gestora
+        servicio = reserva.servicio
+        cliente = reserva.cliente
+        fecha = reserva.fecha
+        hora = reserva.hora
+
+        # Construye el mensaje
+        mensaje = (
+            f"¡Nueva cita reservada!\n\n"
+            f"Cliente: {cliente}\n"
+            f"Servicio: {servicio}\n"
+            f"Fecha: {fecha}\n"
+            f"Hora: {hora}\n"
+            f"Teléfono: {cliente.telefono if hasattr(cliente, 'telefono') else ''}\n"
+            f"Correo: {cliente.correo if hasattr(cliente, 'correo') else ''}\n"
+        )
+
+        send_mail(
+            subject="Nueva cita reservada",
+            message=mensaje,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[gestora.correo],  # Asegúrate que gestora tiene correo
+            fail_silently=False,
+        )
+        # ... continúa con la respuesta ...
