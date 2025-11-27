@@ -95,6 +95,12 @@ body.dark-mode {
 .dark-mode .nav {
   background: linear-gradient(180deg, #272731, #1b1b22);
 }
+/* ===  menu de usuario icono de usuario  === */
+
+.dropdown-toggle > .user{ 
+  font-size: 40px;
+  color: #c2185b;
+}
 
 /* === CONTENIDO PRINCIPAL === */
 .main {
