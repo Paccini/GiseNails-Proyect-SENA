@@ -198,7 +198,7 @@ class ClienteDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
 @method_decorator(never_cache, name='dispatch')
 class ClienteCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Cliente
-    form_class = ClienteForm
+    form_class = RegistroClienteForm  # <-- Cambia ClienteForm por RegistroClienteForm
     template_name = 'clientes/cliente_form.html'
     success_url = reverse_lazy('clientes:cliente_list')
 
