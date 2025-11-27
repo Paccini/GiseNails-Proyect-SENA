@@ -5,6 +5,10 @@
   <!-- Contenedor principal con título -->
   <div class="mb-3 d-flex justify-content-between align-items-center">
     <h2 class="fs-4 fw-semibold"><i class="bi bi-person-lines-fill me-2"></i> Lista de Clientes</h2>
+    <!-- Botón agregar cliente -->
+    <a href="{% url 'clientes:cliente_create' %}" class="btn btn-success">
+      <i class="bi bi-person-plus"></i> Agregar cliente
+    </a>
   </div>
 
   <!-- Tarjeta principal -->
