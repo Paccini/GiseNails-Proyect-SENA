@@ -82,6 +82,11 @@ main.container {
   font-weight: 600;
 }
 
+.dropdown-toggle > .user{
+  font-size: 40px;
+  color: #c2185b;
+}
+
 /* Footer */
 footer {
   background: var(--color-surface);
