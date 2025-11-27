@@ -132,24 +132,22 @@ def registro_cliente(request):
         if form.is_valid():
             cliente = form.save()
             user = getattr(cliente, 'user', None)
-
             if user:
                 login(request, user)
-
             if request.session.get('pending_reserva'):
-                return redirect('reserva:completar_reserva')
-
+                # Solo borrar después de completar la reserva
+                response = redirect('reserva:completar_reserva')
+                # No borres aquí, la vista completar_reserva lo hace
+                return response
             return redirect('clientes:panel')
         else:
-            # Mostrar alerta si el formulario no es válido
-            messages.error(request, 'Por favor, verifica los datos ingresados. Asegúrate de que el correo sea válido y el número de teléfono tenga exactamente 10 dígitos.')
-
+            messages.error(request, 'Por favor, verifica los datos ingresados...')
     else:
         form = RegistroClienteForm(initial=initial)
 
-    # Borrar la cita pendiente si se cambia de vista
-    if request.session.get('pending_reserva'):
-        del request.session['pending_reserva']
+    # Elimina la cita pendiente solo si el usuario navega fuera del flujo normal (opcional)
+    # if request.method != 'POST' and request.session.get('pending_reserva'):
+    #     del request.session['pending_reserva']
 
     return render(request, 'login/login.html', {
         'register_form': form,
