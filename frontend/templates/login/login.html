@@ -15,34 +15,73 @@
 {% block content %}
   <main>
     <div class="wrapper {% if register_active %}active{% endif %}">
-      <!-- FORMULARIO LOGIN -->
+      <!-- FORMULARIO LOGIN / RESTABLECER / NUEVA CONTRASEÑA -->
       <div class="form-box login">
-        <h2>Iniciar sesión</h2>
-        {% if pending_message %}
-          <div class="pending-reserva-message" style="margin-bottom:1rem;">
-            <p>Hemos guardado tu cita pendiente. Inicia sesión para confirmarla.</p>
-          </div>
-        {% endif %}
-        <form method="post" autocomplete="on">
-          {% csrf_token %}
-          {% if error %}
-            <div class="login-alert">{{ error }}</div>
+        {% if show_set_password_form %}
+          <h2>Ingresa nueva contraseña</h2>
+          {% if set_password_success %}
+            <div class="login-alert">{{ set_password_success }}</div>
+            <a href="{% url 'login:login' %}" class="btn" style="margin-top:1rem;">Iniciar sesión</a>
+          {% elif set_password_error %}
+            <div class="login-alert">{{ set_password_error }}</div>
+            <a href="{% url 'login:password_reset' %}" class="btn" style="margin-top:1rem;">Solicitar nuevo enlace</a>
+          {% else %}
+            <form method="post" autocomplete="off">
+              {% csrf_token %}
+              <div class="input-box">
+                <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
+                {{ form_set_password.password }}
+                <label>Nueva contraseña</label>
+              </div>
+              <button type="submit" class="btn">Restablecer</button>
+            </form>
           {% endif %}
-          <div class="input-box">
-            <span class="icon"><ion-icon name="mail"></ion-icon></span>
-            <input type="email" name="email" value="{{ prefill_email|default:'' }}" required />
-            <label>Email</label>
-          </div>
-          <div class="input-box">
-            <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
-            <input type="password" name="password" required />
-            <label>Password</label>
-          </div>
-          <button type="submit" class="btn">Entrar</button>
+        {% elif show_reset_form %}
+          <h2>Restablecer contraseña</h2>
+          {% if reset_success %}
+            <div class="login-alert">{{ reset_success }}</div>
+          {% else %}
+            <form method="post" autocomplete="off">
+              {% csrf_token %}
+              {% if reset_error %}
+                <div class="login-alert">{{ reset_error }}</div>
+              {% endif %}
+              <div class="input-box">
+                <span class="icon"><ion-icon name="mail"></ion-icon></span>
+                {{ reset_form.email }}
+                <label>Correo</label>
+              </div>
+              <button type="submit" name="reset_password" class="btn">Enviar correo</button>
+            </form>
+          {% endif %}
           <div class="login-register">
             <p>¿No tienes cuenta? <a href="{% url 'login:registro' %}" class="register-link">Regístrate</a></p>
+            <a href="{% url 'login:login' %}">Volver al login</a>
           </div>
-        </form>
+        {% else %}
+          <h2>Iniciar sesión</h2>
+          <form method="post" autocomplete="on">
+            {% csrf_token %}
+            {% if error %}
+              <div class="login-alert">{{ error }}</div>
+            {% endif %}
+            <div class="input-box">
+              <span class="icon"><ion-icon name="mail"></ion-icon></span>
+              <input type="email" name="email" value="{{ prefill_email|default:'' }}" required />
+              <label>Email</label>
+            </div>
+            <div class="input-box">
+              <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
+              <input type="password" name="password" required />
+              <label>Password</label>
+            </div>
+            <button type="submit" class="btn">Entrar</button>
+            <div class="login-register">
+              <p>¿No tienes cuenta? <a href="#" class="register-link">Regístrate</a></p>
+              <p><a href="{% url 'login:login' %}?show_reset=true">¿Olvidaste tu contraseña?</a></p>
+            </div>
+          </form>
+        {% endif %}
       </div>
 
       <!-- FORMULARIO REGISTRO -->
