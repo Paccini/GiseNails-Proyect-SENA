@@ -131,18 +131,22 @@ def login_view(request):
         pending = request.session.get('pending_reserva')
         prefill_email = pending.get('correo')
         password_only = True
+    else:
+        pending = None
+
+    # SIEMPRE crea el formulario de registro
+    from clientes.forms import RegistroClienteForm
+    initial = {
+        'nombre': pending.get('nombre', '') if pending else '',
+        'correo': pending.get('correo', '') if pending else '',
+        'telefono': pending.get('telefono', '') if pending else '',
+    }
+    register_form = RegistroClienteForm(initial=initial)
 
     # Si viene register_active, mostrar el registro
     if register_active:
-        from clientes.forms import RegistroClienteForm
-        initial = {
-            'nombre': pending.get('nombre', '') if pending else '',
-            'correo': pending.get('correo', '') if pending else '',
-            'telefono': pending.get('telefono', '') if pending else '',
-        }
-        form = RegistroClienteForm(initial=initial)
         return render(request, 'login/login.html', {
-            'register_form': form,
+            'register_form': register_form,
             'register_active': True,
             'pending_message': pending_message,
             'initial': initial,
@@ -155,6 +159,9 @@ def login_view(request):
         'prefill_email': prefill_email,
         'password_only': password_only,
         'pending_message': pending_message,
+        'register_form': register_form,  # <-- SIEMPRE ENVIAR
+        'initial': initial,
+    })
         'register_active': register_active,
         'show_reset_form': show_reset_form,
         'reset_form': reset_form,
@@ -232,7 +239,6 @@ def logout_view(request):
 @user_passes_test(lambda u: u.is_staff)
 @never_cache
 def dashboard(request):
-
     # Datos generales
     clientes_count = Cliente.objects.count()
     servicios_count = Servicio.objects.count()
@@ -312,11 +318,7 @@ def dashboard(request):
 
     return render(request, 'dashboard.html', context)
 
-
-# =============================
-# UPDATE USER
-# =============================
-@login_required(login_url='login:login')
+@login_required
 def update_user(request):
     update_error = None
     update_success = None
@@ -325,7 +327,6 @@ def update_user(request):
     if request.method == 'POST':
         form = UpdateUserForm(request.POST)
         show_modal = True
-
         if form.is_valid():
             nombre = form.cleaned_data['nombre']
             old_password = form.cleaned_data['old_password']
@@ -339,36 +340,25 @@ def update_user(request):
                 user.first_name = nombre_parts[0]
                 user.last_name = nombre_parts[1] if len(nombre_parts) > 1 else ''
                 nuevo_username = nombre.replace(" ", "").lower()
-
                 if User.objects.exclude(pk=user.pk).filter(username=nuevo_username).exists():
                     update_error = "El nombre de usuario ya está en uso. Elige otro nombre."
                 else:
                     user.username = nuevo_username
                     if new_password:
                         user.set_password(new_password)
-                    user.save()
-
-                    if new_password:
                         from django.contrib.auth import update_session_auth_hash
                         update_session_auth_hash(request, user)
-
+                    user.save()
                     update_success = "¡Datos actualizados correctamente!"
-                    show_modal = True
-
-        return render(request, 'dashboard.html', {
-            'form': form,
-            'update_error': update_error,
-            'update_success': update_success,
-            'show_modal': show_modal,
-        })
-
+        else:
+            update_error = "Datos inválidos. Revisa el formulario."
     else:
         form = UpdateUserForm(initial={'nombre': request.user.get_full_name()})
 
     return render(request, 'dashboard.html', {
         'form': form,
         'update_error': update_error,
-        'update_success': None,
+        'update_success': update_success,
         'show_modal': show_modal,
     })
 

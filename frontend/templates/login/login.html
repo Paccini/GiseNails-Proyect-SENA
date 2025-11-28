@@ -55,6 +55,7 @@
             </form>
           {% endif %}
           <div class="login-register">
+            <p>¿No tienes cuenta? <a href="{% url 'login:registro' %}" class="register-link">Regístrate</a></p>
             <a href="{% url 'login:login' %}">Volver al login</a>
           </div>
         {% else %}
