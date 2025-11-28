@@ -77,7 +77,7 @@
             </div>
             <button type="submit" class="btn">Entrar</button>
             <div class="login-register">
-              <p>¿No tienes cuenta? <a href="#" class="register-link">Regístrate</a></p>
+              <p>¿No tienes cuenta? <a href="{% url 'login:registro' %}" class="register-link">Regístrate</a></p>
               <p><a href="{% url 'login:login' %}?show_reset=true">¿Olvidaste tu contraseña?</a></p>
             </div>
           </form>
@@ -126,7 +126,7 @@
           {{ register_form.telefono.errors }}
           {{ register_form.password.errors }}
           <div class="login-register">
-            <p>¿Ya tienes cuenta? <a href="#" class="login-link">Inicia sesión</a></p>
+            <p>¿Ya tienes cuenta? <a href="{% url 'login:login' %}" class="login-link">Inicia sesión</a></p>
           </div>
         </form>
       </div>
@@ -144,18 +144,4 @@
   <script src="{% static 'js/login.js' %}"></script>
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-  {% if register_active %}
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const wrapper = document.querySelector('.wrapper');
-        if (wrapper) {
-          wrapper.classList.add('active');
-        }
-        const registerLink = document.querySelector('.register-link');
-        if (registerLink) {
-          registerLink.click();
-        }
-      });
-    </script>
-  {% endif %}
 {% endblock %}
