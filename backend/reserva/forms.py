@@ -1,5 +1,5 @@
 from django import forms
-from .models import Reserva
+from .models import Reserva, PagoReserva
 from clientes.models import Cliente
 from reserva.models import HorarioDisponible
 
@@ -82,3 +82,12 @@ class ReservaEditForm(forms.ModelForm):
             # Solo muestra horas no ocupadas o la hora actual de la cita
             qs = HorarioDisponible.objects.exclude(id__in=ocupadas) | HorarioDisponible.objects.filter(id=instance.hora_id)
             self.fields['hora'].queryset = qs.distinct().order_by('hora')
+
+class PagoReservaForm(forms.ModelForm):
+    class Meta:
+        model = PagoReserva
+        fields = ['metodo', 'comprobante']
+        widgets = {
+            'metodo': forms.Select(attrs={'class': 'form-select'}),
+            'comprobante': forms.FileInput(attrs={'class': 'form-control'}),
+        }

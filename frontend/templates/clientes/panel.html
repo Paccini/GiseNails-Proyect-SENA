@@ -77,20 +77,30 @@
             <td>{{ cita.hora }}</td>
             <td>{{ cita.servicio }}</td>
             <td>{{ cita.gestora }}</td>
-            <td><span class="badge bg-info">{{ cita.get_estado_display }}</span></td>
+            <td>
+              <span class="badge bg-info">{{ cita.get_estado_display }}</span>
+              {% if cita.pagos.exists %}
+                {% for pago in cita.pagos.all %}
+                  {% if pago.confirmado and cita.estado == 'confirmada' %}
+                    <span class="badge bg-success">PAGO! Ref: {{ pago.referencia }}</span>
+                  {% elif not pago.confirmado and cita.estado == 'pendiente' %}
+                    <span class="badge bg-warning text-dark">Pago pendiente (Ref: {{ pago.referencia }})</span>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+            </td>
             <td>
               {% if cita.estado == 'pendiente' %}
-              <div class="d-flex flex-wrap gap-1">
-                <form method="post" action="{% url 'clientes:confirmar' cita.pk %}" class="confirmar-form" style="display:inline;">
-                  {% csrf_token %}
-                  <button type="button" class="btn btn-success btn-sm py-0 confirmar-btn">
-                    <i class="bi bi-check-circle"></i> Confirmar
+                <div class="d-flex flex-wrap gap-1">
+                  <button type="button"
+                          class="btn btn-warning btn-sm py-0 abonar-btn"
+                          data-abonar-url="{% url 'clientes:abonar_reserva' cita.pk %}">
+                    <i class="bi bi-cash-coin"></i> Abonar 30%
                   </button>
-                </form>
-                <a href="{% url 'clientes:cancelar' cita.pk %}" class="btn btn-danger btn-sm py-0">
-                  <i class="bi bi-x-circle"></i> Cancelar
-                </a>
-              </div>
+                  <a href="{% url 'clientes:cancelar' cita.pk %}" class="btn btn-danger btn-sm py-0">
+                    <i class="bi bi-x-circle"></i> Cancelar
+                  </a>
+                </div>
               {% endif %}
             </td>
           </tr>
@@ -275,6 +285,12 @@
     </div>
   </div>
 </div>
+
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-success">{{ message }}</div>
+  {% endfor %}
+{% endif %}
 {% endblock %}
 <!-- Fin del bloque principal de contenido -->
 

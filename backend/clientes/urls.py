@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from reserva import views as reserva_views
 
 app_name = 'clientes'
 
@@ -17,4 +18,6 @@ urlpatterns = [
     path('<int:pk>/eliminar/', views.ClienteDeleteView.as_view(), name='cliente_delete'),
     path('editar-perfil/', views.editar_perfil,name='editar_perfil'),
     path('<int:pk>/toggle-activo/', views.toggle_cliente_activo, name='cliente_toggle_activo'),
+
+    path('abonar/<int:pk>/', reserva_views.abonar_reserva, name='abonar_reserva'),
 ]
