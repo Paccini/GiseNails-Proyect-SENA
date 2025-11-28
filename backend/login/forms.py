@@ -46,3 +46,24 @@ class UpdateUserForm(forms.Form):
             'placeholder': 'Nueva contraseña'
         })
     )
+
+class PasswordResetForm(forms.Form):
+    email = forms.EmailField(
+        label='Correo',
+        widget=forms.EmailInput(attrs={
+            'placeholder': 'Correo',
+            'autocomplete': 'email',
+            'class': 'login-input',
+            'style': 'background:transparent;color:#232c36;'
+        })
+    )
+
+class SetNewPasswordForm(forms.Form):
+    password = forms.CharField(
+        label='Nueva contraseña',
+        widget=forms.PasswordInput(attrs={
+            'placeholder': 'Nueva contraseña',
+            'class': 'login-input',
+            'style': 'background:transparent;color:#232c36;'
+        })
+    )
