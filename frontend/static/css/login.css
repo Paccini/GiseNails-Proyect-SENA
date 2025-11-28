@@ -51,7 +51,9 @@ body {
 /* Formularios */
 .wrapper .form-box {
   width: 100%;
-  padding: 40px;
+  padding: 2.5rem 2rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px 0 rgba(31, 0, 31, 0.15);
   transition: transform 0.3s ease;
 }
 
@@ -183,13 +185,17 @@ body {
   color: #fff;
 }
 
+.login-register a,
 .login-register p a {
-  color: #ffb6c1;
+  color: #fff !important;
   text-decoration: none;
   font-weight: 600;
+  transition: color 0.2s;
 }
 
+.login-register a:hover,
 .login-register p a:hover {
+  color: #ffb6c1 !important;
   text-decoration: underline;
 }
 
