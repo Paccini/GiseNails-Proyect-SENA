@@ -1,4 +1,5 @@
 {% extends 'base_admin.html' %}
+{% load token_filters %}
 {% block content %}
 <!-- ===========================================================
     PÁGINA: LISTA DE RESERVAS
@@ -103,11 +104,11 @@
 
                         <!-- Botones de acción (editar y eliminar) -->
                         <td>
-                            <a href="{% url 'reserva:editar_reserva' reserva.id %}" class="btn btn-sm btn-warning me-1"
+                            <a href="{% url 'reserva:editar_reserva' reserva.id|encrypt_id %}" class="btn btn-sm btn-warning me-1"
                                 title="Editar">
                                 <i class="bi bi-pencil-square"></i>
                             </a>
-                            <a href="{% url 'reserva:eliminar_reserva' reserva.id %}" class="btn btn-sm btn-danger"
+                            <a href="{% url 'reserva:eliminar_reserva' reserva.id|encrypt_id %}" class="btn btn-sm btn-danger"
                                 title="Cancelar">
                                 <i class="bi bi-trash"></i>
                             </a>

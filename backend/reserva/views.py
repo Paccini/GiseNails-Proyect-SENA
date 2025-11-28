@@ -17,6 +17,19 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Reserva
 from datetime import datetime, time, timedelta
 from django.contrib import messages
+from cryptography.fernet import Fernet
+from django.conf import settings
+
+fernet = Fernet(settings.ENCRYPT_KEY)
+
+def encrypt_id(pk: int) -> str:
+    """Convierte un ID normal en uno cifrado"""
+    return fernet.encrypt(str(pk).encode()).decode()
+
+def decrypt_id(token: str) -> int:
+    """Convierte un token cifrado en el ID real"""
+    return int(fernet.decrypt(token.encode()).decode())
+
 
 def reserva(request):
     gestoras = Empleado.objects.all()
@@ -231,8 +244,13 @@ def agregar_reserva(request):
 @login_required
 @user_passes_test(lambda u: u.is_staff)
 @never_cache
-def editar_reserva(request, pk):
-    cita = get_object_or_404(Reserva, pk=pk)
+def editar_reserva(request, token):
+    try:
+        real_pk = decrypt_id(token)
+    except:
+        return redirect('reserva:home')
+    
+    cita = get_object_or_404(Reserva, pk=real_pk)
     if request.method == 'POST':
         form = ReservaEditForm(request.POST, instance=cita)
         if form.is_valid():
@@ -240,14 +258,18 @@ def editar_reserva(request, pk):
             return redirect('reserva:home')
     else:
         form = ReservaEditForm(instance=cita)
-    context = {'form': form}
-    return render(request, 'reservas/editar.html', context)
+    return render(request, 'reservas/editar.html', {'form': form})
 
 @login_required
 @user_passes_test(lambda u: u.is_staff)
 @never_cache
-def eliminar_reserva(request, pk):
-    cita = get_object_or_404(Reserva, pk=pk)
+def eliminar_reserva(request, token):
+    try:
+        real_pk = decrypt_id(token)
+    except:
+        return redirect('reserva:home')
+    
+    cita = get_object_or_404(Reserva, pk=real_pk)
     if request.method == 'POST':
         cita.delete()
         return redirect("reserva:home")

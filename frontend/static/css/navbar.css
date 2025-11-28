@@ -13,8 +13,8 @@
 
 /* NAVBAR */
 .gn-navbar{
-    position:sticky;
-    top:0;
+    position: sticky;
+    top: 0;
     width:100%;
     background:rgba(0,0,0,0.4);
     backdrop-filter:blur(10px);
@@ -25,25 +25,6 @@
     align-items:center;
     z-index:1000;
     transition:background .4s ease;
-    position: relative; /* necesario para el brillo */
-}
-
-/* === EFECTO DE BRILLO ARREGLADO === */
-.gn-navbar::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%; /* destello ocupa todo el ancho */
-    height: 100%;
-    background: linear-gradient(90deg, transparent 0%, rgba(255,105,180,0.5) 50%, transparent 100%);
-    pointer-events: none;
-    transform: translateX(-100%);  /* inicia fuera por la izquierda */
-    transition: transform 0.8s ease-in-out;
-}
-
-.gn-navbar:hover::before {
-    transform: translateX(100%);   /* recorre TODO el navbar */
 }
 
 /* BRAND */
@@ -55,13 +36,19 @@
 
 .navbar-logo{
     height:40px;
-    filter:invert(1);
+    filter: brightness(0) saturate(100%) invert(1);
+    transition: transform 0.3s ease;
+}
+
+.brand .title:hover .navbar-logo {
+    transform: scale(1.08);
 }
 
 /* ENLACES */
 .nav-links{
     display:flex;
     gap:35px;
+    align-items: center;
 }
 
 .nav-links a{
@@ -71,6 +58,7 @@
     font-weight:500;
     position:relative;
     transition:.3s;
+    opacity: 1;
 }
 
 .nav-links a:hover{
@@ -102,6 +90,7 @@
     opacity:0;
     visibility:hidden;
     transition:.3s ease;
+    z-index: 999;
 }
 
 .mobile-menu a{
@@ -123,56 +112,17 @@
 
 /* RESPONSIVE */
 @media(max-width:992px){
+    .gn-navbar {
+        padding: 12px 20px;
+    }
+
     .nav-links{
         display:none;
     }
+
     .mobile-toggle{
         display:block;
     }
-}
-
-/* === LOGO ANIMADO & COLOR === */
-.navbar-logo {
-    filter: brightness(0) saturate(100%) invert(1);
-    transition: transform 0.3s ease;
-}
-
-.brand .title:hover .navbar-logo {
-    transform: scale(1.08);
-}
-
-/* Animación al cargar */
-@keyframes logoBounceIn {
-    0% { transform: translateY(-50px) scale(0.5); opacity: 0; }
-    60% { transform: translateY(10px) scale(1.05); opacity: 1; }
-    80% { transform: translateY(-5px) scale(0.98); }
-    100% { transform: translateY(0) scale(1); opacity: 1; }
-}
-
-.brand .title h1,
-.brand .title img,
-.brand .title .navbar-logo {
-    animation: logoBounceIn 1s ease-out forwards;
-    animation-delay: .2s;
-    opacity: 0;
-}
-
-/* === ANIMACIÓN EN LOS LINKS === */
-.nav-links a {
-    opacity: 0;
-    animation: navLinkFadeIn 0.6s ease-out forwards;
-}
-
-.nav-links a:nth-child(1) { animation-delay: 0.4s; }
-.nav-links a:nth-child(2) { animation-delay: 0.5s; }
-.nav-links a:nth-child(3) { animation-delay: 0.6s; }
-.nav-links a:nth-child(4) { animation-delay: 0.7s; }
-.nav-links a:nth-child(5) { animation-delay: 0.8s; }
-.nav-links a:nth-child(6) { animation-delay: 0.9s; }
-
-@keyframes navLinkFadeIn {
-    0% { transform: translateY(20px); opacity: 0; }
-    100% { transform: translateY(0); opacity: 1; }
 }
 
 /* === SUBRAYADO ANIMADO + PULSO DE LUZ === */

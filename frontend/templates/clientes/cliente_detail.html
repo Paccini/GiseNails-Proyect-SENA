@@ -14,7 +14,9 @@
     <div class="card-body">
         <!-- Lista de detalles del cliente -->
         <ul class="list-group list-group-flush mb-3">
-            <li class="list-group-item"><strong>ID:</strong> {{ object.id }}</li>
+            <li class="list-group-item">
+                <strong>ID:</strong> {{ object.id|stringformat:"s"|slice:":3" }}***
+            </li>
             <li class="list-group-item"><strong>Nombre:</strong> {{ object.nombre }}</li>
             <li class="list-group-item"><strong>Correo:</strong> {{ object.correo }}</li>
             <li class="list-group-item"><strong>Teléfono:</strong> {{ object.telefono }}</li>

@@ -14,7 +14,7 @@ urlpatterns = [
     # Rutas administrativas de reservas
     path('reservas/', home, name='home'),
     path('reservas/agregar/', ReservaCreateView.as_view(), name='agregar_reserva'),
-    path('reservas/editar/<int:pk>/', editar_reserva, name='editar_reserva'),
-    path('reservas/eliminar/<int:pk>/', eliminar_reserva, name='eliminar_reserva'),
+    path('reservas/editar/<str:token>/', editar_reserva, name='editar_reserva'),
+    path('reservas/eliminar/<str:token>/', eliminar_reserva, name='eliminar_reserva'),
     path('completar-reserva/', completar_reserva, name='completar_reserva'),
-]
+]   

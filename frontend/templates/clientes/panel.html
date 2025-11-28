@@ -1,23 +1,14 @@
 <!-- filepath: c:\Users\juanv\Desktop\proyecto Gise-Nails\frontend\templates\clientes\panel.html -->
 {% extends 'base_cliente.html' %}
-<!-- Extiende la plantilla base para clientes -->
-
 {% load static %}
-<!-- Carga el uso de archivos estáticos -->
-
+{% load token_filters %}
 {% block content %}
-<!-- Inicio del bloque principal de contenido -->
 
 <div class="card mb-4">
-
-  
-
-    <!-- Tarjeta que muestra la información del cliente -->
     <div class="card-header">
         <h3 class="fw-bold mb-0"><i class="bi bi-person-circle me-2"></i> Información del cliente</h3>
     </div>
     <div class="card-body">
-        <!-- Datos del cliente -->
         <p><strong>Nombre:</strong> {{ cliente.nombre }}</p>
         <p><strong>Correo:</strong> {{ cliente.correo }}</p>
         <p><strong>Teléfono:</strong> {{ cliente.telefono }}</p>
@@ -27,24 +18,28 @@
 
 <div class="card mb-3">
   <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
-  <h3>Mis citas</h3>
+    <h3>Mis citas</h3>
 
-  <div class="d-flex align-items-center gap-2 flex-wrap">
-    <form method="get" class="d-flex align-items-center gap-2">
-      <select class="form-select" name="estado">
-        <option value="">Todos los estados</option>
-        <option value="pendiente">Pendiente</option>
-        <option value="completada">Completada</option>
-        <option value="cancelada">Cancelada</option>
-      </select>
-      <input type="date" name="fecha" class="form-control" />
-      <button type="submit" class="btn btn-primary"> <i class="bi bi-funnel-fill"></i> </button>
-      <a href="{% url 'clientes:panel' %}" class="btn btn-secondary">
-        <i class="bi bi-brush-fill"></i>
-      </a>
-    </form>
+    <!-- FILTROS -->
+    <div class="d-flex align-items-center gap-2 flex-wrap">
+      <form method="get" class="d-flex align-items-center gap-2">
+        <select class="form-select" name="estado">
+          <option value="">Todos los estados</option>
+          <option value="pendiente">Pendiente</option>
+          <option value="completada">Completada</option>
+          <option value="cancelada">Cancelada</option>
+        </select>
+
+        <input type="date" name="fecha" class="form-control" />
+
+        <button type="submit" class="btn btn-primary"><i class="bi bi-funnel-fill"></i></button>
+
+        <a href="{% url 'clientes:panel' %}" class="btn btn-secondary">
+          <i class="bi bi-brush-fill"></i>
+        </a>
+      </form>
+    </div>
   </div>
-</div>
 
   <div class="card-body">
     {% if reservas %}
@@ -71,15 +66,20 @@
             <td>
               {% if cita.estado == 'pendiente' %}
               <div class="d-flex flex-wrap gap-1">
-                <form method="post" action="{% url 'clientes:confirmar' cita.pk %}" class="confirmar-form" style="display:inline;">
+
+                <!-- CONFIRMAR (POST con ID encriptado) -->
+                <form method="post" action="{% url 'clientes:confirmar' cita.pk|encrypt_id %}" class="confirmar-form" style="display:inline;">
                   {% csrf_token %}
                   <button type="button" class="btn btn-success btn-sm py-0 confirmar-btn">
                     <i class="bi bi-check-circle"></i> Confirmar
                   </button>
                 </form>
-                <a href="{% url 'clientes:cancelar' cita.pk %}" class="btn btn-danger btn-sm py-0">
+
+                <!-- CANCELAR (GET con ID encriptado) -->
+                <a href="{% url 'clientes:cancelar' cita.pk|encrypt_id %}" class="btn btn-danger btn-sm py-0">
                   <i class="bi bi-x-circle"></i> Cancelar
                 </a>
+
               </div>
               {% endif %}
             </td>
@@ -92,23 +92,30 @@
     <!-- PAGINACIÓN -->
     <nav aria-label="Paginación de reservas">
       <ul class="pagination justify-content-center">
+
         {% if reservas.has_previous %}
         <li class="page-item">
-          <a class="page-link" href="?page={{ reservas.previous_page_number }}&estado={{ filter_estado }}&fecha={{ filter_fecha }}">Anterior</a>
+          <a class="page-link" href="?page={{ reservas.previous_page_number }}&estado={{ filter_estado }}&fecha={{ filter_fecha }}">
+            Anterior
+          </a>
         </li>
         {% else %}
         <li class="page-item disabled"><span class="page-link">Anterior</span></li>
         {% endif %}
 
         {% for num in reservas.paginator.page_range %}
-          <li class="page-item {% if reservas.number == num %}active{% endif %}">
-            <a class="page-link" href="?page={{ num }}&estado={{ filter_estado }}&fecha={{ filter_fecha }}">{{ num }}</a>
-          </li>
+        <li class="page-item {% if reservas.number == num %}active{% endif %}">
+          <a class="page-link" href="?page={{ num }}&estado={{ filter_estado }}&fecha={{ filter_fecha }}">
+            {{ num }}
+          </a>
+        </li>
         {% endfor %}
 
         {% if reservas.has_next %}
         <li class="page-item">
-          <a class="page-link" href="?page={{ reservas.next_page_number }}&estado={{ filter_estado }}&fecha={{ filter_fecha }}">Siguiente</a>
+          <a class="page-link" href="?page={{ reservas.next_page_number }}&estado={{ filter_estado }}&fecha={{ filter_fecha }}">
+            Siguiente
+          </a>
         </li>
         {% else %}
         <li class="page-item disabled"><span class="page-link">Siguiente</span></li>
@@ -122,184 +129,21 @@
   </div>
 </div>
 
+<!-- MODALES (SIN CAMBIOS) -->
+{{ block.super }}
 
-<!-- Modal para actualizar datos del cliente -->
-<div class="modal fade" id="updateClienteModal" tabindex="-1" aria-labelledby="updateClienteModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <!-- Formulario para actualizar la información del cliente -->
-      <form method="post" action="{% url 'clientes:editar_perfil' %}">
-        {% csrf_token %}
-        <div class="modal-header">
-          <h5 class="modal-title fw-bold" id="updateClienteModalLabel" style="color:#232c36;">Actualizar datos de cliente</h5>
-          <!-- Botón para cerrar el modal -->
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-        </div>
-        <div class="modal-body">
-          <div class="mb-3">
-            <!-- Mensaje informativo -->
-            <span class="fw-semibold" style="color:#3b82f6;">
-              Puedes actualizar tu nombre, correo, teléfono y contraseña.<br>
-              Para cambiar la contraseña, debes ingresar la actual y la nueva.
-            </span>
-          </div>
-
-          {% if form.errors %}
-            <!-- Si hay errores en el formulario, se muestran aquí -->
-            <div class="alert alert-danger">
-              {% for field in form %}
-                {% for error in field.errors %}
-                  {{ error }}<br>
-                {% endfor %}
-              {% endfor %}
-            </div>
-          {% endif %}
-
-          <!-- Campo: nombre -->
-          <div class="mb-3">
-            <label for="id_nombre" class="form-label fw-bold" style="color:#232c36;">Nombre</label>
-            <input type="text" class="form-control" name="nombre" id="id_nombre" value="{{ cliente.nombre }}" required>
-          </div>
-
-          <!-- Campo: correo -->
-          <div class="mb-3">
-            <label for="id_correo" class="form-label fw-bold" style="color:#232c36;">Correo</label>
-            <input type="email" class="form-control" name="correo" id="id_correo" value="{{ cliente.correo }}" required>
-          </div>
-
-          <!-- Campo: teléfono -->
-          <div class="mb-3">
-            <label for="id_telefono" class="form-label fw-bold" style="color:#232c36;">Teléfono</label>
-            <input type="text" class="form-control" name="telefono" id="id_telefono" value="{{ cliente.telefono }}"
-              required>
-          </div>
-
-          <!-- Campo: contraseña actual -->
-          <div class="mb-3">
-            <label for="id_old_password" class="form-label fw-bold" style="color:#232c36;">Contraseña actual <span
-                class="text-danger">*</span></label>
-            <input type="password" class="form-control" name="old_password" id="id_old_password"
-              autocomplete="current-password">
-            <div class="form-text" style="color:#6b7280;">Necesaria para cualquier cambio de contraseña</div>
-          </div>
-
-
-          <!-- mensage de si la contraseña actual esta al escrita error -->
-
-            {% if update_error %}
-            <div class="alert alert-danger">
-                {{ update_error }}
-            </div>
-            {% endif %}
-
-          <!-- Campo: nueva contraseña -->
-          <div class="mb-3">
-            <label for="id_new_password" class="form-label fw-bold" style="color:#232c36;">Nueva contraseña</label>
-            <input type="password" class="form-control" name="new_password" id="id_new_password"
-              autocomplete="new-password">
-            <div class="form-text" style="color:#6b7280;">Déjalo vacío si no deseas cambiarla</div>
-          </div>
-        </div>
-
-        <!-- Pie del modal con botones -->
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="submit" class="btn btn-primary">Actualizar</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-<!-- Modal para agendar cita -->
-<div class="modal fade" id="agendarCitaModal" tabindex="-1" aria-labelledby="agendarCitaModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form method="post" action="{% url 'clientes:agendar' %}">
-        {% csrf_token %}
-        <div class="modal-header">
-          <h5 class="modal-title fw-bold" id="agendarCitaModalLabel" style="color:#232c36;">Agendar nueva cita</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-        </div>
-        <div class="modal-body">
-          <div class="mb-3">
-            <label for="id_fecha" class="form-label fw-bold" style="color:#232c36;">Fecha</label>
-            <input type="date" class="form-control" name="fecha" id="id_fecha" required>
-          </div>
-          <div class="mb-3">
-            <label for="id_hora" class="form-label fw-bold" style="color:#232c36;">Hora</label>
-            <select class="form-select" name="hora" id="id_hora" required>
-              <option value="">Seleccione una hora</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label for="id_servicio" class="form-label fw-bold" style="color:#232c36;">Servicio</label>
-            <select class="form-select" name="servicio" id="id_servicio" required>
-              <option value="">Seleccione un servicio</option>
-              {% for servicio in servicios %}
-                <option value="{{ servicio.pk }}">{{ servicio.nombre }}</option>
-              {% endfor %}
-            </select>
-          </div>
-          <div class="mb-3">
-            <label for="id_gestora" class="form-label fw-bold" style="color:#232c36;">Gestora</label>
-            <select class="form-select" name="gestora" id="id_gestora" required>
-              <option value="">Seleccione una gestora</option>
-              {% for gestora in gestoras %}
-                <option value="{{ gestora.pk }}">{{ gestora.nombre }}</option>
-              {% endfor %}
-            </select>
-          </div>
-          <div class="mb-3">
-            <span class="fw-semibold" style="color:#3b82f6;">
-              Al agendar una cita, aceptas nuestros términos y condiciones.
-            </span>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="submit" class="btn btn-primary">Agendar cita</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
 {% endblock %}
-<!-- Fin del bloque principal de contenido -->
 
 {% block scripts %}
-<!-- Bloque de scripts adicionales -->
-
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<!-- Variables que controlan el modal y mensajes desde el servidor (deben ir antes de cargar panel_cliente.js) -->
+
 <script>
   var panel_url = "{% url 'clientes:panel' %}";
-  {% if show_cita_alert %}
-  var show_cita_alert = true;
-  {% else %}
-  var show_cita_alert = false;
-  {% endif %}
-
-  {% if show_modal %}
-  var show_modal = true;
-  {% else %}
-  var show_modal = false;
-  {% endif %}
-
-  {% if update_error %}
-  var update_error = "{{ update_error|escapejs }}";
-  {% else %}
-  var update_error = null;
-  {% endif %}
-
-  {% if update_success %}
-  var update_success = "{{ update_success|escapejs }}";
-  {% else %}
-  var update_success = null;
-  {% endif %}
+  var show_cita_alert = {{ show_cita_alert|yesno:"true,false" }};
+  var show_modal = {{ show_modal|yesno:"true,false" }};
+  var update_error = "{{ update_error|default_if_none:''|escapejs }}";
+  var update_success = "{{ update_success|default_if_none:''|escapejs }}";
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{% static 'js/panel_cliente.js' %}"></script>
 {% endblock %}
