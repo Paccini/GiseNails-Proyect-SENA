@@ -143,15 +143,11 @@ def login_view(request):
     }
     register_form = RegistroClienteForm(initial=initial)
 
-    # Si viene register_active, mostrar el registro
-    if register_active:
-        return render(request, 'login/login.html', {
-            'register_form': register_form,
-            'register_active': True,
-            'pending_message': pending_message,
-            'initial': initial,
-            'prefill_email': initial.get('correo'),
-        })
+    # Si el formulario de registro tiene errores, mostrar el registro
+    if request.method == 'POST' and 'nombre' in request.POST:
+        register_form = RegistroClienteForm(request.POST)
+        if not register_form.is_valid():
+            register_active = True
 
     context = {
         'form': login_form,
@@ -159,9 +155,8 @@ def login_view(request):
         'prefill_email': prefill_email,
         'password_only': password_only,
         'pending_message': pending_message,
-        'register_form': register_form,  # <-- SIEMPRE ENVIAR
+        'register_form': register_form,
         'initial': initial,
-    })
         'register_active': register_active,
         'show_reset_form': show_reset_form,
         'reset_form': reset_form,
