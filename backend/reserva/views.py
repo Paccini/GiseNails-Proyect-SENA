@@ -14,11 +14,19 @@ from django.db.models import Count
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from .models import Reserva
+from .models import Reserva, PagoReserva
+from .forms import PagoReservaForm
 from datetime import datetime, time, timedelta
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
+from decimal import Decimal
+from django import forms
+from django.utils.formats import number_format, localize
+
+class ReferenciaPagoForm(forms.Form):
+    metodo = forms.ChoiceField(choices=[('nequi', 'Nequi'), ('daviplata', 'Daviplata')], widget=forms.Select(attrs={'class': 'form-select'}))
+    referencia = forms.CharField(label='Referencia de pago', max_length=20, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Número de referencia'}))
 
 def reserva(request):
     gestoras = Empleado.objects.all()
@@ -171,6 +179,7 @@ def home(request):
     fecha_fin = request.GET.get('fecha_fin', '')
     usuario = request.GET.get('usuario', '')
     estado = request.GET.get('estado', '')
+    referencia = request.GET.get('referencia', '').strip()
 
     citas = Reserva.objects.all()
     # Excluye canceladas y realizadas por defecto
@@ -197,6 +206,9 @@ def home(request):
     if usuario:
         citas = citas.filter(cliente__nombre__icontains=usuario)
 
+    if referencia:
+        citas = citas.filter(pagos__referencia__icontains=referencia)
+
     citas = citas.order_by('fecha', 'hora__hora')
 
     paginator = Paginator(citas, 5)
@@ -208,6 +220,7 @@ def home(request):
         'fecha_fin': fecha_fin,
         'usuario': usuario,
         'estado': estado,
+        'referencia': referencia,
         'is_paginated': page_obj.has_other_pages(),
         'page_obj': page_obj,
         'paginator': paginator,
@@ -245,9 +258,11 @@ def agregar_reserva(request):
 def editar_reserva(request, pk):
     cita = get_object_or_404(Reserva, pk=pk)
     if request.method == 'POST':
-        form = ReservaEditForm(request.POST, instance=cita)
-        if form.is_valid():
-            form.save()
+        nuevo_estado = request.POST.get('estado')
+        if nuevo_estado in dict(Reserva.ESTADO_CHOICES):
+            cita.estado = nuevo_estado
+            cita.save()
+            messages.success(request, "Estado actualizado correctamente.")
             return redirect('reserva:home')
     else:
         form = ReservaEditForm(instance=cita)
@@ -446,3 +461,40 @@ def crear_reserva(request):
             fail_silently=False,
         )
         # ... continúa con la respuesta ...
+
+@login_required
+def abonar_reserva(request, pk):
+    reserva = get_object_or_404(Reserva, pk=pk, cliente__user=request.user)
+    precio_servicio = reserva.servicio.precio if reserva.servicio else Decimal('0')
+    monto_abono = precio_servicio * Decimal('0.3')
+    monto_abono = int(monto_abono.to_integral_value(rounding='ROUND_HALF_UP'))
+    monto_abono_str = localize(monto_abono)  # Esto pone el punto de miles según configuración regional
+
+    nequi_num = '3153923380'
+    daviplata_num = '3153923380'
+    if request.method == 'POST':
+        form = ReferenciaPagoForm(request.POST)
+        if form.is_valid():
+            metodo = form.cleaned_data['metodo']
+            referencia = form.cleaned_data['referencia']
+            PagoReserva.objects.create(
+                reserva=reserva,
+                cliente=reserva.cliente,
+                monto=monto_abono,
+                metodo=metodo,
+                comprobante=None,
+                confirmado=False,
+                fecha_pago=timezone.now(),
+                referencia=referencia  # Guarda la referencia
+            )
+            messages.success(request, "Referencia enviada. El equipo validará tu pago y confirmará tu cita.")
+            return redirect('clientes:panel')
+    else:
+        form = ReferenciaPagoForm()
+    return render(request, 'reserva/abonar_reserva.html', {
+        'reserva': reserva,
+        'form': form,
+        'monto_abono': monto_abono_str,
+        'nequi_num': nequi_num,
+        'daviplata_num': daviplata_num,
+    })

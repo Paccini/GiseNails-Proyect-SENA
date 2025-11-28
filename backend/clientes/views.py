@@ -314,12 +314,14 @@ def cancelar_reserva(request, pk):
 @login_required
 @never_cache
 def confirmar_reserva(request, pk):
-    cliente = get_object_or_404(Cliente, user=request.user)
-    reserva = get_object_or_404(Reserva, pk=pk, cliente=cliente)
-    if request.method == 'POST' and reserva.estado == 'pendiente':
-        reserva.estado = 'confirmada'
-        reserva.save()
-    return redirect('clientes:panel')
+    cliente = get_object_or_404(Cliente, pk=pk)
+    reserva = get_object_or_404(Reserva, cliente=cliente)
+    if request.method == 'POST':
+        nuevo_estado = request.POST.get('estado')
+        if nuevo_estado in dict(Reserva.ESTADO_CHOICES):
+            reserva.estado = nuevo_estado
+            reserva.save()
+    return redirect('clientes:cliente_list')
 
 def toggle_cliente_activo(request, pk):
     """
