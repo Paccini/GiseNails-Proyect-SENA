@@ -29,6 +29,7 @@
                 <thead class="table-light">
                     <tr>
                         <th><i class="bi bi-hash me-1"></i> ID</th>
+                        <th><i class="bi bi-image me-1"></i> Imagen</th> <!-- NUEVA COLUMNA -->
                         <th><i class="bi bi-tag me-1"></i> Nombre</th>
                         <th><i class="bi bi-card-text me-1"></i> Descripción</th>
                         <th><i class="bi bi-currency-dollar me-1"></i> Precio</th>
@@ -41,6 +42,13 @@
                     {% for servicio in servicios %}
                     <tr>
                         <td>{{ servicio.id }}</td>
+                        <td>
+                            {% if servicio.imagen %}
+                                <img src="{{ servicio.imagen.url }}" alt="{{ servicio.nombre }}" style="width:48px;height:48px;object-fit:cover;border-radius:8px;">
+                            {% else %}
+                                <span class="text-muted">Sin imagen</span>
+                            {% endif %}
+                        </td>
                         <td>
                             <i class="bi bi-scissors me-1 text-secondary"></i>
                             {{ servicio.nombre }}
@@ -66,7 +74,7 @@
                     {% empty %}
                     <!-- Mensaje mostrado si no existen servicios -->
                     <tr>
-                        <td colspan="6" class="text-center">No hay servicios registrados.</td>
+                        <td colspan="7" class="text-center">No hay servicios registrados.</td>
                     </tr>
                     {% endfor %}
                 </tbody>
