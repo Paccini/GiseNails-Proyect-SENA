@@ -1,0 +1,59 @@
+{% extends 'base_cliente.html' %}
+{% block content %}
+<div class="card mx-auto" style="max-width:500px;">
+  <div class="card-header bg-primary text-white">
+    <h4>Pagar valor total</h4>
+  </div>
+  <div class="card-body">
+    <p>Debes pagar el <b>100%</b> para confirmar tu cita.</p>
+    <p>Monto a pagar: <b>${{ monto_total }}</b></p>
+    <p>
+      <b>Nequi:</b> {{ nequi_num }}<br>
+      <b>Daviplata:</b> {{ daviplata_num }}
+    </p>
+    <p>
+      <b>Paso 1:</b> Abre tu app Nequi o Daviplata.<br>
+      <b>Paso 2:</b> Envía <b>${{ monto_total }}</b> al número:<br>
+      <b>Nequi:</b> {{ nequi_num }}<br>
+      <b>Daviplata:</b> {{ daviplata_num }}<br>
+      <b>Paso 3:</b> Al finalizar el pago, la app te dará un <b>número de referencia</b>.<br>
+      <b>Paso 4:</b> Ingresa ese número aquí y presiona "Enviar referencia".
+    </p>
+    <form method="post" class="mt-3 mb-2">
+      {% csrf_token %}
+      <div class="mb-3">
+        {{ form.metodo.label_tag }}
+        {{ form.metodo }}
+      </div>
+      <div class="mb-3">
+        {{ form.referencia.label_tag }}
+        {{ form.referencia }}
+        <small class="form-text text-muted">Ejemplo: 1234567890</small>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Enviar referencia</button>
+      <a href="{% url 'clientes:panel' %}" class="btn btn-secondary w-100 mt-2">Cancelar</a>
+    </form>
+    <div class="mt-2 text-muted">
+      <small>Tu cita será confirmada cuando el equipo valide tu pago.</small>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    {% if messages %}
+      {% for message in messages %}
+        Swal.fire({
+          icon: 'success',
+          title: '¡Listo!',
+          text: "{{ message }}",
+          timer: 3500,
+          timerProgressBar: true,
+          showConfirmButton: false
+        });
+      {% endfor %}
+    {% endif %}
+  });
+</script>
+{% endblock %}

@@ -71,6 +71,27 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // Confirmación al pagar el 100%
+    document.querySelectorAll('.pagar-completo-btn').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: '¿Pagar el 100% de la cita?',
+                html: 'Vas a pagar el <b>100%</b> del valor de la cita.<br><br>Recuerda que si no asistes, <b>no se devolverá el dinero</b>.',
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#0d6efd',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, pagar todo',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = btn.getAttribute('data-pagar-url');
+                }
+            });
+        });
+    });
+
     // Cargar horas disponibles en el modal de agendar cita
     var fechaInput = document.getElementById('id_fecha');
     if (fechaInput) {
