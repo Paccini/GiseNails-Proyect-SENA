@@ -1,18 +1,20 @@
 {% extends 'base_cliente.html' %}
 {% block content %}
-<div class="card mt-4">
-    <div class="card-body">
-        <h4>¿Estás seguro que deseas cancelar esta cita?</h4>
-        <p><strong>Fecha:</strong> {{ reserva.fecha|date:"d/m/Y" }}</p>
-        <p><strong>Hora:</strong> {{ reserva.hora }}</p>
-        <p><strong>Servicio:</strong> {{ reserva.servicio }}</p>
-        <p><strong>Gestora:</strong> {{ reserva.gestora }}</p>
-        <form method="post">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-danger">Sí, cancelar</button>
-            <a href="{% url 'clientes:panel' %}" class="btn btn-secondary">No, volver</a>
-        </form>
-        <br>
+<div class="container py-5">
+  <div class="card mx-auto" style="max-width:400px;">
+    <div class="card-header bg-danger text-white text-center">
+      <h4>Cancelar cita</h4>
     </div>
+    <div class="card-body">
+      <p class="text-dark">
+        ¿Estás seguro que deseas cancelar la cita de <b>{{ reserva.servicio }}</b> el <b>{{ reserva.fecha|date:"d/m/Y" }}</b> a las <b>{{ reserva.hora }}</b>?
+      </p>
+      <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger w-100 mb-2">Sí, cancelar</button>
+        <a href="{% url 'clientes:panel' %}" class="btn btn-secondary w-100">Volver</a>
+      </form>
+    </div>
+  </div>
 </div>
 {% endblock %}

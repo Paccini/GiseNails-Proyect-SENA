@@ -12,118 +12,60 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <!-- Bootstrap Icons -->
+
+    <!-- Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
-    <!-- Google Fonts -->
+
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Great+Vibes&family=Dancing+Script&display=swap" rel="stylesheet" />
-    <!-- CSS personalizado -->
+
+    <!-- CUSTOM CSS -->
     <link rel="stylesheet" href="{% static 'css/base.css' %}" />
     <link rel="stylesheet" href="{% static 'css/navbar.css' %}" />
     <link rel="stylesheet" href="{% static 'css/footer.css' %}" />
+
     {% block extra_head %}
 
     {% endblock %}
   </head>
 
   <body>
-    <!-- quick fix: hide/remove any offcanvas/duplicate mobile menu as soon as possible -->
-    <style>
-      /* escondemos cualquier offcanvas/overlay por defecto (prioridad máxima) */
-      .offcanvas,
-      .offcanvas-backdrop,
-      [class*='offcanvas'],
-      [data-bs-offcanvas],
-      .mobile-menu:not(#mobileMenu),
-      [role='menu']:not(#mobileMenu) {
-        display: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-        pointer-events: none !important;
-      }
-    </style>
-
-    <script>
-      ;(function () {
-        // elimina duplicados ya existentes y protege contra nuevos añadidos dinámicamente
-        function removeDupMenus() {
-          document.querySelectorAll('.mobile-menu:not(#mobileMenu), .offcanvas, .offcanvas-backdrop, [data-bs-offcanvas], [role="menu"]:not(#mobileMenu)').forEach((el) => {
-            try {
-              el.remove()
-            } catch (e) {}
-          })
-        }
-      
-        // limpieza inmediata
-        removeDupMenus()
-      
-        // observador que borra menús añadidos posteriormente (por librerías o Bootstrap)
-        const mo = new MutationObserver(() => removeDupMenus())
-        mo.observe(document.documentElement || document.body, { childList: true, subtree: true })
-      
-        // Interceptar clicks en captura para asegurarnos de que no se abra un offcanvas
-        document.addEventListener(
-          'click',
-          (e) => {
-            const btn = document.getElementById('mobileToggle')
-            if (btn && (btn === e.target || btn.contains(e.target))) {
-              removeDupMenus() // limpia justo antes de que otros listeners actúen
-            }
-          },
-          true
-        )
-      })()
-    </script>
-
-    <!-- Nuevo Navbar Moderno -->
     <header class="gn-navbar" id="gnNavbar">
-      <div class="brand" onclick="window.location.href='{% url 'inicio' %}'" role="button" aria-label="Gise Nails">
+      <div class="brand" onclick="window.location.href='{% url 'inicio' %}'">
         <div class="title">
-          <img src="{% static 'img/logo_blanco.png' %}" alt="Gise Nails Logo" class="navbar-logo" />
+          <img src="{% static 'img/logo_blanco.png' %}" class="navbar-logo" alt="Logo" />
           <h1>GISE NAILS</h1>
         </div>
       </div>
 
       <nav>
-        {% if request.resolver_match %}
-          {% with current_view=request.resolver_match.view_name %}
-            <div class="nav-links" id="navLinks">
-              <a class="underline {% if current_view == 'inicio' %}active{% endif %}" href="{% url 'inicio' %}"><i class="bi bi-house-door"></i> Inicio</a>
-              <a class="underline {% if current_view == 'reserva:reserva' %}active{% endif %}" href="{% url 'reserva:reserva' %}"><i class="bi bi-calendar-check"></i> Reserva</a>
-              <a class="underline {% if current_view == 'nosotros' %}active{% endif %}" href="{% url 'nosotros' %}"><i class="bi bi-people"></i> Nosotros</a>
-              <a class="underline {% if current_view == 'productos:lista_productos' %}active{% endif %}" href="{% url 'productos:lista_productos' %}"><i class="bi bi-bag-heart"></i> Productos</a>
-              <a class="underline {% if current_view == 'servicio:lista_servicios' %}active{% endif %}" href="{% url 'servicio:lista_servicios' %}"><i class="bi bi-star"></i> Servicios</a>
-              <a class="underline {% if current_view == 'login:login' %}active{% endif %}" href="{% url 'login:login' %}"><i class="bi bi-person-circle"></i> Inicia sesión</a>
-            </div>
-          {% endwith %}
-        {% else %}
-          {# Fallback si request.resolver_match no está disponible: simple enlaces sin active dinámico #}
-          <div class="nav-links" id="navLinks">
-            <a class="underline" href="{% url 'inicio' %}"><i class="bi bi-house-door"></i> Inicio</a>
-            <a class="underline" href="{% url 'reserva:reserva' %}"><i class="bi bi-calendar-check"></i> Reserva</a>
-            <a class="underline" href="{% url 'nosotros' %}"><i class="bi bi-people"></i> Nosotros</a>
-            <a class="underline" href="{% url 'productos:lista_productos' %}"><i class="bi bi-bag-heart"></i> Productos</a>
-            <a class="underline" href="{% url 'servicio:lista_servicios' %}"><i class="bi bi-star"></i> Servicios</a>
-            <a class="underline" href="{% url 'login:login' %}"><i class="bi bi-person-circle"></i> Inicia sesión</a>
-          </div>
-        {% endif %}
-
-        <div class="actions">
-          <button class="icon-btn mobile-toggle" id="mobileToggle" aria-expanded="false" aria-controls="mobileMenu"><i class="bi bi-list"></i></button>
+        <div class="nav-links" id="navLinks">
+          <a href="{% url 'inicio' %}"><i class="bi bi-house-door"></i> Inicio</a>
+          <a href="{% url 'reserva:reserva' %}"><i class="bi bi-calendar-check"></i> Reserva</a>
+          <a href="{% url 'nosotros' %}"><i class="bi bi-people"></i> Nosotros</a>
+          <a href="{% url 'productos:lista_productos' %}"><i class="bi bi-bag-heart"></i> Productos</a>
+          <a href="{% url 'servicio:lista_servicios' %}"><i class="bi bi-stars"></i> Servicios</a>
+          <a href="{% url 'login:login' %}"><i class="bi bi-person-circle"></i> Inicia sesión</a>
         </div>
 
-        <!-- Mobile menu (hidden on desktop) -->
-        <div class="mobile-menu hidden" id="mobileMenu" role="menu" aria-hidden="true">
-          <a href="{% url 'inicio' %}">Inicio</a>
-          <a href="{% url 'reserva:reserva' %}">Reserva</a>
-          <a href="{% url 'nosotros' %}">Nosotros</a>
-          <a href="{% url 'productos:lista_productos' %}">Productos</a>
-          <a href="{% url 'servicio:lista_servicios' %}">Servicios</a>
-          <a href="{% url 'login:login' %}">Inicia sesión</a>
+        <div class="actions">
+          <button class="mobile-toggle" id="mobileToggle"><i class="bi bi-list"></i></button>
+        </div>
+
+        <!-- MENÚ MÓVIL -->
+        <div class="mobile-menu hidden" id="mobileMenu">
+          <a href="{% url 'inicio' %}"><i class="bi bi-house-door"></i> Inicio</a>
+          <a href="{% url 'reserva:reserva' %}"><i class="bi bi-calendar-check"></i> Reserva</a>
+          <a href="{% url 'nosotros' %}"><i class="bi bi-people"></i> Nosotros</a>
+          <a href="{% url 'productos:lista_productos' %}"><i class="bi bi-bag-heart"></i> Productos</a>
+          <a href="{% url 'servicio:lista_servicios' %}"><i class="bi bi-stars"></i> Servicios</a>
+          <a href="{% url 'login:login' %}"><i class="bi bi-person-circle"></i> Inicia sesión</a>
         </div>
       </nav>
     </header>
+
     <div style="height: 80px;"></div>
-    <!-- Contenido principal -->
+
     <main class="main-content">
       <div class="container-fluid">
         {% block content %}
@@ -131,7 +73,6 @@
         {% endblock %}
       </div>
     </main>
-
     <!-- Pie de página -->
     <footer>
       <div class="row">
@@ -209,64 +150,221 @@
       <hr />
       <p class="copyright">Gise Nails © 2025 – Todos los derechos reservados</p>
     </footer>
-    {% block scripts %}
-      <!-- JQuery (necesario para main.js) -->
-      <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-      <!-- JS personalizado -->
-      <script src="{% static 'js/home.js' %}"></script>
-      <!-- Bootstrap JS -->
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-      <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-      <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
-      {% block extra_js %}
-        <script>
-          ;(function () {
-            const btn = document.getElementById('mobileToggle')
-            const menu = document.getElementById('mobileMenu')
-            const navLinks = document.getElementById('navLinks')
-          
-            function removeWhitePanel() {
-              // ocultar #navLinks en móviles (doble protección)
-              if (window.innerWidth <= 992 && navLinks) {
-                navLinks.style.display = 'none'
-                navLinks.style.visibility = 'hidden'
-                navLinks.style.opacity = '0'
-                navLinks.style.pointerEvents = 'none'
-              }
-              // eliminar posibles offcanvas/backdrops añadidos por librerías
-              document.querySelectorAll('.offcanvas, .offcanvas-backdrop, [data-bs-offcanvas], .mobile-menu:not(#mobileMenu)').forEach((el) => el.remove())
-            }
-          
-            // limpieza inicial
-            removeWhitePanel()
-          
-            // observar DOM para eliminar paneles que aparezcan dinámicamente
-            const mo = new MutationObserver(() => removeWhitePanel())
-            mo.observe(document.body, { childList: true, subtree: true })
-          
-            if (btn && menu) {
-              btn.addEventListener('click', (e) => {
-                e.stopPropagation()
-                // siempre ocultar navLinks justo antes de abrir el menú
-                removeWhitePanel()
-                menu.classList.toggle('hidden')
-                btn.setAttribute('aria-expanded', String(!menu.classList.contains('hidden')))
-                menu.setAttribute('aria-hidden', String(menu.classList.contains('hidden')))
-              })
-          
-              // cerrar si hace click fuera
-              document.addEventListener('click', (e) => {
-                if (!menu.classList.contains('hidden') && !menu.contains(e.target) && !btn.contains(e.target)) {
-                  menu.classList.add('hidden')
-                  btn.setAttribute('aria-expanded', 'false')
-                  menu.setAttribute('aria-hidden', 'true')
-                }
-              })
-            }
-          })()
-        </script>
-      {% endblock %}
+    <!-- JS -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="{% static 'js/home.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    {% block extra_js %}
+      <style>
+        #whatsapp-float-btn {
+          position: fixed;
+          right: 22px;
+          bottom: 22px;
+          z-index: 9999;
+          background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+          color: #fff;
+          border-radius: 50%;
+          box-shadow: 0 6px 24px rgba(18, 140, 126, 0.18);
+          width: 62px;
+          height: 62px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 2.2rem;
+          cursor: pointer;
+          border: 3px solid #fff;
+          outline: none;
+          text-decoration: none;
+          transition: box-shadow 0.2s, background 0.2s, transform 0.18s;
+        }
+        #whatsapp-float-btn:hover {
+          background: linear-gradient(135deg, #128c7e 0%, #25d366 100%);
+          box-shadow: 0 10px 32px rgba(18, 140, 126, 0.28);
+          transform: scale(1.08);
+          color: #fff;
+        }
+        @media (max-width: 600px) {
+          #whatsapp-float-btn {
+            right: 12px;
+            bottom: 12px;
+            width: 48px;
+            height: 48px;
+            font-size: 1.5rem;
+          }
+        }
+        #wa-modal-backdrop {
+          position: fixed;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.38);
+          z-index: 9998;
+          display: none;
+        }
+        #wa-modal {
+          position: fixed;
+          right: 50%;
+          bottom: 50%;
+          transform: translate(50%, 50%);
+          z-index: 9999;
+          background: #fff;
+          color: #222;
+          border-radius: 20px;
+          box-shadow: 0 12px 38px rgba(18, 140, 126, 0.16);
+          min-width: 320px;
+          max-width: 95vw;
+          width: 370px;
+          padding: 32px 24px 22px 24px;
+          display: none;
+          flex-direction: column;
+          gap: 18px;
+          animation: wa-modal-in 0.22s cubic-bezier(0.5, 1.5, 0.5, 1);
+          border: 2px solid #25d366;
+        }
+        @keyframes wa-modal-in {
+          from {
+            opacity: 0;
+            transform: translate(50%, 60%) scale(0.95);
+          }
+          to {
+            opacity: 1;
+            transform: translate(50%, 50%) scale(1);
+          }
+        }
+        #wa-modal h3 {
+          font-size: 1.35rem;
+          font-weight: 700;
+          margin-bottom: 8px;
+          color: #128c7e;
+          text-align: center;
+        }
+        #wa-modal .wa-options {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          margin-bottom: 10px;
+        }
+        #wa-modal .wa-option-btn {
+          background: linear-gradient(90deg, #25d366 0%, #128c7e 100%);
+          color: #fff;
+          border: none;
+          border-radius: 8px;
+          padding: 12px 18px;
+          font-size: 1.08rem;
+          font-weight: 600;
+          cursor: pointer;
+          box-shadow: 0 2px 8px rgba(18, 140, 126, 0.09);
+          transition: background 0.18s, box-shadow 0.18s, transform 0.18s;
+          text-align: left;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+        #wa-modal .wa-option-btn:hover {
+          background: linear-gradient(90deg, #128c7e 0%, #25d366 100%);
+          box-shadow: 0 4px 18px rgba(18, 140, 126, 0.18);
+          transform: scale(1.03);
+        }
+        #wa-modal .wa-actions {
+          display: flex;
+          justify-content: flex-end;
+          gap: 10px;
+          margin-top: 8px;
+        }
+        #wa-modal .btn-wa-cancel {
+          background: #eee;
+          color: #222;
+          border: none;
+          border-radius: 7px;
+          padding: 7px 14px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: background 0.18s;
+        }
+        #wa-modal .btn-wa-cancel:hover {
+          background: #ddd;
+        }
+        #wa-modal .wa-success {
+          color: #25d366;
+          font-weight: 600;
+          margin-top: 8px;
+          text-align: center;
+        }
+        #wa-modal .wa-error {
+          color: #d32f2f;
+          font-weight: 600;
+          margin-top: 8px;
+          text-align: center;
+        }
+      </style>
+      <a href="#" id="whatsapp-float-btn" aria-label="Contactanos por WhatsApp"><i class="bi bi-whatsapp"></i></a>
+      <div id="wa-modal-backdrop"></div>
+      <div id="wa-modal" role="dialog" aria-modal="true" aria-labelledby="wa-modal-title">
+        <h3 id="wa-modal-title">Contáctanos por WhatsApp</h3>
+        <div class="wa-options">
+          <button type="button" class="wa-option-btn" data-msg="Hola, quiero agendar una cita para uñas. ¿Cuáles son los horarios disponibles?"><i class="bi bi-calendar-check"></i> Agendar cita para uñas</button>
+          <button type="button" class="wa-option-btn" data-msg="Hola, me gustaría conocer los precios y promociones actuales."><i class="bi bi-tag"></i> Solicitar precios y promociones</button>
+          <button type="button" class="wa-option-btn" data-msg="Hola, tengo una consulta sobre el cuidado de mis uñas. ¿Me pueden asesorar?"><i class="bi bi-chat-dots"></i> Consulta sobre cuidado de uñas</button>
+          <button type="button" class="wa-option-btn" data-msg="Hola, quiero información sobre productos para uñas."><i class="bi bi-bag-heart"></i> Información de productos</button>
+          <button type="button" class="wa-option-btn" data-msg="Hola, quiero saber la ubicación y cómo llegar al local."><i class="bi bi-geo-alt"></i> Ubicación y cómo llegar</button>
+        </div>
+        <div class="wa-actions">
+          <button type="button" class="btn-wa-cancel">Cancelar</button>
+        </div>
+        <div class="wa-success" style="display:none;"></div>
+        <div class="wa-error" style="display:none;"></div>
+      </div>
+      <script>
+        // WhatsApp modal profesional con opciones
+        ;(function () {
+          const btn = document.getElementById('whatsapp-float-btn')
+          const modal = document.getElementById('wa-modal')
+          const backdrop = document.getElementById('wa-modal-backdrop')
+          const cancelBtn = modal.querySelector('.btn-wa-cancel')
+          const optionBtns = modal.querySelectorAll('.wa-option-btn')
+          const successMsg = modal.querySelector('.wa-success')
+          const errorMsg = modal.querySelector('.wa-error')
+          const WA_NUMBER = '3169382622' // Cambia aquí tu número si lo necesitas
+        
+          function openModal() {
+            modal.style.display = 'flex'
+            backdrop.style.display = 'block'
+            document.body.style.overflow = 'hidden'
+            successMsg.style.display = 'none'
+            errorMsg.style.display = 'none'
+          }
+          function closeModal() {
+            modal.style.display = 'none'
+            backdrop.style.display = 'none'
+            document.body.style.overflow = ''
+            successMsg.style.display = 'none'
+            errorMsg.style.display = 'none'
+          }
+          btn.addEventListener('click', function (e) {
+            e.preventDefault()
+            openModal()
+          })
+          backdrop.addEventListener('click', closeModal)
+          cancelBtn.addEventListener('click', closeModal)
+        
+          optionBtns.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+              const msg = btn.getAttribute('data-msg')
+              if (!msg) return
+              const text = encodeURIComponent(msg)
+              const waUrl = `https://wa.me/${WA_NUMBER}?text=${text}`
+              window.open(waUrl, '_blank')
+              successMsg.textContent = '¡Redirigiendo a WhatsApp!'
+              successMsg.style.display = 'block'
+              setTimeout(closeModal, 1800)
+            })
+          })
+        
+          document.addEventListener('keydown', function (e) {
+            if (modal.style.display === 'flex' && e.key === 'Escape') closeModal()
+          })
+        })()
+      </script>
     {% endblock %}
   </body>
 </html>

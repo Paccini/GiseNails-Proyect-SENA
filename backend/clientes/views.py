@@ -29,19 +29,29 @@ def panel_cliente(request):
         return redirect('clientes:registro')
 
     # filtros desde querystring
-    estado = request.GET.get('estado', 'all')  # 'all' muestra todos
-    fecha_str = request.GET.get('fecha', '').strip()
+    estado = request.GET.get('estado', '')  # '' muestra todos
+    fecha_inicio = request.GET.get('fecha_inicio', '').strip()
+    fecha_fin = request.GET.get('fecha_fin', '').strip()
     page = request.GET.get('page', 1)
 
     reservas_qs = Reserva.objects.filter(cliente=cliente).order_by('-fecha', '-hora')
 
-    if estado and estado != 'all':
+    # Filtrar por estado
+    if estado:
         reservas_qs = reservas_qs.filter(estado=estado)
 
-    if fecha_str:
+    # Filtrar por rango de fechas
+    if fecha_inicio:
         try:
-            fecha_obj = datetime.strptime(fecha_str, '%Y-%m-%d').date()
-            reservas_qs = reservas_qs.filter(fecha=fecha_obj)
+            fecha_inicio_obj = datetime.strptime(fecha_inicio, '%Y-%m-%d').date()
+            reservas_qs = reservas_qs.filter(fecha__gte=fecha_inicio_obj)
+        except Exception:
+            pass
+    
+    if fecha_fin:
+        try:
+            fecha_fin_obj = datetime.strptime(fecha_fin, '%Y-%m-%d').date()
+            reservas_qs = reservas_qs.filter(fecha__lte=fecha_fin_obj)
         except Exception:
             pass
 
@@ -86,7 +96,8 @@ def panel_cliente(request):
         'horarios': horarios,
         'show_cita_alert': show_cita_alert,
         'filter_estado': estado,
-        'filter_fecha': fecha_str,
+        'filter_fecha_inicio': fecha_inicio,
+        'filter_fecha_fin': fecha_fin,
         'show_modal': show_modal,
         'update_error': update_error,
         'update_success': update_success,
@@ -198,7 +209,7 @@ class ClienteDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
 @method_decorator(never_cache, name='dispatch')
 class ClienteCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Cliente
-    form_class = ClienteForm
+    form_class = RegistroClienteForm  # <-- Cambia ClienteForm por RegistroClienteForm
     template_name = 'clientes/cliente_form.html'
     success_url = reverse_lazy('clientes:cliente_list')
 
@@ -248,13 +259,13 @@ def registro_cliente(request):
         form = RegistroClienteForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('login:login')  # Si quieres redirigir después de registrar
+            return redirect('clientes:login')
+        else:
+            # Si hay errores, renderiza el formulario con los datos y errores
+            return render(request, 'clientes/registro.html', {'form': form})
     else:
         form = RegistroClienteForm()
-    return render(request, 'clientes/registro.html', {
-        'form': form,
-        'registro': True
-    })
+    return render(request, 'clientes/registro.html', {'form': form})
 
 
 @login_required
@@ -303,12 +314,14 @@ def cancelar_reserva(request, pk):
 @login_required
 @never_cache
 def confirmar_reserva(request, pk):
-    cliente = get_object_or_404(Cliente, user=request.user)
-    reserva = get_object_or_404(Reserva, pk=pk, cliente=cliente)
-    if request.method == 'POST' and reserva.estado == 'pendiente':
-        reserva.estado = 'confirmada'
-        reserva.save()
-    return redirect('clientes:panel')
+    cliente = get_object_or_404(Cliente, pk=pk)
+    reserva = get_object_or_404(Reserva, cliente=cliente)
+    if request.method == 'POST':
+        nuevo_estado = request.POST.get('estado')
+        if nuevo_estado in dict(Reserva.ESTADO_CHOICES):
+            reserva.estado = nuevo_estado
+            reserva.save()
+    return redirect('clientes:cliente_list')
 
 def toggle_cliente_activo(request, pk):
     """

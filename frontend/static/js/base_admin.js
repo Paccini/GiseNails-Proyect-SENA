@@ -90,3 +90,51 @@ document.addEventListener('DOMContentLoaded', function () {
         if (notifBadge) notifBadge.style.display = 'none';
     });
 });
+
+// Abre el modal y pasa datos
+document.querySelectorAll('.pago-efectivo-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    const facturaId = btn.getAttribute('data-factura');
+    const saldo = btn.getAttribute('data-total');
+    document.getElementById('facturaIdInput').value = facturaId;
+    document.getElementById('montoEfectivoInput').value = saldo;
+    document.getElementById('montoEfectivoInput').max = saldo;
+    document.getElementById('saldoMaximo').textContent = '$' + saldo.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    var modal = new bootstrap.Modal(document.getElementById('modalPagoEfectivo'));
+    modal.show();
+  });
+});
+
+document.getElementById('btnPagoEfectivoGlobal').addEventListener('click', function() {
+  document.getElementById('referenciaInput').value = '';
+  document.getElementById('infoPagoEfectivo').style.display = 'none';
+  var modal = new bootstrap.Modal(document.getElementById('modalPagoEfectivo'));
+  modal.show();
+});
+
+document.getElementById('referenciaInput').addEventListener('blur', function() {
+  var ref = this.value.trim();
+  if (!ref) return;
+  fetch(`/reserva/api/buscar-factura/?referencia=${encodeURIComponent(ref)}`)
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) {
+        document.getElementById('clienteNombre').textContent = data.cliente;
+        document.getElementById('servicioNombre').textContent = data.servicio;
+        document.getElementById('saldoPendiente').textContent = data.saldo;
+        document.getElementById('facturaIdInput').value = data.factura_id;
+        document.getElementById('formPagoEfectivo').action = `/reserva/factura/${data.factura_id}/pago-efectivo/`;
+        document.getElementById('infoPagoEfectivo').style.display = '';
+      } else {
+        document.getElementById('infoPagoEfectivo').style.display = 'none';
+        Swal.fire('Referencia no encontrada', 'No se encontró ninguna factura con esa referencia o ya está pagada.', 'error');
+      }
+    });
+});
+
+document.getElementById('formPagoEfectivo').addEventListener('submit', function(e) {
+  if (!document.getElementById('facturaIdInput').value) {
+    e.preventDefault();
+    Swal.fire('Error', 'Debes buscar y seleccionar una factura válida antes de registrar el pago.', 'error');
+  }
+});

@@ -36,8 +36,8 @@ class RegistroClienteForm(forms.ModelForm):
     telefono = forms.CharField(
         validators=[
             RegexValidator(
-                regex=r'^\+?\d{9,15}$', 
-                message='El número de teléfono debe tener entre 9 y 15 dígitos y puede incluir el código de país y no debe tener letras.'
+                regex=r'^\d{10}$', 
+                message='El número de teléfono debe tener exactamente 10 dígitos.'
             )
         ],
         widget=forms.TextInput(attrs={
@@ -82,7 +82,8 @@ class RegistroClienteForm(forms.ModelForm):
                     'type': 'password',
                     'class': 'login-input',
                     'style': 'background:transparent;color:#232c36;'
-                })
+                }),
+                required=True
             )
 
     def save(self, commit=True):

@@ -25,9 +25,18 @@
     <div class="card-body">
 
         <!-- === FORMULARIO DE BÚSQUEDA Y FILTRO === -->
-        <form method="get" class="d-flex gap-2 mb-3">
-            <!-- Filtro por fecha -->
-            <input type="date" name="fecha" value="{{ fecha }}" class="form-control w-auto">
+        <form method="get" class="d-flex gap-2 mb-3 flex-wrap">
+            <!-- Filtro por fecha inicio -->
+            <div class="d-flex align-items-center gap-1">
+                <label for="fecha_inicio" class="form-label mb-0" style="white-space: nowrap;">Fecha inicial:</label>
+                <input type="date" name="fecha_inicio" id="fecha_inicio" value="{{ fecha_inicio }}" class="form-control w-auto">
+            </div>
+
+            <!-- Filtro por fecha fin -->
+            <div class="d-flex align-items-center gap-1">
+                <label for="fecha_fin" class="form-label mb-0" style="white-space: nowrap;">Fecha final:</label>
+                <input type="date" name="fecha_fin" id="fecha_fin" value="{{ fecha_fin }}" class="form-control w-auto">
+            </div>
 
             <!-- Filtro por nombre de cliente -->
             <input type="text" name="usuario" value="{{ usuario }}" class="form-control w-auto"
@@ -41,6 +50,10 @@
                 <option value="cancelada" {% if estado == "cancelada" %}selected{% endif %}>Cancelada</option>
                 <option value="realizada" {% if estado == "realizada" %}selected{% endif %}>Realizada</option>
             </select>
+
+            <!-- Filtro por referencia de pago -->
+            <input type="text" name="referencia" value="{{ referencia }}" class="form-control w-auto"
+                placeholder="Referencia de pago...">
 
             <!-- Botón de búsqueda -->
             <button type="submit" class="btn btn-primary">
@@ -60,6 +73,7 @@
                         <th><i class="bi bi-calendar-event me-1"></i> Fecha</th>
                         <th><i class="bi bi-clock me-1"></i> Hora</th>
                         <th><i class="bi bi-info-circle me-1"></i> Estado</th>
+                        <th><i class="bi bi-key me-1"></i> Referencia</th>
                         <th><i class="bi bi-gear me-1"></i> Acciones</th>
                     </tr>
                 </thead>
@@ -89,7 +103,29 @@
 
                         <!-- Estado actual (pendiente, confirmada, etc.) -->
                         <td>
-                            <span class="badge bg-info">{{ reserva.get_estado_display }}</span>
+                            <form method="post" action="{% url 'reserva:editar_reserva' reserva.pk %}" style="display:inline;">
+                                {% csrf_token %}
+                                <select name="estado" class="form-select form-select-sm d-inline w-auto" onchange="this.form.submit()">
+                                    {% for key, value in reserva.ESTADO_CHOICES %}
+                                        <option value="{{ key }}" {% if reserva.estado == key %}selected{% endif %}>{{ value }}</option>
+                                    {% endfor %}
+                                </select>
+                            </form>
+                        </td>
+
+                        <!-- Referencia de pago -->
+                        <td>
+                            {% if reserva.pagos.exists %}
+                                {% for pago in reserva.pagos.all %}
+                                    {% if pago.referencia %}
+                                        <span class="badge bg-secondary">{{ pago.referencia }}</span>
+                                    {% else %}
+                                        <span class="text-muted">Sin referencia</span>
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                <span class="text-muted">Sin pago</span>
+                            {% endif %}
                         </td>
 
                         <!-- Botones de acción (editar y eliminar) -->
@@ -108,7 +144,7 @@
                     <!-- Si no hay reservas -->
                     {% empty %}
                     <tr>
-                        <td colspan="8" class="text-center">No hay reservas registradas.</td>
+                        <td colspan="9" class="text-center">No hay reservas registradas.</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -123,7 +159,7 @@
                 {% if page_obj.has_previous %}
                 <li class="page-item">
                     <a class="page-link"
-                        href="?fecha={{ fecha }}&usuario={{ usuario }}&page={{ page_obj.previous_page_number }}">
+                        href="?fecha_inicio={{ fecha_inicio }}&fecha_fin={{ fecha_fin }}&usuario={{ usuario }}&estado={{ estado }}&referencia={{ referencia }}&page={{ page_obj.previous_page_number }}">
                         Anterior
                     </a>
                 </li>
@@ -132,7 +168,7 @@
                 <!-- Números de página -->
                 {% for num in paginator.page_range %}
                 <li class="page-item {% if page_obj.number == num %}active{% endif %}">
-                    <a class="page-link" href="?fecha={{ fecha }}&usuario={{ usuario }}&page={{ num }}">{{ num }}</a>
+                    <a class="page-link" href="?fecha_inicio={{ fecha_inicio }}&fecha_fin={{ fecha_fin }}&usuario={{ usuario }}&estado={{ estado }}&referencia={{ referencia }}&page={{ num }}">{{ num }}</a>
                 </li>
                 {% endfor %}
 
@@ -140,7 +176,7 @@
                 {% if page_obj.has_next %}
                 <li class="page-item">
                     <a class="page-link"
-                        href="?fecha={{ fecha }}&usuario={{ usuario }}&page={{ page_obj.next_page_number }}">
+                        href="?fecha_inicio={{ fecha_inicio }}&fecha_fin={{ fecha_fin }}&usuario={{ usuario }}&estado={{ estado }}&referencia={{ referencia }}&page={{ page_obj.next_page_number }}">
                         Siguiente
                     </a>
                 </li>

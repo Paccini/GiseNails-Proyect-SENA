@@ -1,169 +1,181 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-
-
-/* === RESETEO GENERAL === */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+/* RESET */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
 }
 
-
-/* === NAVBAR PRINCIPAL === */
-.gn-navbar {
-    position: sticky;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(10px);
-    border-bottom: 2px solid var(--pink-accent);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-    padding: 15px 80px !important;
-    box-sizing: border-box;
-    gap: 20px;
-    min-height: 70px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 1000;
-    transition: background 0.4s ease-in-out;
-    overflow: hidden;
+:root{
+    --pink-accent:#ff6ebc;
+    --text-light:#ffffff;
 }
 
-/* Efecto de brillo al pasar el mouse */
+/* NAVBAR */
+.gn-navbar{
+    position:sticky;
+    top:0;
+    width:100%;
+    background:rgba(0,0,0,0.4);
+    backdrop-filter:blur(10px);
+    border-bottom:2px solid var(--pink-accent);
+    padding:15px 80px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    z-index:1000;
+    transition:background .4s ease;
+    position: relative; /* necesario para el brillo */
+}
+
+/* === EFECTO DE BRILLO ARREGLADO === */
 .gn-navbar::before {
     content: '';
     position: absolute;
     top: 0;
-    left: -100%;
-    width: 100%;
+    left: 0;
+    width: 100%; /* destello ocupa todo el ancho */
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 105, 180, 0.5), transparent);
-    transition: 0.7s ease-in-out;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,105,180,0.5) 50%, transparent 100%);
     pointer-events: none;
+    transform: translateX(-100%);  /* inicia fuera por la izquierda */
+    transition: transform 0.8s ease-in-out;
 }
 
 .gn-navbar:hover::before {
-    left: 100%;
+    transform: translateX(100%);   /* recorre TODO el navbar */
 }
 
-/* === LOGO / MARCA === */
-.brand .title h1 {
-    color: var(--text-light);
-    font-size: 28px;
-    letter-spacing: 1px;
-    font-weight: 700;
-    margin: 0;
-    cursor: pointer;
-    animation: logoBounceIn 1s ease-out forwards;
-    animation-delay: 0.2s;
-    opacity: 0;
+/* BRAND */
+.brand .title{
+    display:flex;
+    align-items:center;
+    gap:15px;
 }
 
+.navbar-logo{
+    height:40px;
+    filter:invert(1);
+}
 
-@keyframes logoBounceIn {
-    0% {
-        transform: translateY(-50px) scale(0.5);
-        opacity: 0;
+/* ENLACES */
+.nav-links{
+    display:flex;
+    gap:35px;
+}
+
+.nav-links a{
+    color:#fff;
+    text-decoration:none;
+    font-size:18px;
+    font-weight:500;
+    position:relative;
+    transition:.3s;
+}
+
+.nav-links a:hover{
+    color:var(--pink-accent);
+}
+
+/* MOBILE TOGGLE */
+.mobile-toggle{
+    display:none;
+    background:none;
+    border:none;
+    color:#fff;
+    font-size:28px;
+    cursor:pointer;
+}
+
+/* MOBILE MENU */
+.mobile-menu{
+    position:absolute;
+    right:20px;
+    top:70px;
+    width:200px;
+    background:#111;
+    display:flex;
+    flex-direction:column;
+    padding:15px;
+    gap:15px;
+    border-radius:10px;
+    opacity:0;
+    visibility:hidden;
+    transition:.3s ease;
+}
+
+.mobile-menu a{
+    color:#fff;
+    text-decoration:none;
+    font-size:18px;
+}
+
+/* CONTROL VISIBILIDAD */
+.mobile-menu.hidden{
+    opacity:0;
+    visibility:hidden;
+}
+
+.mobile-menu:not(.hidden){
+    opacity:1;
+    visibility:visible;
+}
+
+/* RESPONSIVE */
+@media(max-width:992px){
+    .nav-links{
+        display:none;
     }
-
-    60% {
-        transform: translateY(10px) scale(1.05);
-        opacity: 1;
-    }
-
-    80% {
-        transform: translateY(-5px) scale(0.98);
-    }
-
-    100% {
-        transform: translateY(0) scale(1);
-        opacity: 1;
+    .mobile-toggle{
+        display:block;
     }
 }
 
-.brand .title {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.brand .title .navbar-logo {
-    height: 40px;
-    /* Ajusta según necesites */
-    width: auto;
+/* === LOGO ANIMADO & COLOR === */
+.navbar-logo {
     filter: brightness(0) saturate(100%) invert(1);
-    /* Hace el logo blanco */
     transition: transform 0.3s ease;
 }
 
 .brand .title:hover .navbar-logo {
-    transform: scale(1.05);
+    transform: scale(1.08);
 }
 
-.brand .title h1:hover {
-    color: var(--pink-accent);
-    text-shadow: 0 0 8px rgba(255, 105, 180, 0.8);
+/* Animación al cargar */
+@keyframes logoBounceIn {
+    0% { transform: translateY(-50px) scale(0.5); opacity: 0; }
+    60% { transform: translateY(10px) scale(1.05); opacity: 1; }
+    80% { transform: translateY(-5px) scale(0.98); }
+    100% { transform: translateY(0) scale(1); opacity: 1; }
 }
 
-/* === ENLACES DE NAVEGACIÓN === */
-.nav-links {
-    display: flex;
-    align-items: center;
-    gap: 35px;
+.brand .title h1,
+.brand .title img,
+.brand .title .navbar-logo {
+    animation: logoBounceIn 1s ease-out forwards;
+    animation-delay: .2s;
+    opacity: 0;
 }
 
+/* === ANIMACIÓN EN LOS LINKS === */
 .nav-links a {
-    color: var(--text-light);
-    font-size: 18px;
-    font-weight: 500;
-    position: relative;
-
-    text-decoration: none;
-    padding: 5px 0;
     opacity: 0;
     animation: navLinkFadeIn 0.6s ease-out forwards;
 }
 
-.nav-links a:nth-child(1) {
-    animation-delay: 0.5s;
-}
-
-.nav-links a:nth-child(2) {
-    animation-delay: 0.6s;
-}
-
-.nav-links a:nth-child(3) {
-    animation-delay: 0.7s;
-}
-
-.nav-links a:nth-child(4) {
-    animation-delay: 0.8s;
-}
-
-.nav-links a:nth-child(5) {
-    animation-delay: 0.9s;
-}
-
-.nav-links a:nth-child(6) {
-    animation-delay: 1s;
-}
+.nav-links a:nth-child(1) { animation-delay: 0.4s; }
+.nav-links a:nth-child(2) { animation-delay: 0.5s; }
+.nav-links a:nth-child(3) { animation-delay: 0.6s; }
+.nav-links a:nth-child(4) { animation-delay: 0.7s; }
+.nav-links a:nth-child(5) { animation-delay: 0.8s; }
+.nav-links a:nth-child(6) { animation-delay: 0.9s; }
 
 @keyframes navLinkFadeIn {
-    0% {
-        transform: translateY(20px);
-        opacity: 0;
-    }
-
-    100% {
-        transform: translateY(0);
-        opacity: 1;
-    }
+    0% { transform: translateY(20px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
 }
 
-/* Subrayado animado y efecto brillante */
+/* === SUBRAYADO ANIMADO + PULSO DE LUZ === */
 .nav-links a::before {
     content: '';
     position: absolute;
@@ -182,9 +194,9 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at center, rgba(255, 105, 180, 0.4) 0%, transparent 70%);
+    width: 120%;
+    height: 120%;
+    background: radial-gradient(circle, rgba(255, 105, 180, 0.4) 0%, transparent 70%);
     border-radius: 50%;
     transform: translate(-50%, -50%) scale(0);
     opacity: 0;
@@ -192,233 +204,11 @@
     pointer-events: none;
 }
 
-.nav-links a:hover {
-    color: var(--pink-accent);
-    text-shadow: 0 0 8px rgba(255, 105, 180, 0.7);
-    transform: translateY(-2px);
-    transition: all 0.3s ease-in-out;
-}
-
 .nav-links a:hover::before {
     transform: scaleX(1);
 }
 
 .nav-links a:hover::after {
-    transform: translate(-50%, -50%) scale(1.5);
+    transform: translate(-50%, -50%) scale(1.4);
     opacity: 1;
-}
-
-/* === BOTÓN DE MENÚ MÓVIL === */
-.actions .mobile-toggle {
-    background: none;
-    border: none;
-    color: var(--text-light);
-    font-size: 28px;
-    cursor: pointer;
-    display: none;
-    transition: color 0.3s ease;
-}
-
-.actions .mobile-toggle:hover {
-    color: var(--pink-accent);
-}
-
-/* === MENÚ MÓVIL (consolidado) ===
-   Mantiene la caja compacta a la derecha (como la original),
-   texto blanco y alto z-index. Evita duplicados/efectos que blanqueaban el texto.
-*/
-.mobile-menu {
-    display: none;
-    /* oculto por defecto hasta remover la clase .hidden en JS */
-    flex-direction: column;
-    background: rgba(26, 26, 26, 0.95);
-    /* fondo oscuro para legibilidad */
-    /* elimina gradientes/transparencias que pueden hacer el texto difícil de leer */
-    /* evita backdrop-filter que difumina el fondo y reduce contraste */
-    position: absolute;
-    top: 100%;
-    /* se abre justo debajo del navbar (comportamiento original) */
-    right: 0;
-    width: 220px;
-    /* caja compacta a la derecha como antes */
-    border-left: 2px solid var(--pink-accent);
-    border-bottom: 2px solid var(--pink-accent);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
-    padding: 12px;
-    border-radius: 10px;
-    z-index: 1200;
-    /* más alto para que esté por encima de otros elementos */
-    transition: transform 0.18s ease, opacity 0.18s ease;
-    transform-origin: top right;
-}
-
-/* Ocultar usando la clase hidden (la lógica JS ya la usa) */
-.mobile-menu.hidden {
-    display: none;
-    opacity: 0;
-    transform: scale(.98);
-}
-
-/* Enlaces del menú: blancos y con suficiente tamaño */
-.mobile-menu a {
-    color: #fff !important;
-    font-weight: 600;
-    padding: 10px 8px;
-    border-radius: 8px;
-    text-decoration: none;
-    display: block;
-    transition: background .12s ease;
-}
-
-/* Estado hover/activo para contraste */
-.mobile-menu a:hover,
-.mobile-menu a:focus {
-    background: rgba(255, 255, 255, 0.06);
-    outline: none;
-}
-
-/* Asegura que el icono del botón hamburguesa sea visible */
-.icon-btn.mobile-toggle {
-    color: #fff;
-    background: transparent;
-    border: none;
-}
-
-/* === OVERRIDES: asegurar que SOLO exista el menú móvil oscuro y legible === */
-header.gn-navbar nav>.mobile-menu {
-    background-color: rgba(18, 6, 18, 0.98) !important;
-    background-image: none !important;
-    color: #fff !important;
-    -webkit-text-fill-color: #fff !important;
-    backdrop-filter: none !important;
-    mix-blend-mode: normal !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6) !important;
-    border: 1px solid rgba(255, 105, 180, 0.12) !important;
-    width: 220px;
-    padding: 12px !important;
-    border-radius: 10px !important;
-    z-index: 1200 !important;
-}
-
-/* Forzar color y opacidad en todos los descendientes (íconos, spans, svg) */
-header.gn-navbar nav>.mobile-menu,
-header.gn-navbar nav>.mobile-menu a,
-header.gn-navbar nav>.mobile-menu a * {
-    color: #fff !important;
-    opacity: 1 !important;
-}
-
-/* Evitar que Bootstrap/otras clases muestren un offcanvas/collapse extra al abrir */
-header.gn-navbar .offcanvas,
-header.gn-navbar .navbar-collapse,
-header.gn-navbar .collapse {
-    display: none !important;
-}
-
-/* Si el menú sigue mostrándose doble, obliga a que solo se muestre el #mobileMenu */
-#mobileMenu {
-    display: flex !important;
-}
-
-#mobileMenu.hidden {
-    display: none !important;
-}
-
-/* ===== Forzar que SOLO se muestre nuestro menú móvil #mobileMenu ===== */
-.mobile-menu:not(#mobileMenu),
-[role="menu"]:not(#mobileMenu),
-.offcanvas,
-.offcanvas-backdrop {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-}
-
-/* Asegurar que nuestro menú sea visible y por encima de todo */
-#mobileMenu {
-    display: flex !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    pointer-events: auto !important;
-    z-index: 3000 !important;
-    background-color: rgba(18, 6, 18, 0.98) !important;
-    color: #fff !important;
-}
-
-/* Protege el menú real contra transform/blur que lo hicieran ilegible */
-#mobileMenu,
-#mobileMenu * {
-    -webkit-text-fill-color: #fff !important;
-    color: #fff !important;
-    mix-blend-mode: normal !important;
-    backdrop-filter: none !important;
-}
-
-/* Ajustes específicos para pantallas muy pequeñas */
-@media (max-width: 420px) {
-    .mobile-menu {
-        top: 56px;
-        right: 8px;
-        width: calc(100% - 16px);
-        /* ocupa ancho casi completo en móviles muy pequeños */
-        left: 8px;
-        padding: 10px;
-    }
-
-    .mobile-menu a {
-        padding: 12px 10px;
-        font-size: 0.98rem;
-    }
-}
-
-@media (max-width: 992px) {
-    .nav-links {
-        display: none;
-    }
-
-    .actions .mobile-toggle {
-        display: block;
-    }
-}
-
-/* ===== Corregir doble menú: ocultar #navLinks en móvil y proteger contra offcanvas blancos ===== */
-@media (max-width: 992px) {
-
-    /* Forzamos que el contenedor de enlaces desktop no muestre nada en móvil */
-    #navLinks,
-    .nav-links,
-    .navbar-collapse,
-    .collapse {
-        display: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-        pointer-events: none !important;
-        background: transparent !important;
-        box-shadow: none !important;
-        border: none !important;
-    }
-
-    /* Asegurar que nuestro menú móvil personalizado esté por encima */
-    #mobileMenu {
-        display: flex !important;
-        z-index: 4000 !important;
-        position: fixed !important;
-        /* evita que contenido subyacente muestre bordes */
-        top: 72px;
-        /* ajusta si tu header cambia de altura */
-        right: 12px;
-        left: auto;
-        width: 220px;
-    }
-
-    /* Si alguna librería añade un offcanvas / backdrop, lo escondemos */
-    .offcanvas,
-    .offcanvas-backdrop,
-    [data-bs-offcanvas] {
-        display: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-        pointer-events: none !important;
-    }
 }

@@ -23,6 +23,14 @@ from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from reserva.views import completar_reserva  # <--- Agrega esta línea
 from . import views
+from django.middleware.cache import CacheMiddleware
+from django.utils.deprecation import MiddlewareMixin
+
+class ClearPendingReservaMiddleware(MiddlewareMixin):
+    def process_request(self, request):
+        if 'pending_reserva' in request.session:
+            del request.session['pending_reserva']
+        return None
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -37,5 +45,10 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(next_page='/login/'), name='logout'),
     path('empleados/', include(('empleados.urls', 'empleados'), namespace='empleados')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+MIDDLEWARE = [
+    # ...existing middleware...
+    'gisenails.middleware.ClearPendingReservaMiddleware',
+]
 
 

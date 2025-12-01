@@ -1,18 +1,18 @@
 from django import forms
 
 class LoginForm(forms.Form):
-    username = forms.CharField(
-        label='',
-        widget=forms.TextInput(attrs={
+    email = forms.EmailField(
+        label='Correo',
+        widget=forms.EmailInput(attrs={
             'placeholder': 'Correo',
             'autocomplete': 'email',
             'type': 'email',
-            'class': 'login-input',  # <--- agrega esta clase
+            'class': 'login-input',
             'style': 'background:transparent;color:#232c36;'
         })
     )
     password = forms.CharField(
-        label='',
+        label='Contraseña',
         widget=forms.PasswordInput(attrs={
             'placeholder': 'Contraseña',
             'autocomplete': 'current-password',
@@ -44,5 +44,26 @@ class UpdateUserForm(forms.Form):
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
             'placeholder': 'Nueva contraseña'
+        })
+    )
+
+class PasswordResetForm(forms.Form):
+    email = forms.EmailField(
+        label='Correo',
+        widget=forms.EmailInput(attrs={
+            'placeholder': 'Correo',
+            'autocomplete': 'email',
+            'class': 'login-input',
+            'style': 'background:transparent;color:#232c36;'
+        })
+    )
+
+class SetNewPasswordForm(forms.Form):
+    password = forms.CharField(
+        label='Nueva contraseña',
+        widget=forms.PasswordInput(attrs={
+            'placeholder': 'Nueva contraseña',
+            'class': 'login-input',
+            'style': 'background:transparent;color:#232c36;'
         })
     )

@@ -79,13 +79,29 @@
             <input type="date" name="fin" class="form-control" value="{{ fin }}">
         </div>
 
+        <div class="col-md-4">
+            <label class="form-label">Estado</label>
+            <select name="estado" class="form-select">
+                <option value="realizada" {% if estado == "realizada" %}selected{% endif %}>Realizada</option>
+                <option value="confirmada" {% if estado == "confirmada" %}selected{% endif %}>Confirmada</option>
+                <option value="pendiente" {% if estado == "pendiente" %}selected{% endif %}>Pendiente</option>
+                <option value="">Todos</option>
+            </select>
+        </div>
+
         <div class="col-md-4 d-flex align-items-end">
-            <button class="btn btn-primary w-100">
-                Filtrar
+            <button class="btn btn-primary w-100"> 
+                <i class="bi bi-funnel-fill"></i>
             </button>
         </div>
     </form>
 </div>
+
+{% if inicio and fin %}
+    <p class="text-muted mb-2">
+        Mostrando ventas del <b>{{ inicio }}</b> al <b>{{ fin }}</b> (Estado: <b>{{ estado|title }}</b>)
+    </p>
+{% endif %}
 
 <!-- Gráfico -->
 <div class="card shadow-sm border-0 mb-4">

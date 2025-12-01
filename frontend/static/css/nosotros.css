@@ -521,6 +521,13 @@ body, main, .container-fluid {
   display: none !important;
 }
 
+/* Letra blanca para la sección de Encuéntranos */
+.map-section,
+.map-section h2,
+.map-section p {
+  color: #fff !important;
+}
+
 
 /* Fin de adición */
 

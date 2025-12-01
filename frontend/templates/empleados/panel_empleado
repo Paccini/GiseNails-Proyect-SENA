@@ -1,4 +1,4 @@
-{% extends 'base_empleado' %}
+{% extends 'base_empleado.html' %}
 {% load static %}
 
 {% block content %}
@@ -41,10 +41,15 @@
           <option value="realizada" {% if filter_estado == 'realizada' %}selected{% endif %}>Realizada</option>
         </select>
 
-        <input type="date" name="fecha" class="form-control form-control-sm" value="{{ filter_fecha }}">
+        <div class="d-flex align-items-center gap-1">
+          Fecha inicial:
+          <input type="date" name="fecha_inicio" class="form-control form-control-sm" value="{{ filter_fecha_inicio }}" style="max-width:150px;" title="Fecha inicio">
+          Fecha final:
+          <input type="date" name="fecha_fin" class="form-control form-control-sm" value="{{ filter_fecha_fin }}" style="max-width:150px;" title="Fecha fin">
+        </div>
 
-        <button type="submit" class="btn btn-sm btn-primary">Filtrar</button>
-        <a href="{% url 'empleados:panel_empleado' %}" class="btn btn-sm btn-outline-secondary">Limpiar</a>
+        <button type="submit" class="btn btn-sm btn-primary">  <i class="bi bi-funnel-fill"></i> </button>
+        <a href="{% url 'empleados:panel_empleado' %}" class="btn btn-sm btn-outline-secondary"> <i class="bi bi-brush-fill"></i> </a>
       </form>
 
       <!-- Botón agendar integrado (derecha) -->
@@ -65,7 +70,6 @@
               <th>Hora</th>
               <th>Servicio</th>
               <th>Estado</th>
-              <th class="text-end">Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -88,21 +92,7 @@
                   <span class="badge bg-light text-dark">{{ cita.get_estado_display }}</span>
                 {% endif %}
               </td>
-              <td class="text-end" data-label="Acciones">
-                <button 
-                  type="button"
-                  class="btn btn-sm btn-outline-primary"
-                  data-bs-toggle="modal"
-                  data-bs-target="#editarReservaModal"
-                  data-id="{{ cita.pk }}"
-                  data-fecha="{{ cita.fecha }}"
-                  data-hora="{{ cita.hora.id }}"
-                  data-servicio="{{ cita.servicio.id }}"
-                  data-estado="{{ cita.estado }}"
-                >
-                  <i class="bi bi-pencil-square me-1"></i>Editar
-                </button>
-              </td>
+              
             </tr>
             {% endfor %}
           </tbody>
@@ -113,17 +103,17 @@
       <nav aria-label="Paginación de citas" class="mt-3">
         <ul class="pagination justify-content-center mb-0">
           {% if citas.has_previous %}
-            <li class="page-item"><a class="page-link" href="?page={{ citas.previous_page_number }}&estado={{ filter_estado }}&fecha={{ filter_fecha }}">Anterior</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ citas.previous_page_number }}&estado={{ filter_estado }}&fecha_inicio={{ filter_fecha_inicio }}&fecha_fin={{ filter_fecha_fin }}">Anterior</a></li>
           {% else %}
             <li class="page-item disabled"><span class="page-link">Anterior</span></li>
           {% endif %}
 
           {% for num in citas.paginator.page_range %}
-            <li class="page-item {% if citas.number == num %}active{% endif %}"><a class="page-link" href="?page={{ num }}&estado={{ filter_estado }}&fecha={{ filter_fecha }}">{{ num }}</a></li>
+            <li class="page-item {% if citas.number == num %}active{% endif %}"><a class="page-link" href="?page={{ num }}&estado={{ filter_estado }}&fecha_inicio={{ filter_fecha_inicio }}&fecha_fin={{ filter_fecha_fin }}">{{ num }}</a></li>
           {% endfor %}
 
           {% if citas.has_next %}
-            <li class="page-item"><a class="page-link" href="?page={{ citas.next_page_number }}&estado={{ filter_estado }}&fecha={{ filter_fecha }}">Siguiente</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ citas.next_page_number }}&estado={{ filter_estado }}&fecha_inicio={{ filter_fecha_inicio }}&fecha_fin={{ filter_fecha_fin }}">Siguiente</a></li>
           {% else %}
             <li class="page-item disabled"><span class="page-link">Siguiente</span></li>
           {% endif %}

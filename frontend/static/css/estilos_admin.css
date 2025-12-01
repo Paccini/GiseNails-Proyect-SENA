@@ -100,7 +100,6 @@ main.container>table {
 .table tbody tr td {
     border: none;
 }
-
 /* Mejor separación y legibilidad para tablas en el panel admin */
 .table {
     border-collapse: separate !important;
@@ -165,7 +164,7 @@ body.dark-mode .table-hover tbody tr:hover {
 
 /* Encabezado de tabla: fondo claro, texto oscuro, borde inferior */
 .table thead th {
-    background: #f1f5f9 !important;
+    background: #e8cee7 !important;
     color: #232c36 !important;
     border-bottom: 2px solid #e5e7eb !important;
 }
@@ -200,23 +199,25 @@ body.dark-mode .table thead th {
 
 /* Botones de colores personalizados */
 .btn-primary {
-    background: #3b82f6;
-    border: none;
+    background: #ecf1ee;
+    border-color: #181a1b !important;
+    
 }
 
 .btn-danger {
-    background: #ef4444;
-    border: none;
+    background: #fdfbfb;
+    border-color: #c51927 !important;
+    
 }
 
 .btn-success {
-    background: #22c55e;
+    background: #db478c;
     border: none;
 }
 
 .btn-warning {
     background: #fde68a;
-    color: #232c36;
+    color: #e7eef1;
     border: none;
 }
 
@@ -250,6 +251,9 @@ body.dark-mode .table thead th {
     background: #22d3ee;
     color: #fff;
 }
+.i{
+ border-color: #181a1b !important;
+}
 
 .badge-activo {
     background: #22c55e;
@@ -269,7 +273,7 @@ main.container>.card {
 
 /* Ajuste de botón grande */
 .btn {
-    border-radius: 8px;
+    border-radius: 10px;
     font-weight: 500;
 }
 
@@ -822,8 +826,9 @@ footer {
 
 .icon,
 .bi {
-    color: #232c36 !important;
+    color: #e90670 ;
 }
+
 
 /* --- MODO OSCURO --- */
 body.dark-mode {
@@ -1092,4 +1097,143 @@ body.dark-mode .card-header i {
 
 body {
     font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* === FOOTER PANEL === */
+.footer-panel {
+  background: #fff;
+  color: #232c36;
+  border-top: none;
+  box-shadow: 0 -2px 18px rgba(255, 79, 159, 0.1);
+  font-size: 1.08rem;
+  padding: 32px 0 16px 0;
+}
+
+.footer-panel .container {
+  max-width: 1100px;
+  margin: auto;
+}
+
+.footer-panel .row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.footer-panel .col-12,
+.footer-panel .col-md-4 {
+  flex: 1 1 220px;
+  min-width: 220px;
+  margin-bottom: 12px;
+}
+
+.footer-panel img {
+  height: 70px;
+  filter: drop-shadow(0 0 8px #ffb6e6);
+  margin-bottom: 8px;
+}
+
+.footer-panel .fw-bold {
+  font-size: 1.15rem;
+}
+
+.footer-panel .fw-semibold {
+  font-size: 1.08rem;
+}
+
+.footer-panel a {
+  color: #ff4f9f;
+  text-decoration: none;
+  margin-right: 8px;
+  transition: color 0.2s;
+}
+
+.footer-panel a:hover {
+  color: #c2185b;
+}
+
+.footer-panel .mt-2 {
+  color: #232c36;
+}
+
+/* --- Mejoras visuales para el panel admin --- */
+
+/* Botones principales con degradado y sombra */
+.btn-success, .btn-primary {
+    background: linear-gradient(90deg, #db478c 0%, #ffb6e6 100%);
+    color: #fff !important;
+    border: none;
+    box-shadow: 0 2px 8px rgba(219,71,140,0.12);
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+.btn-success:hover, .btn-primary:hover {
+    background: linear-gradient(90deg, #ffb6e6 0%, #db478c 100%);
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 4px 16px rgba(219,71,140,0.18);
+}
+
+/* Botón de cancelar más suave */
+.btn-secondary {
+    background: #f3f4f6;
+    color: #db478c !important;
+    border: none;
+    box-shadow: 0 2px 8px rgba(44,62,80,0.07);
+}
+.btn-secondary:hover {
+    background: #e8cee7;
+    color: #232c36 !important;
+}
+
+/* Botones de acciones con colores suaves y pastel */
+.btn-sm.i {
+    background: linear-gradient(135deg, #7de2d1 0%, #b2f7ef 100%);
+    color: #fff !important;
+    border: none;
+    box-shadow: 0 2px 8px rgba(125,226,209,0.12);
+    transition: background 0.2s, transform 0.15s;
+}
+.btn-sm.i:hover {
+    background: linear-gradient(135deg, #b2f7ef 0%, #7de2d1 100%);
+    transform: scale(1.07);
+}
+
+.btn-sm.btn-primary {
+    background: linear-gradient(135deg, #db478c 0%, #ffb6e6 100%);
+    color: #fff !important;
+    border: none;
+    box-shadow: 0 2px 8px rgba(219,71,140,0.12);
+    transition: background 0.2s, transform 0.15s;
+}
+.btn-sm.btn-primary:hover {
+    background: linear-gradient(135deg, #ffb6e6 0%, #db478c 100%);
+    transform: scale(1.07);
+}
+
+.btn-sm.btn-danger {
+    background: linear-gradient(135deg, #fff 0%, #ffe4f3 100%);
+    color: #db478c !important;
+    border: 2px solid #db478c;
+    box-shadow: 0 2px 8px rgba(219,71,140,0.08);
+    transition: background 0.2s, transform 0.15s;
+}
+.btn-sm.btn-danger:hover {
+    background: linear-gradient(135deg, #ffe4f3 0%, #fff 100%);
+    color: #fff !important;
+    border: 2px solid #db478c;
+    transform: scale(1.07);
+}
+
+/* Iconos dentro de los botones */
+.btn-sm.i i,
+.btn-sm.btn-primary i,
+.btn-sm.btn-danger i {
+    font-size: 1.3em;
+    color: #db478c !important;
+    transition: color 0.2s;
+}
+.btn-sm.i:hover i,
+.btn-sm.btn-primary:hover i,
+.btn-sm.btn-danger:hover i {
+    color: #b01313 !important;
 }

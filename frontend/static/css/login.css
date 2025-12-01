@@ -1,3 +1,5 @@
+
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 
 * {
@@ -19,6 +21,10 @@ main {
 body {
   background: url('/static/img/background.jpeg') no-repeat center / cover;
   background-attachment: fixed;
+  /* Ajustar el tamaño de la imagen de fondo */
+  background-size: cover; /* La imagen ocupará todo el espacio disponible */
+  background-position: center; /* Centrar la imagen */
+  background-repeat: no-repeat; /* Evitar que la imagen se repita */
 }
 
 /* Contenedor principal */
@@ -47,16 +53,18 @@ body {
 /* Formularios */
 .wrapper .form-box {
   width: 100%;
-  padding: 40px;
+  padding: 2.5rem 2rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px 0 rgba(31, 0, 31, 0.15);
   transition: transform 0.3s ease;
 }
 
 .wrapper .form-box.login {
-  transform: translateX(0);
+  display: block;
 }
 
 .wrapper.active .form-box.login {
-  transform: translateX(-400px);
+  display: none;
   opacity: 0;
 }
 
@@ -64,11 +72,13 @@ body {
   position: absolute;
   transform: translateX(400px);
   opacity: 0;
+  display: none;
 }
 
 .wrapper.active .form-box.register {
   transform: translateX(0);
   opacity: 1;
+  display: block;
 }
 
 /* Título */
@@ -162,6 +172,9 @@ body {
   font-weight: 600;
   transition: 0.3s;
 }
+.form-box register{
+  margin-top: -30px;
+}
 
 .btn:hover {
   background: #ff85c1;
@@ -176,14 +189,25 @@ body {
   color: #fff;
 }
 
+.login-register a,
 .login-register p a {
-  color: #ffb6c1;
+  color: #fff !important;
   text-decoration: none;
   font-weight: 600;
+  transition: color 0.2s;
 }
 
+.login-register a:hover,
 .login-register p a:hover {
+  color: #ffb6c1 !important;
   text-decoration: underline;
+}
+
+/* Ajustar el contenedor del formulario */
+form {
+    max-height: 90vh; /* Limitar la altura máxima al 90% de la ventana */
+    overflow-y: auto; /* Agregar desplazamiento vertical si el contenido excede la altura */
+    margin: auto; /* Centrar el formulario */
 }
 
 /* Responsive */
