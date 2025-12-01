@@ -1,9 +1,7 @@
-<!-- filepath: c:\Users\juanv\Desktop\proyecto Gise-Nails\frontend\templates\clientes\panel.html -->
 {% extends 'base_cliente.html' %}
-<!-- Extiende la plantilla base para clientes -->
-
+{% load humanize %}
 {% load static %}
-<!-- Carga el uso de archivos estáticos -->
+<!-- Extiende la plantilla base para clientes -->
 
 {% block content %}
 <!-- Inicio del bloque principal de contenido -->
@@ -88,23 +86,58 @@
                   {% endif %}
                 {% endfor %}
               {% endif %}
+              {% if cita.facturas.last and cita.facturas.last.saldo_restante > 0 %}
+                <a href="{% url 'clientes:pagar_saldo' cita.pk %}" class="btn btn-success btn-sm py-0">
+                  <i class="bi bi-cash-coin"></i> Pagar saldo restante (${{ cita.facturas.last.saldo_restante|intcomma }})
+                </a>
+              {% endif %}
             </td>
             <td>
-              {% if cita.estado == 'pendiente' %}
-                <div class="d-flex flex-wrap gap-1">
-                  <button type="button"
-                          class="btn btn-warning btn-sm py-0 abonar-btn"
-                          data-abonar-url="{% url 'clientes:abonar_reserva' cita.pk %}">
-                    <i class="bi bi-cash-coin"></i> Abonar 30%
-                  </button>
-                  <a href="{% url 'clientes:cancelar' cita.pk %}" class="btn btn-danger btn-sm py-0">
-                    <i class="bi bi-x-circle"></i> Cancelar
-                  </a>
-                </div>
+              {% if cita.estado == 'pendiente' and not cita.pagos.exists %}
+                <button type="button"
+                        class="btn btn-primary btn-sm py-0 pagar-completo-btn"
+                        data-pagar-url="{% url 'clientes:pagar_completo' cita.pk %}">
+                  <i class="bi bi-cash-coin"></i> Pagar 100%
+                </button>
+                <button type="button"
+                        class="btn btn-warning btn-sm py-0 abonar-btn"
+                        data-abonar-url="{% url 'clientes:abonar_reserva' cita.pk %}">
+                  <i class="bi bi-cash-coin"></i> Abonar 30%
+                </button>
+                <a href="{% url 'clientes:cancelar' cita.pk %}" class="btn btn-danger btn-sm py-0">
+                  <i class="bi bi-x-circle"></i> Cancelar
+                </a>
               {% endif %}
+              {% if cita.estado == 'confirmada' and cita.facturas.last and cita.facturas.last.saldo_restante > 0 %}
+  <a href="{% url 'clientes:pagar_saldo' cita.pk %}" class="btn btn-success btn-sm py-0">
+    <i class="bi bi-cash-coin"></i> Pagar saldo restante (${{ cita.facturas.last.saldo_restante|intcomma }})
+  </a>
+{% endif %}
             </td>
           </tr>
           {% endfor %}
+          {% for cita in reservas %}
+  {% if cita.estado == 'confirmada' and cita.pagos.exists %}
+    {% for pago in cita.pagos.all %}
+      {% if pago.confirmado %}
+        <tr>
+          <td>{{ cita.fecha|date:"d/m/Y" }}</td>
+          <td>{{ cita.hora }}</td>
+          <td>{{ cita.servicio }}</td>
+          <td>{{ cita.gestora }}</td>
+          <td>
+            <span class="badge bg-success">Confirmada</span>
+            <span class="badge bg-info">{{ pago.get_metodo_display }}</span>
+            <span class="badge bg-secondary">Ref: {{ pago.referencia }}</span>
+          </td>
+          <td>
+            <!-- Acciones aquí -->
+          </td>
+        </tr>
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+{% endfor %}
         </tbody>
       </table>
     </div>

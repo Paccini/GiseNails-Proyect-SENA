@@ -6,7 +6,7 @@ from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import login_required, user_passes_test
 from productos.models import Producto
 from servicio.models import Servicio
-from reserva.models import Reserva
+from reserva.models import Reserva, Factura, PagoReserva
 from django.utils import timezone
 from django.db.models import Count, Sum, F, Case, When, DecimalField, Value
 from django.db.models.functions import TruncDay
@@ -234,83 +234,44 @@ def logout_view(request):
 @user_passes_test(lambda u: u.is_staff)
 @never_cache
 def dashboard(request):
-    # Datos generales
     clientes_count = Cliente.objects.count()
     servicios_count = Servicio.objects.count()
     productos_count = Producto.objects.count()
 
-    # Filtros
     inicio = request.GET.get('inicio')
     fin = request.GET.get('fin')
+    estado = request.GET.get('estado', 'realizada')
 
-    ventas_total = 0
+    qs = Reserva.objects.filter(estado="realizada", facturas__pagado=True)
+    if estado:
+        qs = Reserva.objects.filter(estado=estado)
+    if estado == "realizada":
+        qs = qs.filter(facturas__pagado=True)
+    if inicio and fin:
+        qs = qs.filter(fecha__range=[inicio, fin])
+        ventas_total = qs.aggregate(total=Sum('facturas__monto_total'))['total'] or 0
+    else:
+        ventas_total = 0  # Solo muestra ventas si hay filtro de fechas
+
+    abonos_total = PagoReserva.objects.filter(tipo_pago='abono', confirmado=True).aggregate(total=Sum('monto'))['total'] or 0
+    pendientes_count = Reserva.objects.filter(estado='pendiente').count()
+
     meses = []
     datos_citas = []
-
-    # filtrar solo realizadas
-    qs = Reserva.objects.filter(estado="realizada")
-
-    if inicio and fin:
-        # parsear fechas y validar
-        start_date = parse_date(inicio)
-        end_date = parse_date(fin)
-        if not start_date or not end_date or start_date > end_date:
-            # rangos inválidos -> no mostrar nada
-            start_date = None
-            end_date = None
-
-    else:
-        start_date = None
-        end_date = None
-
-    if start_date and end_date:
-        # filtrar por fecha (fecha es DateField -> usar rango directo sobre fecha)
-        qs_range = qs.filter(fecha__range=(start_date, end_date)).select_related('producto', 'servicio')
-
-        # Recorrer todas las reservas del rango y sumar en Python por fecha.
-        # Esto evita problemas de joins/lookup y garantiza que si hay 2+ realizadas
-        # en la misma fecha se sumen todas.
-        totals_by_date = {}
-        for r in qs_range:
-            # obtener la fecha (si fecha es datetime -> date())
-            d = r.fecha.date() if isinstance(r.fecha, datetime.datetime) else r.fecha
-            # obtener precio desde producto o servicio (protegiendo nulos)
-            precio = 0
-            try:
-                if getattr(r, 'producto', None):
-                    precio = float(getattr(r.producto, 'precio', 0) or 0)
-                elif getattr(r, 'servicio', None):
-                    precio = float(getattr(r.servicio, 'precio', 0) or 0)
-            except Exception:
-                precio = 0
-            totals_by_date[d] = totals_by_date.get(d, 0) + precio
-
-        # construir lista completa de días entre start_date and end_date (incl.)
-        days = []
-        cur = start_date
-        while cur <= end_date:
-            days.append(cur)
-            cur = cur + datetime.timedelta(days=1)
-
-        meses = [d.strftime("%d/%m/%Y") for d in days]
-        datos_citas = [totals_by_date.get(d, 0) for d in days]
-        ventas_total = sum(datos_citas)
-
-    # si no hay filtro válido: meses=[], datos_citas=[], ventas_total=0
 
     context = {
         'clientes_count': clientes_count,
         'servicios_count': servicios_count,
         'productos_count': productos_count,
-
         'ventas_total': ventas_total,
+        'abonos_total': abonos_total,
+        'pendientes_count': pendientes_count,
         'inicio': inicio,
         'fin': fin,
-
+        'estado': estado,
         'meses': meses,
-        'datos_citas': datos_citas
+        'datos_citas': datos_citas,
     }
-
     return render(request, 'dashboard.html', context)
 
 @login_required

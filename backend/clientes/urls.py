@@ -20,4 +20,9 @@ urlpatterns = [
     path('<int:pk>/toggle-activo/', views.toggle_cliente_activo, name='cliente_toggle_activo'),
 
     path('abonar/<int:pk>/', reserva_views.abonar_reserva, name='abonar_reserva'),
+    path('pago-efectivo/<int:pk>/', reserva_views.pago_efectivo, name='pago_efectivo'),
+
+    path('pagar-completo/<int:pk>/', reserva_views.pagar_completo, name='pagar_completo'),
+
+    path('pagar-saldo/<int:pk>/', reserva_views.pagar_saldo, name='pagar_saldo'),
 ]

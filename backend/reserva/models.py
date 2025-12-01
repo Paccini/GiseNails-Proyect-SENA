@@ -56,17 +56,26 @@ class PagoReserva(models.Model):
     reserva = models.ForeignKey('Reserva', on_delete=models.CASCADE, related_name='pagos')
     cliente = models.ForeignKey('clientes.Cliente', on_delete=models.CASCADE)
     monto = models.DecimalField(max_digits=10, decimal_places=2)
-    metodo = models.CharField(max_length=20, choices=[('nequi', 'Nequi'), ('daviplata', 'Daviplata')])
+    metodo = models.CharField(max_length=20, choices=[('nequi', 'Nequi'), ('daviplata', 'Daviplata'), ('efectivo', 'Efectivo')])
     comprobante = models.ImageField(upload_to='comprobantes/', null=True, blank=True)
     fecha_pago = models.DateTimeField(auto_now_add=True)
     confirmado = models.BooleanField(default=False)
-    referencia = models.CharField(max_length=30, blank=True, null=True)  # <-- Nuevo campo
+    referencia = models.CharField(max_length=30, blank=True, null=True)
+    tipo_pago = models.CharField(max_length=15, choices=[('abono', 'Abono'), ('completo', 'Pago Completo'), ('saldo', 'Saldo Restante')], default='abono')
 
     def __str__(self):
-        return f"{self.reserva} - {self.metodo} - {self.monto}"
+        return f"{self.reserva} - {self.metodo} - {self.monto} - {self.tipo_pago}"
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        if self.confirmado and self.reserva.estado == 'pendiente':
-            self.reserva.estado = 'confirmada'
-            self.reserva.save()
+class Factura(models.Model):
+    reserva = models.ForeignKey(Reserva, on_delete=models.CASCADE, related_name='facturas')
+    cliente = models.ForeignKey('clientes.Cliente', on_delete=models.CASCADE)
+    fecha = models.DateTimeField(auto_now_add=True)
+    monto_total = models.DecimalField(max_digits=10, decimal_places=2)
+    pagado = models.BooleanField(default=False)
+    metodo = models.CharField(max_length=20, choices=[('nequi', 'Nequi'), ('daviplata', 'Daviplata'), ('efectivo', 'Efectivo')])
+    referencia = models.CharField(max_length=30, blank=True, null=True)
+    abono = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    saldo_restante = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    def __str__(self):
+        return f"Factura #{self.pk} - {self.cliente.nombre} - {self.monto_total}"
