@@ -101,20 +101,20 @@
               {% if cita.estado == 'pendiente' and not cita.pagos.exists %}
                 <button type="button"
                         class="btn btn-primary btn-sm py-0 pagar-completo-btn"
-                        data-pagar-url="{% url 'clientes:pagar_completo' cita.pk %}">
+                        data-pagar-url="{% url 'clientes:pagar_completo' cita.pk|encrypt_id %}">
                   <i class="bi bi-cash-coin"></i> Pagar 100%
                 </button>
                 <button type="button"
                         class="btn btn-warning btn-sm py-0 abonar-btn"
-                        data-abonar-url="{% url 'clientes:abonar_reserva' cita.pk %}">
+                        data-abonar-url="{% url 'clientes:abonar_reserva' cita.pk|encrypt_id %}">
                   <i class="bi bi-cash-coin"></i> Abonar 30%
                 </button>
-                <a href="{% url 'clientes:cancelar' cita.pk %}" class="btn btn-danger btn-sm py-0">
+                <a href="{% url 'clientes:cancelar' cita.pk|encrypt_id %}" class="btn btn-danger btn-sm py-0">
                   <i class="bi bi-x-circle"></i> Cancelar
                 </a>
               {% endif %}
               {% if cita.estado == 'confirmada' and cita.facturas.last and cita.facturas.last.saldo_restante > 0 %}
-  <a href="{% url 'clientes:pagar_saldo' cita.pk %}" class="btn btn-success btn-sm py-0">
+  <a href="{% url 'clientes:pagar_saldo' cita.pk|encrypt_id %}" class="btn btn-success btn-sm py-0">
     <i class="bi bi-cash-coin"></i> Pagar saldo restante (${{ cita.facturas.last.saldo_restante|intcomma }})
   </a>
 {% endif %}

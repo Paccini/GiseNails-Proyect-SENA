@@ -22,6 +22,12 @@ from datetime import datetime
 from cryptography.fernet import Fernet
 from django.conf import settings
 from cryptography.fernet import Fernet
+from reserva.views import completar_reserva
+from reserva.views import decrypt_id
+
+
+
+
 fernet = Fernet(settings.ENCRYPT_KEY)
 def encrypt_id(pk: int) -> str:
     """Convierte un ID normal en uno cifrado"""
@@ -324,9 +330,9 @@ def agendar_reserva(request):
 
 @login_required
 @never_cache
-def cancelar_reserva(request, pk):
+def cancelar_reserva(request, token):
     try:
-        real_pk = decrypt_id(pk)
+        real_pk = decrypt_id(token)
     except:
         return redirect('clientes:panel')
 

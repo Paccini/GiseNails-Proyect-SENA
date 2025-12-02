@@ -25,6 +25,7 @@ from decimal import Decimal
 from django import forms
 from django.utils.formats import number_format, localize
 
+
 # --------------------------------------------------
 #  ENCRIPTACIÓN (tu metodología)
 # --------------------------------------------------
@@ -468,7 +469,8 @@ def crear_reserva(request):
         )
 
 @login_required
-def abonar_reserva(request, pk):
+def abonar_reserva(request, token):
+    pk=decrypt_id(token)
     reserva = get_object_or_404(Reserva, pk=pk, cliente__user=request.user)
     precio_servicio = reserva.servicio.precio if reserva.servicio else Decimal('0')
     monto_abono = precio_servicio * Decimal('0.3')
@@ -549,7 +551,8 @@ def facturacion(request):
     })
 
 @login_required
-def pagar_saldo(request, pk):
+def pagar_saldo(request, token):
+    pk = decrypt_id(token)
     reserva = get_object_or_404(Reserva, pk=pk, cliente__user=request.user)
     factura = reserva.facturas.last()
     monto_saldo = factura.saldo_restante
@@ -580,7 +583,8 @@ def pagar_saldo(request, pk):
     })
 
 @login_required
-def pago_efectivo(request, pk):
+def pago_efectivo(request, token):
+    pk = decrypt_id(token)
     reserva = get_object_or_404(Reserva, pk=pk, cliente__user=request.user)
     if request.method == 'POST':
         PagoReserva.objects.create(
@@ -595,7 +599,8 @@ def pago_efectivo(request, pk):
         return redirect('clientes:panel')
 
 @login_required
-def pagar_completo(request, pk):
+def pagar_completo(request, token):
+    pk = decrypt_id(token)
     reserva = get_object_or_404(Reserva, pk=pk, cliente__user=request.user)
     monto_total = reserva.servicio.precio if reserva.servicio else Decimal('0')
     monto_total = int(monto_total.to_integral_value(rounding='ROUND_HALF_UP'))
