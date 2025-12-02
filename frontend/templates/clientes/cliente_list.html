@@ -55,7 +55,7 @@
                 <td>{{ cliente.telefono }}</td>
                 <td>
                   <!-- Botón para ver detalles del cliente -->
-                  <a href="{% url 'clientes:cliente_detail' cliente.pk %}" class="btn btn-sm btn-info me-1" title="Ver"><i class="bi bi-eye"></i></a>
+                  <a href="{% url 'clientes:cliente_detail' cliente.pk %}" class="btn btn-sm btn-light me-1" title="Ver"><i class="bi bi-eye"></i></a>
                   <!-- Botón para editar cliente -->
                   <a href="{% url 'clientes:cliente_update' cliente.pk %}" class="btn btn-sm btn-primary me-1" title="Editar"><i class="bi bi-pencil-square"></i></a>
 

@@ -1,45 +1,46 @@
 <!-- clientes/templates/clientes/cliente_form.html -->
 {% extends 'base_admin.html' %}
 {% block content %}
-<!-- Contenedor principal de la tarjeta -->
-<div class="card shadow mb-4">
-    <!-- Encabezado con el título y botón de volver -->
+
+<div class="card shadow mb-4 form-card-admin">
     <div class="card-header bg-success text-dark d-flex justify-content-between align-items-center">
         <h2 class="mb-0">
-            <!-- Cambia el título según si se edita o se agrega un cliente -->
-            {% if object %}Editar Cliente{% else %}Agregar Cliente{% endif %}
+            {% if cliente %}Editar Cliente{% else %}Agregar Cliente{% endif %}
         </h2>
-        <a href="{% url 'clientes:cliente_list' %}" class="btn btn-light btn-sm">
+        <a href="{% url 'clientes:cliente_list' %}" class="btn btn-outline-secondary btn-back">
             <i class="bi bi-arrow-left"></i> Volver
         </a>
     </div>
-
-    <!-- Cuerpo principal del formulario -->
     <div class="card-body">
-        <form method="post">
+        <form method="post" enctype="multipart/form-data" class="form-admin">
             {% csrf_token %}
-            <!-- Tabla con los campos del formulario -->
-            <table class="table table-bordered">
+            <div class="row g-3">
                 {% for field in form %}
-                <tr>
-                    <th>{{ field.label_tag }}</th>
-                    <td>{{ field }}</td>
-                </tr>
+                <div class="col-md-6">
+                    <label for="{{ field.id_for_label }}" class="form-label fw-semibold">
+                        {{ field.label }}{% if field.field.required %} <span class="text-danger">*</span>{% endif %}
+                    </label>
+                    {{ field }}
+                    {% if field.help_text %}
+                        <div class="form-text">{{ field.help_text }}</div>
+                    {% endif %}
+                    {% if field.errors %}
+                        <div class="text-danger small">
+                            {{ field.errors|striptags }}
+                        </div>
+                    {% endif %}
+                </div>
                 {% endfor %}
-            </table>
-
-            <!-- Botones de acción -->
-            <div class="d-flex gap-2">
-                <!-- Botón para guardar -->
-                <button type="submit" class="btn btn-success">
-                    <i class="bi bi-save"></i> Guardar
+            </div>
+            <div class="d-flex gap-2 mt-4">
+                <button type="submit" class="btn btn-success px-4">
+                    <i class="bi bi-person-plus"></i>
+                    {% if cliente %}Guardar Cambios{% else %}Guardar Cliente{% endif %}
                 </button>
-                <!-- Botón para cancelar -->
-                <a href="{% url 'clientes:cliente_list' %}" class="btn btn-secondary">
-                    <i class="bi bi-x-circle"></i> Cancelar
-                </a>
+                
             </div>
         </form>
     </div>
 </div>
+
 {% endblock %}

@@ -1,97 +1,83 @@
 {% extends 'base_admin.html' %}
 {% block content %}
 <!-- ===========================================================
-    PÁGINA: AGREGAR CITA
-    Descripción:
-    Permite registrar una nueva cita en el sistema. 
-    Incluye un formulario con validación dinámica para cargar 
-    las horas disponibles dependiendo de la gestora y la fecha.
+    PÁGINA: AGREGAR/EDITAR CITA
 ============================================================== -->
 
-<!-- === TARJETA PRINCIPAL === -->
-<div class="card shadow mb-4">
-
-    <!-- === ENCABEZADO VERDE === -->
-    <div class="card-header bg-success text-dark d-flex justify-content-between align-items-center">
-        <h2 class="mb-0">
-            <i class="bi bi-calendar-plus me-2"></i>
-            Agregar Cita
+<div class="card shadow mb-4 form-card-admin" style="max-width:900px;margin:0 auto;">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center" style="border-radius:16px 16px 0 0;">
+        <h2 class="mb-0 fw-bold" style="font-size:2.2rem;">
+            {% if cita %}<i class="bi bi-calendar-edit me-2"></i> Editar Cita{% else %}<i class="bi bi-calendar-plus me-2"></i> Agregar Cita{% endif %}
         </h2>
-
-        <!-- Botón para regresar al listado -->
-        <a href="{% url 'reserva:home' %}" class="btn btn-light btn-sm">
-            <i class="bi bi-arrow-left"></i> Volver
+        <a href="{% url 'reserva:home' %}" class="btn btn-outline-secondary btn-back" style="font-size:1.1em;">
+            <i class="bi bi-arrow-left" style="color:#db478c;"></i> Volver
         </a>
     </div>
-
-    <!-- === CUERPO DE LA TARJETA === -->
     <div class="card-body">
-
-        <!-- === FORMULARIO DE REGISTRO DE CITA === -->
-        <form method="post">
+        <form method="post" enctype="multipart/form-data" class="form-admin">
             {% csrf_token %}
-
-            <!-- === TABLA CON LOS CAMPOS DEL FORMULARIO === -->
-            <table class="table table-bordered align-middle">
-                <tr>
-                    <th>{{ form.cliente.label_tag }}</th>
-                    <td>{{ form.cliente }}</td>
-                </tr>
-                <tr>
-                    <th>{{ form.servicio.label_tag }}</th>
-                    <td>{{ form.servicio }}</td>
-                </tr>
-                <tr>
-                    <th>{{ form.gestora.label_tag }}</th>
-                    <td>{{ form.gestora }}</td>
-                </tr>
-                <tr>
-                    <th>{{ form.fecha.label_tag }}</th>
-                    <td>{{ form.fecha }}</td>
-                </tr>
-                <tr>
-                    <th>{{ form.hora.label_tag }}</th>
-                    <td>{{ form.hora }}</td>
-                </tr>
-                <tr>
-                    <th>{{ form.estado.label_tag }}</th>
-                    <td>{{ form.estado }}</td>
-                </tr>
-            </table>
-
-            <!-- === BOTONES DE ACCIÓN === -->
-            <div class="d-flex gap-2">
-                <!-- Guardar nueva cita -->
-                <button type="submit" class="btn btn-success">
-                    <i class="bi bi-save"></i> Guardar
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="{{ form.cliente.id_for_label }}" class="form-label fw-semibold" style="color:#db478c;">{{ form.cliente.label }} <span class="text-danger">*</span></label>
+                    {{ form.cliente }}
+                    {% if form.cliente.errors %}
+                        <div class="text-danger small">{{ form.cliente.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <label for="{{ form.servicio.id_for_label }}" class="form-label fw-semibold" style="color:#db478c;">{{ form.servicio.label }} <span class="text-danger">*</span></label>
+                    {{ form.servicio }}
+                    {% if form.servicio.errors %}
+                        <div class="text-danger small">{{ form.servicio.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <label for="{{ form.gestora.id_for_label }}" class="form-label fw-semibold" style="color:#db478c;">{{ form.gestora.label }} <span class="text-danger">*</span></label>
+                    {{ form.gestora }}
+                    {% if form.gestora.errors %}
+                        <div class="text-danger small">{{ form.gestora.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <label for="{{ form.fecha.id_for_label }}" class="form-label fw-semibold" style="color:#db478c;">{{ form.fecha.label }} <span class="text-danger">*</span></label>
+                    {{ form.fecha }}
+                    {% if form.fecha.errors %}
+                        <div class="text-danger small">{{ form.fecha.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <label for="{{ form.hora.id_for_label }}" class="form-label fw-semibold" style="color:#db478c;">{{ form.hora.label }} <span class="text-danger">*</span></label>
+                    {{ form.hora }}
+                    {% if form.hora.errors %}
+                        <div class="text-danger small">{{ form.hora.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <label for="{{ form.estado.id_for_label }}" class="form-label fw-semibold" style="color:#db478c;">{{ form.estado.label }} <span class="text-danger">*</span></label>
+                    {{ form.estado }}
+                    {% if form.estado.errors %}
+                        <div class="text-danger small">{{ form.estado.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="d-flex gap-2 mt-4">
+                <button type="submit" class="btn btn-success px-4" style="font-size:1.1em;">
+                    <i class="bi bi-save"></i>
+                    {% if cita %}Guardar Cambios{% else %}Guardar Cita{% endif %}
                 </button>
-
-                <!-- Cancelar y volver -->
-                <a href="{% url 'reserva:home' %}" class="btn btn-secondary">
-                    <i class="bi bi-x-circle"></i> Cancelar
-                </a>
+               
             </div>
         </form>
     </div>
 </div>
 
-<!-- ===========================================================
-    SCRIPT: CARGA DE HORAS DISPONIBLES
-    Descripción:
-    Actualiza dinámicamente las horas del campo "hora" 
-    dependiendo de la gestora y fecha seleccionadas por el usuario.
-============================================================== -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-
-    // === FUNCIÓN PARA CARGAR LAS HORAS DISPONIBLES ===
     function cargarHoras() {
         const gestora = document.getElementById('id_gestora').value;
         const fecha = document.getElementById('id_fecha').value;
         const horaSelect = document.getElementById('id_hora');
-
         if (gestora && fecha) {
-            // Realiza una solicitud al backend para obtener los horarios disponibles
             fetch(`/reserva/horarios-disponibles/?gestora_id=${gestora}&fecha=${fecha}`)
                 .then(response => response.json())
                 .then(data => {
@@ -104,16 +90,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
                 });
         } else {
-            // Si no hay gestora o fecha seleccionada, se muestra un mensaje por defecto
             horaSelect.innerHTML = '<option value="">Selecciona gestora y fecha</option>';
         }
     }
-
-    // === EVENTOS: Cuando cambia la fecha o la gestora ===
     document.getElementById('id_fecha').addEventListener('change', cargarHoras);
     document.getElementById('id_gestora').addEventListener('change', cargarHoras);
-
-    // === OPCIONAL: Cargar horas si ya hay valores cargados al iniciar ===
     cargarHoras();
 });
 </script>
