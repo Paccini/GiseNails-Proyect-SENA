@@ -8,8 +8,7 @@ from productos.models import Producto
 from servicio.models import Servicio
 from reserva.models import Reserva, Factura, PagoReserva
 from django.utils import timezone
-from django.db.models import Count, Sum, F, Case, When, DecimalField, Value
-from django.db.models.functions import TruncDay
+from django.db.models import Count, Sum
 from django.http import HttpResponse
 from .forms import UpdateUserForm, LoginForm, PasswordResetForm, SetNewPasswordForm
 from empleados.models import Empleado
@@ -82,8 +81,6 @@ def login_view(request):
             user = authenticate(request, username=username, password=password)
 
             if user is not None:
-
-                # Validación cliente inactivo
                 cliente_obj = Cliente.objects.filter(user=user).first()
                 if cliente_obj is not None and not cliente_obj.activo:
                     error = "Tu cuenta está inactiva, contáctate con el administrador."
@@ -93,7 +90,6 @@ def login_view(request):
                         'prefill_email': None, 'password_only': False
                     })
 
-                # Validación empleado inactiva
                 empleado_obj = Empleado.objects.filter(correo__iexact=user.email).first()
                 if empleado_obj is not None and not empleado_obj.activo:
                     error = "Tu cuenta está inactiva, contáctate con el administrador."
@@ -103,11 +99,7 @@ def login_view(request):
                         'prefill_email': None, 'password_only': False
                     })
 
-                # Inicio de sesión
                 login(request, user)
-
-                # Adding debug messages to identify the failing condition during login redirection
-                print(f"Debug: Cliente: {cliente_obj}, Empleado: {Empleado.objects.filter(correo__iexact=user.email).exists()}, Admin: {user.is_staff or user.is_superuser}")
 
                 if cliente_obj:
                     if request.session.get('pending_reserva'):
@@ -122,10 +114,8 @@ def login_view(request):
                     return redirect('login:dashboard')
 
                 error = "No tienes permisos para acceder."
-                print("Debug: No matching role found for user.")
             else:
                 error = "Usuario o contraseña incorrectos."
-
 
     if request.session.get('pending_reserva'):
         pending = request.session.get('pending_reserva')
@@ -134,8 +124,6 @@ def login_view(request):
     else:
         pending = None
 
-    # SIEMPRE crea el formulario de registro
-    from clientes.forms import RegistroClienteForm
     initial = {
         'nombre': pending.get('nombre', '') if pending else '',
         'correo': pending.get('correo', '') if pending else '',
@@ -143,7 +131,6 @@ def login_view(request):
     }
     register_form = RegistroClienteForm(initial=initial)
 
-    # Si el formulario de registro tiene errores, mostrar el registro
     if request.method == 'POST' and 'nombre' in request.POST:
         register_form = RegistroClienteForm(request.POST)
         if not register_form.is_valid():
@@ -185,19 +172,13 @@ def registro_cliente(request):
             if user:
                 login(request, user)
             if request.session.get('pending_reserva'):
-                # Solo borrar después de completar la reserva
                 response = redirect('reserva:completar_reserva')
-                # No borres aquí, la vista completar_reserva lo hace
                 return response
             return redirect('clientes:panel')
         else:
             messages.error(request, 'Por favor, verifica los datos ingresados...')
     else:
         form = RegistroClienteForm(initial=initial)
-
-    # Elimina la cita pendiente solo si el usuario navega fuera del flujo normal (opcional)
-    # if request.method != 'POST' and request.session.get('pending_reserva'):
-    #     del request.session['pending_reserva']
 
     return render(request, 'login/login.html', {
         'register_form': form,
@@ -228,12 +209,18 @@ def logout_view(request):
 
 
 # =============================
-# DASHBOARD (VERSIÓN FINAL TUYA)
+# DASHBOARD (CORREGIDO)
 # =============================
 @login_required
 @user_passes_test(lambda u: u.is_staff)
 @never_cache
 def dashboard(request):
+    from reserva.models import Reserva
+    from clientes.models import Cliente
+    from servicio.models import Servicio
+    from productos.models import Producto
+    from django.db.models import Sum
+
     clientes_count = Cliente.objects.count()
     servicios_count = Servicio.objects.count()
     productos_count = Producto.objects.count()
@@ -242,22 +229,29 @@ def dashboard(request):
     fin = request.GET.get('fin')
     estado = request.GET.get('estado', 'realizada')
 
-    qs = Reserva.objects.filter(estado="realizada", facturas__pagado=True)
-    if estado:
-        qs = Reserva.objects.filter(estado=estado)
-    if estado == "realizada":
-        qs = qs.filter(facturas__pagado=True)
+    ventas_total = 0
+    reservas = Reserva.objects.none()
+
+    # Sumar solo reservas realizadas en el rango de fechas
     if inicio and fin:
-        qs = qs.filter(fecha__range=[inicio, fin])
-        ventas_total = qs.aggregate(total=Sum('facturas__monto_total'))['total'] or 0
-    else:
-        ventas_total = 0  # Solo muestra ventas si hay filtro de fechas
+        filtro = {'fecha__range': [inicio, fin], 'estado': 'realizada'}
+        reservas = Reserva.objects.filter(**filtro)
+        ventas_total = reservas.aggregate(total=Sum('servicio__precio'))['total'] or 0
+        ventas_total = int(ventas_total)
+
+    # Datos para la gráfica
+    datos_citas = []
+    meses = []
+    if inicio and fin:
+        fechas = reservas.values_list('fecha', flat=True).distinct()
+        fechas = sorted(set(fechas))
+        for fecha in fechas:
+            count = reservas.filter(fecha=fecha).count()
+            meses.append(str(fecha))
+            datos_citas.append(count)
 
     abonos_total = PagoReserva.objects.filter(tipo_pago='abono', confirmado=True).aggregate(total=Sum('monto'))['total'] or 0
     pendientes_count = Reserva.objects.filter(estado='pendiente').count()
-
-    meses = []
-    datos_citas = []
 
     context = {
         'clientes_count': clientes_count,
@@ -332,7 +326,6 @@ def password_reset_view(request):
             user = User.objects.filter(email__iexact=email).first()
             if user:
                 token = get_random_string(32)
-                # Asume que tienes un campo reset_token en el modelo Cliente y/o Empleado
                 cliente = Cliente.objects.filter(user=user).first()
                 if cliente:
                     cliente.reset_token = token
