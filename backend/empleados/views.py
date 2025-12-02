@@ -12,6 +12,21 @@ from django.http import JsonResponse
 from django.contrib import messages
 from datetime import datetime
 
+# --------------------------------------------------
+#  ENCRIPTACIÓN SEGÚN TU METODOLOGÍA
+# --------------------------------------------------
+from cryptography.fernet import Fernet
+from django.conf import settings
+
+fernet = Fernet(settings.ENCRYPT_KEY)
+
+def encrypt_id(pk):
+    return fernet.encrypt(str(pk).encode()).decode()
+
+def decrypt_id(token):
+    return int(fernet.decrypt(token.encode()).decode())
+# --------------------------------------------------
+
 
 class EditarCitaForm(forms.ModelForm):
     class Meta:
@@ -19,6 +34,10 @@ class EditarCitaForm(forms.ModelForm):
         fields = ['fecha', 'hora', 'servicio', 'estado']
 
 
+
+# ==================================================
+#  LISTAR EMPLEADOS (NO USA PK → NO CAMBIA)
+# ==================================================
 @login_required
 @user_passes_test(lambda u: u.is_staff)
 @never_cache
@@ -30,8 +49,10 @@ def empleado_list(request):
     paginator = Paginator(empleados, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+
     return render(request, 'empleados/empleado_list.html', {
         'empleados': page_obj,
+        'encrypt_id': encrypt_id,  # ✔ Para encriptar en el template
         'q': q,
         'is_paginated': page_obj.has_other_pages(),
         'page_obj': page_obj,
@@ -39,6 +60,10 @@ def empleado_list(request):
     })
 
 
+
+# ==================================================
+#  CREAR EMPLEADO (NO USA PK)
+# ==================================================
 @login_required
 @user_passes_test(lambda u: u.is_staff)
 @never_cache
@@ -49,14 +74,19 @@ def empleado_create(request):
             empleado = form.save(commit=False)
             correo = form.cleaned_data.get('correo') or ''
             password = form.cleaned_data.get('password') or None
-            user, created = User.objects.get_or_create(username=correo, defaults={'email': correo})
+
+            user, created = User.objects.get_or_create(
+                username=correo, defaults={'email': correo}
+            )
             if password:
                 user.set_password(password)
                 user.save()
+
             try:
                 empleado.user = user
             except Exception:
                 pass
+
             empleado.save()
             return redirect('empleados:empleado_list')
     else:
@@ -64,76 +94,106 @@ def empleado_create(request):
     return render(request, 'empleados/empleado_form.html', {'form': form})
 
 
+
+# ==================================================
+#  ACTUALIZAR EMPLEADO (CAMBIA PK → TOKEN)
+# ==================================================
 @login_required
 @user_passes_test(lambda u: u.is_staff)
 @never_cache
-def empleado_update(request, pk):
+def empleado_update(request, token):
+
+    pk = decrypt_id(token)
     empleado = get_object_or_404(Empleado, pk=pk)
+
     if request.method == 'POST':
         form = EmpleadoForm(request.POST, request.FILES, instance=empleado)
         if form.is_valid():
             empleado = form.save(commit=False)
             correo = form.cleaned_data.get('correo') or ''
             password = form.cleaned_data.get('password') or None
-            user = None
-            try:
-                user = empleado.user
-            except Exception:
-                user = None
+            
+            user = getattr(empleado, 'user', None)
+
             if user is None:
-                user, created = User.objects.get_or_create(username=correo, defaults={'email': correo})
+                user, created = User.objects.get_or_create(
+                    username=correo, defaults={'email': correo}
+                )
             else:
                 if correo and user.username != correo:
                     user.username = correo
                     user.email = correo
+
             if password:
                 user.set_password(password)
             user.save()
+
             try:
                 empleado.user = user
             except Exception:
                 pass
+
             empleado.save()
             return redirect('empleados:empleado_list')
+
     else:
         form = EmpleadoForm(instance=empleado)
-    return render(request, 'empleados/empleado_form.html', {'form': form, 'empleado': empleado})
+
+    return render(request, 'empleados/empleado_form.html', {
+        'form': form,
+        'empleado': empleado
+    })
 
 
+
+# ==================================================
+#  DESHABILITAR/HABILITAR EMPLEADO (CAMBIA PK → TOKEN)
+# ==================================================
 @login_required
 @user_passes_test(lambda u: u.is_staff)
 @never_cache
-def empleado_delete(request, pk):
-    """
-    Ya no elimina el empleado. Alterna (habilita/deshabilita) el campo 'activo'.
-    No permite deshabilitar si el empleado tiene reservas pendientes/confirmadas.
-    """
+def empleado_delete(request, token):
+
+    pk = decrypt_id(token)
     empleado = get_object_or_404(Empleado, pk=pk)
+
     if request.method == 'POST':
-        # Si se intenta deshabilitar, comprobar reservas activas
+
         if empleado.activo:
-            reservas_activas = Reserva.objects.filter(gestora=empleado, estado__in=['pendiente', 'confirmada']).exists()
+            reservas_activas = Reserva.objects.filter(
+                gestora=empleado,
+                estado__in=['pendiente', 'confirmada']
+            ).exists()
+
             if reservas_activas:
                 messages.error(request, "No se puede deshabilitar: el empleado tiene reservas pendientes o confirmadas.")
                 return redirect('empleados:empleado_list')
-        # Alternar activo
+
         empleado.activo = not empleado.activo
         empleado.save()
+
         estado = "habilitado" if empleado.activo else "deshabilitado"
         messages.success(request, f"Empleado {empleado.nombre} {empleado.apellidos} {estado}.")
+
         return redirect('empleados:empleado_list')
-    # Mostrar confirmación (antes era confirm delete)
-    return render(request, 'empleados/empleado_confirm_delete.html', {'empleado': empleado})
+
+    return render(request, 'empleados/empleado_confirm_delete.html', {
+        'empleado': empleado
+    })
 
 
+
+# ==================================================
+#  EL RESTO NO CAMBIA (NO USA PK EN URL)
+# ==================================================
 @login_required
 @never_cache
 def panel_empleado(request):
     from servicio.models import Servicio
     from clientes.models import Cliente
+
     empleado = get_object_or_404(Empleado, correo__iexact=request.user.email)
 
-    # filtros
     estado = request.GET.get('estado', 'all')
     fecha_inicio = request.GET.get('fecha_inicio', '').strip()
     fecha_fin = request.GET.get('fecha_fin', '').strip()
@@ -158,12 +218,13 @@ def panel_empleado(request):
         except Exception:
             pass
 
-    paginator = Paginator(citas_qs, 3)  # 3 por página (ajusta si quieres)
+    paginator = Paginator(citas_qs, 3)
     citas_page = paginator.get_page(page)
 
     servicios = Servicio.objects.all()
     horas_disponibles = HorarioDisponible.objects.all()
     clientes = Cliente.objects.all()
+
     return render(request, 'empleados/panel_empleado', {
         'empleado': empleado,
         'citas': citas_page,
@@ -176,18 +237,24 @@ def panel_empleado(request):
     })
 
 
+
 @login_required
 @never_cache
 def editar_cita_empleado(request, pk):
     from servicio.models import Servicio
+
     empleado = get_object_or_404(Empleado, correo__iexact=request.user.email)
     cita = get_object_or_404(Reserva, pk=pk, gestora=empleado)
-    # Solo horas no ocupadas por otra reserva de la misma gestora y fecha, o la hora actual de la cita
+
     ocupadas = Reserva.objects.filter(
         gestora=empleado,
         fecha=cita.fecha
     ).exclude(pk=cita.pk).values_list('hora_id', flat=True)
-    horas_disponibles = HorarioDisponible.objects.exclude(id__in=ocupadas) | HorarioDisponible.objects.filter(id=cita.hora_id)
+
+    horas_disponibles = HorarioDisponible.objects.exclude(
+        id__in=ocupadas
+    ) | HorarioDisponible.objects.filter(id=cita.hora_id)
+
     servicios = Servicio.objects.all()
 
     if request.method == 'POST':
@@ -195,16 +262,19 @@ def editar_cita_empleado(request, pk):
         hora_id = request.POST.get('hora')
         servicio_id = request.POST.get('servicio')
         estado = request.POST.get('estado')
+
         if fecha and hora_id and servicio_id and estado:
             cita.fecha = fecha
             cita.hora_id = hora_id
             cita.servicio_id = servicio_id
             cita.estado = estado
             cita.save()
+
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
                 return JsonResponse({'success': True})
+
             return redirect('empleados:panel_empleado')
-    # Si GET, devuelve solo las horas disponibles para ese día y gestora
+
     return render(request, 'empleados/panel_empleado', {
         'empleado': empleado,
         'citas': Reserva.objects.filter(gestora=empleado),
@@ -214,21 +284,25 @@ def editar_cita_empleado(request, pk):
     })
 
 
+
 @login_required
 @never_cache
 def horas_disponibles_empleado(request):
     fecha = request.GET.get('fecha')
     empleado = get_object_or_404(Empleado, correo__iexact=request.user.email)
-    horarios = HorarioDisponible.objects.all()
-    from datetime import datetime
+
     try:
         fecha_obj = datetime.strptime(fecha, '%Y-%m-%d').date()
-    except Exception:
+    except:
         return JsonResponse({'horarios': []})
+
     ocupados = Reserva.objects.filter(gestora=empleado, fecha=fecha_obj).values_list('hora_id', flat=True)
-    disponibles = horarios.exclude(id__in=ocupados)
+    disponibles = HorarioDisponible.objects.exclude(id__in=ocupados)
+
     data = [{'id': h.id, 'hora': h.hora.strftime('%H:%M')} for h in disponibles]
+
     return JsonResponse({'horarios': data})
+
 
 
 @login_required
@@ -240,16 +314,19 @@ def agendar_cita_empleado(request):
         fecha = request.POST.get('fecha')
         hora_id = request.POST.get('hora')
         servicio_id = request.POST.get('servicio')
+
         if not (cliente_id and fecha and hora_id and servicio_id):
             return JsonResponse({'success': False, 'error': 'Todos los campos son obligatorios.'})
-        # Validar que la hora esté disponible
+
         existe = Reserva.objects.filter(
             gestora=empleado,
             fecha=fecha,
             hora_id=hora_id
         ).exists()
+
         if existe:
             return JsonResponse({'success': False, 'error': 'La hora seleccionada ya está ocupada.'})
+
         Reserva.objects.create(
             cliente_id=cliente_id,
             gestora=empleado,
@@ -258,25 +335,29 @@ def agendar_cita_empleado(request):
             servicio_id=servicio_id,
             estado='pendiente'
         )
+
         return JsonResponse({'success': True})
+
     return JsonResponse({'success': False, 'error': 'Método no permitido.'})
 
 
+
 def toggle_empleado_activo(request, pk):
-    """
-    Endpoint AJAX para alternar empleado.activo con validación de reservas.
-    """
     if not request.user.is_authenticated or not request.user.is_staff:
         return JsonResponse({'success': False, 'error': 'No autorizado.'}, status=403)
 
     empleado = get_object_or_404(Empleado, pk=pk)
+
     if empleado.activo:
-        tiene_reservas = Reserva.objects.filter(gestora=empleado, estado__in=['pendiente', 'confirmada']).exists()
+        tiene_reservas = Reserva.objects.filter(
+            gestora=empleado,
+            estado__in=['pendiente', 'confirmada']
+        ).exists()
+
         if tiene_reservas:
             return JsonResponse({'success': False, 'error': 'El empleado tiene reservas pendientes o confirmadas.'})
+
     empleado.activo = not empleado.activo
     empleado.save()
+
     return JsonResponse({'success': True, 'activo': empleado.activo})
-
-
-

@@ -19,7 +19,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # =======================
 
 SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key-change-this")
-
+ENCRYPT_KEY = os.getenv("ENCRYPT_KEY", "q3fnUGonImjGQuumjWB0U5HPKZgu7p9cJXlUyfcF1yE=")
 
 DEBUG = config('DEBUG', default=False, cast=bool)
 
