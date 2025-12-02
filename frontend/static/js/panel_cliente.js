@@ -50,22 +50,43 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Confirmación al confirmar cita
-    document.querySelectorAll('.confirmar-btn').forEach(function(btn) {
+    // Nueva sección: Confirmación al abonar el 30%
+    document.querySelectorAll('.abonar-btn').forEach(function(btn) {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
             Swal.fire({
-                title: '¿Estás seguro que quieres confirmar la cita?',
+                title: '¿Estás seguro que quieres abonar el 30%?',
                 html: 'Recuerda que tienes que abonar un <b>30%</b> de la cita para poder que quede agendada.<br><br>Si en dado caso la cita se confirma y <b>NO</b> se llega a asistir, será cancelada y <b>no se devolverá el depósito</b>.',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#198754',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Sí, confirmar',
+                confirmButtonText: 'Sí, abonar',
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    btn.closest('form').submit();
+                    window.location.href = btn.getAttribute('data-abonar-url');
+                }
+            });
+        });
+    });
+
+    // Confirmación al pagar el 100%
+    document.querySelectorAll('.pagar-completo-btn').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: '¿Pagar el 100% de la cita?',
+                html: 'Vas a pagar el <b>100%</b> del valor de la cita.<br><br>Recuerda que si no asistes, <b>no se devolverá el dinero</b>.',
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#0d6efd',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, pagar todo',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = btn.getAttribute('data-pagar-url');
                 }
             });
         });

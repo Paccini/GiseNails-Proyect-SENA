@@ -195,7 +195,8 @@ def panel_empleado(request):
     empleado = get_object_or_404(Empleado, correo__iexact=request.user.email)
 
     estado = request.GET.get('estado', 'all')
-    fecha_str = request.GET.get('fecha', '').strip()
+    fecha_inicio = request.GET.get('fecha_inicio', '').strip()
+    fecha_fin = request.GET.get('fecha_fin', '').strip()
     page = request.GET.get('page', 1)
 
     citas_qs = Reserva.objects.filter(gestora=empleado).order_by('-fecha', '-hora')
@@ -203,11 +204,18 @@ def panel_empleado(request):
     if estado and estado != 'all':
         citas_qs = citas_qs.filter(estado=estado)
 
-    if fecha_str:
+    # Filtrar por rango de fechas (siempre acepta ISO YYYY-MM-DD desde input date)
+    if fecha_inicio:
         try:
-            fecha_obj = datetime.strptime(fecha_str, '%Y-%m-%d').date()
-            citas_qs = citas_qs.filter(fecha=fecha_obj)
-        except:
+            fecha_inicio_obj = datetime.strptime(fecha_inicio, '%Y-%m-%d').date()
+            citas_qs = citas_qs.filter(fecha__gte=fecha_inicio_obj)
+        except Exception:
+            pass
+    if fecha_fin:
+        try:
+            fecha_fin_obj = datetime.strptime(fecha_fin, '%Y-%m-%d').date()
+            citas_qs = citas_qs.filter(fecha__lte=fecha_fin_obj)
+        except Exception:
             pass
 
     paginator = Paginator(citas_qs, 3)
@@ -224,7 +232,8 @@ def panel_empleado(request):
         'horas_disponibles': horas_disponibles,
         'clientes': clientes,
         'filter_estado': estado,
-        'filter_fecha': fecha_str,
+        'filter_fecha_inicio': fecha_inicio,
+        'filter_fecha_fin': fecha_fin,
     })
 
 

@@ -1,0 +1,188 @@
+{% extends 'base_admin.html' %}
+{% load humanize %}
+{% block content %}
+<h2 class="mb-4"><i class="bi bi-receipt me-2"></i> Facturación y Cierre de Cartera</h2>
+<form method="get" class="row g-2 mb-3">
+    <div class="col-md-2">
+        <select name="metodo" class="form-select">
+            <option value="">Todos los métodos</option>
+            <option value="nequi" {% if metodo == 'nequi' %}selected{% endif %}>Nequi</option>
+            <option value="daviplata" {% if metodo == 'daviplata' %}selected{% endif %}>Daviplata</option>
+            <option value="efectivo" {% if metodo == 'efectivo' %}selected{% endif %}>Efectivo</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <select name="estado" class="form-select">
+            <option value="">Todos</option>
+            <option value="pagado" {% if estado == 'pagado' %}selected{% endif %}>Pagado</option>
+            <option value="pendiente" {% if estado == 'pendiente' %}selected{% endif %}>Pendiente</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <input type="date" name="fecha_inicio" value="{{ fecha_inicio }}" class="form-control" placeholder="Desde">
+    </div>
+    <div class="col-md-2">
+        <input type="date" name="fecha_fin" value="{{ fecha_fin }}" class="form-control" placeholder="Hasta">
+    </div>
+    <div class="col-md-2">
+        <button class="btn btn-primary w-100"><i class="bi bi-search"></i> Filtrar</button>
+    </div>
+</form>
+<!-- Encima de la tabla de facturación -->
+<!-- Botón fuera de la tabla -->
+<button class="btn btn-success mb-3" id="btnPagoEfectivoGlobal">
+  <i class="bi bi-cash"></i> Registrar pago en efectivo
+</button>
+<!-- Ejemplo de tabla mejorada -->
+<div class="table-responsive">
+  <table class="table table-hover align-middle table-nowrap" style="min-width:1100px;">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Cliente</th>
+        <th>Servicio</th>
+        <th>Método</th>
+        <th>Referencia</th>
+        <th>Pagos</th>
+        <th>Saldo</th>
+        <th>Total</th>
+        <th>Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for factura in facturas %}
+      <tr>
+        <td>{{ factura.fecha|date:"d/m/Y H:i" }}</td>
+        <td>{{ factura.cliente.nombre }}</td>
+        <td>
+          <span title="{{ factura.reserva.servicio }}">{{ factura.reserva.servicio|truncatechars:18 }}</span>
+        </td>
+        <td>{{ factura.get_metodo_display }}</td>
+        <td>
+          <span title="{{ factura.referencia }}">{{ factura.referencia|truncatechars:12 }}</span>
+        </td>
+        <td>
+          {% if factura.pagado %}
+            {% for pago in factura.reserva.pagos.all %}
+              {% if pago.tipo_pago == 'completo' %}
+                <span class="badge bg-info">{{ pago.get_tipo_pago_display }}</span>
+                <span class="badge bg-secondary">{{ pago.metodo|title }}</span>
+                <span class="badge bg-dark">${{ pago.monto|intcomma }}</span>
+                <span class="badge bg-secondary">Ref: {{ pago.referencia }}</span>
+              {% endif %}
+            {% endfor %}
+          {% else %}
+            {% for pago in factura.reserva.pagos.all %}
+              <span class="badge bg-info">{{ pago.get_tipo_pago_display }}</span>
+              <span class="badge bg-secondary">{{ pago.metodo|title }}</span>
+              <span class="badge bg-dark">${{ pago.monto|intcomma }}</span>
+              <span class="badge bg-secondary">Ref: {{ pago.referencia }}</span>
+              <br>
+            {% endfor %}
+          {% endif %}
+        </td>
+        <td>${{ factura.saldo_restante|intcomma }}</td>
+        <td>${{ factura.monto_total|intcomma }}</td>
+        <td>
+          {% if factura.pagado %}
+            <span class="badge bg-success">Pagado</span>
+          {% else %}
+            <span class="badge bg-warning text-dark">Pendiente</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="10" class="text-center">No hay facturas registradas.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal de pago en efectivo mejorado -->
+<div class="modal fade" id="modalPagoEfectivo" tabindex="-1" aria-labelledby="modalPagoEfectivoLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form method="post" id="formPagoEfectivo" class="modal-content" action="{% url 'reserva:pago_efectivo_admin' 0 %}">
+      {% csrf_token %}
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="modalPagoEfectivoLabel">
+          <i class="bi bi-cash-coin me-2"></i> Registrar pago en efectivo
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="referenciaInput" class="form-label fw-semibold">Referencia de pago</label>
+          <div class="input-group">
+            <input type="text" class="form-control" name="referencia" id="referenciaInput" placeholder="Ej: M123456789" required>
+            <button type="button" class="btn btn-primary" id="btnBuscarReferencia">
+              <i class="bi bi-search"></i> Buscar
+            </button>
+          </div>
+          <div class="form-text text-muted">Ingresa la referencia y haz clic en <b>Buscar</b>.</div>
+        </div>
+        <div id="infoPagoEfectivo" class="border rounded p-3 mb-2" style="display:none; background: #f8f9fa;">
+          <div class="mb-2">
+            <b>Cliente:</b> <span id="clienteNombre"></span><br>
+            <b>Servicio:</b> <span id="servicioNombre"></span><br>
+            <b>Saldo pendiente:</b> <span class="text-success fw-bold">$<span id="saldoPendiente"></span></span>
+          </div>
+          <input type="hidden" name="factura_id" id="facturaIdInput">
+          <button type="submit" class="btn btn-success w-100 mt-2">Registrar pago completo</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+<script>
+// Mejor experiencia para el modal de pago en efectivo
+document.getElementById('btnPagoEfectivoGlobal').addEventListener('click', function() {
+  document.getElementById('referenciaInput').value = '';
+  document.getElementById('infoPagoEfectivo').style.display = 'none';
+  var modal = new bootstrap.Modal(document.getElementById('modalPagoEfectivo'));
+  modal.show();
+});
+
+document.getElementById('btnBuscarReferencia').addEventListener('click', function() {
+  buscarReferencia();
+});
+
+document.getElementById('referenciaInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    buscarReferencia();
+  }
+});
+
+function buscarReferencia() {
+  var ref = document.getElementById('referenciaInput').value.trim();
+  if (!ref) {
+    Swal.fire('Referencia requerida', 'Por favor ingresa una referencia de pago.', 'warning');
+    return;
+  }
+  fetch(`/reserva/api/buscar-factura/?referencia=${encodeURIComponent(ref)}`)
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) {
+        document.getElementById('clienteNombre').textContent = data.cliente;
+        document.getElementById('servicioNombre').textContent = data.servicio;
+        document.getElementById('saldoPendiente').textContent = data.saldo;
+        document.getElementById('facturaIdInput').value = data.factura_id;
+        document.getElementById('formPagoEfectivo').action = `/reserva/factura/${data.factura_id}/pago-efectivo/`;
+        document.getElementById('infoPagoEfectivo').style.display = '';
+      } else {
+        document.getElementById('infoPagoEfectivo').style.display = 'none';
+        Swal.fire('Referencia no encontrada', 'No se encontró ninguna factura con esa referencia o ya está pagada.', 'error');
+      }
+    });
+}
+
+document.getElementById('formPagoEfectivo').addEventListener('submit', function(e) {
+  if (!document.getElementById('facturaIdInput').value) {
+    e.preventDefault();
+    Swal.fire('Error', 'Debes buscar y seleccionar una factura válida antes de registrar el pago.', 'error');
+  }
+});
+</script>

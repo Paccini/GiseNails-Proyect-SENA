@@ -9,6 +9,7 @@ class Cliente(models.Model):
     telefono = models.CharField(max_length=20)
     fecha_registro = models.DateTimeField(auto_now_add=True)
     activo = models.BooleanField(default=True, help_text="Si False el cliente está deshabilitado")
+    reset_token = models.CharField(max_length=64, blank=True, null=True)
 
     def __str__(self):
         return self.nombre

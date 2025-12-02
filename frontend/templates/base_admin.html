@@ -141,6 +141,9 @@
               <a class="nav-link" href="{% url 'clientes:cliente_list' %}"><i
                   class="bi bi-person-lines-fill me-2"></i>Clientes</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'reserva:facturacion' %}"><i class="bi bi-receipt me-2"></i>Facturación</a>
+            </li>
           </ul>
         </div>
       </div>
@@ -158,9 +161,30 @@
   </main>
 
   <!-- PIE DE PÁGINA -->
-  <footer class="text-center py-4"
-    style="background: #f8fafc; color: #232c36; border-top: 1px solid #e5e7eb; box-shadow: 0 -2px 12px rgba(44,62,80,0.07); font-size: 1.05rem;">
-    © 2025 GiseNails &nbsp;|&nbsp; Todos los derechos reservados</footer>
+  <footer class="footer-panel">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-md-4 mb-2 mb-md-0 text-center">
+        <img src="{% static 'img/Logo-Gisenails.PNG' %}" alt="Gise Nails">
+        <div class="fw-bold">Gise Nails</div>
+        <div>Belleza y cuidado profesional de tus uñas</div>
+      </div>
+      <div class="col-12 col-md-4 mb-2 mb-md-0 text-center">
+        <div class="fw-semibold">Contacto</div>
+        <div><i class=" bi bi-envelope me-1"></i> contacto@gisenails.com</div>
+        <div><i class=" bi bi-telephone me-1"></i> +57 300 123 4567</div>
+        <div><i class=" bi bi-geo-alt me-1"></i> Cra 12 #34-56, Bogotá</div>
+      </div>
+      <div class="col-12 col-md-4 text-center">
+        <div class="fw-semibold">Síguenos</div>
+        <a href="https://instagram.com/gisenails" target="_blank"><i class="bi bi-instagram fs-5"></i></a>
+        <a href="https://facebook.com/gisenails" target="_blank"><i class="bi bi-facebook fs-5"></i></a>
+        <a href="https://wa.me/573001234567" target="_blank"><i class="bi bi-whatsapp fs-5"></i></a>
+        <div class="mt-2">© 2025 Gise Nails | Todos los derechos reservados</div>
+      </div>
+    </div>
+  </div>
+</footer>
   {% else %}
   <!-- Si el usuario no está autenticado o no es staff -->
   <main class="container my-5"></main>

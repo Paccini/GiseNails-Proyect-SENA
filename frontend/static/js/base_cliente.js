@@ -53,14 +53,8 @@
         savedTheme = null;
     }
 
-    if (!savedTheme) {
-        savedTheme =
-            window.matchMedia &&
-            window.matchMedia('(prefers-color-scheme: dark)').matches
-                ? 'dark'
-                : 'light';
-    }
-
+    // Siempre inicia en modo claro
+    savedTheme = 'light';
     applyTheme(savedTheme);
 
     /* ===============================
