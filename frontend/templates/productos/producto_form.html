@@ -1,72 +1,73 @@
 {% extends 'base_admin.html' %}
+
+{% load static %}
+
+{% block title %}
+    {% if form.instance.id %}
+        Editar Producto
+    {% else %}
+        Agregar Producto
+    {% endif %}
+{% endblock %}
+
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/producto_form.css' %}">
 
-<!-- ============================================= -->
-<!-- CONTENEDOR PRINCIPAL DE EDICIÓN / CREACIÓN DE PRODUCTO -->
-<!-- ============================================= -->
-<div class="card shadow mb-4">
-
-    <!-- ============================================= -->
-    <!-- ENCABEZADO DE LA TARJETA -->
-    <!-- Muestra el título dinámico según si se está editando o agregando -->
-    <!-- Incluye un botón para volver al listado de productos -->
-    <!-- ============================================= -->
-    <div class="card-header bg-success text-dark d-flex justify-content-between align-items-center">
-        <h2 class="mb-0">
+<div class="form-container">
+    <!-- ENCABEZADO DEL FORMULARIO -->
+    <div class="form-header">
+        <h2>
             {% if producto %}
-                Editar Producto
+                <i class="bi bi-pencil-square"></i> Editar Producto
             {% else %}
-                Agregar Producto
+                <i class="bi bi-plus-circle"></i> Agregar Producto
             {% endif %}
         </h2>
-        <a href="{% url 'productos:producto_list' %}" class="btn btn-light btn-sm">
+        <a href="{% url 'productos:producto_list' %}" class="btn-back">
             <i class="bi bi-arrow-left"></i> Volver
         </a>
     </div>
 
-    <!-- ============================================= -->
-    <!-- CUERPO DE LA TARJETA -->
-    <!-- Contiene el formulario con todos los campos del producto -->
-    <!-- ============================================= -->
-    <div class="card-body">
-        
-        <!-- ============================================= -->
-        <!-- FORMULARIO DE PRODUCTO -->
-        <!-- Usa método POST y permite subida de archivos (imágenes) -->
-        <!-- Incluye protección CSRF para seguridad -->
-        <!-- ============================================= -->
+    <!-- CUERPO DEL FORMULARIO -->
+    <div class="form-body">
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             
-            <!-- ============================================= -->
-            <!-- TABLA DE CAMPOS DEL FORMULARIO -->
-            <!-- Cada campo del formulario se renderiza dentro de una fila -->
-            <!-- Se muestran dinámicamente todos los campos definidos en el formulario Django -->
-            <!-- ============================================= -->
-            <table class="table table-bordered">
+            <div class="form-group-container">
                 {% for field in form %}
-                <tr>
-                    <th>{{ field.label_tag }}</th>
-                    <td>{{ field }}</td>
-                </tr>
+                    <div class="form-group {% if field.field.widget.input_type == 'textarea' %}textarea-group{% endif %}">
+                        {% if field.label %}
+                            <label for="{{ field.id_for_label }}">
+                                <i class="bi bi-info-circle"></i>
+                                {{ field.label }}
+                                {% if field.field.required %}<span>*</span>{% endif %}
+                            </label>
+                        {% endif %}
+                        
+                        {{ field }}
+                        
+                        {% if field.errors %}
+                            <ul>
+                                {% for error in field.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
                 {% endfor %}
-            </table>
+            </div>
 
-            <!-- ============================================= -->
             <!-- BOTONES DE ACCIÓN -->
-            <!-- Botón principal: Guardar o Guardar cambios (según el contexto) -->
-            <!-- Botón secundario: Cancelar y volver a la lista -->
-            <!-- ============================================= -->
-            <div class="d-flex gap-2">
-                <button type="submit" class="btn btn-success">
-                    <i class="bi bi-save"></i>
+            <div class="form-actions">
+                <button type="submit" class="btn-submit">
+                    <i class="bi bi-check-circle"></i>
                     {% if producto %}
-                        Guardar cambios
+                        Guardar Cambios
                     {% else %}
-                        Guardar
+                        Guardar Producto
                     {% endif %}
                 </button>
-                <a href="{% url 'productos:producto_list' %}" class="btn btn-secondary">
+                <a href="{% url 'productos:producto_list' %}" class="btn-cancel">
                     <i class="bi bi-x-circle"></i> Cancelar
                 </a>
             </div>
