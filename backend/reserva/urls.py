@@ -23,7 +23,7 @@ urlpatterns = [
     path('facturacion/', views.facturacion, name='facturacion'),
 
     # Nueva ruta para pago en efectivo
-    path('factura/<int:pk>/pago-efectivo/', views.pago_efectivo_admin, name='pago_efectivo_admin'),
+    path('factura/<str:token>/pago-efectivo/', views.pago_efectivo_admin, name='pago_efectivo_admin'),
 
     # Nueva ruta para la API de búsqueda de factura
     path('api/buscar-factura/', views.api_buscar_factura, name='api_buscar_factura'),
