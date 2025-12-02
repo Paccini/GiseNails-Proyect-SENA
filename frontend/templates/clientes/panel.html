@@ -92,7 +92,7 @@
                 {% endfor %}
               {% endif %}
               {% if cita.facturas.last and cita.facturas.last.saldo_restante > 0 %}
-                <a href="{% url 'clientes:pagar_saldo' cita.pk %}" class="btn btn-success btn-sm py-0">
+                <a href="{% url 'clientes:pagar_saldo' cita.pk|encrypt_id %}" class="btn btn-success btn-sm py-0">
                   <i class="bi bi-cash-coin"></i> Pagar saldo restante (${{ cita.facturas.last.saldo_restante|intcomma }})
                 </a>
               {% endif %}
