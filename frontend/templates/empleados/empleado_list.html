@@ -1,5 +1,6 @@
 {% extends 'base_admin.html' %}
 <!-- Extiende la plantilla base del panel de administración llamada 'base_admin.html' -->
+{% load token_filters %}
 
 {% block content %}
   <!-- Inicio del bloque de contenido principal -->
@@ -85,11 +86,11 @@
                 </td>
                 <td>
                   <!-- Botones de acción: editar y eliminar -->
-                  <a href="{% url 'empleados:empleado_update' empleado.id %}" class="btn btn-sm btn-warning me-1" title="Editar"><i class="bi bi-pencil-square"></i></a>
+                  <a href="{% url 'empleados:empleado_update' empleado.id|encrypt_id %}" class="btn btn-sm btn-warning me-1" title="Editar"><i class="bi bi-pencil-square"></i></a>
 
                   <!-- Toggle moderno inline -->
                   <label class="switch" title="{% if empleado.activo %}Activo{% else %}Inactivo{% endif %}">
-                    <input type="checkbox" class="switch-input empleado-toggle" data-id="{{ empleado.pk }}" {% if empleado.activo %}checked{% endif %}>
+                    <input type="checkbox" class="switch-input empleado-toggle" data-id="{{ empleado.id|encrypt_id }}" {% if empleado.activo %}checked{% endif %}>
                     <span class="switch-label"></span>
                   </label>
                 </td>
@@ -146,7 +147,7 @@
         cb.addEventListener('change', function () {
           const id = this.dataset.id
           const checkedBefore = this.checked
-          fetch("{% url 'empleados:empleado_toggle_activo' 0 %}".replace('0', id), {
+          fetch("{% url 'empleados:empleado_toggle_activo' 0 %}".replace('TOKEN', id), {
             method: 'POST',
             headers: { 'X-CSRFToken': csrftoken, Accept: 'application/json' }
           })

@@ -1,37 +1,25 @@
 {% extends 'base_admin.html' %}
+{% load token_filters %}
 {% block content %}
-<!-- ===========================================================
-    PÁGINA: AGREGAR CITA
-    Descripción:
-    Permite registrar una nueva cita en el sistema. 
-    Incluye un formulario con validación dinámica para cargar 
-    las horas disponibles dependiendo de la gestora y la fecha.
-============================================================== -->
 
-<!-- === TARJETA PRINCIPAL === -->
 <div class="card shadow mb-4">
 
-    <!-- === ENCABEZADO VERDE === -->
     <div class="card-header bg-success text-dark d-flex justify-content-between align-items-center">
         <h2 class="mb-0">
             <i class="bi bi-calendar-plus me-2"></i>
             Agregar Cita
         </h2>
 
-        <!-- Botón para regresar al listado -->
         <a href="{% url 'reserva:home' %}" class="btn btn-light btn-sm">
             <i class="bi bi-arrow-left"></i> Volver
         </a>
     </div>
 
-    <!-- === CUERPO DE LA TARJETA === -->
     <div class="card-body">
 
-        <!-- === FORMULARIO DE REGISTRO DE CITA === -->
         <form method="post">
             {% csrf_token %}
 
-            <!-- === TABLA CON LOS CAMPOS DEL FORMULARIO === -->
             <table class="table table-bordered align-middle">
                 <tr>
                     <th>{{ form.cliente.label_tag }}</th>
@@ -59,14 +47,11 @@
                 </tr>
             </table>
 
-            <!-- === BOTONES DE ACCIÓN === -->
             <div class="d-flex gap-2">
-                <!-- Guardar nueva cita -->
                 <button type="submit" class="btn btn-success">
                     <i class="bi bi-save"></i> Guardar
                 </button>
 
-                <!-- Cancelar y volver -->
                 <a href="{% url 'reserva:home' %}" class="btn btn-secondary">
                     <i class="bi bi-x-circle"></i> Cancelar
                 </a>
@@ -75,24 +60,23 @@
     </div>
 </div>
 
-<!-- ===========================================================
-    SCRIPT: CARGA DE HORAS DISPONIBLES
-    Descripción:
-    Actualiza dinámicamente las horas del campo "hora" 
-    dependiendo de la gestora y fecha seleccionadas por el usuario.
-============================================================== -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 
-    // === FUNCIÓN PARA CARGAR LAS HORAS DISPONIBLES ===
     function cargarHoras() {
-        const gestora = document.getElementById('id_gestora').value;
+        const gestoraSelect = document.getElementById('id_gestora');
+        const gestora = gestoraSelect.value;
         const fecha = document.getElementById('id_fecha').value;
         const horaSelect = document.getElementById('id_hora');
 
         if (gestora && fecha) {
-            // Realiza una solicitud al backend para obtener los horarios disponibles
-            fetch(`/reserva/horarios-disponibles/?gestora_id=${gestora}&fecha=${fecha}`)
+
+            // EXTRAEMOS EL TOKEN CIFRADO DESDE EL OPTION SELECCIONADO
+            const gestoraToken = gestoraSelect
+                .selectedOptions[0]
+                .getAttribute('data-token');
+
+            fetch(`/reserva/horarios-disponibles/?gestora_token=${gestoraToken}&fecha=${fecha}`)
                 .then(response => response.json())
                 .then(data => {
                     horaSelect.innerHTML = '';
@@ -103,18 +87,17 @@ document.addEventListener('DOMContentLoaded', function() {
                         horaSelect.appendChild(opt);
                     });
                 });
+
         } else {
-            // Si no hay gestora o fecha seleccionada, se muestra un mensaje por defecto
             horaSelect.innerHTML = '<option value="">Selecciona gestora y fecha</option>';
         }
     }
 
-    // === EVENTOS: Cuando cambia la fecha o la gestora ===
     document.getElementById('id_fecha').addEventListener('change', cargarHoras);
     document.getElementById('id_gestora').addEventListener('change', cargarHoras);
 
-    // === OPCIONAL: Cargar horas si ya hay valores cargados al iniciar ===
     cargarHoras();
 });
 </script>
+
 {% endblock %}

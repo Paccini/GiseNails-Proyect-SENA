@@ -20,6 +20,9 @@ from django.contrib import messages
 from cryptography.fernet import Fernet
 from django.conf import settings
 
+# --------------------------------------------------
+#  ENCRIPTACIÓN (tu metodología)
+# --------------------------------------------------
 fernet = Fernet(settings.ENCRYPT_KEY)
 
 def encrypt_id(pk: int) -> str:
@@ -29,6 +32,7 @@ def encrypt_id(pk: int) -> str:
 def decrypt_id(token: str) -> int:
     """Convierte un token cifrado en el ID real"""
     return int(fernet.decrypt(token.encode()).decode())
+# --------------------------------------------------
 
 
 def reserva(request):
@@ -119,6 +123,7 @@ def reserva(request):
         'servicios_por_categoria': servicios_por_categoria,
     })
 
+
 def horarios_disponibles(request):
     fecha = request.GET.get('fecha')
     gestora_id = request.GET.get('gestora_id')
@@ -140,6 +145,7 @@ def horarios_disponibles(request):
     disponibles = horarios.exclude(id__in=ocupados)
     data = [{'id': h.id, 'hora': h.hora.strftime('%H:%M')} for h in disponibles]
     return JsonResponse({'horarios': data})
+
 
 @login_required
 @user_passes_test(lambda u: u.is_staff)
@@ -216,6 +222,7 @@ def home(request):
     }
     return render(request, 'reservas/home.html', context)
 
+
 @login_required
 @user_passes_test(lambda u: u.is_staff)
 @never_cache
@@ -241,13 +248,14 @@ def agregar_reserva(request):
 
     return render(request, 'reservas/agregar.html', {'form': form})
 
+
 @login_required
 @user_passes_test(lambda u: u.is_staff)
 @never_cache
 def editar_reserva(request, token):
     try:
         real_pk = decrypt_id(token)
-    except:
+    except Exception:
         return redirect('reserva:home')
     
     cita = get_object_or_404(Reserva, pk=real_pk)
@@ -260,13 +268,14 @@ def editar_reserva(request, token):
         form = ReservaEditForm(instance=cita)
     return render(request, 'reservas/editar.html', {'form': form})
 
+
 @login_required
 @user_passes_test(lambda u: u.is_staff)
 @never_cache
 def eliminar_reserva(request, token):
     try:
         real_pk = decrypt_id(token)
-    except:
+    except Exception:
         return redirect('reserva:home')
     
     cita = get_object_or_404(Reserva, pk=real_pk)
@@ -290,10 +299,10 @@ class ReservaCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         self.object = form.save()
         return super().form_valid(form)
 
+
 from django.contrib.auth.decorators import login_required
 
 @login_required
-
 def completar_reserva(request):
     from django.core.mail import send_mail
     pending = request.session.get('pending_reserva')
@@ -360,18 +369,27 @@ def completar_reserva(request):
                 html_message=mensaje_html
             )
     
-
     # Limpia la sesión
-    del request.session['pending_reserva']
+    if 'pending_reserva' in request.session:
+        del request.session['pending_reserva']
 
     # Redirige al panel del cliente
     return redirect('clientes:panel')
 
+
 from django.contrib.auth.models import User
 
-def confirmar_reserva(request, pk):
-    # Obtener la reserva pendiente
-    reserva = get_object_or_404(Reserva, pk=pk)
+@login_required
+def confirmar_reserva(request, token):
+    """
+    Ahora recibe token (cifrado). Desencriptamos y confirmamos.
+    """
+    try:
+        real_pk = decrypt_id(token)
+    except Exception:
+        return redirect('reserva:home')
+
+    reserva = get_object_or_404(Reserva, pk=real_pk)
 
     # Verificar si el correo del cliente existe en la base de datos
     cliente_email = reserva.cliente.correo
