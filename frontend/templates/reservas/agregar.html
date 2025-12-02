@@ -1,5 +1,7 @@
 {% extends 'base_admin.html' %}
+{% load token_filters %}
 {% block content %}
+<<<<<<< HEAD
 <!-- ===========================================================
     PÁGINA: AGREGAR/EDITAR CITA
 ============================================================== -->
@@ -66,6 +68,62 @@
                     {% if cita %}Guardar Cambios{% else %}Guardar Cita{% endif %}
                 </button>
                
+=======
+
+<div class="card shadow mb-4">
+
+    <div class="card-header bg-success text-dark d-flex justify-content-between align-items-center">
+        <h2 class="mb-0">
+            <i class="bi bi-calendar-plus me-2"></i>
+            Agregar Cita
+        </h2>
+
+        <a href="{% url 'reserva:home' %}" class="btn btn-light btn-sm">
+            <i class="bi bi-arrow-left"></i> Volver
+        </a>
+    </div>
+
+    <div class="card-body">
+
+        <form method="post">
+            {% csrf_token %}
+
+            <table class="table table-bordered align-middle">
+                <tr>
+                    <th>{{ form.cliente.label_tag }}</th>
+                    <td>{{ form.cliente }}</td>
+                </tr>
+                <tr>
+                    <th>{{ form.servicio.label_tag }}</th>
+                    <td>{{ form.servicio }}</td>
+                </tr>
+                <tr>
+                    <th>{{ form.gestora.label_tag }}</th>
+                    <td>{{ form.gestora }}</td>
+                </tr>
+                <tr>
+                    <th>{{ form.fecha.label_tag }}</th>
+                    <td>{{ form.fecha }}</td>
+                </tr>
+                <tr>
+                    <th>{{ form.hora.label_tag }}</th>
+                    <td>{{ form.hora }}</td>
+                </tr>
+                <tr>
+                    <th>{{ form.estado.label_tag }}</th>
+                    <td>{{ form.estado }}</td>
+                </tr>
+            </table>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-save"></i> Guardar
+                </button>
+
+                <a href="{% url 'reserva:home' %}" class="btn btn-secondary">
+                    <i class="bi bi-x-circle"></i> Cancelar
+                </a>
+>>>>>>> dfc60ca68f1136c21dfe84a6ae1d40124e095c75
             </div>
         </form>
     </div>
@@ -73,12 +131,27 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+<<<<<<< HEAD
+=======
+
+>>>>>>> dfc60ca68f1136c21dfe84a6ae1d40124e095c75
     function cargarHoras() {
-        const gestora = document.getElementById('id_gestora').value;
+        const gestoraSelect = document.getElementById('id_gestora');
+        const gestora = gestoraSelect.value;
         const fecha = document.getElementById('id_fecha').value;
         const horaSelect = document.getElementById('id_hora');
         if (gestora && fecha) {
+<<<<<<< HEAD
             fetch(`/reserva/horarios-disponibles/?gestora_id=${gestora}&fecha=${fecha}`)
+=======
+
+            // EXTRAEMOS EL TOKEN CIFRADO DESDE EL OPTION SELECCIONADO
+            const gestoraToken = gestoraSelect
+                .selectedOptions[0]
+                .getAttribute('data-token');
+
+            fetch(`/reserva/horarios-disponibles/?gestora_token=${gestoraToken}&fecha=${fecha}`)
+>>>>>>> dfc60ca68f1136c21dfe84a6ae1d40124e095c75
                 .then(response => response.json())
                 .then(data => {
                     horaSelect.innerHTML = '';
@@ -89,13 +162,22 @@ document.addEventListener('DOMContentLoaded', function() {
                         horaSelect.appendChild(opt);
                     });
                 });
+
         } else {
             horaSelect.innerHTML = '<option value="">Selecciona gestora y fecha</option>';
         }
     }
+<<<<<<< HEAD
     document.getElementById('id_fecha').addEventListener('change', cargarHoras);
     document.getElementById('id_gestora').addEventListener('change', cargarHoras);
+=======
+
+    document.getElementById('id_fecha').addEventListener('change', cargarHoras);
+    document.getElementById('id_gestora').addEventListener('change', cargarHoras);
+
+>>>>>>> dfc60ca68f1136c21dfe84a6ae1d40124e095c75
     cargarHoras();
 });
 </script>
+
 {% endblock %}

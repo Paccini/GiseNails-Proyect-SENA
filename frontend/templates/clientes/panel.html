@@ -1,21 +1,16 @@
 {% extends 'base_cliente.html' %}
-{% load humanize %}
 {% load static %}
+{% load token_filters %}
+{% load humanize %}
 <!-- Extiende la plantilla base para clientes -->
 
 {% block content %}
-<!-- Inicio del bloque principal de contenido -->
 
 <div class="card mb-4">
-
-  
-
-    <!-- Tarjeta que muestra la información del cliente -->
     <div class="card-header">
         <h3 class="fw-bold mb-0"><i class="bi bi-person-circle me-2"></i> Información del cliente</h3>
     </div>
     <div class="card-body">
-        <!-- Datos del cliente -->
         <p><strong>Nombre:</strong> {{ cliente.nombre }}</p>
         <p><strong>Correo:</strong> {{ cliente.correo }}</p>
         <p><strong>Teléfono:</strong> {{ cliente.telefono }}</p>
@@ -25,7 +20,17 @@
 
 <div class="card mb-3">
   <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
-  <h3>Mis citas</h3>
+    <h3>Mis citas</h3>
+
+    <!-- FILTROS -->
+    <div class="d-flex align-items-center gap-2 flex-wrap">
+      <form method="get" class="d-flex align-items-center gap-2">
+        <select class="form-select" name="estado">
+          <option value="">Todos los estados</option>
+          <option value="pendiente">Pendiente</option>
+          <option value="completada">Completada</option>
+          <option value="cancelada">Cancelada</option>
+        </select>
 
     <!-- filtro -->
 
@@ -145,6 +150,7 @@
     <!-- PAGINACIÓN -->
     <nav aria-label="Paginación de reservas">
       <ul class="pagination justify-content-center">
+
         {% if reservas.has_previous %}
         <li class="page-item">
           <a class="page-link" href="?page={{ reservas.previous_page_number }}&estado={{ filter_estado }}&fecha_inicio={{ filter_fecha_inicio }}&fecha_fin={{ filter_fecha_fin }}">Anterior</a>
@@ -175,6 +181,8 @@
   </div>
 </div>
 
+<!-- MODALES (SIN CAMBIOS) -->
+{{ block.super }}
 
 <!-- Modal para actualizar datos del cliente -->
 <div class="modal fade" id="updateClienteModal" tabindex="-1" aria-labelledby="updateClienteModalLabel"
@@ -325,40 +333,17 @@
   {% endfor %}
 {% endif %}
 {% endblock %}
-<!-- Fin del bloque principal de contenido -->
 
 {% block scripts %}
-<!-- Bloque de scripts adicionales -->
-
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<!-- Variables que controlan el modal y mensajes desde el servidor (deben ir antes de cargar panel_cliente.js) -->
+
 <script>
   var panel_url = "{% url 'clientes:panel' %}";
-  {% if show_cita_alert %}
-  var show_cita_alert = true;
-  {% else %}
-  var show_cita_alert = false;
-  {% endif %}
-
-  {% if show_modal %}
-  var show_modal = true;
-  {% else %}
-  var show_modal = false;
-  {% endif %}
-
-  {% if update_error %}
-  var update_error = "{{ update_error|escapejs }}";
-  {% else %}
-  var update_error = null;
-  {% endif %}
-
-  {% if update_success %}
-  var update_success = "{{ update_success|escapejs }}";
-  {% else %}
-  var update_success = null;
-  {% endif %}
+  var show_cita_alert = {{ show_cita_alert|yesno:"true,false" }};
+  var show_modal = {{ show_modal|yesno:"true,false" }};
+  var update_error = "{{ update_error|default_if_none:''|escapejs }}";
+  var update_success = "{{ update_success|default_if_none:''|escapejs }}";
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{% static 'js/panel_cliente.js' %}"></script>
 {% endblock %}

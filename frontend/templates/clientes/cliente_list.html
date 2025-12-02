@@ -1,5 +1,5 @@
-<!-- clientes/templates/clientes/cliente_list.html -->
 {% extends 'base_admin.html' %}
+{% load token_filters %}
 {% block content %}
 
   <!-- Contenedor principal con título -->
@@ -43,31 +43,51 @@
             </tr>
           </thead>
           <tbody>
-            <!-- Bucle para mostrar cada cliente -->
             {% for cliente in object_list %}
               <tr>
-                <td>{{ cliente.id }}</td>
+                <!-- ID truncado para no exponerlo -->
+                <td>{{ cliente.id|stringformat:"s"|slice:":3" }}***</td>
+
                 <td>
                   <i class="bi bi-person-circle me-1 text-secondary"></i>
                   {{ cliente.nombre }}
                 </td>
                 <td>{{ cliente.correo }}</td>
                 <td>{{ cliente.telefono }}</td>
+<<<<<<< HEAD
                 <td>
                   <!-- Botón para ver detalles del cliente -->
                   <a href="{% url 'clientes:cliente_detail' cliente.pk %}" class="btn btn-sm btn-light me-1" title="Ver"><i class="bi bi-eye"></i></a>
                   <!-- Botón para editar cliente -->
                   <a href="{% url 'clientes:cliente_update' cliente.pk %}" class="btn btn-sm btn-primary me-1" title="Editar"><i class="bi bi-pencil-square"></i></a>
+=======
+>>>>>>> dfc60ca68f1136c21dfe84a6ae1d40124e095c75
 
-                  <!-- Toggle moderno inline -->
+                <td>
+                  <!-- Ver detalle con ID encriptado -->
+                  <a href="{% url 'clientes:cliente_detail' cliente.pk|encrypt_id %}" 
+                     class="btn btn-sm btn-info me-1" title="Ver">
+                    <i class="bi bi-eye"></i>
+                  </a>
+
+                  <!-- Editar cliente con ID encriptado -->
+                  <a href="{% url 'clientes:cliente_update' cliente.pk|encrypt_id %}" 
+                     class="btn btn-sm btn-primary me-1" title="Editar">
+                    <i class="bi bi-pencil-square"></i>
+                  </a>
+
+                  <!-- Toggle usando ID encriptado -->
                   <label class="switch" title="{% if cliente.activo %}Activo{% else %}Inactivo{% endif %}">
-                    <input type="checkbox" class="switch-input cliente-toggle" data-id="{{ cliente.pk }}" {% if cliente.activo %}checked{% endif %}>
+                    <input 
+                      type="checkbox" 
+                      class="switch-input cliente-toggle"
+                      data-id="{{ cliente.pk|encrypt_id }}"
+                      {% if cliente.activo %}checked{% endif %}>
                     <span class="switch-label"></span>
                   </label>
                 </td>
               </tr>
             {% empty %}
-              <!-- Mensaje si no hay clientes registrados -->
               <tr>
                 <td colspan="5" class="text-center">No hay clientes registrados.</td>
               </tr>
@@ -80,21 +100,18 @@
       {% if is_paginated %}
         <nav>
           <ul class="pagination justify-content-center">
-            <!-- Botón de página anterior -->
             {% if page_obj.has_previous %}
               <li class="page-item">
                 <a class="page-link" href="?q={{ request.GET.q }}&page={{ page_obj.previous_page_number }}">Anterior</a>
               </li>
             {% endif %}
 
-            <!-- Números de página -->
             {% for num in paginator.page_range %}
               <li class="page-item {% if page_obj.number == num %}active{% endif %}">
                 <a class="page-link" href="?q={{ request.GET.q }}&page={{ num }}">{{ num }}</a>
               </li>
             {% endfor %}
 
-            <!-- Botón de página siguiente -->
             {% if page_obj.has_next %}
               <li class="page-item">
                 <a class="page-link" href="?q={{ request.GET.q }}&page={{ page_obj.next_page_number }}">Siguiente</a>
@@ -106,6 +123,7 @@
     </div>
   </div>
 
+  <!-- JAVASCRIPT -->
   <script>
     ;(function () {
       function getCookie(name) {
@@ -116,34 +134,36 @@
 
       document.querySelectorAll('.cliente-toggle').forEach((cb) => {
         cb.addEventListener('change', function () {
-          const id = this.dataset.id
-          const checkedBefore = this.checked
-          // enviar petición
-          fetch("{% url 'clientes:cliente_toggle_activo' 0 %}".replace('0', id), {
+          const id = this.dataset.id;  // ← ahora ID encriptado
+          const checkedBefore = this.checked;
+
+          fetch("{% url 'clientes:cliente_toggle_activo' 'TOKEN' %}".replace('TOKEN', id), {
             method: 'POST',
             headers: {
               'X-CSRFToken': csrftoken,
               'Accept': 'application/json'
-            },
+            }
           })
-            .then((r) => r.json())
-            .then((data) => {
-              if (!data.success) {
-                // revertir estado si hubo error y mostrar mensaje
-                this.checked = !checkedBefore
-                Swal ? Swal.fire('Error', data.error || 'No fue posible actualizar', 'error') : alert(data.error || 'No fue posible actualizar')
-                return
-              }
-              // opcional: mostrar pequeño tooltip o cambiar title
-              this.closest('label.switch').title = data.activo ? 'Activo' : 'Inactivo'
-            })
-            .catch((err) => {
-              console.error(err)
-              this.checked = !checkedBefore
-              alert('Error en la petición.')
-            })
-        })
-      })
-    })()
+          .then((r) => r.json())
+          .then((data) => {
+            if (!data.success) {
+              this.checked = !checkedBefore;
+              Swal ? Swal.fire('Error', data.error || 'No fue posible actualizar', 'error') : alert(data.error || 'No fue posible actualizar');
+              return;
+            }
+
+            this.closest('label.switch').title = data.activo ? 'Activo' : 'Inactivo';
+          })
+          .catch((err) => {
+            console.error(err);
+            this.checked = !checkedBefore;
+            alert('Error en la petición.');
+          });
+
+        });
+      });
+
+    })();
   </script>
+
 {% endblock %}

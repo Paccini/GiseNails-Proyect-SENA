@@ -19,6 +19,17 @@ from reserva.models import HorarioDisponible
 from django.contrib import messages
 from django.http import JsonResponse  # <-- agregar si no está
 from datetime import datetime
+from cryptography.fernet import Fernet
+from django.conf import settings
+from cryptography.fernet import Fernet
+fernet = Fernet(settings.ENCRYPT_KEY)
+def encrypt_id(pk: int) -> str:
+    """Convierte un ID normal en uno cifrado"""
+    return fernet.encrypt(str(pk).encode()).decode()
+
+def decrypt_id(token: str) -> int:
+    """Convierte un token cifrado en el ID real"""
+    return int(fernet.decrypt(token.encode()).decode())
 
 @login_required
 @never_cache
@@ -199,12 +210,21 @@ class ClienteListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         return queryset
 
 @method_decorator(never_cache, name='dispatch')
-class ClienteDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
+class ClienteDetailView(DetailView):
     model = Cliente
     template_name = 'clientes/cliente_detail.html'
+    context_object_name = 'cliente'
 
-    def test_func(self):
-        return self.request.user.is_staff
+    def get_object(self, queryset=None):
+        token = self.kwargs.get("token", None)
+        if not token:
+            raise ValueError("No se recibió token en la URL.")
+
+        # Desencriptar
+        fernet = Fernet(settings.ENCRYPT_KEY)
+        decrypted_id = fernet.decrypt(token.encode()).decode()
+
+        return Cliente.objects.get(id=decrypted_id)
 
 @method_decorator(never_cache, name='dispatch')
 class ClienteCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
@@ -216,15 +236,16 @@ class ClienteCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     def test_func(self):
         return self.request.user.is_staff
 
-@method_decorator(never_cache, name='dispatch')
-class ClienteUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class ClienteUpdateView(UpdateView):
     model = Cliente
     form_class = ClienteForm
-    template_name = 'clientes/cliente_form.html'
-    success_url = reverse_lazy('clientes:cliente_list')
+    template_name = "clientes/cliente_form.html"
+    context_object_name = ("cliente:cliente_list")
 
-    def test_func(self):
-        return self.request.user.is_staff
+    def get_object(self, queryset=None):
+        token = self.kwargs.get("token")        # Recibir el token de la URL
+        cliente_id = decrypt_id(token)          # Desencriptar
+        return get_object_or_404(Cliente, pk=cliente_id)
 
 @method_decorator(never_cache, name='dispatch')
 class ClienteDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
@@ -304,18 +325,32 @@ def agendar_reserva(request):
 @login_required
 @never_cache
 def cancelar_reserva(request, pk):
+    try:
+        real_pk = decrypt_id(pk)
+    except:
+        return redirect('clientes:panel')
+
     cliente = get_object_or_404(Cliente, user=request.user)
-    reserva = get_object_or_404(Reserva, pk=pk, cliente=cliente)
+    reserva = get_object_or_404(Reserva, pk=real_pk, cliente=cliente)
+
     if request.method == 'POST':
         reserva.delete()
         return redirect('clientes:panel')
+
     return render(request, 'clientes/cancelar_reserva.html', {'reserva': reserva})
 
 @login_required
 @never_cache
 def confirmar_reserva(request, pk):
-    cliente = get_object_or_404(Cliente, pk=pk)
-    reserva = get_object_or_404(Reserva, cliente=cliente)
+    try:
+        real_pk = decrypt_id(pk)
+    except:
+        return redirect('clientes:panel')
+
+    cliente = get_object_or_404(Cliente, user=request.user)
+    reserva = get_object_or_404(Reserva, pk=real_pk, cliente=cliente)
+
+    
     if request.method == 'POST':
         nuevo_estado = request.POST.get('estado')
         if nuevo_estado in dict(Reserva.ESTADO_CHOICES):
@@ -323,16 +358,18 @@ def confirmar_reserva(request, pk):
             reserva.save()
     return redirect('clientes:cliente_list')
 
+
 def toggle_cliente_activo(request, pk):
-    """
-    Endpoint AJAX: alterna cliente.activo.
-    Si se intenta deshabilitar y tiene reservas pendientes/confirmadas, devuelve error.
-    """
     if not request.user.is_authenticated or not request.user.is_staff:
         return JsonResponse({'success': False, 'error': 'No autorizado.'}, status=403)
 
-    cliente = get_object_or_404(Cliente, pk=pk)
-    # Intentamos deshabilitar -> validar reservas activas
+    try:
+        real_pk = decrypt_id(pk)
+    except:
+        return JsonResponse({'success': False, 'error': 'Token inválido.'}, status=400)
+
+    cliente = get_object_or_404(Cliente, pk=real_pk)
+
     if cliente.activo:
         tiene_reservas = Reserva.objects.filter(cliente=cliente, estado__in=['pendiente', 'confirmada']).exists()
         if tiene_reservas:

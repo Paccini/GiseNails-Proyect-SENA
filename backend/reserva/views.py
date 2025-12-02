@@ -17,11 +17,29 @@ from django.views.generic import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .forms import PagoReservaForm
 from django.contrib import messages
+from cryptography.fernet import Fernet
+from django.conf import settings
 from django.core.mail import send_mail
 from django.conf import settings
 from decimal import Decimal
 from django import forms
 from django.utils.formats import number_format, localize
+
+# --------------------------------------------------
+#  ENCRIPTACIÓN (tu metodología)
+# --------------------------------------------------
+fernet = Fernet(settings.ENCRYPT_KEY)
+
+def encrypt_id(pk: int) -> str:
+    """Convierte un ID normal en uno cifrado"""
+    return fernet.encrypt(str(pk).encode()).decode()
+
+def decrypt_id(token: str) -> int:
+    """Convierte un token cifrado en el ID real"""
+    return int(fernet.decrypt(token.encode()).decode())
+# --------------------------------------------------
+
+
 
 class ReferenciaPagoForm(forms.Form):
     metodo = forms.ChoiceField(choices=[('nequi', 'Nequi'), ('daviplata', 'Daviplata')], widget=forms.Select(attrs={'class': 'form-select'}))
@@ -104,6 +122,7 @@ def reserva(request):
         'servicios_por_categoria': servicios_por_categoria,
     })
 
+
 def horarios_disponibles(request):
     fecha = request.GET.get('fecha')
     gestora_id = request.GET.get('gestora_id')
@@ -133,6 +152,7 @@ def horarios_disponibles(request):
             'disabled': disabled
         })
     return JsonResponse({'horarios': horarios_data})
+
 
 @login_required
 @user_passes_test(lambda u: u.is_staff)
@@ -211,6 +231,7 @@ def home(request):
     }
     return render(request, 'reservas/home.html', context)
 
+
 @login_required
 @user_passes_test(lambda u: u.is_staff)
 @never_cache
@@ -236,11 +257,17 @@ def agregar_reserva(request):
 
     return render(request, 'reservas/agregar.html', {'form': form})
 
+
 @login_required
 @user_passes_test(lambda u: u.is_staff)
 @never_cache
-def editar_reserva(request, pk):
-    cita = get_object_or_404(Reserva, pk=pk)
+def editar_reserva(request, token):
+    try:
+        real_pk = decrypt_id(token)
+    except Exception:
+        return redirect('reserva:home')
+    
+    cita = get_object_or_404(Reserva, pk=real_pk)
     if request.method == 'POST':
         nuevo_estado = request.POST.get('estado')
         if nuevo_estado in dict(Reserva.ESTADO_CHOICES):
@@ -250,14 +277,19 @@ def editar_reserva(request, pk):
             return redirect('reserva:home')
     else:
         form = ReservaEditForm(instance=cita)
-    context = {'form': form}
-    return render(request, 'reservas/editar.html', context)
+    return render(request, 'reservas/editar.html', {'form': form})
+
 
 @login_required
 @user_passes_test(lambda u: u.is_staff)
 @never_cache
-def eliminar_reserva(request, pk):
-    cita = get_object_or_404(Reserva, pk=pk)
+def eliminar_reserva(request, token):
+    try:
+        real_pk = decrypt_id(token)
+    except Exception:
+        return redirect('reserva:home')
+    
+    cita = get_object_or_404(Reserva, pk=real_pk)
     if request.method == 'POST':
         cita.delete()
         return redirect("reserva:home")
@@ -383,10 +415,22 @@ def completar_reserva(request):
 
     return redirect('clientes:panel')
 
+
 from django.contrib.auth.models import User
 
-def confirmar_reserva(request, pk):
-    reserva = get_object_or_404(Reserva, pk=pk)
+@login_required
+def confirmar_reserva(request, token):
+    """
+    Ahora recibe token (cifrado). Desencriptamos y confirmamos.
+    """
+    try:
+        real_pk = decrypt_id(token)
+    except Exception:
+        return redirect('reserva:home')
+
+    reserva = get_object_or_404(Reserva, pk=real_pk)
+
+    # Verificar si el correo del cliente existe en la base de datos
     cliente_email = reserva.cliente.correo
     if not User.objects.filter(username=cliente_email).exists():
         return render(request, 'login/login.html', {

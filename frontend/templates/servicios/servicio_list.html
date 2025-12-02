@@ -1,4 +1,6 @@
 {% extends 'base_admin.html' %}
+
+{% load token_filters %}
 {% block content %}
 
 <!-- Encabezado de la página con título y botón para agregar servicios -->
@@ -41,7 +43,7 @@
                     <!-- Bucle que recorre todos los servicios -->
                     {% for servicio in servicios %}
                     <tr>
-                        <td>{{ servicio.id }}</td>
+                        <td>{{ servicio.id|encrypt_id }}</td>
                         <td>
                             {% if servicio.imagen %}
                                 <img src="{{ servicio.imagen.url }}" alt="{{ servicio.nombre }}" style="width:48px;height:48px;object-fit:cover;border-radius:8px;">
@@ -56,6 +58,7 @@
                         <td>{{ servicio.descripcion }}</td>
                         <td>${{ servicio.precio }}</td>
                         <td>{{ servicio.categoria }}</td>
+<<<<<<< HEAD
                         <!-- ... -->
 <td>
     <div class="d-flex gap-2">
@@ -70,6 +73,22 @@
         </a>
     </div>
 </td>
+=======
+                        <td>
+                            <!-- Botones de acción: Ver, Editar, Eliminar -->
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'servicio:servicio_detail' servicio.id|encrypt_id %}" class="btn btn-sm btn-info" title="Ver">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a href="{% url 'servicio:servicio_update' servicio.id|encrypt_id %}" class="btn btn-sm btn-primary" title="Editar">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <a href="{% url 'servicio:servicio_delete' servicio.id|encrypt_id %}" class="btn btn-sm btn-danger" title="Eliminar">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+>>>>>>> dfc60ca68f1136c21dfe84a6ae1d40124e095c75
                     </tr>
                     {% empty %}
                     <!-- Mensaje mostrado si no existen servicios -->
