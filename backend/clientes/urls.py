@@ -24,10 +24,10 @@ urlpatterns = [
     path('editar-perfil/', views.editar_perfil, name='editar_perfil'),
     path('<str:token>/toggle-activo/', views.toggle_cliente_activo, name='cliente_toggle_activo'),
 
-    path('abonar/<int:pk>/', reserva_views.abonar_reserva, name='abonar_reserva'),
-    path('pago-efectivo/<int:pk>/', reserva_views.pago_efectivo, name='pago_efectivo'),
+    path('abonar/<str:token>/', reserva_views.abonar_reserva, name='abonar_reserva'),
+    path('pago-efectivo/<str:token>/', reserva_views.pago_efectivo, name='pago_efectivo'),
 
-    path('pagar-completo/<int:pk>/', reserva_views.pagar_completo, name='pagar_completo'),
+    path('pagar-completo/<str:token>/', reserva_views.pagar_completo, name='pagar_completo'),
 
-    path('pagar-saldo/<int:pk>/', reserva_views.pagar_saldo, name='pagar_saldo'),
+    path('pagar-saldo/<str:token>/', reserva_views.pagar_saldo, name='pagar_saldo'),
 ]
