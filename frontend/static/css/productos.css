@@ -307,3 +307,11 @@ body.pag-navigating .productos-page {
     .objetivo-section { padding: 18px 12px; }
     .objetivo-section .productos-section-title { font-size: 1.25rem; }
 }
+
+/* Forzar fuentes del proyecto (definidas en base.css) */
+body {
+  font-family: var(--fuente-textos) !important;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--fuente-titulos) !important;
+}
