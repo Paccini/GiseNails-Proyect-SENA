@@ -228,13 +228,13 @@ body.dark-mode .table thead th {
 }
 
 .btn-warning {
-    background: #fde68a;
-    color: #e7eef1;
+    background: #db478c;
+    color: #dee7de;
     border: none;
 }
 
 .btn-warning:hover {
-    background: #fbbf24;
+    background: #de3b9a;
     color: #fff;
 }
 
@@ -1173,79 +1173,161 @@ body {
 
 /* Botones principales con degradado y sombra */
 .btn-success, .btn-primary {
-    background: linear-gradient(90deg, #db478c 0%, #ffb6e6 100%);
-    color: #fff !important;
+    background: linear-gradient(90deg, #db478c 0%, #fff 100%);
+    color: #db478c !important;
     border: none;
-    box-shadow: 0 2px 8px rgba(219,71,140,0.12);
-    transition: transform 0.15s, box-shadow 0.15s;
+    font-weight: 700;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(219,71,140,0.10);
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
 }
-.btn-success:hover, .btn-primary:hover {
-    background: linear-gradient(90deg, #ffb6e6 0%, #db478c 100%);
+.btn-light{
+    background: linear-gradient(90deg, #4f6d88 0%, #db478c 100%);
+}
+.btn-success:hover, .btn-primary:hover, .btn-success:focus, .btn-primary:focus {
+    background: linear-gradient(90deg, #fff 0%, #db478c 100%);
+    color: #fff !important;
+    box-shadow: 0 4px 16px rgba(219,71,140,0.18);
     transform: translateY(-2px) scale(1.04);
+}
+
+/* Botón cancelar: blanco con borde rosado */
+.btn-danger {
+    background: #fff;
+    color: #db478c !important;
+    border: 2px solid #db478c;
+    font-weight: 600;
+    border-radius: 10px;
+    transition: background 0.2s, color 0.2s;
+}
+.btn-danger:hover, .btn-danger:focus {
+    background: #db478c;
+    color: #fff !important;
+}
+
+/* Botón volver: borde gris, texto rosado al hover */
+.btn-outline-secondary {
+    border: 1.5px solid #adb5bd;
+    color: #232c36;
+    background: #fff;
+    border-radius: 10px;
+    font-weight: 500;
+    transition: background 0.2s, color 0.2s;
+}
+.btn-outline-secondary:hover, .btn-outline-secondary:focus {
+    background: #f8fafc;
+    color: #db478c;
+}
+
+/* --- FORMULARIO MODERNO --- */
+.form-card-admin {
+    max-width: 700px;
+    margin: 0 auto;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px 0 rgba(219,71,140,0.13);
+    padding: 0;
+}
+.form-admin .form-label {
+    font-weight: 600;
+    color: #db478c;
+    margin-bottom: 6px;
+}
+.form-admin input,
+.form-admin select,
+.form-admin textarea {
+    border-radius: 8px;
+    border: 1.5px solid #e8cee7;
+    background: #f8fafc;
+    color: #232c36;
+    padding: 10px 12px;
+    font-size: 1.08em;
+    margin-bottom: 2px;
+    width: 100%;
+    transition: border-color 0.2s;
+}
+.form-admin input:focus,
+.form-admin select:focus,
+.form-admin textarea:focus {
+    border-color: #db478c;
+    outline: none;
+    background: #fff;
+}
+.form-admin .form-text {
+    color: #6b7280;
+    font-size: 0.97em;
+}
+.form-admin .text-danger {
+    font-size: 0.97em;
+    margin-top: 2px;
+}
+@media (max-width: 768px) {
+    .form-card-admin {
+        padding: 0;
+    }
+    .form-admin .row {
+        flex-direction: column;
+    }
+    .form-admin .col-md-6 {
+        width: 100%;
+        margin-bottom: 12px;
+    }
+}
+
+/* --- BOTONES DE ACCIÓN EN TABLAS (VER, EDITAR, ELIMINAR) --- */
+.btn-action {
+    border-radius: 12px !important;
+    border: 2px solid #db478c !important;
+    background: #fff !important;
+    color: #db478c !important;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(219,71,140,0.07);
+    transition: background 0.18s, color 0.18s, border 0.18s, box-shadow 0.18s;
+    padding: 7px 10px !important;
+    min-width: 36px;
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-action i {
+    font-size: 1.15em;
+}
+
+.btn-action.btn-view {
+    background: linear-gradient(135deg, #5e8db4 0%, #db478c 100%) !important;
+    color: #fff !important;
+    border: 2px solid #db478c !important;
+}
+.btn-action.btn-view:hover, .btn-action.btn-view:focus {
+    background: linear-gradient(135deg, #db478c 0%, #5e8db4 100%) !important;
+    color: #fff !important;
     box-shadow: 0 4px 16px rgba(219,71,140,0.18);
 }
 
-/* Botón de cancelar más suave */
-.btn-secondary {
-    background: #f3f4f6;
-    color: #db478c !important;
-    border: none;
-    box-shadow: 0 2px 8px rgba(44,62,80,0.07);
-}
-.btn-secondary:hover {
-    background: #e8cee7;
-    color: #232c36 !important;
-}
-
-/* Botones de acciones con colores suaves y pastel */
-.btn-sm.i {
-    background: linear-gradient(135deg, #7de2d1 0%, #b2f7ef 100%);
+.btn-action.btn-edit {
+    background: linear-gradient(90deg, #db478c 0%, #ffb6e6 100%) !important;
     color: #fff !important;
-    border: none;
-    box-shadow: 0 2px 8px rgba(125,226,209,0.12);
-    transition: background 0.2s, transform 0.15s;
+    border: 2px solid #db478c !important;
 }
-.btn-sm.i:hover {
-    background: linear-gradient(135deg, #b2f7ef 0%, #7de2d1 100%);
-    transform: scale(1.07);
-}
-
-.btn-sm.btn-primary {
-    background: linear-gradient(135deg, #db478c 0%, #ffb6e6 100%);
+.btn-action.btn-edit:hover, .btn-action.btn-edit:focus {
+    background: linear-gradient(90deg, #ffb6e6 0%, #db478c 100%) !important;
     color: #fff !important;
-    border: none;
-    box-shadow: 0 2px 8px rgba(219,71,140,0.12);
-    transition: background 0.2s, transform 0.15s;
-}
-.btn-sm.btn-primary:hover {
-    background: linear-gradient(135deg, #ffb6e6 0%, #db478c 100%);
-    transform: scale(1.07);
+    box-shadow: 0 4px 16px rgba(219,71,140,0.18);
 }
 
-.btn-sm.btn-danger {
-    background: linear-gradient(135deg, #fff 0%, #ffe4f3 100%);
+.btn-action.btn-delete {
+    background: #fff !important;
     color: #db478c !important;
-    border: 2px solid #db478c;
-    box-shadow: 0 2px 8px rgba(219,71,140,0.08);
-    transition: background 0.2s, transform 0.15s;
+    border: 2px solid #db478c !important;
 }
-.btn-sm.btn-danger:hover {
-    background: linear-gradient(135deg, #ffe4f3 0%, #fff 100%);
+.btn-action.btn-delete:hover, .btn-action.btn-delete:focus {
+    background: #db478c !important;
     color: #fff !important;
-    border: 2px solid #db478c;
-    transform: scale(1.07);
+    box-shadow: 0 4px 16px rgba(219,71,140,0.18);
 }
 
-/* Iconos dentro de los botones */
-.btn-sm.i i,
-.btn-sm.btn-primary i,
-.btn-sm.btn-danger i {
-    font-size: 1.3em;
-    color: #db478c !important;
-    transition: color 0.2s;
-}
-.btn-sm.i:hover i,
-.btn-sm.btn-primary:hover i,
-.btn-sm.btn-danger:hover i {
-    color: #b01313 !important;
+/* Ajuste para que los botones no se vean pegados */
+.d-flex.gap-2 .btn-action {
+    margin-right: 0 !important;
 }

@@ -75,23 +75,25 @@
 
                         <!-- === ACCIONES CON TOKEN CIFRADO === -->
                         <td>
-                            <!-- Ver -->
-                            <a href="{% url 'productos:producto_detail' producto.id|encrypt_id %}" 
-                               class="btn btn-sm btn-info me-1" title="Ver">
-                                <i class="bi bi-eye"></i>
-                            </a>
+                            <div class="d-flex gap-2">
+                                <!-- Ver detalles -->
+                                <a href="{% url 'productos:producto_detail' producto.id|encrypt_id %}" 
+                                  class="btn btn-sm btn-action btn-view" title="Ver">
+                                    <i class="bi bi-eye"></i>
+                                </a>
 
-                            <!-- Editar -->
-                            <a href="{% url 'productos:producto_update' producto.id|encrypt_id %}" 
-                               class="btn btn-sm btn-primary me-1" title="Editar">
-                                <i class="bi bi-pencil-square"></i>
-                            </a>
+                                <!-- Editar producto -->
+                                <a href="{% url 'productos:producto_update' producto.id|encrypt_id %}" 
+                                   class="btn btn-sm btn-action btn-edit" title="Editar">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
 
-                            <!-- Eliminar -->
-                            <a href="{% url 'productos:producto_delete' producto.id|encrypt_id %}" 
-                               class="btn btn-sm btn-danger" title="Eliminar">
-                                <i class="bi bi-trash"></i>
-                            </a>
+                                <!-- Eliminar producto -->
+                                <a href="{% url 'productos:producto_delete' producto.id|encrypt_id %}" 
+                                   class="btn btn-sm btn-action btn-delete" title="Eliminar">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
                         </td>
 
                     </tr>

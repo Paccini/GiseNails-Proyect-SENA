@@ -73,7 +73,6 @@ class RegistroClienteForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Solo agregar el campo password si NO se está editando (no hay instancia)
         if not self.instance.pk:
             self.fields['password'] = forms.CharField(
                 widget=forms.PasswordInput(attrs={

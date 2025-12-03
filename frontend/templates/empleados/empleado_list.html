@@ -86,7 +86,7 @@
                 </td>
                 <td>
                   <!-- Botones de acción: editar y eliminar -->
-                  <a href="{% url 'empleados:empleado_update' empleado.id|encrypt_id %}" class="btn btn-sm btn-warning me-1" title="Editar"><i class="bi bi-pencil-square"></i></a>
+                  <a href="{% url 'empleados:empleado_update' empleado.id|encrypt_id %}" class="btn btn-sm btn-light me-1" title="Editar"><i class="bi bi-pencil-square"></i></a>
 
                   <!-- Toggle moderno inline -->
                   <label class="switch" title="{% if empleado.activo %}Activo{% else %}Inactivo{% endif %}">
