@@ -17,28 +17,23 @@ from django.views.generic import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .forms import PagoReservaForm
 from django.contrib import messages
-from cryptography.fernet import Fernet, InvalidToken # <-- IMPORTAR InvalidToken
+from cryptography.fernet import Fernet, InvalidToken
 from django.conf import settings
-from django.core.mail import send_mail # <-- MOVÍ ESTA IMPORTACIÓN ARRIBA
-from decimal import Decimal
+from django.core.mail import send_mail
 from django import forms
-from django.utils.formats import number_format, localize
-from django.contrib.auth.models import User # <-- MOVÍ ESTA IMPORTACIÓN ARRIBA
 from django.views.decorators.csrf import csrf_exempt
+from decimal import Decimal
+from django.utils.formats import localize
+from django.contrib.auth.models import User
 
-# --------------------------------------------------
-# ENCRIPTACIÓN (tu metodología)
-# --------------------------------------------------
+# Encriptación
 fernet = Fernet(settings.ENCRYPT_KEY)
 
 def encrypt_id(pk: int) -> str:
-    """Convierte un ID normal en uno cifrado"""
     return fernet.encrypt(str(pk).encode()).decode()
 
 def decrypt_id(token: str) -> int:
-    """Convierte un token cifrado en el ID real"""
     return int(fernet.decrypt(token.encode()).decode())
-# --------------------------------------------------
 
 class ReferenciaPagoForm(forms.Form):
     metodo = forms.ChoiceField(choices=[('nequi', 'Nequi'), ('daviplata', 'Daviplata')], widget=forms.Select(attrs={'class': 'form-select'}))
@@ -83,14 +78,12 @@ def reserva(request):
                 return JsonResponse({"success": False, "error": "Horario no disponible (selecciona otro)."})
 
             try:
-                # Intenta el formato DD/MM/YYYY primero, luego ISO
                 try:
                     fecha = datetime.strptime(fecha_str, '%d/%m/%Y').date()
                 except ValueError:
                     fecha = datetime.fromisoformat(fecha_str).date()
             except Exception:
-                 return JsonResponse({"success": False, "error": "Formato de fecha inválido."})
-
+                return JsonResponse({"success": False, "error": "Formato de fecha inválido."})
 
             pending = {
                 'gestora_id': gestora.id,
@@ -126,7 +119,6 @@ def reserva(request):
         'servicios_por_categoria': servicios_por_categoria,
     })
 
-
 def horarios_disponibles(request):
     fecha = request.GET.get('fecha')
     gestora_id = request.GET.get('gestora_id')
@@ -157,7 +149,6 @@ def horarios_disponibles(request):
         })
     return JsonResponse({'horarios': horarios_data})
 
-
 @login_required
 @user_passes_test(lambda u: u.is_staff)
 @never_cache
@@ -166,17 +157,11 @@ def home(request):
     hoy = ahora.date()
     hora_actual = ahora.time().replace(second=0, microsecond=0)
 
-    # Lógica de cancelación consolidada y simplificada. 
-    # Idealmente, esto debe ser una tarea programada (celery/cron).
-    
-    # 1. Cancelar pendientes cuya fecha es anterior a hoy
     Reserva.objects.filter(
         estado='pendiente',
         fecha__lt=hoy
     ).exclude(pagos__confirmado=True).update(estado='cancelada')
 
-    # 2. Cancelar pendientes de hoy cuya hora ya pasó (o está a punto de pasar, 1 hora de margen)
-    hora_limite_cancelacion = (datetime.combine(hoy, hora_actual) - timedelta(hours=1)).time()
     Reserva.objects.filter(
         estado='pendiente',
         fecha=hoy,
@@ -191,20 +176,17 @@ def home(request):
 
     citas = Reserva.objects.all()
 
-    # FILTRO POR REFERENCIA DE PAGO O FACTURA
     if referencia:
         citas = citas.filter(
             Q(pagos__referencia__icontains=referencia) |
             Q(facturas__referencia__icontains=referencia)
         ).distinct()
     else:
-        # Filtros normales: Si no hay referencia, aplicamos filtros de estado y fecha
         if not estado:
             citas = citas.exclude(estado__in=['cancelada', 'realizada'])
         else:
             citas = citas.filter(estado=estado)
 
-        # Filtrar por rango de fechas
         if fecha_inicio:
             citas = citas.filter(fecha__gte=fecha_inicio)
         if fecha_fin:
@@ -212,7 +194,6 @@ def home(request):
         if usuario:
             citas = citas.filter(cliente__nombre__icontains=usuario)
 
-    # 🔑 Generar encrypted_id para los enlaces del dashboard
     for cita in citas:
         cita.encrypted_id = encrypt_id(cita.pk)
         
@@ -234,7 +215,6 @@ def home(request):
     }
     return render(request, 'reservas/home.html', context)
 
-
 @login_required
 @user_passes_test(lambda u: u.is_staff)
 @never_cache
@@ -243,7 +223,6 @@ def agregar_reserva(request):
     gestora = request.GET.get('gestora')
     form = ReservaForm(request.POST or None)
 
-    # Filtra las horas solo si hay fecha y gestora seleccionadas
     if fecha and gestora:
         ocupadas = Reserva.objects.filter(
             gestora_id=gestora,
@@ -255,11 +234,37 @@ def agregar_reserva(request):
         form.fields['hora'].queryset = HorarioDisponible.objects.all().order_by('hora')
 
     if request.method == 'POST' and form.is_valid():
-        form.save()
+        reserva_obj = form.save()
+        # Notificación profesional al cliente
+        cliente = reserva_obj.cliente
+        servicio = reserva_obj.servicio
+        fecha_str = reserva_obj.fecha.strftime('%d/%m/%Y')
+        hora_str = reserva_obj.hora.hora.strftime('%H:%M')
+        empleado = reserva_obj.gestora
+        mensaje_html = f"""
+        <div style="font-family: 'Montserrat', Arial, sans-serif; background: #f8f9fa; padding: 32px; border-radius: 18px;">
+          <h2 style="color: #d63384;">¡Tu cita ha sido agendada!</h2>
+          <p>Hola <b>{cliente.nombre}</b>,<br>
+          Tu cita para <b>{servicio.nombre}</b> ha sido registrada.<br>
+          <b>Fecha:</b> {fecha_str}<br>
+          <b>Hora:</b> {hora_str}<br>
+          <b>Profesional:</b> {empleado.nombre} {empleado.apellidos}<br>
+          </p>
+          <hr>
+          <p style="color: #d63384;">GiseNails - Tu bienestar, nuestra prioridad.</p>
+        </div>
+        """
+        send_mail(
+            subject="Confirmación de cita en GiseNails",
+            message="Tu cita ha sido agendada.",
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[cliente.correo],
+            html_message=mensaje_html,
+            fail_silently=False,
+        )
         return redirect('reserva:home')
 
     return render(request, 'reservas/agregar.html', {'form': form})
-
 
 @login_required
 @user_passes_test(lambda u: u.is_staff)
@@ -267,7 +272,7 @@ def agregar_reserva(request):
 def editar_reserva(request, token):
     try:
         real_pk = decrypt_id(token)
-    except InvalidToken: # <-- Manejo específico de error de token
+    except InvalidToken:
         messages.error(request, "Token de reserva inválido.")
         return redirect('reserva:home')
     
@@ -277,12 +282,37 @@ def editar_reserva(request, token):
         if nuevo_estado in dict(Reserva.ESTADO_CHOICES):
             cita.estado = nuevo_estado
             cita.save()
-            messages.success(request, "Estado actualizado correctamente.")
+            # Notificación profesional al cliente
+            cliente = cita.cliente
+            servicio = cita.servicio
+            fecha_str = cita.fecha.strftime('%d/%m/%Y')
+            hora_str = cita.hora.hora.strftime('%H:%M')
+            estado_display = dict(Reserva.ESTADO_CHOICES).get(nuevo_estado, nuevo_estado)
+            mensaje_html = f"""
+            <div style="font-family: 'Montserrat', Arial, sans-serif; background: #f8f9fa; padding: 32px; border-radius: 18px;">
+              <h2 style="color: #d63384;">Actualización de tu cita</h2>
+              <p>Hola <b>{cliente.nombre}</b>,<br>
+              El estado de tu cita para <b>{servicio.nombre}</b> ha cambiado a <b>{estado_display}</b>.<br>
+              <b>Fecha:</b> {fecha_str}<br>
+              <b>Hora:</b> {hora_str}<br>
+              </p>
+              <hr>
+              <p style="color: #d63384;">GiseNails - Siempre a tu servicio.</p>
+            </div>
+            """
+            send_mail(
+                subject="Actualización de estado de tu cita en GiseNails",
+                message=f"Tu cita ha cambiado a estado {estado_display}.",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[cliente.correo],
+                html_message=mensaje_html,
+                fail_silently=False,
+            )
+            messages.success(request, "Estado de la cita actualizado correctamente.")
             return redirect('reserva:home')
     else:
         form = ReservaEditForm(instance=cita)
     return render(request, 'reservas/editar.html', {'form': form})
-
 
 @login_required
 @user_passes_test(lambda u: u.is_staff)
@@ -290,7 +320,7 @@ def editar_reserva(request, token):
 def eliminar_reserva(request, token):
     try:
         real_pk = decrypt_id(token)
-    except InvalidToken: # <-- Manejo específico de error de token
+    except InvalidToken:
         messages.error(request, "Token de reserva inválido.")
         return redirect('reserva:home')
     
@@ -343,16 +373,12 @@ def completar_reserva(request):
             estado='pendiente'
         )
         
-        # --- ENVÍO DE CORREO AL CLIENTE ---
         correo_destino = cliente.correo or pending.get('correo')
         if correo_destino:
             servicio_nombre = reserva_obj.servicio.nombre
-            
-            # La fecha debe ser un objeto date o datetime aquí, pero nos aseguramos
             fecha_dt = reserva_obj.fecha
             if isinstance(reserva_obj.fecha, str):
-                fecha_dt = datetime.fromisoformat(reserva_obj.fecha).date() # Asegurar que es date si es string
-                
+                fecha_dt = datetime.fromisoformat(reserva_obj.fecha).date()
             fecha = fecha_dt.strftime('%d/%m/%Y')
             hora = reserva_obj.hora.hora.strftime('%H:%M')
             mensaje = f"Hola {cliente.nombre},\n\nTu cita para '{servicio_nombre}' ha sido agendada para el día {fecha} a las {hora}.\n\n¡Gracias por reservar con Gise-Nails!"
@@ -369,21 +395,17 @@ def completar_reserva(request):
             send_mail(
                 subject="Confirmación de tu cita en Gise-Nails",
                 message=mensaje,
-                from_email=None,
+                from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=[correo_destino],
                 fail_silently=False,
                 html_message=mensaje_html
             )
         
-        # --- ENVÍO DE CORREO AL EMPLEADO ---
         gestora = reserva_obj.gestora
         servicio = reserva_obj.servicio
-        
-        # La fecha ya está limpia como objeto date/datetime de la sección anterior
         fecha_dt = reserva_obj.fecha
         if isinstance(reserva_obj.fecha, str):
             fecha_dt = datetime.fromisoformat(reserva_obj.fecha).date()
-
         fecha = fecha_dt.strftime('%d/%m/%Y')
         hora = reserva_obj.hora.hora.strftime('%H:%M')
         mensaje_empleado = (
@@ -407,7 +429,6 @@ def completar_reserva(request):
                 <b>Hora:</b> <span style="color:#d63384;">{hora}</span>
             </p>
             <hr style="margin: 24px 0; border: none; border-top: 2px solid #ffb6e6;">
-          
             <p style="margin-top: 32px; color: #d63384; font-weight: bold; font-size: 1.2rem;">
                 ¡Gracias por tu dedicación! 💅
             </p>
@@ -416,38 +437,27 @@ def completar_reserva(request):
         send_mail(
             subject="Nueva cita reservada en Gise-Nails",
             message=mensaje_empleado,
-            from_email=None,
+            from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[gestora.correo],
             fail_silently=False,
             html_message=mensaje_html_empleado
         )
-    # Limpia la sesión
     if 'pending_reserva' in request.session:
         del request.session['pending_reserva']
 
     return redirect('clientes:panel')
 
-
-# ⚠️ ELIMINADA: La vista `crear_reserva` estaba rota y no funcional.
-
-
 @login_required
 def confirmar_reserva(request, token):
-    """
-    Ahora recibe token (cifrado). Desencriptamos y confirmamos.
-    """
     try:
         real_pk = decrypt_id(token)
-    except InvalidToken: # <-- Manejo específico de error de token
+    except InvalidToken:
         messages.error(request, "Enlace de confirmación inválido.")
         return redirect('clientes:panel')
 
     reserva = get_object_or_404(Reserva, pk=real_pk)
-
-    # Verificar si el cliente tiene un usuario asociado
     cliente_email = reserva.cliente.correo
     if not User.objects.filter(username=cliente_email).exists():
-        # Si no existe, redirige al login/registro con la opción de pre-llenar el correo
         return render(request, 'login/login.html', {
             'register_active': True,
             'prefill_email': cliente_email,
@@ -463,7 +473,7 @@ def confirmar_reserva(request, token):
 def abonar_reserva(request, token):
     try:
         pk = decrypt_id(token)
-    except InvalidToken: # <-- Manejo de InvalidToken
+    except InvalidToken:
         messages.error(request, "Enlace de reserva inválido.")
         return redirect('clientes:panel')
         
@@ -480,7 +490,7 @@ def abonar_reserva(request, token):
         if form.is_valid():
             metodo = form.cleaned_data['metodo']
             referencia = form.cleaned_data['referencia']
-            PagoReserva.objects.create(
+            pago = PagoReserva.objects.create(
                 reserva=reserva,
                 cliente=reserva.cliente,
                 monto=monto_abono,
@@ -507,6 +517,35 @@ def abonar_reserva(request, token):
                 factura.metodo = metodo
                 factura.referencia = referencia
                 factura.save()
+            # Notificación profesional al cliente
+            cliente = reserva.cliente
+            servicio = reserva.servicio
+            fecha_str = reserva.fecha.strftime('%d/%m/%Y')
+            hora_str = reserva.hora.hora.strftime('%H:%M')
+            mensaje_html = f"""
+            <div style="font-family: 'Montserrat', Arial, sans-serif; background: #f8f9fa; padding: 32px; border-radius: 18px;">
+              <h2 style="color: #198754;">¡Pago recibido!</h2>
+              <p>Hola <b>{cliente.nombre}</b>,<br>
+              Hemos recibido tu abono para el servicio <b>{servicio.nombre}</b>.<br>
+              <b>Fecha de la cita:</b> {fecha_str}<br>
+              <b>Hora:</b> {hora_str}<br>
+              <b>Monto abonado:</b> ${monto_abono}<br>
+              <b>Método:</b> {metodo}<br>
+              <b>Referencia:</b> {referencia}<br>
+              <span style="color: #d63384;">Recuerda que tienes un saldo pendiente de ${factura.saldo_restante}.</span>
+              </p>
+              <hr>
+              <p style="color: #d63384;">GiseNails - Gracias por tu confianza.</p>
+            </div>
+            """
+            send_mail(
+                subject="Confirmación de abono en GiseNails",
+                message="Hemos recibido tu abono.",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[cliente.correo],
+                html_message=mensaje_html,
+                fail_silently=False,
+            )
             messages.success(request, "Referencia enviada. El equipo validará tu pago y confirmará tu cita.")
             return redirect('clientes:panel')
     else:
@@ -550,7 +589,7 @@ def facturacion(request):
 def pagar_saldo(request, token):
     try:
         pk = decrypt_id(token)
-    except InvalidToken: # <-- Manejo de InvalidToken
+    except InvalidToken:
         messages.error(request, "Enlace de pago inválido.")
         return redirect('clientes:panel')
         
@@ -568,33 +607,49 @@ def pagar_saldo(request, token):
         if form.is_valid():
             metodo = form.cleaned_data['metodo']
             referencia = form.cleaned_data['referencia']
-            
-            # Crear un registro de pago por el saldo restante
-            PagoReserva.objects.create(
+            pago = PagoReserva.objects.create(
                 reserva=reserva,
                 cliente=reserva.cliente,
                 monto=monto_saldo,
                 metodo=metodo,
                 confirmado=False,
                 referencia=referencia,
-                tipo_pago='saldo' # Nuevo tipo para el saldo
+                tipo_pago='saldo'
             )
-            
-            # Actualizar Factura
             factura.saldo_restante = 0
             factura.pagado = True
             factura.metodo = metodo
             factura.referencia = referencia
             factura.save()
-            
-            messages.success(request, "¡Pago completado! Gracias por cancelar el saldo restante.")
+            cliente = reserva.cliente
+            servicio = reserva.servicio
+            fecha_str = reserva.fecha.strftime('%d/%m/%Y')
+            hora_str = reserva.hora.hora.strftime('%H:%M')
+            mensaje_html = f"""
+            <div style="font-family: 'Montserrat', Arial, sans-serif; background: #f8f9fa; padding: 32px; border-radius: 18px;">
+              <h2 style="color: #198754;">¡Pago recibido!</h2>
+              <p>Hola <b>{cliente.nombre}</b>,<br>
+              Hemos recibido tu pago del saldo restante para el servicio <b>{servicio.nombre}</b>.<br>
+              <b>Fecha de la cita:</b> {fecha_str}<br>
+              <b>Hora:</b> {hora_str}<br>
+              <b>Monto pagado:</b> ${monto_saldo}<br>
+              <b>Método:</b> {metodo}<br>
+              <b>Referencia:</b> {referencia}<br>
+              <span style="color: #198754;">¡Tu pago está completo! Nos vemos en tu cita.</span>
+              </p>
+              <hr>
+              <p style="color: #d63384;">GiseNails - Gracias por tu confianza.</p>
+            </div>
+            """
             send_mail(
-                subject="Pago de saldo restante - Gise Nails",
-                message=f"El cliente {factura.cliente.nombre} pagó el saldo restante de la reserva #{reserva.pk}.\nReferencia: {referencia}\nMétodo: {metodo}\nMonto: ${monto_saldo}",
+                subject="Confirmación de pago de saldo en GiseNails",
+                message="Hemos recibido tu pago de saldo.",
                 from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=["juansarcila20@gmail.com"],
-                fail_silently=True,
+                recipient_list=[cliente.correo],
+                html_message=mensaje_html,
+                fail_silently=False,
             )
+            messages.success(request, "¡Pago completado! Gracias por cancelar el saldo restante.")
             return redirect('clientes:panel')
             
     return render(request, 'reserva/pagar_saldo.html', {
@@ -608,38 +663,21 @@ def pagar_saldo(request, token):
 def pago_efectivo(request, token):
     try:
         pk = decrypt_id(token)
-    except InvalidToken: # <-- Manejo de InvalidToken
+    except InvalidToken:
         messages.error(request, "Enlace de pago inválido.")
         return redirect('clientes:panel')
         
     reserva = get_object_or_404(Reserva, pk=pk, cliente__user=request.user)
     if request.method == 'POST':
-        # La lógica de pago en efectivo debe ser validada por el administrador.
         messages.warning(request, "El pago en efectivo se registra en persona. Por favor, realiza el pago en el local.")
         return redirect('clientes:panel')
-
-    # Si se mantiene la lógica de registrar el pago completo en efectivo, debe estar seguro:
-    """
-    if request.method == 'POST':
-        PagoReserva.objects.create(
-            reserva=reserva,
-            cliente=reserva.cliente,
-            monto=reserva.servicio.precio,
-            metodo='efectivo',
-            confirmado=True,
-            referencia='Pago en efectivo - Cliente',
-            tipo_pago='completo'
-        )
-        messages.success(request, "¡Pago en efectivo registrado correctamente!")
-        return redirect('clientes:panel')
-    """
     return redirect('clientes:panel')
 
 @login_required
 def pagar_completo(request, token):
     try:
         pk = decrypt_id(token)
-    except InvalidToken: # <-- Manejo de InvalidToken
+    except InvalidToken:
         messages.error(request, "Enlace de pago inválido.")
         return redirect('clientes:panel')
         
@@ -654,9 +692,7 @@ def pagar_completo(request, token):
         if form.is_valid():
             metodo = form.cleaned_data['metodo']
             referencia = form.cleaned_data['referencia']
-            
-            # Crear PagoReserva
-            PagoReserva.objects.create(
+            pago = PagoReserva.objects.create(
                 reserva=reserva,
                 cliente=reserva.cliente,
                 monto=monto_total,
@@ -665,8 +701,6 @@ def pagar_completo(request, token):
                 referencia=referencia,
                 tipo_pago='completo'
             )
-            
-            # Crear Factura inicial (Pagado=False, saldo_restante=0, abono=0, en espera de confirmación)
             Factura.objects.create(
                 reserva=reserva,
                 cliente=reserva.cliente,
@@ -675,8 +709,36 @@ def pagar_completo(request, token):
                 pagado=False,
                 metodo=metodo,
                 referencia=referencia,
-                abono=monto_total, # El abono es el total en este caso, se espera la confirmación
+                abono=monto_total,
                 saldo_restante=0
+            )
+            cliente = reserva.cliente
+            servicio = reserva.servicio
+            fecha_str = reserva.fecha.strftime('%d/%m/%Y')
+            hora_str = reserva.hora.hora.strftime('%H:%M')
+            mensaje_html = f"""
+            <div style="font-family: 'Montserrat', Arial, sans-serif; background: #f8f9fa; padding: 32px; border-radius: 18px;">
+              <h2 style="color: #198754;">¡Pago recibido!</h2>
+              <p>Hola <b>{cliente.nombre}</b>,<br>
+              Hemos recibido tu pago completo para el servicio <b>{servicio.nombre}</b>.<br>
+              <b>Fecha de la cita:</b> {fecha_str}<br>
+              <b>Hora:</b> {hora_str}<br>
+              <b>Monto pagado:</b> ${monto_total}<br>
+              <b>Método:</b> {metodo}<br>
+              <b>Referencia:</b> {referencia}<br>
+              <span style="color: #198754;">¡Tu pago está completo! Nos vemos en tu cita.</span>
+              </p>
+              <hr>
+              <p style="color: #d63384;">GiseNails - Gracias por tu confianza.</p>
+            </div>
+            """
+            send_mail(
+                subject="Confirmación de pago completo en GiseNails",
+                message="Hemos recibido tu pago completo.",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[cliente.correo],
+                html_message=mensaje_html,
+                fail_silently=False,
             )
             messages.success(request, "Referencia enviada. El equipo validará tu pago y confirmará tu cita.")
             return redirect('clientes:panel')
@@ -699,12 +761,7 @@ def pago_efectivo_admin(request, token=None):
         factura = get_object_or_404(Factura, pk=factura_id, pagado=False)
         reserva = factura.reserva
         cliente = factura.cliente
-        
-        # El monto pagado en efectivo es el saldo restante de la factura
         monto_pagado = factura.saldo_restante
-        
-        # No se elimina el abono, simplemente se registra el pago del saldo restante
-        
         PagoReserva.objects.create(
             reserva=reserva,
             cliente=cliente,
@@ -712,19 +769,43 @@ def pago_efectivo_admin(request, token=None):
             metodo='efectivo',
             confirmado=True,
             referencia=referencia,
-            tipo_pago='saldo' # Es pago del saldo restante
+            tipo_pago='saldo'
         )
-        
-        # Actualizar Factura para marcar como pagada
         factura.abono += monto_pagado
         factura.saldo_restante = 0
         factura.pagado = True
         factura.metodo = 'efectivo'
         factura.referencia = referencia
         factura.save()
-        
+        cliente = reserva.cliente
+        servicio = reserva.servicio
+        fecha_str = reserva.fecha.strftime('%d/%m/%Y')
+        hora_str = reserva.hora.hora.strftime('%H:%M')
+        mensaje_html = f"""
+        <div style="font-family: 'Montserrat', Arial, sans-serif; background: #f8f9fa; padding: 32px; border-radius: 18px;">
+          <h2 style="color: #198754;">¡Pago recibido!</h2>
+          <p>Hola <b>{cliente.nombre}</b>,<br>
+          Hemos registrado tu pago en efectivo para el servicio <b>{servicio.nombre}</b>.<br>
+          <b>Fecha de la cita:</b> {fecha_str}<br>
+          <b>Hora:</b> {hora_str}<br>
+          <b>Monto pagado:</b> ${monto_pagado}<br>
+          <b>Método:</b> Efectivo<br>
+          <b>Referencia:</b> {referencia}<br>
+          <span style="color: #198754;">¡Tu pago está completo! Nos vemos en tu cita.</span>
+          </p>
+          <hr>
+          <p style="color: #d63384;">GiseNails - Gracias por tu confianza.</p>
+        </div>
+        """
+        send_mail(
+            subject="Confirmación de pago en efectivo en GiseNails",
+            message="Hemos registrado tu pago en efectivo.",
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[cliente.correo],
+            html_message=mensaje_html,
+            fail_silently=False,
+        )
         messages.success(request, "Pago en efectivo registrado correctamente.")
-        
     return redirect('reserva:facturacion')
 
 @login_required
