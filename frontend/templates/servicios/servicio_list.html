@@ -61,13 +61,13 @@
                         <td>
                             <!-- Botones de acción: Ver, Editar, Eliminar -->
                             <div class="d-flex gap-2">
-                                <a href="{% url 'servicio:servicio_detail' servicio.id|encrypt_id %}" class="btn btn-sm btn-info" title="Ver">
+                                <a href="{% url 'servicio:servicio_detail' servicio.id|encrypt_id %}" class="btn btn-sm btn-action btn-view" title="Ver">
                                     <i class="bi bi-eye"></i>
                                 </a>
-                                <a href="{% url 'servicio:servicio_update' servicio.id|encrypt_id %}" class="btn btn-sm btn-primary" title="Editar">
+                                <a href="{% url 'servicio:servicio_update' servicio.id|encrypt_id %}" class="btn btn-sm btn-action btn-edit" title="Editar">
                                     <i class="bi bi-pencil-square"></i>
                                 </a>
-                                <a href="{% url 'servicio:servicio_delete' servicio.id|encrypt_id %}" class="btn btn-sm btn-danger" title="Eliminar">
+                                <a href="{% url 'servicio:servicio_delete' servicio.id|encrypt_id %}" class="btn btn-sm btn-action btn-delete" title="Eliminar">
                                     <i class="bi bi-trash"></i>
                                 </a>
                             </div>

@@ -92,17 +92,14 @@
               <td data-label="Hora">{{ cita.hora }}</td>
               <td data-label="Servicio">{{ cita.servicio }}</td>
               <td data-label="Estado">
-                {% if cita.estado == 'pendiente' %}
-                  <span class="badge bg-info text-dark">Pendiente</span>
-                {% elif cita.estado == 'confirmada' %}
-                  <span class="badge bg-success">Confirmada</span>
-                {% elif cita.estado == 'cancelada' %}
-                  <span class="badge bg-danger">Cancelada</span>
-                {% elif cita.estado == 'realizada' %}
-                  <span class="badge bg-secondary">Realizada</span>
-                {% else %}
-                  <span class="badge bg-light text-dark">{{ cita.get_estado_display }}</span>
-                {% endif %}
+                <select class="form-select form-select-sm estado-cita-select"
+                        data-id="{{ cita.pk }}"
+                        data-cliente="{{ cita.cliente.correo }}">
+                  <option value="pendiente" {% if cita.estado == 'pendiente' %}selected{% endif %}>Pendiente</option>
+                  <option value="confirmada" {% if cita.estado == 'confirmada' %}selected{% endif %}>Confirmada</option>
+                  <option value="cancelada" {% if cita.estado == 'cancelada' %}selected{% endif %}>Cancelada</option>
+                  <option value="realizada" {% if cita.estado == 'realizada' %}selected{% endif %}>Realizada</option>
+                </select>
               </td>
               
             </tr>
@@ -324,4 +321,35 @@
     }
   });
   </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  function getCookie(name) {
+    let v = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+    return v ? v.pop() : '';
+  }
+  document.querySelectorAll('.estado-cita-select').forEach(function(select) {
+    select.addEventListener('change', function() {
+      const citaId = this.dataset.id;
+      const nuevoEstado = this.value;
+      fetch(`/empleados/cita/${citaId}/cambiar-estado/`, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': getCookie('csrftoken'),
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ estado: nuevoEstado })
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) {
+          Swal.fire('¡Estado actualizado!', '', 'success');
+        } else {
+          Swal.fire('Error', data.error || 'No se pudo cambiar el estado', 'error');
+        }
+      });
+    });
+  });
+});
+</script>
 {% endblock %}

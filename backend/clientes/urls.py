@@ -13,9 +13,9 @@ urlpatterns = [
     path('confirmar/<str:token>/', views.confirmar_reserva, name='confirmar'),
 
     # CRUD
+    path('crear/', views.ClienteCreateView.as_view(), name='cliente_create'),
     path('', views.ClienteListView.as_view(), name='cliente_list'),
     path('<str:token>/', views.ClienteDetailView.as_view(), name='cliente_detail'),
-    path('crear/', views.ClienteCreateView.as_view(), name='cliente_create'),
 
     path('<str:token>/editar/', views.ClienteUpdateView.as_view(), name='cliente_update'),
     path('<str:token>/eliminar/', views.ClienteDeleteView.as_view(), name='cliente_delete'),

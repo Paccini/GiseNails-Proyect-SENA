@@ -105,14 +105,14 @@ document.querySelectorAll('.pago-efectivo-btn').forEach(function(btn) {
   });
 });
 
-document.getElementById('btnPagoEfectivoGlobal').addEventListener('click', function() {
+document.getElementById('btnPagoEfectivoGlobal')?.addEventListener('click', function() {
   document.getElementById('referenciaInput').value = '';
   document.getElementById('infoPagoEfectivo').style.display = 'none';
   var modal = new bootstrap.Modal(document.getElementById('modalPagoEfectivo'));
   modal.show();
 });
 
-document.getElementById('referenciaInput').addEventListener('blur', function() {
+document.getElementById('referenciaInput')?.addEventListener('blur', function() {
   var ref = this.value.trim();
   if (!ref) return;
   fetch(`/reserva/api/buscar-factura/?referencia=${encodeURIComponent(ref)}`)
@@ -132,7 +132,7 @@ document.getElementById('referenciaInput').addEventListener('blur', function() {
     });
 });
 
-document.getElementById('formPagoEfectivo').addEventListener('submit', function(e) {
+document.getElementById('formPagoEfectivo')?.addEventListener('submit', function(e) {
   if (!document.getElementById('facturaIdInput').value) {
     e.preventDefault();
     Swal.fire('Error', 'Debes buscar y seleccionar una factura válida antes de registrar el pago.', 'error');

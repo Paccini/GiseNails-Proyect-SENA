@@ -11,65 +11,43 @@
 {% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/producto_form.css' %}">
 
-<div class="form-container">
-    <!-- ENCABEZADO DEL FORMULARIO -->
-    <div class="form-header">
-        <h2>
-            {% if producto %}
-                <i class="bi bi-pencil-square"></i> Editar Producto
-            {% else %}
-                <i class="bi bi-plus-circle"></i> Agregar Producto
-            {% endif %}
+<div class="card shadow mb-4 form-card-admin">
+    <div class="card-header bg-success text-dark d-flex justify-content-between align-items-center">
+        <h2 class="mb-0">
+            {% if producto %}Editar Producto{% else %}Agregar Producto{% endif %}
         </h2>
-        <a href="{% url 'productos:producto_list' %}" class="btn-back">
+        <a href="{% url 'productos:producto_list' %}" class="btn btn-outline-secondary btn-back">
             <i class="bi bi-arrow-left"></i> Volver
         </a>
     </div>
-
-    <!-- CUERPO DEL FORMULARIO -->
-    <div class="form-body">
-        <form method="post" enctype="multipart/form-data">
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data" class="form-admin">
             {% csrf_token %}
-            
-            <div class="form-group-container">
+            <div class="row g-3">
                 {% for field in form %}
-                    <div class="form-group {% if field.field.widget.input_type == 'textarea' %}textarea-group{% endif %}">
-                        {% if field.label %}
-                            <label for="{{ field.id_for_label }}">
-                                <i class="bi bi-info-circle"></i>
-                                {{ field.label }}
-                                {% if field.field.required %}<span>*</span>{% endif %}
-                            </label>
-                        {% endif %}
-                        
-                        {{ field }}
-                        
-                        {% if field.errors %}
-                            <ul>
-                                {% for error in field.errors %}
-                                    <li>{{ error }}</li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                    </div>
+                <div class="col-md-6">
+                    <label for="{{ field.id_for_label }}" class="form-label fw-semibold">
+                        {{ field.label }}{% if field.field.required %} <span class="text-danger">*</span>{% endif %}
+                    </label>
+                    {{ field }}
+                    {% if field.help_text %}
+                        <div class="form-text">{{ field.help_text }}</div>
+                    {% endif %}
+                    {% if field.errors %}
+                        <div class="text-danger small">
+                            {{ field.errors|striptags }}
+                        </div>
+                    {% endif %}
+                </div>
                 {% endfor %}
             </div>
-
-            <!-- BOTONES DE ACCIÓN -->
-            <div class="form-actions">
-                <button type="submit" class="btn-submit">
+            <div class="d-flex gap-2 mt-4">
+                <button type="submit" class="btn btn-success px-4">
                     <i class="bi bi-check-circle"></i>
-                    {% if producto %}
-                        Guardar Cambios
-                    {% else %}
-                        Guardar Producto
-                    {% endif %}
+                    {% if producto %}Guardar Cambios{% else %}Guardar Producto{% endif %}
                 </button>
-                <a href="{% url 'productos:producto_list' %}" class="btn-cancel">
-                    <i class="bi bi-x-circle"></i> Cancelar
-                </a>
+             
             </div>
         </form>
     </div>
