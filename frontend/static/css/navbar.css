@@ -6,10 +6,13 @@
     font-family:'Poppins',sans-serif;
 }
 
+
+
 :root{
     --pink-accent:#ff6ebc;
     --text-light:#ffffff;
 }
+
 
 /* NAVBAR */
 .gn-navbar{
@@ -32,6 +35,10 @@
     display:flex;
     align-items:center;
     gap:15px;
+}
+.brand .title h1 {
+    color: var(--pink-accent) !important; 
+    margin: 0; /* Asegura que no haya márgenes no deseados */
 }
 
 .navbar-logo{
