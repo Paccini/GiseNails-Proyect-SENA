@@ -3,41 +3,69 @@
 {% block content %}
 
 <div class="card shadow mb-4 form-card-admin">
-    <div class="card-header bg-success text-dark d-flex justify-content-between align-items-center">
-        <h2 class="mb-0">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center" style="border-radius:16px 16px 0 0;">
+        <h2 class="mb-0 fw-bold" style="font-size:2.2rem;">
             {% if cliente %}Editar Cliente{% else %}Agregar Cliente{% endif %}
         </h2>
-        <a href="{% url 'clientes:cliente_list' %}" class="btn btn-outline-secondary btn-back">
-            <i class="bi bi-arrow-left"></i> Volver
+        <a href="{% url 'clientes:cliente_list' %}" class="btn btn-outline-secondary btn-back" style="font-size:1.1em;">
+            <i class="bi bi-arrow-left" style="color:#db478c;"></i> Volver
         </a>
     </div>
     <div class="card-body">
         <form method="post" enctype="multipart/form-data" class="form-admin">
             {% csrf_token %}
             <div class="row g-3">
-                {% for field in form %}
                 <div class="col-md-6">
-                    <label for="{{ field.id_for_label }}" class="form-label fw-semibold">
-                        {{ field.label }}{% if field.field.required %} <span class="text-danger">*</span>{% endif %}
-                    </label>
-                    {{ field }}
-                    {% if field.help_text %}
-                        <div class="form-text">{{ field.help_text }}</div>
-                    {% endif %}
-                    {% if field.errors %}
-                        <div class="text-danger small">
-                            {{ field.errors|striptags }}
-                        </div>
+                    <label for="{{ form.nombre.id_for_label }}" class="form-label fw-semibold" style="color:#db478c;">{{ form.nombre.label }} <span class="text-danger">*</span></label>
+                    {{ form.nombre }}
+                    {% if form.nombre.errors %}
+                        <div class="text-danger small">{{ form.nombre.errors|striptags }}</div>
                     {% endif %}
                 </div>
-                {% endfor %}
+                <div class="col-md-6">
+                    <label for="{{ form.correo.id_for_label }}" class="form-label fw-semibold" style="color:#db478c;">{{ form.correo.label }} <span class="text-danger">*</span></label>
+                    {{ form.correo }}
+                    {% if form.correo.errors %}
+                        <div class="text-danger small">{{ form.correo.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <label for="{{ form.telefono.id_for_label }}" class="form-label fw-semibold" style="color:#db478c;">{{ form.telefono.label }} <span class="text-danger">*</span></label>
+                    {{ form.telefono }}
+                    {% if form.telefono.errors %}
+                        <div class="text-danger small">{{ form.telefono.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+                {% if not cliente %}
+                <div class="col-md-6">
+                    <label for="{{ form.password.id_for_label }}" class="form-label fw-semibold" style="color:#db478c;">Contraseña <span class="text-danger">*</span></label>
+                    {{ form.password }}
+                    {% if form.password.errors %}
+                        <div class="text-danger small">{{ form.password.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+                {% else %}
+                <div class="col-md-6">
+                    <label for="{{ form.old_password.id_for_label }}" class="form-label fw-semibold" style="color:#db478c;">Contraseña actual</label>
+                    {{ form.old_password }}
+                    {% if form.old_password.errors %}
+                        <div class="text-danger small">{{ form.old_password.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <label for="{{ form.new_password.id_for_label }}" class="form-label fw-semibold" style="color:#db478c;">Nueva contraseña</label>
+                    {{ form.new_password }}
+                    {% if form.new_password.errors %}
+                        <div class="text-danger small">{{ form.new_password.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+                {% endif %}
             </div>
             <div class="d-flex gap-2 mt-4">
                 <button type="submit" class="btn btn-success px-4">
                     <i class="bi bi-person-plus"></i>
                     {% if cliente %}Guardar Cambios{% else %}Guardar Cliente{% endif %}
                 </button>
-                
             </div>
         </form>
     </div>

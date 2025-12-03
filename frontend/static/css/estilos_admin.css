@@ -1182,7 +1182,7 @@ body {
     transition: background 0.2s, color 0.2s, box-shadow 0.2s;
 }
 .btn-light{
-    background: linear-gradient(90deg, #5e8db4 0%, #db478c 100%);
+    background: linear-gradient(90deg, #4f6d88 0%, #db478c 100%);
 }
 .btn-success:hover, .btn-primary:hover, .btn-success:focus, .btn-primary:focus {
     background: linear-gradient(90deg, #fff 0%, #db478c 100%);

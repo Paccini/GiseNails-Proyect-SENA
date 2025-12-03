@@ -1,6 +1,6 @@
 {% extends 'base_admin.html' %}
-{% load token_filters %}
 {% block content %}
+{% load token_filters %}
 <!-- ===========================================================
     PÁGINA: LISTA DE RESERVAS
     Descripción:
@@ -131,11 +131,7 @@
 
                         <!-- Botones de acción (editar y eliminar) -->
                         <td>
-<<<<<<< HEAD
-                            <a href="{% url 'reserva:editar_reserva' reserva.id %}" class="btn btn-sm btn-light me-1"
-=======
-                            <a href="{% url 'reserva:editar_reserva' reserva.id|encrypt_id %}" class="btn btn-sm btn-warning me-1"
->>>>>>> dfc60ca68f1136c21dfe84a6ae1d40124e095c75
+                            <a href="{% url 'reserva:editar_reserva' reserva.id|encrypt_id %}" class="btn btn-sm btn-light me-1"
                                 title="Editar">
                                 <i class="bi bi-pencil-square"></i>
                             </a>

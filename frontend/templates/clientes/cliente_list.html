@@ -54,19 +54,11 @@
                 </td>
                 <td>{{ cliente.correo }}</td>
                 <td>{{ cliente.telefono }}</td>
-<<<<<<< HEAD
-                <td>
-                  <!-- Botón para ver detalles del cliente -->
-                  <a href="{% url 'clientes:cliente_detail' cliente.pk %}" class="btn btn-sm btn-light me-1" title="Ver"><i class="bi bi-eye"></i></a>
-                  <!-- Botón para editar cliente -->
-                  <a href="{% url 'clientes:cliente_update' cliente.pk %}" class="btn btn-sm btn-primary me-1" title="Editar"><i class="bi bi-pencil-square"></i></a>
-=======
->>>>>>> dfc60ca68f1136c21dfe84a6ae1d40124e095c75
 
                 <td>
                   <!-- Ver detalle con ID encriptado -->
                   <a href="{% url 'clientes:cliente_detail' cliente.pk|encrypt_id %}" 
-                     class="btn btn-sm btn-info me-1" title="Ver">
+                     class="btn btn-sm btn-light me-1" title="Ver">
                     <i class="bi bi-eye"></i>
                   </a>
 
