@@ -1,14 +1,16 @@
 /* ---------------------------
-   PANEL CLIENTE GISE NAILS
-   Diseño Moderno con Animaciones y Modo Oscuro
-   Autor: ChatGPT - GPT-5
+   PANEL CLIENTE GISE NAILS
+   Diseño Moderno con Animaciones y Modo Oscuro
+   Autor: ChatGPT - GPT-5
 ---------------------------- */
 
 /* === VARIABLES DE COLOR === */
 :root {
-  --primary-color: #3b82f6; /* Azul principal */
+  --primary-color: #3b82f6;
+  /* Azul principal */
   --primary-light: #60a5fa;
-  --accent-color: #e2e8f0; /* Azul grisáceo claro */
+  --accent-color: #e2e8f0;
+  /* Azul grisáceo claro (Hover/Fondo claro) */
   --text-color: #222;
   --bg-color: #fff;
   --dark-bg: #1b1b1f;
@@ -23,18 +25,24 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
-  transition: background var(--transition-speed), color var(--transition-speed),
-    transform var(--transition-speed), box-shadow var(--transition-speed);
+  /* Optimización: Sacar la transición de fondo y color del * para evitar problemas */
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
 }
 
 body {
   background: var(--bg-color);
   color: var(--text-color);
   overflow-x: hidden;
+  /* Mantiene el scroll principal limpio */
+  transition: background var(--transition-speed), color var(--transition-speed);
 }
 
 /* === MODO OSCURO === */
 body.dark-mode {
+  --bg-color: #1b1b1f;
+  --text-color: #e6e6e6;
+  --accent-color: #2e303d;
+  /* Tono de hover/fondo más oscuro en dark mode */
   background: var(--dark-bg);
   color: var(--dark-text);
 }
@@ -95,9 +103,9 @@ body.dark-mode {
 .dark-mode .nav {
   background: linear-gradient(180deg, #272731, #1b1b22);
 }
-/* ===  menu de usuario icono de usuario  === */
 
-.dropdown-toggle > .user{ 
+/* === menu de usuario icono de usuario === */
+.dropdown-toggle>.user {
   font-size: 40px;
   color: #c2185b;
 }
@@ -125,6 +133,7 @@ body.dark-mode {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   transform: translateY(0);
+  transition: background var(--transition-speed), color var(--transition-speed), transform 0.2s, box-shadow 0.3s;
 }
 
 .card:hover {
@@ -134,6 +143,10 @@ body.dark-mode {
 
 .dark-mode .card {
   background: var(--dark-card);
+}
+
+.dark-mode .card-header {
+  color: var(--dark-text) !important;
 }
 
 /* === BOTONES (Azules) === */
@@ -146,10 +159,32 @@ button,
   /* padding: 0.6rem 1.2rem; */
   cursor: pointer;
   font-weight: 500;
-  width: 250px;
+  width: auto;
+  /* Ajuste para evitar forzar el ancho en acciones */
   transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
   box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
-  
+  padding: 0.6rem 1.2rem;
+  /* Restaurar padding */
+}
+
+/* Botones pequeños en la tabla */
+.btn-sm {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.875rem;
+}
+
+/* Botón de filtro (solo icono) */
+.btn-primary.btn-sm[type="submit"],
+.btn-secondary.btn-sm {
+  width: 40px;
+  /* Ancho fijo para botones de icono */
+  padding: 0.5rem 0.5rem;
+}
+
+.btn-secondary {
+  background: #6c757d;
+  /* Color secundario para el botón Limpiar */
+  box-shadow: 0 4px 10px rgba(108, 117, 125, 0.3);
 }
 
 button:hover,
@@ -165,6 +200,10 @@ button:hover,
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
 }
 
+.dark-mode .btn-secondary {
+  background: #4b5563;
+}
+
 /* === TABLAS === */
 table {
   width: 100%;
@@ -172,6 +211,8 @@ table {
   border-radius: 10px;
   overflow: hidden;
   margin-top: 1rem;
+  min-width: 650px;
+  /* Asegura un ancho mínimo para forzar el scroll en mobile */
 }
 
 table thead {
@@ -181,10 +222,50 @@ table thead {
 
 table th,
 table td {
-  padding: 1rem;
+  padding: 0.8rem;
+  /* Reducir padding */
   text-align: center;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  white-space: nowrap;
+  /* Por defecto, evitamos saltos para celdas pequeñas */
 }
+
+/* Solución principal para el texto largo */
+table td:nth-child(3),
+/* Servicio */
+table td:nth-child(4) {
+  /* Gestora */
+  white-space: normal;
+  /* Permite que el texto salte de línea */
+  word-break: break-word;
+  /* Rompe palabras muy largas */
+  max-width: 200px;
+  /* Limita el ancho de la columna */
+}
+
+/* Solución de Badges y Botones Largos en Celdas */
+td>.badge,
+td>.btn,
+td>a.btn {
+  white-space: normal;
+  display: inline-block;
+  margin: 2px 0;
+  line-height: 1.2;
+}
+
+/* Evitar que el botón de pagar saldo restante estire la tabla */
+td .btn-success.py-0 {
+  font-size: 0.85rem;
+  padding: 0.2rem 0.4rem !important;
+  white-space: normal;
+  min-width: 100px;
+}
+
+/* Ajuste de color para badge warning en light mode */
+.badge.bg-warning {
+  color: #222 !important;
+}
+
 
 tr:hover {
   background: var(--accent-color);
@@ -198,15 +279,22 @@ tr:hover {
   background: rgba(255, 255, 255, 0.05);
 }
 
+.dark-mode table th,
+.dark-mode table td {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
 /* === MODALES === */
 .modal-content {
   background: var(--bg-color);
+  color: var(--text-color);
   border-radius: 15px;
   box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
 }
 
 .dark-mode .modal-content {
   background: var(--dark-card);
+  color: var(--dark-text);
 }
 
 /* === ANIMACIONES === */
@@ -240,11 +328,17 @@ tr:hover {
 /* === SCROLLBAR PERSONALIZADO === */
 ::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
+  /* Importante para el scroll horizontal de la tabla */
 }
 
 ::-webkit-scrollbar-thumb {
   background: var(--primary-color);
   border-radius: 10px;
+}
+
+.dark-mode ::-webkit-scrollbar-thumb {
+  background: #2563eb;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -253,12 +347,18 @@ tr:hover {
 
 /* === FOOTER PANEL === */
 .footer-panel {
-  background: #fff;
-  color: #232c36;
+  background: var(--bg-color);
+  color: var(--text-color);
   border-top: none;
-  box-shadow: 0 -2px 18px rgba(255, 79, 159, 0.1);
+  box-shadow: 0 -2px 18px rgba(0, 0, 0, 0.05);
   font-size: 1.08rem;
   padding: 32px 0 16px 0;
+}
+
+.dark-mode .footer-panel {
+  background: var(--dark-card);
+  color: var(--dark-text);
+  box-shadow: 0 -2px 18px rgba(0, 0, 0, 0.3);
 }
 
 .footer-panel .container {
@@ -286,6 +386,11 @@ tr:hover {
   margin-bottom: 8px;
 }
 
+.dark-mode .footer-panel img {
+  filter: none;
+  /* Asegurar que se vea el logo en dark mode */
+}
+
 .footer-panel .fw-bold {
   font-size: 1.15rem;
 }
@@ -301,6 +406,10 @@ tr:hover {
   transition: color 0.2s;
 }
 
+.dark-mode .footer-panel a {
+  color: #f7a2d4;
+}
+
 .footer-panel a:hover {
   color: #c2185b;
 }
@@ -308,6 +417,11 @@ tr:hover {
 .footer-panel .mt-2 {
   color: #232c36;
 }
+
+.dark-mode .footer-panel .mt-2 {
+  color: var(--dark-text);
+}
+
 
 /* === RESPONSIVE === */
 @media (max-width: 768px) {
@@ -325,6 +439,63 @@ tr:hover {
   .cards {
     grid-template-columns: 1fr;
   }
+
+  /* Botones en móvil para que ocupen todo el ancho si están solos */
+  button:not(.btn-sm),
+  .btn:not(.btn-sm) {
+    width: 100%;
+    margin-top: 10px;
+  }
 }
 
+/* === AJUSTES RESPONSIVE FINOS (para Filtros y Tabla) === */
+@media (max-width: 992px) {
 
+  /* Ajuste de filtros */
+  .card-header .d-flex {
+    flex-direction: column;
+    align-items: stretch !important;
+    width: 100%;
+    /* Asegura que la columna de filtros ocupe todo el ancho */
+  }
+
+  .card-header .d-flex>form {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .card-header .d-flex>form .d-flex {
+    flex-direction: row !important;
+    /* Mantener label/input en línea */
+    justify-content: space-between;
+    gap: 5px;
+  }
+
+  .card-header .d-flex>form select,
+  .card-header .d-flex>form input,
+  .card-header .d-flex>form button {
+    max-width: none !important;
+    /* Eliminar límites de ancho */
+    width: 100%;
+  }
+
+  /* Para los botones de aplicar y limpiar */
+  .card-header .d-flex>form .btn {
+    width: 100% !important;
+    margin-top: 5px;
+  }
+
+  /* Para la tabla: asegurar scroll en el contenedor */
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Reducir padding de la tabla para ganar espacio */
+  table th,
+  table td {
+    padding: 0.6rem 0.4rem;
+    font-size: 0.85rem;
+  }
+}

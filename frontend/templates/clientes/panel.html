@@ -34,28 +34,28 @@
 
     <!-- filtro -->
 
-  <div class="d-flex align-items-center gap-2 flex-wrap">
-    <form method="get" class="d-flex align-items-center gap-2 flex-wrap">
-      <select class="form-select" name="estado" style="max-width: 180px;">
-        <option value="">Todos los estados</option>
-        <option value="pendiente" {% if filter_estado == 'pendiente' %}selected{% endif %}>Pendiente</option>
-        <option value="confirmada" {% if filter_estado == 'confirmada' %}selected{% endif %}>Confirmada</option>
-        <option value="cancelada" {% if filter_estado == 'cancelada' %}selected{% endif %}>Cancelada</option>
-      </select>
-      <div class="d-flex align-items-center gap-1">
-        <label for="fecha_inicio" class="form-label mb-0" style="white-space: nowrap; font-size: 0.9rem;">Fecha inicial:</label>
-        <input type="date" name="fecha_inicio" id="fecha_inicio" value="{{ filter_fecha_inicio }}" class="form-control" style="max-width: 160px;" />
+      <div class="d-flex align-items-center gap-2 flex-wrap">
+        <form method="get" class="d-flex align-items-center gap-2 flex-wrap">
+          <select class="form-select" name="estado" style="max-width: 180px;">
+            <option value="">Todos los estados</option>
+            <option value="pendiente" {% if filter_estado == 'pendiente' %}selected{% endif %}>Pendiente</option>
+            <option value="confirmada" {% if filter_estado == 'confirmada' %}selected{% endif %}>Confirmada</option>
+            <option value="cancelada" {% if filter_estado == 'cancelada' %}selected{% endif %}>Cancelada</option>
+          </select>
+          <div class="d-flex align-items-center gap-1">
+            <label for="fecha_inicio" class="form-label mb-0" style="white-space: nowrap; font-size: 0.9rem;">Fecha inicial:</label>
+            <input type="date" name="fecha_inicio" id="fecha_inicio" value="{{ filter_fecha_inicio }}" class="form-control" style="max-width: 160px;" />
+          </div>
+          <div class="d-flex align-items-center gap-1">
+            <label for="fecha_fin" class="form-label mb-0" style="white-space: nowrap; font-size: 0.9rem;">Fecha final:</label>
+            <input type="date" name="fecha_fin" id="fecha_fin" value="{{ filter_fecha_fin }}" class="form-control" style="max-width: 160px;" />
+          </div>
+          <button type="submit" class="btn btn-primary"> <i class="bi bi-funnel-fill"></i> </button>
+          <a href="{% url 'clientes:panel' %}" class="btn btn-secondary">
+            <i class="bi bi-brush-fill"></i>
+          </a>
+        </form>
       </div>
-      <div class="d-flex align-items-center gap-1">
-        <label for="fecha_fin" class="form-label mb-0" style="white-space: nowrap; font-size: 0.9rem;">Fecha final:</label>
-        <input type="date" name="fecha_fin" id="fecha_fin" value="{{ filter_fecha_fin }}" class="form-control" style="max-width: 160px;" />
-      </div>
-      <button type="submit" class="btn btn-primary"> <i class="bi bi-funnel-fill"></i> </button>
-      <a href="{% url 'clientes:panel' %}" class="btn btn-secondary">
-        <i class="bi bi-brush-fill"></i>
-      </a>
-    </form>
-  </div>
   
 </div>
 

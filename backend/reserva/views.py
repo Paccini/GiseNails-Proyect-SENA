@@ -754,7 +754,7 @@ def pagar_completo(request, token):
 @login_required
 @user_passes_test(lambda u: u.is_staff)
 @csrf_exempt
-def pago_efectivo_admin(request, token=None):
+def pago_efectivo_admin(request, token=None ):
     if request.method == 'POST':
         factura_id = request.POST.get('factura_id')
         referencia = request.POST.get('referencia')
