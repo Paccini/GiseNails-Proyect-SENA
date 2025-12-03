@@ -17,16 +17,14 @@ from empleados.models import Empleado
 from servicio.models import Servicio
 from reserva.models import HorarioDisponible
 from django.contrib import messages
-from django.http import JsonResponse  # <-- agregar si no está
+from django.http import JsonResponse, Http404  # <-- agregar si no está
 from datetime import datetime
 from cryptography.fernet import Fernet
 from django.conf import settings
 from cryptography.fernet import Fernet
+from cryptography.fernet import InvalidToken
 from reserva.views import completar_reserva
 from reserva.views import decrypt_id
-
-
-
 
 fernet = Fernet(settings.ENCRYPT_KEY)
 def encrypt_id(pk: int) -> str:
@@ -140,7 +138,6 @@ def editar_perfil(request):
             user = request.user
             if new_password:
                 if not old_password or not user.check_password(old_password):
-                    # Mostrar error y mantener modal abierto
                     update_error = "La contraseña actual es incorrecta. No se realizaron cambios."
                     return render(request, 'clientes/panel.html', {
                         'cliente': cliente,
@@ -155,13 +152,8 @@ def editar_perfil(request):
                 else:
                     user.set_password(new_password)
                     user.save()
-                    from django.contrib.auth import update_session_auth_hash
-                    update_session_auth_hash(request, user)
-                    form.save()
-                    return redirect('/clientes/panel/?success=1')
-            else:
-                form.save()
-                return redirect('/clientes/panel/?success=1')
+            form.save()
+            return redirect('/clientes/panel/?success=1')
         else:
             update_error = "Corrige los errores del formulario."
             return render(request, 'clientes/panel.html', {
@@ -222,15 +214,14 @@ class ClienteDetailView(DetailView):
     context_object_name = 'cliente'
 
     def get_object(self, queryset=None):
-        token = self.kwargs.get("token", None)
+        token = self.kwargs.get('token')
         if not token:
-            raise ValueError("No se recibió token en la URL.")
-
-        # Desencriptar
-        fernet = Fernet(settings.ENCRYPT_KEY)
-        decrypted_id = fernet.decrypt(token.encode()).decode()
-
-        return Cliente.objects.get(id=decrypted_id)
+            raise Http404("Token no proporcionado")
+        try:
+            decrypted_id = fernet.decrypt(token.encode()).decode()
+            return Cliente.objects.get(pk=decrypted_id)
+        except (InvalidToken, Cliente.DoesNotExist):
+            raise Http404("Token inválido o cliente no encontrado")
 
 @method_decorator(never_cache, name='dispatch')
 class ClienteCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
@@ -244,14 +235,24 @@ class ClienteCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
 class ClienteUpdateView(UpdateView):
     model = Cliente
-    form_class = ClienteForm
-    template_name = "clientes/cliente_form.html"
-    context_object_name = ("cliente:cliente_list")
+    form_class = RegistroClienteForm
+    template_name = 'clientes/cliente_form.html'
+    success_url = reverse_lazy('clientes:cliente_list')
 
     def get_object(self, queryset=None):
-        token = self.kwargs.get("token")        # Recibir el token de la URL
-        cliente_id = decrypt_id(token)          # Desencriptar
-        return get_object_or_404(Cliente, pk=cliente_id)
+        token = self.kwargs.get('token')
+        if not token:
+            raise Http404("Token no proporcionado")
+        try:
+            decrypted_id = fernet.decrypt(token.encode()).decode()
+            return Cliente.objects.get(pk=decrypted_id)
+        except (InvalidToken, Cliente.DoesNotExist):
+            raise Http404("Token inválido o cliente no encontrado")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['cliente'] = self.object
+        return context
 
 @method_decorator(never_cache, name='dispatch')
 class ClienteDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):

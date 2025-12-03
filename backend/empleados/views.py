@@ -11,6 +11,7 @@ from clientes.models import Cliente
 from django.http import JsonResponse
 from django.contrib import messages
 from datetime import datetime
+from django.core.mail import send_mail
 
 # --------------------------------------------------
 #  ENCRIPTACIÓN SEGÚN TU METODOLOGÍA
@@ -327,13 +328,39 @@ def agendar_cita_empleado(request):
         if existe:
             return JsonResponse({'success': False, 'error': 'La hora seleccionada ya está ocupada.'})
 
-        Reserva.objects.create(
+        cita = Reserva.objects.create(
             cliente_id=cliente_id,
             gestora=empleado,
             fecha=fecha,
             hora_id=hora_id,
             servicio_id=servicio_id,
             estado='pendiente'
+        )
+        # Notificación al cliente
+        cliente = Cliente.objects.get(pk=cliente_id)
+        servicio = cita.servicio
+        fecha_str = cita.fecha.strftime('%d/%m/%Y')
+        hora_str = cita.hora.hora.strftime('%H:%M')
+        mensaje_html = f"""
+        <div style="font-family: 'Montserrat', Arial, sans-serif; background: #f8f9fa; padding: 32px; border-radius: 18px;">
+          <h2 style="color: #d63384;">¡Tu cita ha sido agendada!</h2>
+          <p>Hola <b>{cliente.nombre}</b>,<br>
+          Tu cita para <b>{servicio.nombre}</b> ha sido registrada.<br>
+          <b>Fecha:</b> {fecha_str}<br>
+          <b>Hora:</b> {hora_str}<br>
+          <b>Profesional:</b> {empleado.nombre} {empleado.apellidos}<br>
+          </p>
+          <hr>
+          <p style="color: #d63384;">GiseNails - Tu bienestar, nuestra prioridad.</p>
+        </div>
+        """
+        send_mail(
+            subject="Confirmación de cita en GiseNails",
+            message="Tu cita ha sido agendada.",
+            from_email=None,
+            recipient_list=[cliente.correo],
+            html_message=mensaje_html,
+            fail_silently=False,
         )
 
         return JsonResponse({'success': True})
@@ -361,3 +388,66 @@ def toggle_empleado_activo(request, pk):
     empleado.save()
 
     return JsonResponse({'success': True, 'activo': empleado.activo})
+
+
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from django.http import JsonResponse
+import json
+from reserva.models import Reserva
+from django.core.mail import send_mail
+from django.conf import settings
+
+@csrf_exempt
+@require_POST
+@login_required
+def cambiar_estado_cita_empleado(request, pk):
+    try:
+        # Solo permite al empleado dueño de la cita cambiar el estado
+        empleado = request.user
+        cita = Reserva.objects.get(pk=pk)
+        # Si quieres restringir solo al empleado dueño, descomenta:
+        # if cita.gestora.correo.lower() != empleado.email.lower():
+        #     return JsonResponse({'success': False, 'error': 'No autorizado.'}, status=403)
+
+        data = json.loads(request.body)
+        nuevo_estado = data.get('estado')
+        if nuevo_estado not in dict(Reserva.ESTADO_CHOICES):
+            return JsonResponse({'success': False, 'error': 'Estado inválido'})
+
+        cita.estado = nuevo_estado
+        cita.save()
+
+        # Notificación profesional al cliente
+        cliente = cita.cliente
+        if cliente and cliente.correo:
+            servicio = cita.servicio
+            fecha_str = cita.fecha.strftime('%d/%m/%Y')
+            hora_str = cita.hora.hora.strftime('%H:%M')
+            estado_display = dict(Reserva.ESTADO_CHOICES).get(nuevo_estado, nuevo_estado)
+            mensaje_html = f"""
+            <div style="font-family: 'Montserrat', Arial, sans-serif; background: #f8f9fa; padding: 32px; border-radius: 18px;">
+              <h2 style="color: #d63384;">Actualización de tu cita</h2>
+              <p>Hola <b>{cliente.nombre}</b>,<br>
+              El estado de tu cita para <b>{servicio.nombre}</b> ha cambiado a <b>{estado_display}</b>.<br>
+              <b>Fecha:</b> {fecha_str}<br>
+              <b>Hora:</b> {hora_str}<br>
+              </p>
+              <hr>
+              <p style="color: #d63384;">GiseNails - Siempre a tu servicio.</p>
+            </div>
+            """
+            send_mail(
+                subject="Actualización de estado de tu cita en GiseNails",
+                message=f"Tu cita ha cambiado a estado {estado_display}.",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[cliente.correo],
+                html_message=mensaje_html,
+                fail_silently=False,
+            )
+
+        return JsonResponse({'success': True})
+    except Reserva.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Cita no encontrada'})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})

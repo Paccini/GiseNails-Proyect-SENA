@@ -21,7 +21,9 @@
 </div>
 
 <div class="card mb-3">
-  <div class="card-header d-flex align-items-center justify-content-between">
+
+  <!-- TÍTULO Citas asignadas COMO UNA SECCIÓN ARRIBA -->
+  <div class="card-header">
     <div class="d-flex align-items-center gap-3">
       <div class="fs-4 text-secondary"><i class="bi bi-calendar-check"></i></div>
       <div>
@@ -29,31 +31,41 @@
         <div class="small text-muted">Gestiona las citas y estados</div>
       </div>
     </div>
+  </div>
 
-    <!-- Zona derecha: filtros + botón agendar -->
-    <div class="d-flex align-items-center gap-2">
-      <form method="get" class="d-flex gap-2 align-items-center">
-        <select name="estado" class="form-select form-select-sm" aria-label="Filtrar por estado">
-          <option value="all" {% if filter_estado == 'all' %}selected{% endif %}>Todos</option>
-          <option value="pendiente" {% if filter_estado == 'pendiente' %}selected{% endif %}>Pendiente</option>
-          <option value="confirmada" {% if filter_estado == 'confirmada' %}selected{% endif %}>Confirmada</option>
-          <option value="cancelada" {% if filter_estado == 'cancelada' %}selected{% endif %}>Cancelada</option>
-          <option value="realizada" {% if filter_estado == 'realizada' %}selected{% endif %}>Realizada</option>
-        </select>
-
-        <div class="d-flex align-items-center gap-1">
-          Fecha inicial:
-          <input type="date" name="fecha_inicio" class="form-control form-control-sm" value="{{ filter_fecha_inicio }}" style="max-width:150px;" title="Fecha inicio">
-          Fecha final:
-          <input type="date" name="fecha_fin" class="form-control form-control-sm" value="{{ filter_fecha_fin }}" style="max-width:150px;" title="Fecha fin">
+  <!-- FILTROS Y BOTÓN — AHORA ABAJO EN SU PROPIA SECCIÓN -->
+  <div class="card-body border-bottom pb-3">
+    <div class="filtros-citas">
+      <form method="get" class="row g-2">
+        
+        <div class="col-12 col-md-3">
+          <select name="estado" class="form-select form-select-sm">
+            <option value="all" {% if filter_estado == 'all' %}selected{% endif %}>Todos</option>
+            <option value="pendiente" {% if filter_estado == 'pendiente' %}selected{% endif %}>Pendiente</option>
+            <option value="confirmada" {% if filter_estado == 'confirmada' %}selected{% endif %}>Confirmada</option>
+            <option value="cancelada" {% if filter_estado == 'cancelada' %}selected{% endif %}>Cancelada</option>
+            <option value="realizada" {% if filter_estado == 'realizada' %}selected{% endif %}>Realizada</option>
+          </select>
         </div>
 
-        <button type="submit" class="btn btn-sm btn-primary">  <i class="bi bi-funnel-fill"></i> </button>
-        <a href="{% url 'empleados:panel_empleado' %}" class="btn btn-sm btn-outline-secondary"> <i class="bi bi-brush-fill"></i> </a>
+        <div class="col-6 col-md-3">
+          <label class="small">Inicio:</label>
+          <input type="date" name="fecha_inicio" class="form-control form-control-sm" value="{{ filter_fecha_inicio }}">
+        </div>
+
+        <div class="col-6 col-md-3">
+          <label class="small">Final:</label>
+          <input type="date" name="fecha_fin" class="form-control form-control-sm" value="{{ filter_fecha_fin }}">
+        </div>
+
+        <div class="col-12 col-md-3 d-flex align-items-end gap-2">
+          <button type="submit" class="btn btn-sm btn-primary w-100"><i class="bi bi-funnel-fill"></i></button>
+          <a href="{% url 'empleados:panel_empleado' %}" class="btn btn-sm btn-outline-secondary w-100"><i class="bi bi-brush-fill"></i></a>
+        </div>
+
       </form>
 
-      <!-- Botón agendar integrado (derecha) -->
-      <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#agendarCitaModal" title="Agendar cita">
+      <button type="button" class="btn btn-primary btn-sm mt-2 w-100" data-bs-toggle="modal" data-bs-target="#agendarCitaModal">
         <i class="bi bi-calendar-plus me-1"></i> Agendar
       </button>
     </div>
@@ -80,17 +92,14 @@
               <td data-label="Hora">{{ cita.hora }}</td>
               <td data-label="Servicio">{{ cita.servicio }}</td>
               <td data-label="Estado">
-                {% if cita.estado == 'pendiente' %}
-                  <span class="badge bg-info text-dark">Pendiente</span>
-                {% elif cita.estado == 'confirmada' %}
-                  <span class="badge bg-success">Confirmada</span>
-                {% elif cita.estado == 'cancelada' %}
-                  <span class="badge bg-danger">Cancelada</span>
-                {% elif cita.estado == 'realizada' %}
-                  <span class="badge bg-secondary">Realizada</span>
-                {% else %}
-                  <span class="badge bg-light text-dark">{{ cita.get_estado_display }}</span>
-                {% endif %}
+                <select class="form-select form-select-sm estado-cita-select"
+                        data-id="{{ cita.pk }}"
+                        data-cliente="{{ cita.cliente.correo }}">
+                  <option value="pendiente" {% if cita.estado == 'pendiente' %}selected{% endif %}>Pendiente</option>
+                  <option value="confirmada" {% if cita.estado == 'confirmada' %}selected{% endif %}>Confirmada</option>
+                  <option value="cancelada" {% if cita.estado == 'cancelada' %}selected{% endif %}>Cancelada</option>
+                  <option value="realizada" {% if cita.estado == 'realizada' %}selected{% endif %}>Realizada</option>
+                </select>
               </td>
               
             </tr>
@@ -248,7 +257,7 @@
     if (editarForm) {
       editarForm.onsubmit = function(e) {
         e.preventDefault();
-        var form = e.target;
+        var form = e.tzzzarget;
         var reservaId = document.getElementById('modalReservaId').value;
         var url = "{% url 'empleados:editar_cita_empleado' 0 %}".replace('0', reservaId);
         var formData = new FormData(form);
@@ -312,4 +321,35 @@
     }
   });
   </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  function getCookie(name) {
+    let v = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+    return v ? v.pop() : '';
+  }
+  document.querySelectorAll('.estado-cita-select').forEach(function(select) {
+    select.addEventListener('change', function() {
+      const citaId = this.dataset.id;
+      const nuevoEstado = this.value;
+      fetch(`/empleados/cita/${citaId}/cambiar-estado/`, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': getCookie('csrftoken'),
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ estado: nuevoEstado })
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) {
+          Swal.fire('¡Estado actualizado!', '', 'success');
+        } else {
+          Swal.fire('Error', data.error || 'No se pudo cambiar el estado', 'error');
+        }
+      });
+    });
+  });
+});
+</script>
 {% endblock %}

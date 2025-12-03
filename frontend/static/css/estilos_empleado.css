@@ -344,150 +344,10 @@ h3.fw-bold,
    Responsive: Breakpoints & adjustments
    ------------------------------ */
 
-/* Large desktops (>= 1200px) */
-@media (min-width: 1200px) {
-  main.container {
-    max-width: 1100px;
-    margin: 0 auto;
-  }
 
-  .card {
-    padding: 22px;
-    border-radius: 14px;
-  }
 
-  .table td,
-  .table th {
-    max-width: 300px;
-  }
-}
 
-/* Desktops / Laptops (>= 992px) */
-@media (min-width: 992px) and (max-width: 1199px) {
-  main.container {
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 0 18px;
-  }
 
-  .card {
-    padding: 20px;
-  }
-}
-
-/* Tablets (>= 768px and < 992px) */
-@media (min-width: 768px) and (max-width: 991px) {
-  main.container {
-    padding: 0 16px;
-  }
-
-  .card {
-    padding: 18px;
-  }
-
-  .card-header {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    align-items: stretch;
-  }
-
-  /* Move filters below on smaller headers */
-  .card-header .d-flex.align-items-center.justify-content-between>.d-flex {
-    width: 100%;
-    justify-content: space-between;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
-  .table td,
-  .table th {
-    max-width: 200px;
-  }
-}
-
-/* Small devices / mobile (<= 767px) */
-@media (max-width: 767px) {
-  body {
-    font-size: 14px;
-  }
-
-  main.container {
-    padding: 12px;
-  }
-
-  .card {
-    padding: 14px;
-    border-radius: 12px;
-  }
-
-  .card-header {
-    padding: 12px;
-  }
-
-  .card-header .d-flex.align-items-center.justify-content-between {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-
-  /* Filters stack vertically */
-  form.d-flex {
-    flex-direction: column !important;
-    gap: 8px !important;
-    align-items: stretch;
-    width: 100%;
-  }
-
-  form.d-flex .form-select,
-  form.d-flex .form-control {
-    width: 100%;
-  }
-
-  .btn {
-    width: 100%;
-  }
-
-  .table thead {
-    display: none;
-  }
-
-  /* convert table to stacked cards */
-  .table tbody tr {
-    display: block;
-    padding: 12px;
-    margin-bottom: 12px;
-  }
-
-  .table tbody tr td {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 12px;
-    border-top: 1px solid var(--color-border);
-  }
-
-  .table tbody tr td:first-child {
-    border-top: none;
-  }
-
-  .table tbody tr td::before {
-    content: attr(data-label);
-    font-weight: 600;
-    color: var(--color-muted);
-    margin-right: 8px;
-    flex: 1;
-  }
-
-  .table tbody tr td span.badge {
-    width: auto;
-  }
-
-  /* Floating action button -> move to header on mobile: ensure the Agendar button is full width under filters */
-  .card-header button[title="Agendar cita"],
-  .card-header .btn-primary {
-    width: 100%;
-  }
-}
 
 /* ===== Dark mode: contrast y responsive table fixes adicionales ===== */
 html[data-theme="dark"],
@@ -580,58 +440,7 @@ body.dark-mode .form-select {
   border: 1px solid var(--color-border) !important;
 }
 
-/* Responsive: stacked table (mobile) — usa data-label para mostrar etiquetas */
-@media (max-width: 767px) {
-  .table thead {
-    display: none !important;
-  }
 
-  .table tbody tr {
-    display: block;
-    margin-bottom: 12px;
-    border-radius: 10px;
-    overflow: hidden;
-  }
-
-  .table tbody tr td {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 12px;
-    border-top: 1px solid var(--color-border);
-  }
-
-  .table tbody tr td:first-child {
-    border-top: none;
-    padding-top: 12px;
-  }
-
-  .table tbody tr td::before {
-    content: attr(data-label);
-    color: var(--color-muted);
-    font-weight: 700;
-    margin-right: 8px;
-    flex: 1 0 45%;
-    max-width: 45%;
-    white-space: normal;
-  }
-
-  .table tbody tr td>* {
-    flex: 1 0 55%;
-    text-align: right;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  /* Acciones full width on mobile */
-  .table tbody tr td.text-end {
-    text-align: right;
-  }
-
-  .card {
-    padding: 14px;
-  }
-}
 
 /* ===== Reglas de fuerza para dark + mobile table (aplican tanto a html[data-theme="dark"] como body.dark-mode) ===== */
 html[data-theme="dark"] .navbar,
@@ -681,60 +490,6 @@ body.dark-mode .badge {
   color: #041217 !important;
 }
 
-/* MOBILE: forzar stacked cards y etiquetas legibles */
-@media (max-width: 767px) {
-  .table thead {
-    display: none !important;
-  }
-
-  .table tbody tr {
-    display: block !important;
-    margin-bottom: 12px !important;
-    border-radius: 12px !important;
-    overflow: hidden;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0.00)) !important;
-  }
-
-  .table tbody tr td {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    padding: 10px 12px !important;
-    border-top: 1px solid var(--color-border) !important;
-  }
-
-  .table tbody tr td:first-child {
-    border-top: none !important;
-    padding-top: 12px !important;
-  }
-
-  .table tbody tr td::before {
-    content: attr(data-label) !important;
-    color: var(--color-muted) !important;
-    font-weight: 700 !important;
-    margin-right: 8px !important;
-    width: 45% !important;
-    max-width: 45% !important;
-    text-align: left !important;
-  }
-
-  .table tbody tr td>* {
-    width: 55% !important;
-    text-align: right !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-  }
-
-  .table tbody tr td.text-end {
-    text-align: right !important;
-  }
-
-  /* aseguro que botones en mobile no queden recortados */
-  .table tbody tr td .btn {
-    white-space: nowrap !important;
-  }
-}
 
 /* === FOOTER PANEL === */
 .footer-panel {
@@ -797,6 +552,292 @@ body.dark-mode .badge {
   color: #232c36;
 }
 
-/* ===== end forced rules ===== */
+/* ==========================
+   📱 RESPONSIVE FUERTE
+   ========================== */
 
-/* End of file */
+/* TABLET */
+@media (max-width: 900px) {
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .table {
+    font-size: 14px;
+  }
+
+  footer, .footer-panel {
+    text-align: center;
+  }
+}
+
+/* MOBILE MEDIO (bootstrap breakpoint) */
+@media (max-width: 768px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
+
+  .table td, .table th {
+    max-width: 140px;
+    white-space: nowrap;
+  }
+
+  .btn-primary,
+  .btn-outline-primary {
+    width: 100%;
+    margin-top: 6px;
+  }
+
+  .footer-panel .row {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* MOBILE FUERTE */
+@media (max-width: 576px) {
+
+  .table {
+    display: block;
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+
+  .card {
+    padding: 12px;
+  }
+
+  h3.fw-bold {
+    font-size: 1.1rem;
+  }
+
+  .form-control,
+  .form-select {
+    padding: 6px 8px;
+  }
+}
+
+/* EXTRA SMALL & SEGURIDAD del responsive */
+@media (max-width: 420px) {
+
+  main.container {
+    padding-inline: 6px;
+  }
+
+  .table td,
+  .table th {
+    max-width: 90px;
+  }
+
+  footer,
+  .footer-panel {
+    font-size: 0.88rem;
+  }
+
+  .btn-primary,
+  .btn-outline-primary {
+    padding: 8px;
+    border-radius: 6px;
+  }
+}
+/* ==== RESPONSIVE PARA FILTROS Y BOTÓN AGENDAR ==== */
+@media (max-width: 768px) {
+  .filtros-citas {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .filtros-citas .form-control,
+  .filtros-citas .form-select,
+  .filtros-citas input {
+    width: 100% !important;
+  }
+
+  .btn-agendar {
+    width: 100%;
+  }
+}
+
+/* ===== TABLA SCROLL Y AJUSTE DE TEXTO ===== */
+@media (max-width: 680px) {
+  .table-responsive {
+    overflow-x: auto;
+  }
+
+  .table td,
+  .table th {
+    white-space: nowrap !important;
+  }
+}
+
+/* ===== REDUCIR ESPACIOS ENTRE SECCIONES ===== */
+@media (max-width: 680px) {
+  .card {
+    margin-bottom: 12px;
+  }
+
+  footer {
+    margin-top: 18px;
+  }
+}
+/* ====== RESPONSIVE REAL PARA EL FILTRO Y BOTÓN AGENDAR ====== */
+
+.filtros-citas {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* En pantallas pequeñas -> columnas */
+@media (max-width: 768px) {
+  .filtros-citas {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filtros-citas input,
+  .filtros-citas select,
+  .filtros-citas .form-control,
+  .filtros-citas .form-select {
+    width: 100% !important;
+  }
+
+  .filtros-citas .btn {
+    width: 100%;
+  }
+}
+/* --- RESPONSIVE FILTROS CITAS --- */
+
+.filtros-citas {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Pantallas móviles */
+@media (max-width: 768px) {
+  .filtros-citas {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filtros-citas input,
+  .filtros-citas select,
+  .filtros-citas .btn {
+    width: 100% !important;
+  }
+}
+
+/* ========= RESPONSIVE FILTROS CITAS ========= */
+
+.filtros-citas {
+  flex-wrap: wrap;
+}
+
+/* Móviles */
+@media (max-width: 768px) {
+  .filtros-citas {
+    flex-direction: column;
+    align-items: stretch !important;
+    width: 100%;
+  }
+
+  .filtros-citas form {
+    flex-direction: column !important;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .filtros-citas form select,
+  .filtros-citas form input,
+  .filtros-citas form button,
+  .filtros-citas > button {
+    width: 100% !important;
+  }
+
+  .filtros-citas .d-flex {
+    flex-direction: column !important;
+    width: 100%;
+  }
+}
+
+/* ==== ORGANIZAR FILTROS EN CELULAR ==== */
+@media (max-width: 768px) {
+  .filtros-citas {
+    width: 100%;
+    padding: 5px;
+  }
+
+  .filtros-citas form {
+    background: #fff;
+    padding: 10px;
+    border-radius: 10px;
+  }
+
+  .filtros-citas form label {
+    font-size: 0.9rem;
+  }
+
+  .filtros-citas form select,
+  .filtros-citas form input {
+    padding: 6px;
+  }
+
+  /* Botón Agendar y filtros */
+  .filtros-citas button {
+    margin-top: 5px;
+    width: 100% !important;
+  }
+
+  /* Si el icono está en un div */
+  .filtros-citas > button {
+    width: 100% !important;
+  }
+}
+
+/* ===== PAGINACIÓN RESPONSIVE ===== */
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+/* Contenedor scrollable solo para paginación */
+.pagination {
+  display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
+  max-width: 100%;
+  padding-bottom: 5px;
+}
+
+/* Ocultar scroll en diseño bonito */
+.pagination::-webkit-scrollbar {
+  height: 4px;
+}
+.pagination::-webkit-scrollbar-thumb {
+  background: #c3b3ea;
+  border-radius: 10px;
+}
+
+/* Reacomodo filtros en móvil */
+.filtros-citas form .col-12,
+.filtros-citas form .col-6,
+.filtros-citas form .col-md-3 {
+  width: 100% !important;
+}
+
+/* Botones ocupan ancho completo en móvil */
+@media(max-width: 768px){
+  .pagination {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .pagination .page-link {
+    padding: 6px 10px;
+  }
+}
