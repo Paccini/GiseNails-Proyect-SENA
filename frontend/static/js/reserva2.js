@@ -460,4 +460,37 @@ document.addEventListener('DOMContentLoaded', function() {
     if (selectServiceButton) {
         selectServiceButton.addEventListener('click', clearSelectedService);
     }
+
+	// Supón que este código está en reserva.js y se ejecuta cuando envías el formulario de reserva
+	document.getElementById('form-reserva').addEventListener('submit', function(e) {
+		e.preventDefault();
+
+		const formData = new FormData(this);
+
+		fetch('/ruta/a/tu/vista/reserva/', {
+			method: 'POST',
+			body: formData,
+			headers: {
+				'X-Requested-With': 'XMLHttpRequest',
+			}
+		})
+		.then(response => response.json())
+		.then(data => {
+			if (data.redirect) {
+				window.location.href = data.redirect;
+			} else if (data.success) {
+				// Mostrar mensaje de éxito
+			} else if (data.error) {
+				// Mostrar error
+			}
+		})
+		.catch(() => {
+			Swal.fire({
+				icon: 'error',
+				title: 'Error',
+				text: 'Error de red al intentar crear la reserva.',
+				confirmButtonColor: '#e91e63'
+			});
+		});
+	});
 })

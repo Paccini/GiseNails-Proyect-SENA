@@ -31,7 +31,16 @@ def login_view(request):
     password_only = False
     register_active = request.GET.get('register_active') == 'true'
     show_reset_form = request.GET.get('show_reset') == 'true'
-    pending_message = bool(request.session.get('pending_reserva'))
+    # Detecta pending_message en la URL
+    pending_message = False
+    if request.GET.get('pending_message') in ['1', 'true', 'True', 'yes']:
+        pending_message = True
+    elif request.session.get('pending_reserva'):
+        pending_message = True
+
+    print("DEBUG pending_message:", pending_message)  # <-- Debe imprimir True si la URL lo tiene
+    # Detecta login_message en la URL
+    login_message = request.GET.get('login_message')
 
     login_form = LoginForm()
     reset_form = PasswordResetForm()
@@ -142,6 +151,7 @@ def login_view(request):
         'prefill_email': prefill_email,
         'password_only': password_only,
         'pending_message': pending_message,
+        'login_message': login_message,
         'register_form': register_form,
         'initial': initial,
         'register_active': register_active,

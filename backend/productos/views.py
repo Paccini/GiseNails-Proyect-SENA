@@ -6,6 +6,9 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.cache import never_cache
 from django.core.paginator import Paginator
 from django.views.decorators.http import require_GET
+import openpyxl
+from openpyxl.utils import get_column_letter
+from django.http import HttpResponse
 
 # Importar tus funciones de cifrado/descifrado
 from django.utils.http import urlsafe_base64_decode
@@ -174,3 +177,48 @@ def lista_productos(request):
         'recomendados': recomendados,
         'en_uso': en_uso,
     })
+
+# =====================================================
+# 📌 EXPORTAR A EXCEL
+# =====================================================
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+def exportar_productos_excel(request):
+    q = request.GET.get('q', '')
+    productos = Producto.objects.all()
+    if q:
+        productos = productos.filter(nombre__icontains=q)
+
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Productos"
+
+    headers = ["ID", "Nombre", "Precio", "Descripción", "Cantidad"]
+    ws.append(headers)
+
+    for producto in productos:
+        ws.append([
+            producto.id,
+            producto.nombre,
+            producto.precio,
+            producto.descripcion,
+            producto.cantidad
+        ])
+
+    for col in ws.columns:
+        max_length = 0
+        column = col[0].column_letter
+        for cell in col:
+            try:
+                if len(str(cell.value)) > max_length:
+                    max_length = len(str(cell.value))
+            except:
+                pass
+        ws.column_dimensions[column].width = max_length + 2
+
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = 'attachment; filename=Productos_GiseNails.xlsx'
+    wb.save(response)
+    return response
