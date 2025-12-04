@@ -32,12 +32,20 @@
         </form>
 
 
+        <!-- === EXPORTAR A EXCEL === -->
+        <form method="get" action="{% url 'productos:exportar_productos_excel' %}">
+            <input type="hidden" name="q" value="{{ q }}">
+            <button type="submit" class="btn btn-outline-success mb-3">
+                <i class="bi bi-file-earmark-excel"></i> Exportar a Excel
+            </button>
+        </form>
+
+
         <!-- === TABLA DE PRODUCTOS === -->
         <div class="table-responsive">
             <table class="table table-hover align-middle">
                 <thead class="table-light">
                     <tr>
-                        <th>ID</th>
                         <th>Nombre</th>
                         <th>Precio</th>
                         <th>Descripción</th>
@@ -50,9 +58,6 @@
                 <tbody>
                     {% for producto in productos %}
                     <tr>
-
-                        <!-- ID cifrado -->
-                        <td>{{ producto.id|encrypt_id }}</td>
 
                         <td>
                             <i class="bi bi-box me-1 text-secondary"></i>

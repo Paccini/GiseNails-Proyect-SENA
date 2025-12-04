@@ -2,7 +2,7 @@ from django.urls import path
 from .views import (
     reserva, horarios_disponibles,
     home, agregar_reserva, editar_reserva, eliminar_reserva, ReservaCreateView,
-    completar_reserva
+    completar_reserva, exportar_facturacion_excel
 )
 from . import views
 
@@ -27,4 +27,7 @@ urlpatterns = [
 
     # Nueva ruta para la API de búsqueda de factura
     path('api/buscar-factura/', views.api_buscar_factura, name='api_buscar_factura'),
+
+    # Ruta para exportar facturación a Excel
+    path('exportar-facturacion-excel/', exportar_facturacion_excel, name='exportar_facturacion_excel'),
 ]

@@ -1,111 +1,70 @@
+<!-- filepath: c:\Users\juanv\Desktop\GiseNails-Proyect-SENA\frontend\templates\reservas\home.html -->
 {% extends 'base_admin.html' %}
 {% block content %}
 {% load token_filters %}
-<!-- ===========================================================
-    PÁGINA: LISTA DE RESERVAS
-    Descripción:
-    Muestra todas las citas registradas con opciones de filtrado,
-    búsqueda, paginación y acciones administrativas.
-============================================================== -->
+{% load humanize %}
 
-<!-- === TÍTULO Y BOTÓN PRINCIPAL === -->
 <div class="mb-3 d-flex justify-content-between align-items-center">
-    <!-- Título principal con ícono -->
     <h2 class="fs-4 fw-semibold">
         <i class="bi bi-calendar-check me-2"></i> Lista de Citas
     </h2>
-
-    <!-- Botón para agregar una nueva reserva -->
     <a href="{% url 'reserva:agregar_reserva' %}" class="btn btn-success d-flex align-items-center gap-2">
         <i class="bi bi-plus-lg fs-5"></i> Agregar
     </a>
 </div>
 
-<!-- === CONTENEDOR PRINCIPAL DE LA TABLA === -->
 <div class="card shadow mb-4">
     <div class="card-body">
-
-        <!-- === FORMULARIO DE BÚSQUEDA Y FILTRO === -->
+        <!-- Filtros -->
         <form method="get" class="d-flex gap-2 mb-3 flex-wrap">
-            <!-- Filtro por fecha inicio -->
-            <div class="d-flex align-items-center gap-1">
-                <label for="fecha_inicio" class="form-label mb-0" style="white-space: nowrap;">Fecha inicial:</label>
-                <input type="date" name="fecha_inicio" id="fecha_inicio" value="{{ fecha_inicio }}" class="form-control w-auto">
-            </div>
-
-            <!-- Filtro por fecha fin -->
-            <div class="d-flex align-items-center gap-1">
-                <label for="fecha_fin" class="form-label mb-0" style="white-space: nowrap;">Fecha final:</label>
-                <input type="date" name="fecha_fin" id="fecha_fin" value="{{ fecha_fin }}" class="form-control w-auto">
-            </div>
-
-            <!-- Filtro por nombre de cliente -->
-            <input type="text" name="usuario" value="{{ usuario }}" class="form-control w-auto"
-                placeholder="Buscar cliente...">
-
-            <!-- Filtro por estado de la cita -->
-            <select name="estado" class="form-control w-auto">
-                <option value="">Pendientes y Confirmadas</option>
+            <input type="date" name="fecha_inicio" id="fecha_inicio" value="{{ fecha_inicio }}" class="form-control form-control-sm w-auto" placeholder="Desde">
+            <input type="date" name="fecha_fin" id="fecha_fin" value="{{ fecha_fin }}" class="form-control form-control-sm w-auto" placeholder="Hasta">
+            <input type="text" name="usuario" value="{{ usuario }}" class="form-control form-control-sm w-auto" placeholder="Cliente">
+            <select name="estado" class="form-control form-control-sm w-auto">
+                <option value="">Pend/Conf</option>
                 <option value="pendiente" {% if estado == "pendiente" %}selected{% endif %}>Pendiente</option>
                 <option value="confirmada" {% if estado == "confirmada" %}selected{% endif %}>Confirmada</option>
                 <option value="cancelada" {% if estado == "cancelada" %}selected{% endif %}>Cancelada</option>
                 <option value="realizada" {% if estado == "realizada" %}selected{% endif %}>Realizada</option>
             </select>
-
-            <!-- Filtro por referencia de pago -->
-            <input type="text" name="referencia" value="{{ referencia }}" class="form-control w-auto"
-                placeholder="Referencia de pago...">
-
-            <!-- Botón de búsqueda -->
-            <button type="submit" class="btn btn-primary">
+            <input type="text" name="referencia" value="{{ referencia }}" class="form-control form-control-sm w-auto" placeholder="Referencia">
+            <button type="submit" class="btn btn-primary btn-sm">
                 <i class="bi bi-search"></i>
             </button>
         </form>
 
-        <!-- === TABLA DE RESERVAS === -->
+        <!-- Tabla responsive: ocupa 100% del contenedor, scroll solo en móvil -->
         <div class="table-responsive">
-            <table class="table table-hover align-middle">
-                <thead class="table-light">
+            <table class="table table-sm table-bordered align-middle mb-0 w-100" style="font-size: 0.97em;">
+                <thead class="table-light text-center align-middle">
                     <tr>
-                        <th><i class="bi bi-hash me-1"></i> ID</th>
-                        <th><i class="bi bi-person me-1"></i> Cliente</th>
-                        <th><i class="bi bi-person-badge me-1"></i> Gestora</th>
-                        <th><i class="bi bi-scissors me-1"></i> Servicio</th>
-                        <th><i class="bi bi-calendar-event me-1"></i> Fecha</th>
-                        <th><i class="bi bi-clock me-1"></i> Hora</th>
-                        <th><i class="bi bi-info-circle me-1"></i> Estado</th>
-                        <th><i class="bi bi-key me-1"></i> Referencia</th>
-                        <th><i class="bi bi-gear me-1"></i> Acciones</th>
+                        <th>Cliente</th>
+                        <th>Gestora</th>
+                        <th>Servicio</th>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Estado</th>
+                        <th>Abono</th>
+                        <th>Pago Completo</th>
+                        <th>Saldo Restante</th>
+                        <th>Total</th>
+                        <th>Referencia</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
-
                 <tbody>
-                    <!-- Iteración sobre todas las reservas -->
                     {% for reserva in reservas %}
+                    {% with factura=reserva.facturas.last %}
                     <tr>
-                        <!-- ID de la cita -->
-                        <td>{{ reserva.id }}</td>
-
-                        <!-- Nombre del cliente -->
-                        <td>
-                            <i class="bi bi-person-circle me-1 text-secondary"></i>
-                            {{ reserva.cliente.nombre }}
-                        </td>
-
-                        <!-- Nombre de la gestora asignada -->
+                        <td>{{ reserva.cliente.nombre }}</td>
                         <td>{{ reserva.gestora }}</td>
-
-                        <!-- Nombre del servicio reservado -->
                         <td>{{ reserva.servicio }}</td>
-
-                        <!-- Fecha y hora de la cita -->
-                        <td>{{ reserva.fecha }}</td>
+                        <td>{{ reserva.fecha|date:"M d, Y" }}</td>
                         <td>{{ reserva.hora }}</td>
-
-                        <!-- Estado actual (pendiente, confirmada, etc.) -->
                         <td>
-                            <form method="post" action="{% url 'reserva:editar_reserva' reserva.pk %}" style="display:inline;">
+                            <form method="post" action="{% url 'reserva:home' %}" style="display:inline;">
                                 {% csrf_token %}
+                                <input type="hidden" name="reserva_token" value="{{ reserva.id|encrypt_id }}">
                                 <select name="estado" class="form-select form-select-sm d-inline w-auto" onchange="this.form.submit()">
                                     {% for key, value in reserva.ESTADO_CHOICES %}
                                         <option value="{{ key }}" {% if reserva.estado == key %}selected{% endif %}>{{ value }}</option>
@@ -113,50 +72,70 @@
                                 </select>
                             </form>
                         </td>
-
-                        <!-- Referencia de pago -->
+                        <td>
+                            {% if factura %}
+                                ${{ factura.abono|intcomma }}
+                            {% else %}
+                                <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if factura and factura.abono == factura.monto_total %}
+                                <span class="badge bg-success">Sí</span>
+                            {% else %}
+                                <span class="badge bg-secondary">No</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if factura %}
+                                ${{ factura.saldo_restante|intcomma }}
+                            {% else %}
+                                <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if factura %}
+                                ${{ factura.monto_total|intcomma }}
+                            {% else %}
+                                ${{ reserva.servicio.precio|intcomma }}
+                            {% endif %}
+                        </td>
                         <td>
                             {% if reserva.pagos.exists %}
                                 {% for pago in reserva.pagos.all %}
                                     {% if pago.referencia %}
                                         <span class="badge bg-secondary">{{ pago.referencia }}</span>
                                     {% else %}
-                                        <span class="text-muted">Sin referencia</span>
+                                        <span class="text-muted">Sin ref</span>
                                     {% endif %}
                                 {% endfor %}
                             {% else %}
                                 <span class="text-muted">Sin pago</span>
                             {% endif %}
                         </td>
-
-                        <!-- Botones de acción (editar y eliminar) -->
                         <td>
-                            <a href="{% url 'reserva:editar_reserva' reserva.id|encrypt_id %}" class="btn btn-sm btn-light me-1"
-                                title="Editar">
+                            <a href="{% url 'reserva:editar_reserva' reserva.id|encrypt_id %}" class="btn btn-sm btn-light me-1" title="Editar">
                                 <i class="bi bi-pencil-square"></i>
                             </a>
-                            <a href="{% url 'reserva:eliminar_reserva' reserva.id|encrypt_id %}" class="btn btn-sm btn-danger"
-                                title="Cancelar">
+                            <a href="{% url 'reserva:eliminar_reserva' reserva.id|encrypt_id %}" class="btn btn-sm btn-danger" title="Cancelar">
                                 <i class="bi bi-trash"></i>
                             </a>
                         </td>
                     </tr>
-
-                    <!-- Si no hay reservas -->
+                    {% endwith %}
                     {% empty %}
                     <tr>
-                        <td colspan="9" class="text-center">No hay reservas registradas.</td>
+                        <td colspan="12" class="text-center">No hay reservas registradas.</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
 
-        <!-- === PAGINACIÓN === -->
+        <!-- Paginación -->
         {% if is_paginated %}
         <nav>
-            <ul class="pagination justify-content-center">
-                <!-- Botón "Anterior" -->
+            <ul class="pagination justify-content-center my-2">
                 {% if page_obj.has_previous %}
                 <li class="page-item">
                     <a class="page-link"
@@ -165,15 +144,11 @@
                     </a>
                 </li>
                 {% endif %}
-
-                <!-- Números de página -->
                 {% for num in paginator.page_range %}
                 <li class="page-item {% if page_obj.number == num %}active{% endif %}">
                     <a class="page-link" href="?fecha_inicio={{ fecha_inicio }}&fecha_fin={{ fecha_fin }}&usuario={{ usuario }}&estado={{ estado }}&referencia={{ referencia }}&page={{ num }}">{{ num }}</a>
                 </li>
                 {% endfor %}
-
-                <!-- Botón "Siguiente" -->
                 {% if page_obj.has_next %}
                 <li class="page-item">
                     <a class="page-link"
@@ -187,5 +162,4 @@
         {% endif %}
     </div>
 </div>
-
 {% endblock %}
