@@ -17,7 +17,7 @@ from empleados.models import Empleado
 from servicio.models import Servicio
 from reserva.models import HorarioDisponible
 from django.contrib import messages
-from django.http import JsonResponse, Http404  # <-- agregar si no está
+from django.http import JsonResponse, Http404, HttpResponse  # <-- agregar si no está
 from datetime import datetime
 from cryptography.fernet import Fernet
 from django.conf import settings
@@ -25,6 +25,8 @@ from cryptography.fernet import Fernet
 from cryptography.fernet import InvalidToken
 from reserva.views import completar_reserva
 from reserva.views import decrypt_id
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
 
 fernet = Fernet(settings.ENCRYPT_KEY)
 def encrypt_id(pk: int) -> str:
@@ -385,3 +387,32 @@ def toggle_cliente_activo(request, pk):
     cliente.activo = not cliente.activo
     cliente.save()
     return JsonResponse({'success': True, 'activo': cliente.activo})
+
+@login_required
+@never_cache
+def descargar_cita_pdf(request, token):
+    try:
+        real_pk = decrypt_id(token)
+    except Exception:
+        return redirect('clientes:panel')
+
+    cliente = get_object_or_404(Cliente, user=request.user)
+    reserva = get_object_or_404(Reserva, pk=real_pk, cliente=cliente)
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename=Cita_{reserva.pk}.pdf'
+
+    p = canvas.Canvas(response, pagesize=letter)
+    p.setFont("Helvetica-Bold", 16)
+    p.drawString(50, 750, "Comprobante de Cita - GiseNails")
+    p.setFont("Helvetica", 12)
+    p.drawString(50, 720, f"Cliente: {reserva.cliente.nombre}")
+    p.drawString(50, 700, f"Servicio: {reserva.servicio}")
+    p.drawString(50, 680, f"Gestora: {reserva.gestora}")
+    p.drawString(50, 660, f"Fecha: {reserva.fecha.strftime('%d/%m/%Y')}")
+    p.drawString(50, 640, f"Hora: {reserva.hora}")
+    p.drawString(50, 620, f"Estado: {reserva.get_estado_display()}")
+    p.drawString(50, 600, f"Precio: ${reserva.servicio.precio:,}")
+    p.showPage()
+    p.save()
+    return response
