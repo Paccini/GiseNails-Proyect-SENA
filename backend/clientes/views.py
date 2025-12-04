@@ -243,17 +243,29 @@ class ClienteUpdateView(UpdateView):
 
     def get_object(self, queryset=None):
         token = self.kwargs.get('token')
-        if not token:
-            raise Http404("Token no proporcionado")
-        try:
-            decrypted_id = fernet.decrypt(token.encode()).decode()
-            return Cliente.objects.get(pk=decrypted_id)
-        except (InvalidToken, Cliente.DoesNotExist):
-            raise Http404("Token inválido o cliente no encontrado")
+        pk = decrypt_id(token)
+        return get_object_or_404(Cliente, pk=pk)
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        user = self.object.user
+        new_password = self.request.POST.get('new_password', '').strip()
+        old_password = self.request.POST.get('old_password', '').strip()
+        if new_password:
+            if user.check_password(old_password):
+                user.set_password(new_password)
+                user.save()
+                self.request.session['update_success'] = 'Contraseña actualizada correctamente.'
+            else:
+                self.request.session['update_error'] = 'La contraseña actual es incorrecta.'
+        else:
+            self.request.session['update_success'] = 'Datos actualizados correctamente.'
+        return response
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['cliente'] = self.object
+        context['update_error'] = self.request.session.pop('update_error', None)
+        context['update_success'] = self.request.session.pop('update_success', None)
         return context
 
 @method_decorator(never_cache, name='dispatch')
