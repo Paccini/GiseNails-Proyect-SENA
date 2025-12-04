@@ -400,6 +400,28 @@ def toggle_cliente_activo(request, pk):
     cliente.save()
     return JsonResponse({'success': True, 'activo': cliente.activo})
 
+
+def registro_cliente(request):
+    if request.method == 'POST':
+        form = RegistroClienteForm(request.POST)
+        if form.is_valid():
+            # Guardar el nuevo cliente
+            cliente = form.save(commit=False)
+            cliente.user = request.user  # Asociar el usuario autenticado
+            cliente.save()
+            
+            # Redirigir a la página de inicio de sesión con un mensaje
+            return render(request, 'login/login.html', {
+    'register_active': True,
+    'prefill_email': form.cleaned_data.get('correo', ''),
+    'pending_message': True
+})
+        else:
+            # Si hay errores, renderiza el formulario con los datos y errores
+            return render(request, 'clientes/registro.html', {'form': form})
+    else:
+        form = RegistroClienteForm()
+    return render(request, 'clientes/registro.html', {'form': form})
 @login_required
 @never_cache
 def descargar_cita_pdf(request, token):

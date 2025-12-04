@@ -15,16 +15,21 @@
 {% block content %}
   <main>
     <div class="wrapper {% if register_active %}active{% endif %}">
-      <!-- FORMULARIO LOGIN / RESTABLECER / NUEVA CONTRASEÑA -->
+      
+      <!-- ==================== LOGIN / RESET / SET PASSWORD ==================== -->
       <div class="form-box login">
+
         {% if show_set_password_form %}
           <h2>Ingresa nueva contraseña</h2>
+
           {% if set_password_success %}
             <div class="login-alert">{{ set_password_success }}</div>
             <a href="{% url 'login:login' %}" class="btn" style="margin-top:1rem;">Iniciar sesión</a>
+
           {% elif set_password_error %}
             <div class="login-alert">{{ set_password_error }}</div>
             <a href="{% url 'login:password_reset' %}" class="btn" style="margin-top:1rem;">Solicitar nuevo enlace</a>
+
           {% else %}
             <form method="post" autocomplete="off">
               {% csrf_token %}
@@ -36,8 +41,10 @@
               <button type="submit" class="btn">Restablecer</button>
             </form>
           {% endif %}
+
         {% elif show_reset_form %}
           <h2>Restablecer contraseña</h2>
+
           {% if reset_success %}
             <div class="login-alert">{{ reset_success }}</div>
           {% else %}
@@ -54,77 +61,90 @@
               <button type="submit" name="reset_password" class="btn">Enviar correo</button>
             </form>
           {% endif %}
+
           <div class="login-register">
             <p>¿No tienes cuenta? <a href="{% url 'login:registro' %}" class="register-link">Regístrate</a></p>
             <a href="{% url 'login:login' %}">Volver al login</a>
           </div>
+
         {% else %}
+          <!-- ============== LOGIN NORMAL ============== -->
           <h2>Iniciar sesión</h2>
-          <form method="post" autocomplete="on">
+
+          <!-- CORRECCIÓN IMPORTANTE AQUÍ -->
+          <form method="post" autocomplete="off">
             {% csrf_token %}
-            {% if error %}
-              <div class="login-alert">{{ error }}</div>
-            {% endif %}
+
             <div class="input-box">
               <span class="icon"><ion-icon name="mail"></ion-icon></span>
               <input type="email" name="email" value="{{ prefill_email|default:'' }}" required />
               <label>Email</label>
             </div>
+
             <div class="input-box">
               <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
               <input type="password" name="password" required />
               <label>Password</label>
             </div>
+
             <button type="submit" class="btn">Entrar</button>
+
             <div class="login-register">
               <p>¿No tienes cuenta? <a href="{% url 'login:registro' %}" class="register-link">Regístrate</a></p>
               <p><a href="{% url 'login:login' %}?show_reset=true">¿Olvidaste tu contraseña?</a></p>
             </div>
           </form>
+
         {% endif %}
+
       </div>
 
-      <!-- FORMULARIO REGISTRO -->
+      <!-- ==================== REGISTRO ==================== -->
       <div class="form-box register">
         <h2>Registro</h2>
+
         <form method="post" autocomplete="off" action="{% url 'login:registro' %}">
           {% csrf_token %}
-          {% if pending_message %}
-            <div class="pending-reserva-message" style="margin-bottom:1rem;">
-              <p>Hemos guardado tu cita pendiente. Crea tu cuenta y después completaremos la reserva automáticamente.</p>
-            </div>
-          {% endif %}
+
           {% if register_form.errors %}
             <div class="login-alert">Por favor revisa los datos ingresados.</div>
           {% endif %}
+
           <div class="input-box">
             <span class="icon"><ion-icon name="person"></ion-icon></span>
             <input type="text" name="nombre" id="id_nombre" value="{{ initial.nombre|default:'' }}" required />
             <label>Nombre</label>
           </div>
+
           <div class="input-box">
             <span class="icon"><ion-icon name="mail"></ion-icon></span>
             <input type="email" name="correo" id="id_correo" value="{{ prefill_email|default:'' }}" required />
             <label>Email</label>
           </div>
+
           <div class="input-box">
             <span class="icon"><ion-icon name="call"></ion-icon></span>
             <input type="text" name="telefono" id="id_telefono" value="{{ initial.telefono|default:'' }}" required />
             <label>Teléfono</label>
           </div>
+
           <div class="input-box">
             <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
             <input type="password" name="password" id="id_password" required />
             <label>Password</label>
           </div>
+
           <button type="submit" class="btn" style="display: block; margin-top: 1rem;">Registrarme</button>
+
           {% if register_form.non_field_errors %}
             <div class="error">{{ register_form.non_field_errors }}</div>
           {% endif %}
+
           {{ register_form.nombre.errors }}
           {{ register_form.correo.errors }}
           {{ register_form.telefono.errors }}
           {{ register_form.password.errors }}
+
           <div class="login-register">
             <p>¿Ya tienes cuenta? <a href="{% url 'login:login' %}" class="login-link">Inicia sesión</a></p>
           </div>
@@ -132,16 +152,59 @@
       </div>
     </div>
   </main>
+
   <style>
-    footer {
-      display: none !important;
-    }
+    footer { display: none !important; }
   </style>
+
+
 {% endblock %}
 
 {% block scripts %}
   {{ block.super }}
   <script src="{% static 'js/login.js' %}"></script>
-  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+  {% if pending_message %}
+    <script>
+      function showPendingAlert() {
+        if (typeof Swal !== "undefined") {
+          Swal.fire({
+            icon: 'success',
+            title: '¡Registro exitoso!',
+            text: 'Hemos guardado tu cita pendiente. Crea tu cuenta y después completaremos la reserva automáticamente.',
+            confirmButtonColor: '#e91e63',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            background: '#fff0fa',
+            color: '#d63384'
+          });
+        } else {
+          setTimeout(showPendingAlert, 100);
+        }
+      }
+      document.addEventListener('DOMContentLoaded', showPendingAlert);
+    </script>
+  {% endif %}
+  {% if login_message %}
+    <script>
+      function showLoginAlert() {
+        if (typeof Swal !== "undefined") {
+          Swal.fire({
+            icon: 'info',
+            title: '¡Bienvenida de nuevo!',
+            text: '{{ login_message|escapejs }}',
+            confirmButtonColor: '#e91e63',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            background: '#f0f8ff',
+            color: '#232c36'
+          });
+        } else {
+          setTimeout(showLoginAlert, 100);
+        }
+      }
+      document.addEventListener('DOMContentLoaded', showLoginAlert);
+    </script>
+  {% endif %}
 {% endblock %}

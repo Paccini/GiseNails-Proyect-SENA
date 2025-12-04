@@ -102,13 +102,17 @@ def reserva(request):
             request.session['pending_reserva'] = pending
 
             if cliente_obj:
-                from django.urls import reverse
-                login_url = reverse('login:login')
-                return JsonResponse({"next": f"{login_url}?next=/completar-reserva/", "need": "login"})
+                # Usuario existe, debe iniciar sesión para confirmar reserva
+                return JsonResponse({
+                    "success": False,
+                    "next": "/login/?next=/reserva/completar-reserva/&login_message=Inicia sesión para confirmar tu reserva pendiente."
+                })
             else:
-                from django.urls import reverse
-                registro_url = reverse('login:login')
-                return JsonResponse({"next": f"{registro_url}?register_active=true&next=/completar-reserva/", "need": "register"})
+                # Usuario no existe, debe registrarse
+                return JsonResponse({
+                    "success": False,
+                    "next": "/login/?register_active=true&next=/reserva/completar-reserva/&pending_message=1&prefill_email={}".format(correo_cliente)
+                })
 
         except Exception as e:
             return JsonResponse({"success": False, "error": str(e)})
@@ -808,7 +812,7 @@ def pago_efectivo_admin(request, token=None ):
         fecha_str = reserva.fecha.strftime('%d/%m/%Y')
         hora_str = reserva.hora.hora.strftime('%H:%M')
         mensaje_html = f"""
-        <div style="font-family: 'Montserrat', Arial, sans-serif; background: #f8f9fa; padding: 32px; border-radius: 18px;">
+        <div style="font-family: 'Montserrat', Arial, sans-serif; background: #f9f9fa; padding: 32px; border-radius: 18px;">
           <h2 style="color: #198754;">¡Pago recibido!</h2>
           <p>Hola <b>{cliente.nombre}</b>,<br>
           Hemos registrado tu pago en efectivo para el servicio <b>{servicio.nombre}</b>.<br>
