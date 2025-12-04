@@ -400,7 +400,6 @@ def toggle_cliente_activo(request, pk):
     cliente.save()
     return JsonResponse({'success': True, 'activo': cliente.activo})
 
-
 def registro_cliente(request):
     if request.method == 'POST':
         form = RegistroClienteForm(request.POST)
@@ -422,6 +421,7 @@ def registro_cliente(request):
     else:
         form = RegistroClienteForm()
     return render(request, 'clientes/registro.html', {'form': form})
+
 @login_required
 @never_cache
 def descargar_cita_pdf(request, token):
@@ -450,3 +450,4 @@ def descargar_cita_pdf(request, token):
     p.showPage()
     p.save()
     return response
+
