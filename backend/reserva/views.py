@@ -25,6 +25,9 @@ from django.views.decorators.csrf import csrf_exempt
 from decimal import Decimal
 from django.utils.formats import localize
 from django.contrib.auth.models import User
+import openpyxl
+from openpyxl.utils import get_column_letter
+from django.http import HttpResponse
 
 # Encriptación
 fernet = Fernet(settings.ENCRYPT_KEY)
@@ -161,6 +164,7 @@ def home(request):
     hoy = ahora.date()
     hora_actual = ahora.time().replace(second=0, microsecond=0)
 
+    # Cancelación automática de citas pendientes vencidas
     Reserva.objects.filter(
         estado='pendiente',
         fecha__lt=hoy
@@ -171,6 +175,20 @@ def home(request):
         fecha=hoy,
         hora__hora__lte=hora_actual
     ).exclude(pagos__confirmado=True).update(estado='cancelada')
+
+    # --- AGREGAR ESTE BLOQUE PARA ACTUALIZAR EL ESTADO DESDE LA TABLA ---
+    if request.method == "POST" and "reserva_token" in request.POST and "estado" in request.POST:
+        try:
+            pk = decrypt_id(request.POST["reserva_token"])
+            reserva = Reserva.objects.get(pk=pk)
+            nuevo_estado = request.POST["estado"]
+            if nuevo_estado in dict(reserva.ESTADO_CHOICES):
+                reserva.estado = nuevo_estado
+                reserva.save()
+                messages.success(request, "Estado actualizado correctamente.")
+        except Exception as e:
+            messages.error(request, "No se pudo actualizar el estado.")
+    # --- FIN DEL BLOQUE ---
 
     fecha_inicio = request.GET.get('fecha_inicio', '')
     fecha_fin = request.GET.get('fecha_fin', '')
@@ -507,7 +525,7 @@ def abonar_reserva(request, token):
                 reserva=reserva,
                 cliente=reserva.cliente,
                 defaults={
-                    'monto_total': reserva.servicio.precio,
+                    'monto_total': reserva.servicio.precio,  # Guarda el precio actual
                     'pagado': False,
                     'metodo': metodo,
                     'referencia': referencia,
@@ -515,11 +533,13 @@ def abonar_reserva(request, token):
                     'saldo_restante': reserva.servicio.precio - monto_abono,
                 }
             )
-            if not created:
-                factura.abono += monto_abono
-                factura.saldo_restante = factura.monto_total - factura.abono
-                factura.metodo = metodo
-                factura.referencia = referencia
+            # Si la factura ya existe, NO actualices monto_total si ya hay abono/pago
+            if not created and factura.abono > 0:
+                # Mantén el monto_total anterior
+                pass
+            elif not created:
+                # Si no hay abono, actualiza el monto_total por si el precio cambió
+                factura.monto_total = reserva.servicio.precio
                 factura.save()
             # Notificación profesional al cliente
             cliente = reserva.cliente
@@ -705,17 +725,23 @@ def pagar_completo(request, token):
                 referencia=referencia,
                 tipo_pago='completo'
             )
-            Factura.objects.create(
+            factura, created = Factura.objects.get_or_create(
                 reserva=reserva,
                 cliente=reserva.cliente,
-                fecha=timezone.now(),
-                monto_total=monto_total,
-                pagado=False,
-                metodo=metodo,
-                referencia=referencia,
-                abono=monto_total,
-                saldo_restante=0
+                defaults={
+                    'monto_total': reserva.servicio.precio,
+                    'pagado': False,
+                    'metodo': metodo,
+                    'referencia': referencia,
+                    'abono': monto_total,
+                    'saldo_restante': 0,
+                }
             )
+            if not created and factura.abono > 0:
+                pass  # Mantén el monto_total anterior
+            elif not created:
+                factura.monto_total = reserva.servicio.precio
+                factura.save()
             cliente = reserva.cliente
             servicio = reserva.servicio
             fecha_str = reserva.fecha.strftime('%d/%m/%Y')
@@ -826,3 +852,66 @@ def api_buscar_factura(request):
             'factura_id': factura.id,
         })
     return JsonResponse({'success': False})
+
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+def exportar_facturacion_excel(request):
+    facturas = Factura.objects.select_related('cliente', 'reserva').order_by('-fecha')
+    metodo = request.GET.get('metodo', '')
+    estado = request.GET.get('estado', '')
+    fecha_inicio = request.GET.get('fecha_inicio', '')
+    fecha_fin = request.GET.get('fecha_fin', '')
+
+    if metodo:
+        facturas = facturas.filter(metodo=metodo)
+    if estado:
+        facturas = facturas.filter(pagado=(estado == 'pagado'))
+    if fecha_inicio:
+        facturas = facturas.filter(fecha__gte=fecha_inicio)
+    if fecha_fin:
+        facturas = facturas.filter(fecha__lte=fecha_fin)
+
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Facturación"
+
+    headers = [
+        "Fecha", "Cliente", "Servicio", "Método", "Referencia",
+        "Pagos", "Saldo", "Total", "Estado"
+    ]
+    ws.append(headers)
+
+    for factura in facturas:
+        pagos = "; ".join([
+            f"{pago.get_tipo_pago_display()} - {pago.metodo} - ${pago.monto} - Ref: {pago.referencia}"
+            for pago in factura.reserva.pagos.all()
+        ])
+        ws.append([
+            factura.fecha.strftime("%d/%m/%Y %H:%M"),
+            factura.cliente.nombre,
+            str(factura.reserva.servicio),
+            factura.get_metodo_display(),
+            factura.referencia,
+            pagos,
+            factura.saldo_restante,
+            factura.monto_total,
+            "Pagado" if factura.pagado else "Pendiente"
+        ])
+
+    for col in ws.columns:
+        max_length = 0
+        column = col[0].column_letter
+        for cell in col:
+            try:
+                if len(str(cell.value)) > max_length:
+                    max_length = len(str(cell.value))
+            except:
+                pass
+        ws.column_dimensions[column].width = max_length + 2
+
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = 'attachment; filename=Facturacion_GiseNails.xlsx'
+    wb.save(response)
+    return response

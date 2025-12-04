@@ -17,7 +17,7 @@ from empleados.models import Empleado
 from servicio.models import Servicio
 from reserva.models import HorarioDisponible
 from django.contrib import messages
-from django.http import JsonResponse, Http404  # <-- agregar si no está
+from django.http import JsonResponse, Http404, HttpResponse  # <-- agregar si no está
 from datetime import datetime
 from cryptography.fernet import Fernet
 from django.conf import settings
@@ -25,6 +25,8 @@ from cryptography.fernet import Fernet
 from cryptography.fernet import InvalidToken
 from reserva.views import completar_reserva
 from reserva.views import decrypt_id
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
 
 fernet = Fernet(settings.ENCRYPT_KEY)
 def encrypt_id(pk: int) -> str:
@@ -241,17 +243,29 @@ class ClienteUpdateView(UpdateView):
 
     def get_object(self, queryset=None):
         token = self.kwargs.get('token')
-        if not token:
-            raise Http404("Token no proporcionado")
-        try:
-            decrypted_id = fernet.decrypt(token.encode()).decode()
-            return Cliente.objects.get(pk=decrypted_id)
-        except (InvalidToken, Cliente.DoesNotExist):
-            raise Http404("Token inválido o cliente no encontrado")
+        pk = decrypt_id(token)
+        return get_object_or_404(Cliente, pk=pk)
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        user = self.object.user
+        new_password = self.request.POST.get('new_password', '').strip()
+        old_password = self.request.POST.get('old_password', '').strip()
+        if new_password:
+            if user.check_password(old_password):
+                user.set_password(new_password)
+                user.save()
+                self.request.session['update_success'] = 'Contraseña actualizada correctamente.'
+            else:
+                self.request.session['update_error'] = 'La contraseña actual es incorrecta.'
+        else:
+            self.request.session['update_success'] = 'Datos actualizados correctamente.'
+        return response
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['cliente'] = self.object
+        context['update_error'] = self.request.session.pop('update_error', None)
+        context['update_success'] = self.request.session.pop('update_success', None)
         return context
 
 @method_decorator(never_cache, name='dispatch')
@@ -408,3 +422,31 @@ def registro_cliente(request):
     else:
         form = RegistroClienteForm()
     return render(request, 'clientes/registro.html', {'form': form})
+@login_required
+@never_cache
+def descargar_cita_pdf(request, token):
+    try:
+        real_pk = decrypt_id(token)
+    except Exception:
+        return redirect('clientes:panel')
+
+    cliente = get_object_or_404(Cliente, user=request.user)
+    reserva = get_object_or_404(Reserva, pk=real_pk, cliente=cliente)
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename=Cita_{reserva.pk}.pdf'
+
+    p = canvas.Canvas(response, pagesize=letter)
+    p.setFont("Helvetica-Bold", 16)
+    p.drawString(50, 750, "Comprobante de Cita - GiseNails")
+    p.setFont("Helvetica", 12)
+    p.drawString(50, 720, f"Cliente: {reserva.cliente.nombre}")
+    p.drawString(50, 700, f"Servicio: {reserva.servicio}")
+    p.drawString(50, 680, f"Gestora: {reserva.gestora}")
+    p.drawString(50, 660, f"Fecha: {reserva.fecha.strftime('%d/%m/%Y')}")
+    p.drawString(50, 640, f"Hora: {reserva.hora}")
+    p.drawString(50, 620, f"Estado: {reserva.get_estado_display()}")
+    p.drawString(50, 600, f"Precio: ${reserva.servicio.precio:,}")
+    p.showPage()
+    p.save()
+    return response

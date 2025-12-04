@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 from reserva import views as reserva_views
+from .views import descargar_cita_pdf
 
 app_name = 'clientes'
 
@@ -30,4 +31,6 @@ urlpatterns = [
     path('pagar-completo/<str:token>/', reserva_views.pagar_completo, name='pagar_completo'),
 
     path('pagar-saldo/<str:token>/', reserva_views.pagar_saldo, name='pagar_saldo'),
+
+    path('cita/<str:token>/pdf/', descargar_cita_pdf, name='descargar_cita_pdf'),
 ]
