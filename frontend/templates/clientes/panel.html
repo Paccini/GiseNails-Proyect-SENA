@@ -28,6 +28,7 @@
           <option value="confirmada" {% if filter_estado == 'confirmada' %}selected{% endif %}>Confirmada</option>
           <option value="cancelada" {% if filter_estado == 'cancelada' %}selected{% endif %}>Cancelada</option>
         </select>
+
         <div class="d-flex align-items-center gap-1">
           <label for="fecha_inicio" class="form-label mb-0" style="white-space: nowrap; font-size: 0.9rem;">Fecha inicial:</label>
           <input type="date" name="fecha_inicio" id="fecha_inicio" value="{{ filter_fecha_inicio }}" class="form-control" style="max-width: 160px;" />

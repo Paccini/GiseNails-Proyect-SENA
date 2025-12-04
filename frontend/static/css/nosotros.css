@@ -532,3 +532,10 @@ body, main, .container-fluid {
 /* Fin de adición */
 
 /* Fin de archivo */
+/* Forzar fuentes del proyecto (definidas en base.css) */
+body {
+  font-family: var(--fuente-textos) !important;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--fuente-titulos) !important;
+}
