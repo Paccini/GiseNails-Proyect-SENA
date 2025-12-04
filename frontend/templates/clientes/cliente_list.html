@@ -26,9 +26,6 @@
           <thead class="table-light">
             <tr>
               <th>
-                <i class="bi bi-hash me-1"></i> ID
-              </th>
-              <th>
                 <i class="bi bi-person me-1"></i> Nombre
               </th>
               <th>
@@ -45,9 +42,6 @@
           <tbody>
             {% for cliente in object_list %}
               <tr>
-                <!-- ID truncado para no exponerlo -->
-                <td>{{ cliente.id|stringformat:"s"|slice:":3" }}***</td>
-
                 <td>
                   <i class="bi bi-person-circle me-1 text-secondary"></i>
                   {{ cliente.nombre }}
