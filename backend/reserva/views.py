@@ -26,8 +26,10 @@ from decimal import Decimal
 from django.utils.formats import localize
 from django.contrib.auth.models import User
 import openpyxl
-from openpyxl.utils import get_column_letter
+from openpyxl.styles import Font, Alignment, Border, Side
+from datetime import datetime
 from django.http import HttpResponse
+from openpyxl.utils import get_column_letter
 
 # Encriptación
 fernet = Fernet(settings.ENCRYPT_KEY)
@@ -856,38 +858,50 @@ def api_buscar_factura(request):
 @login_required
 @user_passes_test(lambda u: u.is_staff)
 def exportar_facturacion_excel(request):
-    facturas = Factura.objects.select_related('cliente', 'reserva').order_by('-fecha')
     metodo = request.GET.get('metodo', '')
     estado = request.GET.get('estado', '')
     fecha_inicio = request.GET.get('fecha_inicio', '')
     fecha_fin = request.GET.get('fecha_fin', '')
 
+    facturas = Factura.objects.all()
     if metodo:
         facturas = facturas.filter(metodo=metodo)
     if estado:
-        facturas = facturas.filter(pagado=(estado == 'pagado'))
-    if fecha_inicio:
-        facturas = facturas.filter(fecha__gte=fecha_inicio)
-    if fecha_fin:
-        facturas = facturas.filter(fecha__lte=fecha_fin)
+        facturas = facturas.filter(estado=estado)
+    if fecha_inicio and fecha_fin:
+        facturas = facturas.filter(fecha__range=[fecha_inicio, fecha_fin])
 
     wb = openpyxl.Workbook()
     ws = wb.active
     ws.title = "Facturación"
 
-    headers = [
-        "Fecha", "Cliente", "Servicio", "Método", "Referencia",
-        "Pagos", "Saldo", "Total", "Estado"
-    ]
-    ws.append(headers)
+    # Título y fecha
+    ws.merge_cells('A1:I1')
+    ws['A1'] = "Reporte de Facturación - GiseNails"
+    ws['A1'].font = Font(size=16, bold=True)
+    ws['A1'].alignment = Alignment(horizontal='center')
+    ws['A2'] = f"Fecha de generación: {datetime.now().strftime('%d/%m/%Y %H:%M')}"
+    ws['A2'].font = Font(italic=True)
+    ws['A2'].alignment = Alignment(horizontal='left')
 
+    # Encabezados
+    headers = ["Fecha", "Cliente", "Servicio", "Método", "Referencia", "Pagos", "Saldo", "Total", "Estado"]
+    ws.append([])
+    ws.append(headers)
+    for col_num, header in enumerate(headers, 1):
+        cell = ws.cell(row=3, column=col_num)
+        cell.font = Font(bold=True)
+        cell.alignment = Alignment(horizontal='center')
+        cell.border = Border(bottom=Side(style='thin'))
+
+    # Datos
     for factura in facturas:
         pagos = "; ".join([
-            f"{pago.get_tipo_pago_display()} - {pago.metodo} - ${pago.monto} - Ref: {pago.referencia}"
+            f"{pago.get_tipo_pago_display()} - {pago.metodo.title()} - ${pago.monto} - Ref: {pago.referencia}"
             for pago in factura.reserva.pagos.all()
         ])
         ws.append([
-            factura.fecha.strftime("%d/%m/%Y %H:%M"),
+            factura.fecha.strftime('%d/%m/%Y %H:%M'),
             factura.cliente.nombre,
             str(factura.reserva.servicio),
             factura.get_metodo_display(),
@@ -898,15 +912,13 @@ def exportar_facturacion_excel(request):
             "Pagado" if factura.pagado else "Pendiente"
         ])
 
-    for col in ws.columns:
+    # Ajustar ancho de columnas (evita MergedCell)
+    for i, col in enumerate(ws.columns, 1):
         max_length = 0
-        column = col[0].column_letter
+        column = get_column_letter(i)
         for cell in col:
-            try:
-                if len(str(cell.value)) > max_length:
-                    max_length = len(str(cell.value))
-            except:
-                pass
+            if cell.value:
+                max_length = max(max_length, len(str(cell.value)))
         ws.column_dimensions[column].width = max_length + 2
 
     response = HttpResponse(
