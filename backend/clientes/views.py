@@ -28,6 +28,7 @@ from reserva.views import decrypt_id
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 
+
 fernet = Fernet(settings.ENCRYPT_KEY)
 def encrypt_id(pk: int) -> str:
     """Convierte un ID normal en uno cifrado"""
