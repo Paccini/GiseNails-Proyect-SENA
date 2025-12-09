@@ -18,6 +18,26 @@ document.addEventListener("DOMContentLoaded", () => {
     var regForm = document.querySelector('.form-box.register form');
     if (regForm) {
         regForm.addEventListener('submit', function(e) {
+            var telefono = regForm.querySelector('input[name="telefono"]');
+            var telRegex = /^\d{10}$/;
+            if (!telefono.value.trim() || !telRegex.test(telefono.value.trim())) {
+                e.preventDefault();
+                if (window.Swal) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Teléfono inválido',
+                        text: 'El número de teléfono debe tener exactamente 10 dígitos.',
+                        confirmButtonColor: '#e91e63',
+                        timer: 2200,
+                        background: '#fff0fa',
+                        color: '#d63384'
+                    });
+                } else {
+                    alert('El número de teléfono debe tener exactamente 10 dígitos.');
+                }
+                telefono.focus();
+                return false;
+            }
             var pass = regForm.querySelector('input[name="password"]');
             if (pass && pass.value.length < 6) {
                 e.preventDefault();
