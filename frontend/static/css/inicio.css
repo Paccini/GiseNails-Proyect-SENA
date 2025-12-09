@@ -73,20 +73,20 @@
 
 /* Fondos del bloque de iconos */
 .container-fluid.py-5.scroll-fade {
-    background: linear-gradient(to bottom, #2a0d2e, #3d1147);
-    color: white;
+    background: #cfb1f7;
+    color: black;
     padding: 4rem 0;
 }
 
 .container-fluid.py-5.scroll-fade p,
 .container-fluid.py-5.scroll-fade h2,
 .container-fluid.py-5.scroll-fade h3 {
-    color: white;
+    color: black;
 }
 
 /* sección carrusel horizontal moderno */
 .carousel-section {
-    background-color: #3a0026;
+    background-color: rgb(211, 211, 211);
     padding: 40px 0 30px 0;
     /* menos padding arriba y abajo */
     text-align: center;
@@ -98,15 +98,10 @@
     /* menos espacio debajo del título */
     font-family: var(--fuente-titulos);
 
-    background: linear-gradient(90deg,
-            #ffffff 0%,
-            #ff7ec9 40%,
-            #ffffff 60%,
-            #ffffff 100%);
+    background: #4f1257;
     background-size: 220% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    animation: h2shine 4.5s ease-in-out infinite;
 }
 
 .carousel-second {
@@ -168,7 +163,7 @@
 
 .card:hover {
     transform: translateY(-4px) scale(1.04);
-    box-shadow: 0 18px 50px rgba(255, 0, 180, 0.55);
+    box-shadow: 0 18px 20px rgba(236, 112, 199, 0.55);
     filter: brightness(1.15);
 }
 
@@ -233,7 +228,7 @@
 }
 
 .carousel-section .btn-danger {
-    background: linear-gradient(to bottom, #4f1257, #5d166d) !important;
+    background: #5d166d;
     /* fondo sólido */
     color: #fff;
     border: none;
@@ -246,33 +241,7 @@
     overflow: hidden;
 }
 
-/* Brillo animado sobre la letra */
-.carousel-section .btn-danger::after {
-    content: "RESERVA AHORA";
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: inherit;
-    font-weight: inherit;
-    background: linear-gradient(90deg,
-            #fff 0%,
-            #ffe6f7 35%,
-            #fff 65%,
-            #ffb3e6 100%);
-    background-size: 220% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-fill-color: transparent;
-    animation: h2shine 4.5s ease-in-out infinite;
-    pointer-events: none;
-    z-index: 2;
-}
+
 
 /* Oculta el texto original para que solo se vea el animado */
 .carousel-section .btn-danger span {
@@ -286,10 +255,14 @@
 }
 
 .reviews-section {
-    background: #2a0d2e;
+    background: #cfb1f7;
     padding: 60px 0;
-    color: #fff;
+    color: black;
     text-align: center;
+}
+
+.reviews-section h2 {
+    color: #4f1257 !important;
 }
 
 .reviews-container {
@@ -302,7 +275,7 @@
 }
 
 .review-card {
-    background: rgba(255, 255, 255, 0.06);
+    background: #4f12576c;
     border-radius: 14px;
     padding: 28px 34px;
     /* más espacio interno */
@@ -354,52 +327,5 @@
     }
 }
 
-/* Reutiliza la animación h2shine (ya definida más arriba) */
-/* Estilo animado para todos los títulos */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-.animated-title {
-    display: inline-block;
-    background: linear-gradient(90deg,
-            #ffffff 0%,
-            #ffd6ef 25%,
-            #ff7ec9 50%,
-            #d1006e 75%,
-            #ffffff 100%);
-    background-size: 220% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    color: transparent;
-    animation: h2shine 4.5s ease-in-out infinite;
-    font-weight: 600;
-    will-change: background-position;
-}
 
-/* Fallback para evitar texto invisible en navegadores sin soporte */
-@supports not (-webkit-background-clip: text) {
 
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6,
-    .animated-title {
-        color: #fff;
-        background: none;
-        -webkit-text-fill-color: initial;
-    }
-}
-
-/* Forzar fuentes del proyecto (definidas en base.css) */
-body {
-  font-family: var(--fuente-textos) !important;
-}
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--fuente-titulos) !important;
-}

@@ -42,6 +42,26 @@
     --pink-accent: #ff69b4; /* Un rosa vibrante */
     --black-base: #1a1a1a;
     --text-light: #f0f0f0;
+    --accent: #4f1257;
+    --bg: rgba(18, 14, 28, 0.92);
+    --glass: rgba(30, 24, 40, 0.55);
+    --whitesmoke: #ebe8e8;
+    --glass-blur: blur(16px);
+    --card: rgba(40, 30, 50, 0.65);
+    --surface: rgba(60, 40, 70, 0.45);
+    --radius: 18px;
+    --morado-claro: #9922a8;
+    --morado-oscuro: #4f1257;
+    --input-border: #be4fff;
+    --input-focus: #f0b6ff;
+    --btn: linear-gradient(90deg, #cd4fff 0%, #8418c2 100%);
+    --btn-hover: #ffb6e6;
+    --card-selected: #ffb6e6;
+    --text: black;
+    --shadow-glass: 0 8px 32px 0 rgba(205, 79, 255, 0.18);
+    --border-glass: 1.5px solid rgba(176, 79, 255, 0.35);
+    --border-glass-focus: 2.5px solid #ff4fff;
+    --shadow-btn: 0 2px 12px 0 rgba(205, 79, 255, 0.25);
 }
 
 /* Reset y estilos generales */
@@ -51,7 +71,7 @@ body {
     /* Asegura que el body ocupe toda la altura */
     margin: 0;
     /* Elimina márgenes por defecto */
-    background: linear-gradient(135deg, var(--black-base) 0%, #3a0026 50%, var(--pink-accent) 100%);
+    background: #d2b8f3;
     padding: 0;
     /* Elimina padding por defecto */
     font-family: 'Arapey' sans-serif;

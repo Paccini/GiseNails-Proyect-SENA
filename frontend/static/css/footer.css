@@ -6,10 +6,11 @@ footer {
     margin-top: 0 !important;
     width: 100%;
     padding: 80px 0 30px;
-    background: linear-gradient(to right, #000000, #1a0d0e);
-    color: var(--letra-pie);
+    background: linear-gradient(to right, #a89ab9, #8c74ac);
+    color: black;
     border-top-left-radius: 110px;
     line-height: 22px;
+    
 }
 
 footer .row {
@@ -28,11 +29,11 @@ footer .col {
 footer .logo {
     width: 90px;
     margin-bottom: 30px;
-    filter: drop-shadow(0 0 10px var(--pink-accent));
+    filter: drop-shadow(0 0 10px #4f1257);
 }
 
 footer h3 {
-    color: var(--pink-accent);
+    color: #4f1257;
     width: fit-content;
     margin-bottom: 45px;
     position: relative;
@@ -45,23 +46,23 @@ footer ul li {
 }
 
 footer ul li a {
-    color: var(--text-light);
+    color: black;
 }
 
 footer ul li a:hover,
 footer .email-id:hover,
 footer .social ion-icon:hover {
-    color: var(--pink-accent);
+    color: #4f1257;
 }
 
 footer .email-id {
-    color: var(--text-light);
+    color: black;
 }
 
 footer .underline {
     width: 100%;
     height: 4px;
-    background: #4b1d33;
+    background: #4f1257;
     border-radius: 3px;
     position: absolute;
     top: 34px;
@@ -71,7 +72,7 @@ footer .underline {
 footer .underline span {
     width: 15px;
     height: 100%;
-    background: var(--pink-accent);
+    background: #892097;
     border-radius: 3px;
     position: absolute;
     animation: moving 2s linear infinite;
@@ -81,16 +82,15 @@ footer .tel {
     font-size: 1.1rem;
     font-weight: 500;
     letter-spacing: 0.5px;
-    color: var(--pink-accent);
+    color: #4f1257;
     margin-top: 12px;
     display: inline-block;
 }
 
-footer .social ion-icon {
-    width: 30px;
+footer .social-item i {
     height: 30px;
     font-size: 20px;
-    color: var(--text-light);
+    color: #4f1257;
     margin-right: 15px;
     cursor: pointer;
 }
@@ -98,12 +98,11 @@ footer .social ion-icon {
 footer .social-item {
     display: flex;
     align-items: center;
-    gap: 8px; /* espacio entre icono y texto */
     margin-bottom: 12px; /* separación entre filas */
 }
 
 footer .social-item span {
-    color: var(--text-light);
+    color: black;
     font-size: 15px;
 }
 
@@ -117,7 +116,7 @@ footer hr {
 
 footer .copyright {
     text-align: center;
-    color: var(--text-light);
+    color: black;
     margin-top: 10px;
 }
 
