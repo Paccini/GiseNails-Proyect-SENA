@@ -20,6 +20,10 @@
 
 /* Móviles */
 @media (max-width: 768px) {
+    .cont-bn img,
+    .cont-bn2 img {
+        display: none !important;
+    }
     .cont-bn {
         background-image: url("../img/banner_movil.png");
         background-repeat: no-repeat;
@@ -35,7 +39,23 @@
         padding-top: 0 !important;
         min-height: 0 !important;
     }
+    .cont-bn2 {
+        background-image: url("../img/carrucel5_movil (3).png");
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: top center;
+
+        width: 100%;
+        
+        /* ← La CLAVE: la altura real de tu banner móvil */
+        height: calc(100vw * (219 / 390));
+
+        /* Limpieza de estilos antiguos */
+        padding-top: 0 !important;
+        min-height: 0 !important;
+    }
 }
+
 
 
 
@@ -329,3 +349,8 @@
 
 
 
+@media (max-width: 768px) {
+    .carousel-item:not(.d-md-none) img {
+        display: none;
+    }
+}
