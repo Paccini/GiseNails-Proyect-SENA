@@ -1,379 +1,163 @@
 /* =========================
-   nosotros.css - Estilos para la página "Nosotros"
+   nosotros.css – Diseño Minimal Negro & Gris
    ========================= */
 
-/* --- Estilos para la sección de Valores Corporativos --- */
-
-/* Define el contenedor principal para la sección de "Valores Corporativos". */
-.val-corpo {
-    /* Establece un color de fondo semitransparente. */
-    background-color: #eaf7fd96;
-    /* Añade un espaciado interno (relleno) de 40px arriba/abajo y 80px a los lados. */
-    padding: 40px 80px;
-    /* Hace que el contenedor ocupe el 100% del ancho disponible. */
-    width: 100%;
-}
-
-/* Estiliza los títulos de nivel 2 (h2) dentro de la sección de valores. */
-.val-corpo h2 {
-    /* Aplica el color rosa principal (definido como una variable CSS --rosa-principal). */
-    color: var(--rosa-principal);
-    /* Centra el texto del título. */
-    text-align: center;
-    /* Define una fuente decorativa y cursiva para el título. */
-    font-family: 'Great Vibes', cursive;
-    /* Establece un tamaño de fuente grande. */
-    font-size: 3rem;
-    /* Añade un margen inferior de 30px para separarlo del contenido siguiente. */
-    margin-bottom: 30px;
-    /* Añade un relleno interno de 20px alrededor del texto del título. */
-    padding: 20px;
-}
-
-/* Clase de utilidad para aplicar el color rosa a cualquier texto. */
-.rosa {
-    /* Aplica el color rosa principal. */
-    color: var(--rosa-principal);
-}
-
-/* Estiliza los párrafos (p) dentro de la sección de valores. */
-.val-corpo p {
-    /* Justifica el texto del párrafo para alinear ambas márgenes. */
-    text-align: justify;
-    /* Define el tamaño de la fuente. */
-    font-size: 15px;
-    /* Elimina el margen por defecto del párrafo. */
-    margin: 0;
-    /* Añade un pequeño relleno a la izquierda. */
-    padding-left: 10px;
-}
-
-/* --- Estilos para elementos decorativos --- */
-
-/* Define un círculo decorativo. */
-.circulo {
-    /* Establece el ancho del círculo. */
-    width: 25px;
-    /* Establece la altura del círculo. */
-    height: 25px;
-    /* Convierte el elemento cuadrado en un círculo perfecto. */
-    border-radius: 50%;
-}
-
-/* Estiliza los títulos de nivel 6 (h6) que son hijos directos de un elemento .circulo. */
-.circulo>h6 {
-    /* Centra el texto dentro del círculo. */
-    text-align: center;
-    /* Aplica el color de texto definido en la variable --letra-pie. */
-    color: var(--letra-pie);
-}
-
-/* Define un corazón decorativo creado puramente con CSS. */
-.corazon {
-    /* Permite posicionar los pseudo-elementos ::before y ::after de forma absoluta respecto a este contenedor. */
-    position: relative;
-    /* Establece el ancho de la base del corazón. */
-    width: 24px;
-    /* Establece la altura de la base del corazón. */
-    height: 22px;
-    /* Asigna el color de fondo rosa. */
-    background-color: var(--rosa-principal);
-    /* Rota el cuadrado 45 grados para formar la punta del corazón. */
-    transform: rotate(-45deg);
-    /* Añade un margen a la derecha para separarlo de otros elementos. */
-    margin-right: 12px;
-    /* Evita que el elemento se encoja si está en un contenedor flexible. */
-    flex-shrink: 0;
-    /* Habilita Flexbox para centrar el contenido (el número o texto interior). */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Crea la parte superior derecha del corazón usando un pseudo-elemento. */
-.corazon::after {
-    /* Genera el contenido del pseudo-elemento (necesario para que sea visible). */
-    content: "";
-    /* Posiciona este elemento de forma absoluta con respecto al contenedor .corazon. */
-    position: absolute;
-    /* Asigna el mismo ancho que la base. */
-    width: 24px;
-    /* Asigna la misma altura que la base. */
-    height: 22px;
-    /* Asigna el mismo color de fondo. */
-    background-color: var(--rosa-principal);
-    /* Lo desplaza hacia la derecha. */
-    left: 15px;
-    /* Lo alinea en la parte superior. */
-    top: 0;
-    /* Nota: Este pseudo-elemento no tiene border-radius, por lo que forma la otra mitad del corazón al combinarse con ::before. */
-}
-
-/* Crea la parte superior izquierda del corazón usando otro pseudo-elemento. */
-.corazon::before {
-    /* Genera el contenido del pseudo-elemento. */
-    content: "";
-    /* Posiciona este elemento de forma absoluta con respecto al contenedor .corazon. */
-    position: absolute;
-    /* Asigna el mismo ancho que la base. */
-    width: 24px;
-    /* Asigna la misma altura que la base. */
-    height: 22px;
-    /* Asigna el mismo color de fondo. */
-    background-color: var(--rosa-principal);
-    /* Lo desplaza hacia arriba. */
-    top: -15px;
-    /* Lo alinea a la izquierda. */
-    left: 0;
-    /* Nota: La combinación de la rotación del .corazon y la posición de ::before y ::after crea la forma completa del corazón. */
-}
-
-/* Estiliza el contenido de texto (span) dentro del corazón. */
-.corazon span {
-    /* Permite el uso de z-index y transform. */
-    position: relative;
-    /* Rota el texto 45 grados en sentido contrario para que se lea horizontalmente. */
-    transform: rotate(45deg);
-    /* Establece el color del texto a blanco. */
-    color: #fff;
-    /* Pone el texto en negrita. */
-    font-weight: bold;
-    /* Define el tamaño de la fuente. */
-    font-size: 13px;
-    /* Asegura que el texto esté por encima de los pseudo-elementos del corazón. */
-    z-index: 2;
-}
-
-/* --- Estilos para la tipografía --- */
-
-/* Aplica la tipografía Inter como fuente principal en todo el documento. */
-body {
-    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    /* Establece un color de texto por defecto. */
-    color: #333;
-    /* Define un tamaño de fuente base. */
-    font-size: 16px;
-    /* Establece un interlineado para mejorar la legibilidad. */
-    line-height: 1.5;
-    /* Elimina el margen por defecto del cuerpo. */
-    margin: 0;
-    /* Añade un relleno interno al cuerpo. */
-    padding: 0;
-}
-
-/* nosotros.css - Paleta y colores sincronizados con inicio.css
-   Reemplazar el archivo existente por este para que "Nosotros" tenga los mismos
-   colores de fondo y de texto que la página de inicio.
-*/
-
-/* Variables locales (mismos valores visuales que usa inicio) */
+/* --------- PALETA GENERAL --------- */
 :root {
-    --rosa-principal: #e91e63;
-    /* color de títulos/accentos */
-    --rosa-claro: #ffe6f0;
-    /* fondo suave rosado para secciones */
-    --rosa-fuerte: #ff7aa2;
-    /* botones / acentos fuertes */
-    --rosa-oscuro: #c2185b;
-    /* hover / estados activos */
-    --texto-oscuro: #333333;
-    /* color base de texto */
-    --texto-claro: #ffffff;
-    /* color para textos sobre fondos oscuros */
+    --negro: #000;
+    --negro2: #111;
+    --gris-fondo: #ebe8e8;
+    --gris-seccion: #fafafa;
+    --gris-borde: #d1d1d1;
+    --blanco: #ffffff;
 }
 
-/* --- Base y tipografía --- */
+/* --------- BASE --------- */
 body {
-    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    color: var(--texto-oscuro);
+    color: var(--negro2);
     margin: 0;
     padding: 0;
-    line-height: 1.5;
+    background-color: var(--gris-fondo);
+    line-height: 1.6;
 }
 
-/* --- Utilidades para secciones que deben coincidir con inicio --- */
-/* Fondo rosado suave para secciones principales */
-.bg-rosado {
-    background-color: var(--rosa-claro) !important;
-    color: var(--texto-oscuro);
-}
-
-/* Sección de valores corporativos */
-.val-corpo {
-    background-color: var(--rosa-claro);
-    padding: 40px 80px;
-    width: 100%;
-    color: var(--texto-oscuro);
-}
-
-/* Títulos principales con color rosado principal */
-.val-corpo h2,
-.h2-nosotros {
-    color: var(--rosa-principal);
+/* --------- TITULOS --------- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--negro);
     text-align: center;
-    font-family: 'Great Vibes', cursive;
+    letter-spacing: 1px;
+}
+
+/* --------- UTILIDADES --------- */
+.text-black {
+    color: var(--negro) !important;
+}
+
+.bg-light-grey {
+    background-color: var(--gris-seccion);
+}
+
+.border-grey {
+    border-bottom: 1px solid var(--gris-borde);
+}
+
+/* --------- SECCIÓN VALORES CORPORATIVOS --------- */
+.val-corpo {
+    background-color: var(--gris-seccion);
+    padding: 50px 80px;
+    width: 100%;
+    color: var(--negro2);
+}
+
+.val-corpo h2 {
     font-size: 2.6rem;
     margin-bottom: 1rem;
-    padding: 8px 0;
+    color: var(--negro);
 }
 
-/* Clase para textos destacados en rosa */
-.rosa {
-    color: var(--rosa-principal);
-}
-
-/* Párrafos dentro de las secciones */
-.val-corpo p,
-.bg-rosado p,
-.section-nosotros p {
+/* Párrafos */
+.val-corpo p {
     text-align: justify;
-    font-size: 15px;
+    font-size: 20px;
     margin: 0 0 1rem 0;
-    color: var(--texto-oscuro);
+    color: var(--negro2);
 }
 
-/* Listados y bullets: color de icono/acento */
-ul.nosotros-list li i,
-ul.nosotros-list li .icon {
-    color: var(--rosa-principal);
-}
-
-/* Corazón decorativo (mismo acento) */
+/* --------- ICONO CORAZÓN PREMIUM --------- */
 .corazon {
+    width: 30px;
+    height: 30px;
+    background-color: #000;
     position: relative;
-    width: 28px;
-    height: 26px;
-    background-color: var(--rosa-principal);
-    transform: rotate(-45deg);
     margin-right: 12px;
-    flex-shrink: 0;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.corazon::after,
-.corazon::before {
-    content: "";
-    position: absolute;
-    width: 28px;
-    height: 26px;
-    background-color: var(--rosa-principal);
-}
-
-.corazon::after {
-    left: 17px;
-    top: 0;
-}
-
-.corazon::before {
-    left: 0;
-    top: -17px;
-}
-
-.corazon span {
-    position: relative;
-    transform: rotate(45deg);
-    color: var(--texto-claro);
-    font-weight: 700;
-    font-size: 13px;
-    z-index: 2;
-}
-
-/* Botones y enlaces con la paleta de inicio */
-.btn-rosa,
-.btn-danger.rounded-pill {
-    background: var(--rosa-fuerte);
-    color: var(--texto-claro);
-    border: none;
-    font-weight: 600;
-}
-
-.btn-rosa:hover,
-.btn-danger.rounded-pill:hover {
-    background: var(--rosa-oscuro);
-    color: var(--texto-claro);
-    transform: translateY(-1px);
-}
-
-/* Overlay y carrusel: asegurar contraste y colores consistentes */
-.overlay {
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.65), transparent);
-    color: var(--texto-claro);
-}
-
-.carousel-indicators [data-bs-target] {
-    background-color: var(--rosa-fuerte);
-}
-
-/* Iconos redondeados (misma apariencia que inicio) */
-.rounded-circle {
+    transform: rotate(-45deg);
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 16px;
-    width: 72px;
-    height: 72px;
-    padding: 10px;
+}
+
+.corazon::before,
+.corazon::after {
+    content: "";
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background-color: #000;
     border-radius: 50%;
-    background: #fff;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
 }
 
-/* Ajustes de layout para valores */
-.corpo .d-flex p {
-    margin-left: 8px;
-    color: var(--texto-oscuro);
+.corazon::before {
+    top: -15px;
+    left: 0;
 }
 
-/* ---------- Ajustes para texto blanco en secciones oscuras ---------- */
-/* Lista de puntos (debajo del header) */
+.corazon::after {
+    left: 15px;
+    top: 0;
+}
+
+/* Número dentro */
+.corazon span {
+    position: relative;
+    transform: rotate(45deg);
+    color: #fff;
+    font-size: 13px;
+    font-weight: bold;
+    z-index: 2;
+}
+
+
+/* --------- LISTA NOSOTROS --------- */
 ul.nosotros-list {
+    list-style: none;
+    padding: 0;
     font-size: 1.1rem;
 }
 
 ul.nosotros-list li {
-    color: #ffffff !important;
-    /* texto blanco */
+    padding: 6px 0;
+    color: var(--negro2);
+    display: flex;
+    align-items: center;
 }
 
 ul.nosotros-list li i {
-    color: var(--rosa-principal) !important;
-    /* mantener icono rosa */
-    font-size: 1.5rem;
+    font-size: 1.4rem;
+    margin-right: 10px;
+    color: var(--negro);
 }
 
-/* Sección central: "Qué somos / Cómo lo hacemos / Por qué lo hacemos" */
-.section-que-nosotros,
-.section-que-nosotros .row,
-.section-que-nosotros article,
-.section-que-nosotros figcaption,
-.section-que-nosotros p {
-    color: #ffffff !important;
-    /* forzar texto blanco */
+/* --------- BOTONES --------- */
+.btn-rosa,
+.btn-danger.rounded-pill {
+    background: var(--negro);
+    color: var(--blanco);
+    border: none;
+    font-weight: 600;
+    transition: 0.2s ease;
 }
 
-.section-que-nosotros figure img {
-    /* si quieres bordes o contraste extra sobre fondo oscuro */
-    filter: none;
+.btn-rosa:hover,
+.btn-danger.rounded-pill:hover {
+    background: var(--negro2);
+    color: var(--blanco);
+    transform: translateY(-1px);
 }
 
-/* Valores corporativos (si el fondo es oscuro en vista) */
-.val-corpo,
-.val-corpo h2,
-.val-corpo p,
-.val-corpo .corpo p,
-.val-corpo .corazon span {
-    color: #ffffff !important;
+/* --------- MAPA ENCUÉNTRANOS --------- */
+.map-section,
+.map-section h2,
+.map-section p {
+    color: var(--negro2);
 }
 
-/* Si necesitas mayor contraste para subtítulos/captions */
-.section-que-nosotros figcaption {
-    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
-    font-weight: 500;
-}
-
-/* --- Responsive: mantener legibilidad en móviles --- */
+/* --------- RESPONSIVE --------- */
 @media (max-width: 991px) {
     .val-corpo {
         padding: 30px 20px;
@@ -383,159 +167,30 @@ ul.nosotros-list li i {
         font-size: 2.2rem;
     }
 
-    .corazon,
-    .rounded-circle {
-        width: 22px;
-        height: 20px;
+    .corazon {
+        width: 20px;
+        height: 18px;
     }
 }
 
-/* --- Accesibilidad: enfoque y contraste --- */
-a,
-button {
-    outline-offset: 3px;
+.section-bg-1 {
+    background: var(--whitesmoke);
+    /* blanco */
+    color: #111;
 }
 
-a:focus,
-button:focus {
-    box-shadow: 0 0 0 3px rgba(233, 30, 99, 0.12);
+.section-bg-2 {
+    background: #d2b8f3;
+    color: #111;
 }
 
-/* --- Clases auxiliares si plantilla usa inline color actualmente --- */
-/* Reemplaza estilos inline como style="color: #e91e63" por la clase .rosa */
-/* Reemplaza style="background-color: #ffe6f0" por .bg-rosado */
-
-/* --- Forzar texto blanco en las 3 secciones solicitadas --- */
-/* 1) Lista de puntos (íconos + texto) justo debajo del header */
-ul.nosotros-list li {
-    color: #ffffff !important;
-    /* texto blanco */
+.section-bg-3 {
+    background: var(--whitesmoke);
+    /* rosa pastel corporativo */
+    color: #111;
 }
 
-ul.nosotros-list li i {
-    color: var(--rosa-principal) !important;
-    /* mantener iconos en rosa */
-}
-
-/* 2) Sección central con las 3 "Qué somos / Cómo lo hacemos / Por qué lo hacemos" */
-/* selecciona la fila específica que en la plantilla usa: .row.justify-content-center.align-items-center */
-.py-5.scroll-fade>.row.justify-content-center.align-items-center,
-.py-5.scroll-fade>.row.justify-content-center.align-items-center article,
-.py-5.scroll-fade>.row.justify-content-center.align-items-center article figcaption,
-.py-5.scroll-fade>.row.justify-content-center.align-items-center article p {
-    color: #ffffff !important;
-    /* texto y figcaption blancos */
-}
-
-/* 3) Asegurar legibilidad de captions sobre overlays / fondos oscuros */
-.py-5.scroll-fade>.row.justify-content-center.align-items-center article figcaption {
-    font-weight: 500;
-    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
-}
-
-/* Cambios específicos: texto blanco SOLO en las 3 secciones solicitadas */
-
-/* 1) Lista de puntos bajo el header (presentacion) -> textos blancos, iconos rosados */
-.presentacion ul.nosotros-list li {
-    color: #ffffff !important;
-    /* solo estos textos en blanco */
-}
-
-.presentacion ul.nosotros-list li i {
-    color: var(--rosa-principal) !important;
-    /* mantener icono en rosa */
-    font-size: 1.5rem;
-}
-
-/* 2) Sección central (Qué somos / Cómo lo hacemos / Por qué lo hacemos) -> figcaption y párrafos blancos */
-.section-que-nosotros article figcaption,
-.section-que-nosotros article p {
-    color: #ffffff !important;
-    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
-}
-
-/* 3) Valores corporativos (si su fondo está oscuro) -> títulos y párrafos blancos */
-.val-corpo h2,
-.val-corpo p,
-.val-corpo .corpo p {
-    color: #ffffff !important;
-}
-
-/* Texto blanco únicamente para la sección "Valores corporativos" */
-#valores {
-    /* si el fondo es oscuro, mantener contraste */
-    color: #ffffff;
-}
-
-#valores h2 {
-    color: #ffffff !important;
-}
-
-#valores .corpo p,
-#valores .corpo .d-flex p,
-#valores .corazon+p,
-#valores .corazon+p strong,
-#valores .corpo .d-flex p strong {
-    color: #ffffff !important;
-}
-
-
-#valores .corazon span {
-    color: #ffffff !important;
-}
-
-/* Opcional: subir contraste de los textos más claros */
-#valores .corpo p {
-    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.18);
-}
-
-/* --- Eliminar línea divisoria entre secciones (sin cambiar color) --- */
-
-/* Quita cualquier margen o borde entre secciones */
-section,
-.section-que-nosotros,
-#valores {
-  margin: 0 !important;
-  border: none !important;
-  background: none !important;
-}
-
-/* Asegura que el color de fondo sea continuo desde el body */
-body, main, .container-fluid {
-  background: inherit !important;
-  border: none !important;
-}
-
-/* Quita espacio extra arriba o abajo si el container agrega padding */
-.container,
-.container-fluid {
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-}
-
-/* Ajuste fino: evita que haya una “línea” por sombras o diferencias de color */
-.section-que-nosotros::before,
-.section-que-nosotros::after,
-#valores::before,
-#valores::after {
-  display: none !important;
-}
-
-/* Letra blanca para la sección de Encuéntranos */
-.map-section,
-.map-section h2,
-.map-section p {
-  color: #fff !important;
-}
-
-
-/* Fin de adición */
-
-/* Fin de archivo */
-/* Forzar fuentes del proyecto (definidas en base.css) */
-body {
-  font-family: var(--fuente-textos) !important;
-}
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--fuente-titulos) !important;
+.section-bg-4 {
+    background: #d2b8f3;
+    color: #111;
 }

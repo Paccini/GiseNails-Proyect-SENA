@@ -1,9 +1,14 @@
 /* ======================== VARIABLES ======================== */
 :root {
-    --productos-accent: #ff4081;
-    --productos-card-bg: rgba(255, 255, 255, 0.96);
-    --productos-card-text: #3b3b3b;
-    --productos-muted: #6b6b6b;
+    --negro: #000;
+    --negro2: #111;
+    --gris-fondo: #f5f5f5;
+    --gris-seccion: #fafafa;
+    --gris-borde: #d1d1d1;
+    --blanco: #ffffff;
+    --accent: #000;
+    --texto-card: #222;
+    --texto-muted: #555;
 }
 
 /* ======================== ANIMACIÓN SCROLL ======================== */
@@ -20,72 +25,88 @@
 
 /* ======================== CONTENEDOR PRINCIPAL ======================== */
 .productos-page {
-    padding: 40px 18px;
+    padding: 50px 20px;
+    background-color: var(--gris-fondo);
 }
 
 /* ======================== TITULOS ======================== */
-.productos-title,
-.productos-page .productos-title {
-    color: #fff !important;
-    font-size: 2.8em;
-    font-family: 'Comic Sans MS', cursive;
+.productos-title {
+    color: var(--negro) !important;
+    font-size: 3rem;
     letter-spacing: 1px;
-    margin-bottom: .6rem;
-    text-shadow: 0 2px 6px rgba(0,0,0,.45);
+    font-weight: 700;
+    margin-bottom: .8rem;
 }
 
-.productos-subtitle,
-.productos-page .productos-subtitle {
-    color: rgba(255, 255, 255, .9) !important;
-    font-size: 1.12rem;
+.productos-subtitle {
+    color: var(--negro2) !important;
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    font-weight: 400;
 }
 
 /* ======================== CARDS ======================== */
 .cards {
     justify-content: center;
-    gap: 18px;
-    margin-bottom: 12px;
+    gap: 22px;
+    margin-bottom: 16px;
 }
 
 .cards > .card-gn {
     max-width: 360px !important;
-    max-height: 300px !important;
+    max-height: 320px !important;
 }
 
 .productos-page .card-gn {
-    background: var(--productos-card-bg);
-    color: var(--productos-card-text);
-    border: 1px solid rgba(255, 64, 129, .12);
+    background: var(--blanco);
+    color: var(--texto-card);
+    border: 1px solid var(--gris-borde);
+    border-radius: 10px;
+    padding: 12px;
+    box-shadow: 0 3px 10px rgba(0,0,0,.08);
 }
 
 .productos-page .card-gn .card-title {
-    color: var(--productos-accent);
-    font-weight: 600;
-    font-size: 1.22rem;
+    color: var(--negro);
+    font-weight: 700;
+    font-size: 1.35rem;
 }
 
 .productos-page .card-gn .card-text,
 .productos-page .card-gn .muted {
-    color: var(--productos-muted);
-    font-size: 1.03rem;
-    line-height: 1.35;
+    color: var(--texto-muted);
+    font-size: 1.12rem;
+    line-height: 1.45;
 }
 
 .productos-page .card-gn img {
-    border: 3px solid var(--productos-accent);
-    box-shadow: 0 2px 8px rgba(230, 0, 126, .08);
+    border: 3px solid var(--negro);
+    border-radius: 10px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.12);
 }
 
 .productos-page .card-gn .badge {
-    background: #fff0f7;
-    color: var(--productos-accent);
-    border: 1px solid rgba(255, 64, 129, .12);
+    background: var(--negro);
+    color: var(--blanco);
+    border-radius: 8px;
     font-weight: 700;
 }
 
+/* ======================== BOTONES ======================== */
 .productos-page .card-gn .btn {
-    background: var(--productos-accent);
-    color: #fff;
+    background: var(--negro);
+    color: var(--blanco);
+    border: none;
+    font-size: 1.05rem;
+    font-weight: 600;
+    padding: 8px 16px;
+    transition: .2s ease;
+    border-radius: 6px;
+}
+
+.productos-page .card-gn .btn:hover {
+    background: var(--negro2);
+    transform: translateY(-2px);
 }
 
 /* ======================== PAGINADOR ======================== */
@@ -95,17 +116,7 @@
     margin-bottom: 28px;
 }
 
-.animated-paginator,
-.productos-page .animated-paginator {
-    display: flex !important;
-    gap: 10px !important;
-    align-items: center !important;
-    justify-content: center !important;
-}
-
-/* --- ESTILO GENERAL (SIEMPRE NEGRO) --- */
-.animated-paginator .page-link,
-.productos-page .animated-paginator .page-link {
+.animated-paginator .page-link {
     width: 44px !important;
     height: 44px !important;
     border-radius: 50% !important;
@@ -113,85 +124,53 @@
     align-items: center !important;
     justify-content: center !important;
     padding: 0 !important;
-    background: #fff !important;
-    color: #222 !important;
-    font-size: 1.15rem !important;
+    background: var(--blanco) !important;
+    color: var(--negro) !important;
+    font-size: 1.2rem !important;
     font-weight: 700 !important;
-    border: none !important;
-    box-shadow: 0 6px 14px rgba(0,0,0,.16) !important;
+    border: 1px solid var(--gris-borde) !important;
     transition: transform .22s cubic-bezier(.2,.9,.3,1) !important;
 }
 
-/* --- TODOS LOS ESTADOS (PARA QUE NUNCA SE PONGA BLANCO) --- */
-.animated-paginator .page-link:hover,
-.animated-paginator .page-link:visited,
-.animated-paginator .page-link:focus,
-.animated-paginator .page-link:active,
-.productos-page .animated-paginator .page-link:hover,
-.productos-page .animated-paginator .page-link:visited,
-.productos-page .animated-paginator .page-link:focus,
-.productos-page .animated-paginator .page-link:active {
-    color: #222 !important;
-    background: #fff !important;
-}
-
-/* --- HOVER (solo efecto de movimiento, NO de color) --- */
 .animated-paginator .page-link:hover {
     transform: translateY(-6px);
     box-shadow: 0 16px 30px rgba(0,0,0,.22) !important;
 }
 
-/* --- PÁGINA ACTIVA (único que va blanco) --- */
-.animated-paginator .page-item.active .page-link,
-.productos-page .animated-paginator .page-item.active .page-link {
-    background: var(--productos-accent) !important;
-    color: #fff !important; /* este sí va blanco */
-    transform: scale(1.06) !important;
-    box-shadow: 0 20px 40px rgba(255, 64, 129, .14) !important;
-}
-
-/* Animación pulse */
-.animated-paginator .page-link.pulse {
-    animation: paginator-pulse .38s cubic-bezier(.2, .9, .3, 1) !important;
-}
-
-@keyframes paginator-pulse {
-    0% { transform: scale(1); }
-    40% { transform: scale(1.18); }
-    100% { transform: scale(1); }
-}
-
-body.pag-navigating .productos-page {
-    opacity: 0;
-    transition: opacity .28s ease;
+.animated-paginator .page-item.active .page-link {
+    background: var(--negro) !important;
+    color: var(--blanco) !important; 
+    transform: scale(1.08) !important;
+    box-shadow: 0 20px 40px rgba(0,0,0,.2) !important;
 }
 
 /* ======================== SECCIONES ======================== */
 .productos-section-title {
-    color: #fff;
-    font-size: 1.75rem;
+    color: var(--negro);
+    font-size: 1.85rem;
+    font-weight: 700;
     text-align: center;
-    margin: 20px 0 8px;
+    margin: 28px 0 10px;
 }
 
 /* ======================== LISTAS HORIZONTALES ======================== */
 .recomendados-cards,
 .en-uso-cards {
     display: flex;
-    gap: 14px;
+    gap: 18px;
     flex-wrap: nowrap;
     overflow-x: auto;
     padding: 10px 6px;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
 }
 
 .recomendados-cards .card-gn,
 .en-uso-cards .card-gn {
-    min-width: 220px;
-    max-width: 240px;
+    min-width: 230px;
+    max-width: 260px;
 }
 
-/* ======================== INFO-LIST GENERICO ======================== */
+/* ======================== INFO-LIST ======================== */
 .info-list {
     display: flex;
     gap: 14px;
@@ -203,115 +182,270 @@ body.pag-navigating .productos-page {
 .info-item {
     display: flex;
     gap: 12px;
-    background: rgba(0,0,0,.18);
+    background: var(--gris-seccion);
     border-radius: 10px;
-    padding: 10px 12px;
+    padding: 12px 14px;
     max-width: 520px;
-    color: #fff;
-    border: 1px solid rgba(255,255,255,.04);
+    color: var(--negro2);
+    border: 1px solid var(--gris-borde);
+    font-size: 1.12rem;
 }
 
+/* ======================== IMAGEN LISTA ======================== */
 .info-img {
-    width: 56px;
-    height: 56px;
+    width: 58px;
+    height: 58px;
     border-radius: 999px;
     object-fit: cover;
-    border: 2px solid rgba(255, 64, 129, .14);
-}
-
-.info-desc {
-    color: #fff;
-    font-size: 1.02rem;
-    line-height: 1.3;
+    border: 2px solid var(--negro);
 }
 
 /* ======================== EN USO EN EL ESTUDIO ======================== */
 .en-uso-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 20px;
     padding: 18px 12px;
-    margin-bottom: 22px;
+    margin-bottom: 24px;
 }
 
 .en-uso-list .info-item {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    background: linear-gradient(180deg, rgba(0,0,0,.18), rgba(0,0,0,.12));
-    min-height: 220px;
-    padding: 18px;
+    background: var(--blanco);
+    min-height: 230px;
+    padding: 20px;
     border-radius: 12px;
 }
 
 .en-uso-list .info-img {
     width: 88px;
     height: 88px;
-    border: 3px solid rgba(255, 64, 129,.15);
-    box-shadow: 0 6px 18px rgba(0,0,0,.24);
+    border: 3px solid var(--negro);
+    box-shadow: 0 4px 12px rgba(0,0,0,.2);
 }
 
 .en-uso-list .info-title {
-    font-size: 1.05rem;
+    font-size: 1.15rem;
     font-weight: 700;
-    color: #fff;
-}
-
-.en-uso-list .info-desc {
-    display: none !important;
-}
-
-/* ======================== OBJETIVO ======================== */
-.objetivo-section {
-    padding: 28px 20px;
-    margin: 0 auto 18px;
-    max-width: 1200px;
-    text-align: center;
-}
-
-.objetivo-section .productos-section-title {
-    color: #fff;
-    font-size: 1.75rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-}
-
-.objetivo-section .productos-subtitle {
-    color: rgba(255,255,255,.94);
-    font-size: 1.08rem;
-    line-height: 1.55;
-    max-width: 980px;
-    margin: 0 auto;
-}
-
-.objetivo-section .productos-subtitle span {
-    color: var(--productos-accent);
-    font-weight: 700;
+    color: var(--negro);
 }
 
 /* ======================== RESPONSIVE ======================== */
 @media (max-width: 991px) {
-    .productos-page { padding: 30px 12px; }
-    .productos-title { font-size: 2.1em; }
-    .en-uso-list .info-item { min-height: 200px; }
-}
-
-@media (max-width: 768px) {
-    .info-list { flex-direction: column; align-items: center; }
-    .info-item { width: 95%; }
+    .productos-title { font-size: 2.4rem; }
 }
 
 @media (max-width: 600px) {
     .en-uso-list { grid-template-columns: 1fr; }
-    .objetivo-section { padding: 18px 12px; }
-    .objetivo-section .productos-section-title { font-size: 1.25rem; }
+    .productos-page { padding: 28px 14px; }
 }
 
-/* Forzar fuentes del proyecto (definidas en base.css) */
+/* FUENTES DEL PROYECTO */
 body {
   font-family: var(--fuente-textos) !important;
 }
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--fuente-titulos) !important;
 }
+
+/* ---------- TITULO DE SLIDE / SECCIÓN ---------- */
+.section-title {
+    color: #000 !important;
+    font-size: 2.4rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+/* ---------- PAGINACIÓN CUSTOM SWIPER / CAROUSEL ---------- */
+.swiper-pagination-bullet {
+    width: 14px;
+    height: 14px;
+    background: #aaa !important;
+    opacity: 1 !important;
+    border: 2px solid #000;
+    transition: 0.3s ease;
+}
+
+.swiper-pagination-bullet-active {
+    background: #000 !important;
+    transform: scale(1.3);
+}
+
+/* ---- OPCIONAL: Separar la paginación del contenido ---- */
+.swiper-pagination {
+    margin-top: 20px;
+    position: relative !important;
+}
+
+/* ---------- TITULOS DE SECCIONES / CARDS ---------- */
+.section-title,
+.recommended-title,
+.en-estudio-title {
+    color: #000 !important;
+    font-weight: 800;
+    font-size: 2.2rem;
+    text-align: center;
+}
+
+/* ---------- TEXTO DE CARDS (RECOMENDADOS & EN ESTUDIO) ---------- */
+.recommended-card,
+.estudio-card {
+    color: #000 !important;
+}
+
+.recommended-card h5,
+.estudio-card h5 {
+    color: #000 !important;
+    font-weight: 900;
+}
+
+.recommended-card p,
+.estudio-card p {
+    color: #111 !important;
+    font-size: 1rem;
+}
+
+/* ---------- PAGINACIÓN NEGRA PREMIUM ---------- */
+.swiper-pagination-bullet {
+    width: 13px;
+    height: 13px;
+    background: #000 !important;    /* negro */
+    opacity: 0.3 !important;         /* más sutil */
+    border-radius: 50%;
+    transition: 0.3s ease;
+}
+
+.swiper-pagination-bullet-active {
+    background: #000 !important;     /* negro sólido */
+    opacity: 1 !important;
+    transform: scale(1.3);
+}
+
+/* Separación visual */
+.swiper-pagination {
+    position: relative !important;
+    margin-top: 25px;
+}
+
+/* =========================
+   OVERRIDES FUERTES: TITULOS, CARDS Y PAGINACION
+   Pegar AL FINAL del CSS (se carga después de librerías)
+   ========================= */
+
+/* ---------- TÍTULOS: forzar negro en toda la página de productos ---------- */
+.productos-page .section-title,
+.productos-page .productos-title,
+.productos-page .productos-section-title,
+.productos-page .productos-subtitle,
+.productos-page h1,
+.productos-page h2,
+.productos-page h3,
+.productos-page h4 {
+  color: #000 !important;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Asegurar que figcaption/titles dentro de cards sean negros */
+.productos-page .card-gn .card-title,
+.productos-page .card-gn h5,
+.productos-page .recommended-card h5,
+.productos-page .estudio-card h5 {
+  color: #000 !important;
+}
+
+/* Texto de descripción dentro de cards */
+.productos-page .card-gn .card-text,
+.productos-page .card-gn .muted,
+.productos-page .recommended-card p,
+.productos-page .estudio-card p,
+.productos-page .info-desc,
+.productos-page .info-item,
+.productos-page .info-title {
+  color: #111 !important;
+}
+
+/* ---------- PAGINACIÓN: OVERRIDES PARA SWIPER y paginadores custom ---------- */
+/* Regla con alta especificidad para sobreescribir estilos de librerías */
+.productos-page .swiper-container .swiper-pagination-bullet,
+.productos-page .swiper-pagination-bullet,
+.productos-page .animated-paginator .page-link,
+.productos-page .pagination-wrapper .page-link {
+  background: #000 !important;        /* bullet negro por defecto */
+  opacity: 0.45 !important;           /* ligeramente tenue */
+  border: 0 !important;
+  box-shadow: none !important;
+  transition: transform .22s ease, opacity .22s ease !important;
+}
+
+/* Active / visible bullet / página */
+.productos-page .swiper-pagination-bullet-active,
+.productos-page .animated-paginator .page-item.active .page-link,
+.productos-page .pagination-wrapper .page-item.active .page-link {
+  background: #000 !important;        /* negro sólido */
+  color: #fff !important;
+  opacity: 1 !important;
+  transform: scale(1.18) !important;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.16) !important;
+}
+
+/* Hover en bullets (más contraste) */
+.productos-page .swiper-pagination-bullet:hover,
+.productos-page .animated-paginator .page-link:hover {
+  opacity: 0.85 !important;
+  transform: translateY(-6px) scale(1.02) !important;
+  box-shadow: 0 12px 26px rgba(0,0,0,0.18) !important;
+}
+
+/* Si alguna librería usa ::before o ::after para paginación, también forzamos */
+.productos-page .swiper-pagination-bullet::before,
+.productos-page .swiper-pagination-bullet::after {
+  background: #000 !important;
+  opacity: 1 !important;
+}
+
+/* ---------- SI HAY UN Paginador "animated-paginator" que estaba en blanco ---------- */
+.productos-page .animated-paginator .page-link {
+  background: #000 !important;
+  color: #fff !important;
+  border: 1px solid rgba(0,0,0,0.06) !important;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12) !important;
+}
+
+/* Mantener contraste cuando está enfocado (accessibility) */
+.productos-page .animated-paginator .page-link:focus,
+.productos-page .swiper-pagination-bullet:focus {
+  outline: 3px solid rgba(0,0,0,0.08) !important;
+  outline-offset: 2px !important;
+}
+
+/* ---------- CARDS / LISTAS: asegurar textos en NEGRO y centrado visual ---------- */
+.productos-page .card-gn,
+.productos-page .info-item,
+.productos-page .en-uso-list .info-item,
+.productos-page .recomendados-cards .card-gn {
+  color: #111 !important;
+}
+
+/* Evitar que imágenes o badges empujen color blanco: forzamos fondo de badges si existen */
+.productos-page .card-gn .badge,
+.productos-page .badge {
+  background: #000 !important;
+  color: #fff !important;
+  border: none !important;
+}
+
+/* ---------- UTILS: asegurar que no haya transparencias engañosas ---------- */
+.productos-page *[style*="color: white"],
+.productos-page *[style*="color:#fff"],
+.productos-page *[style*='color: #fff'] {
+  color: #000 !important; /* sobrescribe estilos inline básicos que pongan blanco */
+}
+
+/* ---------- IMPORTANTE: si usas lazy CSS o CSS modules, carga esto al final ---------- */
+/* Fin overrides */

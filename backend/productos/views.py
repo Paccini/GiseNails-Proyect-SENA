@@ -7,6 +7,8 @@ from django.views.decorators.cache import never_cache
 from django.core.paginator import Paginator
 from django.views.decorators.http import require_GET
 import openpyxl
+from openpyxl.styles import Font, Alignment, Border, Side
+from datetime import datetime
 from openpyxl.utils import get_column_letter
 from django.http import HttpResponse
 
@@ -193,9 +195,26 @@ def exportar_productos_excel(request):
     ws = wb.active
     ws.title = "Productos"
 
-    headers = ["ID", "Nombre", "Precio", "Descripción", "Cantidad"]
-    ws.append(headers)
+    # Título y fecha
+    ws.merge_cells('A1:E1')
+    ws['A1'] = "Reporte de Productos - GiseNails"
+    ws['A1'].font = Font(size=16, bold=True)
+    ws['A1'].alignment = Alignment(horizontal='center')
+    ws['A2'] = f"Fecha de generación: {datetime.now().strftime('%d/%m/%Y %H:%M')}"
+    ws['A2'].font = Font(italic=True)
+    ws['A2'].alignment = Alignment(horizontal='left')
 
+    # Encabezados
+    headers = ["ID", "Nombre", "Precio", "Descripción", "Cantidad"]
+    ws.append([])
+    ws.append(headers)
+    for col_num, header in enumerate(headers, 1):
+        cell = ws.cell(row=3, column=col_num)
+        cell.font = Font(bold=True)
+        cell.alignment = Alignment(horizontal='center')
+        cell.border = Border(bottom=Side(style='thin'))
+
+    # Datos
     for producto in productos:
         ws.append([
             producto.id,
@@ -205,15 +224,13 @@ def exportar_productos_excel(request):
             producto.cantidad
         ])
 
-    for col in ws.columns:
+    # Ajustar ancho de columnas (evita MergedCell)
+    for i, col in enumerate(ws.columns, 1):
         max_length = 0
-        column = col[0].column_letter
+        column = get_column_letter(i)
         for cell in col:
-            try:
-                if len(str(cell.value)) > max_length:
-                    max_length = len(str(cell.value))
-            except:
-                pass
+            if cell.value:
+                max_length = max(max_length, len(str(cell.value)))
         ws.column_dimensions[column].width = max_length + 2
 
     response = HttpResponse(
