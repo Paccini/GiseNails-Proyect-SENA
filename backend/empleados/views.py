@@ -103,46 +103,40 @@ def empleado_create(request):
 @user_passes_test(lambda u: u.is_staff)
 @never_cache
 def empleado_update(request, token):
-
     pk = decrypt_id(token)
     empleado = get_object_or_404(Empleado, pk=pk)
+    update_success = None
+    update_error = None
 
     if request.method == 'POST':
         form = EmpleadoForm(request.POST, request.FILES, instance=empleado)
         if form.is_valid():
-            empleado = form.save(commit=False)
-            correo = form.cleaned_data.get('correo') or ''
-            password = form.cleaned_data.get('password') or None
-            
-            user = getattr(empleado, 'user', None)
-
-            if user is None:
-                user, created = User.objects.get_or_create(
-                    username=correo, defaults={'email': correo}
-                )
+            form.save()
+            # Manejo de cambio de contraseña
+            old_password = request.POST.get('old_password', '').strip()
+            new_password = request.POST.get('new_password', '').strip()
+            user = empleado.user if hasattr(empleado, 'user') else None
+            if user and new_password:
+                if old_password and user.check_password(old_password):
+                    user.set_password(new_password)
+                    user.save()
+                    update_success = "Contraseña actualizada correctamente."
+                elif old_password:
+                    update_error = "La contraseña actual es incorrecta."
+                else:
+                    update_error = "Debes ingresar la contraseña actual para cambiarla."
             else:
-                if correo and user.username != correo:
-                    user.username = correo
-                    user.email = correo
-
-            if password:
-                user.set_password(password)
-            user.save()
-
-            try:
-                empleado.user = user
-            except Exception:
-                pass
-
-            empleado.save()
-            return redirect('empleados:empleado_list')
-
+                update_success = "Datos del empleado actualizados correctamente."
+        else:
+            update_error = "Corrige los errores del formulario."
     else:
         form = EmpleadoForm(instance=empleado)
 
     return render(request, 'empleados/empleado_form.html', {
         'form': form,
-        'empleado': empleado
+        'empleado': empleado,
+        'update_success': update_success,
+        'update_error': update_error,
     })
 
 
@@ -451,3 +445,40 @@ def cambiar_estado_cita_empleado(request, pk):
         return JsonResponse({'success': False, 'error': 'Cita no encontrada'})
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)})
+
+
+from django.views.generic import UpdateView
+from django.urls import reverse_lazy
+
+class EmpleadoUpdateView(UpdateView):
+    model = Empleado
+    form_class = EmpleadoForm
+    template_name = 'empleados/empleado_form.html'
+    success_url = reverse_lazy('empleados:empleado_list')
+
+    def get_object(self, queryset=None):
+        token = self.kwargs.get('token')
+        pk = decrypt_id(token)
+        return get_object_or_404(Empleado, pk=pk)
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        user = self.object.user
+        new_password = self.request.POST.get('new_password', '').strip()
+        old_password = self.request.POST.get('old_password', '').strip()
+        if new_password:
+            if user.check_password(old_password):
+                user.set_password(new_password)
+                user.save()
+                self.request.session['update_success'] = 'Contraseña actualizada correctamente.'
+            else:
+                self.request.session['update_error'] = 'La contraseña actual es incorrecta.'
+        else:
+            self.request.session['update_success'] = 'Datos actualizados correctamente.'
+        return response
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['update_error'] = self.request.session.pop('update_error', None)
+        context['update_success'] = self.request.session.pop('update_success', None)
+        return context

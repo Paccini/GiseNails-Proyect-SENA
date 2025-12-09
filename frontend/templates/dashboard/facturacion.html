@@ -28,6 +28,18 @@
         <button class="btn btn-primary w-100"><i class="bi bi-search"></i> Filtrar</button>
     </div>
 </form>
+
+<!-- ...formulario de filtros... -->
+<form method="get" action="{% url 'reserva:exportar_facturacion_excel' %}">
+  <input type="hidden" name="metodo" value="{{ metodo }}">
+  <input type="hidden" name="estado" value="{{ estado }}">
+  <input type="hidden" name="fecha_inicio" value="{{ fecha_inicio }}">
+  <input type="hidden" name="fecha_fin" value="{{ fecha_fin }}">
+  <button type="submit" class="btn btn-outline-success mb-3">
+    <i class="bi bi-file-earmark-excel"></i> Exportar a Excel
+  </button>
+</form>
+<br>
 <!-- Encima de la tabla de facturación -->
 <!-- Botón fuera de la tabla -->
 <button class="btn btn-success mb-3" id="btnPagoEfectivoGlobal">
@@ -135,6 +147,8 @@
     </form>
   </div>
 </div>
+
+
 {% endblock %}
 <script>
 // Mejor experiencia para el modal de pago en efectivo
