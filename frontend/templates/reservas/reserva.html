@@ -50,7 +50,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <label for="tipo-servicio">Categoría de servicio</label>
+                        <label for="tipo-servicio" class="categoria-label">Categoría de servicio</label>
                         <select name="tipo_servicio" id="tipo-servicio" required>
                             <option value="">Selecciona categoría</option>
                             <option value="manicure">Manicure</option>
@@ -179,4 +179,19 @@
     });
   });
 </script>
+
+<style>
+/* Fuerza el texto de los servicios a blanco */
+.modal-servicios-list .servicio-card,
+.servicios-list .servicio-card,
+#resumen-servicio,
+#resumen-servicio .meta,
+#resumen-servicio .precio,
+#resumen-servicio .categoria,
+.categoria-label,
+#tipo-servicio,
+#modal-title {
+    color: #fff !important;
+}
+</style>
 {% endblock %}
