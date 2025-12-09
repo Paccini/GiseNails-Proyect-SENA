@@ -27,6 +27,7 @@ from reserva.views import completar_reserva
 from reserva.views import decrypt_id
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
+from django.templatetags.static import static
 
 
 fernet = Fernet(settings.ENCRYPT_KEY)
@@ -426,29 +427,50 @@ def registro_cliente(request):
 @login_required
 @never_cache
 def descargar_cita_pdf(request, token):
-    try:
-        real_pk = decrypt_id(token)
-    except Exception:
-        return redirect('clientes:panel')
-
-    cliente = get_object_or_404(Cliente, user=request.user)
-    reserva = get_object_or_404(Reserva, pk=real_pk, cliente=cliente)
+    pk = decrypt_id(token)
+    reserva = get_object_or_404(Reserva, pk=pk)
+    cliente = reserva.cliente
 
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename=Cita_{reserva.pk}.pdf'
+    response['Content-Disposition'] = f'attachment; filename=Cita_{cliente.nombre}_{pk}.pdf'
 
-    p = canvas.Canvas(response, pagesize=letter)
-    p.setFont("Helvetica-Bold", 16)
-    p.drawString(50, 750, "Comprobante de Cita - GiseNails")
-    p.setFont("Helvetica", 12)
-    p.drawString(50, 720, f"Cliente: {reserva.cliente.nombre}")
-    p.drawString(50, 700, f"Servicio: {reserva.servicio}")
-    p.drawString(50, 680, f"Gestora: {reserva.gestora}")
-    p.drawString(50, 660, f"Fecha: {reserva.fecha.strftime('%d/%m/%Y')}")
-    p.drawString(50, 640, f"Hora: {reserva.hora}")
-    p.drawString(50, 620, f"Estado: {reserva.get_estado_display()}")
-    p.drawString(50, 600, f"Precio: ${reserva.servicio.precio:,}")
-    p.showPage()
-    p.save()
+    c = canvas.Canvas(response, pagesize=letter)
+    width, height = letter
+
+    # Logo
+    logo_path = static('img/Logo-Gisenails.png')
+    try:
+        c.drawImage(logo_path, 40, height - 80, width=80, height=60)
+    except:
+        pass
+
+    # Título y fecha
+    c.setFont("Helvetica-Bold", 18)
+    c.drawString(140, height - 60, "Confirmación de Cita - GiseNails")
+    c.setFont("Helvetica", 10)
+    c.drawString(140, height - 80, f"Fecha de generación: {datetime.now().strftime('%d/%m/%Y %H:%M')}")
+
+    # Datos del cliente
+    c.setFont("Helvetica-Bold", 12)
+    c.drawString(40, height - 120, f"Cliente: {cliente.nombre}")
+    c.setFont("Helvetica", 11)
+    c.drawString(40, height - 140, f"Correo: {cliente.correo}")
+    c.drawString(40, height - 160, f"Teléfono: {cliente.telefono}")
+
+    # Datos de la cita
+    c.setFont("Helvetica-Bold", 12)
+    c.drawString(40, height - 190, "Detalle de la cita:")
+    c.setFont("Helvetica", 11)
+    c.drawString(60, height - 210, f"Fecha: {reserva.fecha.strftime('%d/%m/%Y')}")
+    c.drawString(60, height - 230, f"Hora: {reserva.hora}")
+    c.drawString(60, height - 250, f"Servicio: {reserva.servicio}")
+    c.drawString(60, height - 270, f"Estado: {reserva.estado}")
+
+    # Pie de página
+    c.setFont("Helvetica-Oblique", 10)
+    c.drawString(40, 40, "Gracias por confiar en GiseNails. Para cambios o cancelaciones, contáctanos.")
+
+    c.showPage()
+    c.save()
     return response
 
