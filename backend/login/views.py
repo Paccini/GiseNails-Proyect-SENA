@@ -26,16 +26,12 @@ from django.utils.crypto import get_random_string
 # LOGIN
 # =============================
 def login_view(request):
-    # Limpia la sesión si NO hay pending_message en la URL o POST
-    if not request.GET.get('pending_message') and not request.POST.get('pending_message'):
-        if 'pending_reserva' in request.session:
-            del request.session['pending_reserva']
-
     error = None
     prefill_email = None
     password_only = False
     register_active = request.GET.get('register_active') == 'true'
     show_reset_form = request.GET.get('show_reset') == 'true'
+    # Detecta pending_message en la URL
     pending_message = False
     if request.GET.get('pending_message') in ['1', 'true', 'True', 'yes']:
         pending_message = True
@@ -149,10 +145,6 @@ def login_view(request):
         if not register_form.is_valid():
             register_active = True
 
-    # Si el usuario entra al login SIN pending_message en la URL, borra la cita pendiente
-    if not request.GET.get('pending_message') and 'pending_reserva' in request.session:
-        del request.session['pending_reserva']
-
     context = {
         'form': login_form,
         'error': error,
@@ -175,9 +167,6 @@ def login_view(request):
 # REGISTRO CLIENTE
 # =============================
 def registro_cliente(request):
-    if not request.GET.get('pending_message') and 'pending_reserva' in request.session:
-        del request.session['pending_reserva']
-        
     pending = request.session.get('pending_reserva', {})
     initial = {
         'nombre': pending.get('nombre', ''),
