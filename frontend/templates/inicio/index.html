@@ -3,34 +3,10 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/inicio.css' %}" />
-<link rel="stylesheet" href="{% static 'css/loading.css' %}" />
 
-<style>
-  /* scroll-fade: oculto por defecto y animación al hacerse visible */
-  .scroll-fade {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.6s ease, transform 0.6s cubic-bezier(.2, .8, .2, 1);
-    will-change: opacity, transform;
-  }
 
-  .scroll-fade.visible {
-    opacity: 1;
-    transform: none;
-  }
-</style>
 
 <main>
-  <div class="loading-page">
-    <svg id="svg" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
-      <text id="svg-g" x="50%" y="55%" dominant-baseline="middle" text-anchor="middle">G</text>
-    </svg>
-
-    <div class="name-container">
-      <div class="welcome-text">Bienvenid@ a Gise Nails</div>
-    </div>
-  </div>
-
   <!-- SECCIÓN DEL CARRUSEL AGREGADO (ÚNICO CAMBIO REALIZADO) -->
   <section class="scroll-fade">
     <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
@@ -173,6 +149,6 @@
 
       document.querySelectorAll('.scroll-fade').forEach(el => observer.observe(el));
     });
-  </script>
+  </script> 
 </main>
 {% endblock %}

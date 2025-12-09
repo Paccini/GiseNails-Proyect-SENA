@@ -1,18 +1,42 @@
 /* ==========================================================
-   SERVICIOS — ESTILOS OPTIMIZADOS Y UNIFICADOS
+   SERVICIOS — CSS UNIFICADO (Negro & Gris, estilo coherente)
+   Reemplaza todo el CSS anterior de la página de servicios
    ========================================================== */
 
 /* -----------------------------
    PALETA Y VARIABLES
+   (coincidente con "Nosotros" / "Productos")
 ----------------------------- */
 :root {
-    --servicios-accent: #ff4081;
-    --servicios-title: #ffffff;
-    --servicios-sub: rgba(255, 255, 255, 0.88);
-    --servicios-card-bg: rgba(255, 255, 255, 0.96);
-    --servicios-card-text: #4a4a4a;
-    --servicios-muted: #6b6b6b;
-    --servicios-border: rgba(255, 64, 129, 0.12);
+    --negro: #000000;
+    --negro-2: #111111;
+    --gris-fondo: #f5f5f5;
+    --gris-seccion: #fafafa;
+    --gris-borde: #dcdcdc;
+    --blanco: #ffffff;
+    --accent: #000000;            /* acento principal (negro) */
+    --card-bg: #ffffff;           /* fondo de cards */
+    --card-text: #222222;
+    --muted: #6b6b6b;
+    --shadow: rgba(0,0,0,0.08);
+}
+
+/* -----------------------------
+   RESET / TIPOGRAFÍA BASE
+----------------------------- */
+* { box-sizing: border-box; }
+.servicios-page {
+    padding: 40px 18px;
+    background-color: var(--gris-fondo);
+    color: var(--negro-2);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Forzar fuentes del proyecto (definidas en base.css) */
+.servicios-page,
+.servicios-page p,
+.servicios-page li {
+  font-family: var(--fuente-textos) !important;
 }
 
 /* -----------------------------
@@ -21,166 +45,181 @@
 .scroll-fade {
     opacity: 0;
     transform: translateY(30px);
-    transition: opacity .6s ease, transform .6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition: opacity .6s ease, transform .6s cubic-bezier(.2,.8,.2,1);
     will-change: opacity, transform;
 }
-.scroll-fade.visible {
-    opacity: 1;
-    transform: none;
-}
+.scroll-fade.visible { opacity: 1; transform: none; }
 
 /* -----------------------------
-   CONTENEDOR
+   TITULOS Y TEXTOS (NEGRO)
 ----------------------------- */
-.servicios-page {
-    padding: 40px 18px;
-}
-
-/* -----------------------------
-   TITULOS Y TEXTOS
------------------------------ */
-.servicios-page .servicios-title {
-    color: var(--servicios-title);
-    font-size: 2.5em;
-    font-family: 'Comic Sans MS', cursive;
+.servicios-page .servicios-title,
+.servicios-page h1,
+.servicios-page h2,
+.servicios-page h3 {
+    color: var(--negro) !important;
+    font-weight: 700;
+    letter-spacing: .4px;
+    text-align: center;
     margin-bottom: .6rem;
-    letter-spacing: 1px;
-    text-shadow: 0 2px 6px rgba(0,0,0,.45);
 }
 
-.servicios-page .servicios-subtitle {
-    color: var(--servicios-sub);
+.servicios-page .servicios-title {
+    font-size: 2.4rem;
+    text-transform: none;
+    text-shadow: none;
+}
+
+.servicios-page .servicios-subtitle,
+.servicios-page p,
+.servicios-page .lead {
+    color: var(--negro-2) !important;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin-bottom: .9rem;
 }
 
 /* -----------------------------
-   CARDS
+   SECTION WRAPPERS (fondos independientes)
+   Usa clases .section-bg-1..4 si quieres BG distintos
+----------------------------- */
+.section-bg-1 { background: var(--gris-fondo); }
+.section-bg-2 { background: var(--gris-seccion); }
+.section-bg-3 { background: var(--blanco); }
+.section-bg-4 { background: linear-gradient(180deg,#fafafa,#f3f3f3); }
+
+/* -----------------------------
+   CARDS (limpias, blancas, sobrias)
 ----------------------------- */
 .servicios-page .card-gn {
-    background: var(--servicios-card-bg) !important;
-    color: var(--servicios-card-text);
-    border: 1px solid var(--servicios-border);
-    max-width: 320px;
+    background: var(--card-bg) !important;
+    color: var(--card-text) !important;
+    border: 1px solid var(--gris-borde);
+    border-radius: 12px;
+    padding: 14px;
+    box-shadow: 0 6px 20px var(--shadow);
+    max-width: 340px;
+    margin: 10px;
 }
 
 .servicios-page .card-gn .card-title,
+.servicios-page .card-gn h5,
 .servicios-page .card-gn strong {
-    color: var(--servicios-accent);
+    color: var(--accent) !important;
+    font-weight: 700;
+    font-size: 1.15rem;
 }
 
 .servicios-page .card-gn .card-text,
 .servicios-page .card-gn .muted {
-    color: var(--servicios-muted);
+    color: var(--muted) !important;
+    font-size: 1rem;
+    line-height: 1.45;
 }
 
 .servicios-page .card-gn img {
-    border: 3px solid var(--servicios-accent);
-    box-shadow: 0 2px 8px rgba(230, 0, 126, 0.08);
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    border: 3px solid var(--accent);
+    box-shadow: 0 6px 18px rgba(0,0,0,.08);
 }
 
 .servicios-page .card-gn .btn {
-    background: var(--servicios-accent);
-    color: white;
-    box-shadow: 0 2px 8px rgba(230, 0, 126, .10);
+    background: var(--accent) !important;
+    color: var(--blanco) !important;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-weight: 700;
+    transition: transform .18s ease, background .18s ease;
 }
 
+.servicios-page .card-gn .btn:hover {
+    transform: translateY(-3px);
+    background: var(--negro-2) !important;
+}
+
+/* badge */
 .servicios-page .card-gn .badge {
-    background: #fff0f7;
-    color: var(--servicios-accent);
-    border: 1px solid var(--servicios-border);
+    background: rgba(0,0,0,0.03) !important;
+    color: var(--accent) !important;
+    border: 1px solid rgba(0,0,0,0.04) !important;
     font-weight: 700;
 }
 
 /* -----------------------------
-   PAGINADOR (UNIFICADO + ANIMACIONES)
+   PAGINADOR (SWIPER / animated-paginator / custom)
+   — Forzamos colores negros y contraste
 ----------------------------- */
 
-.animated-paginator,
-.servicios-page .animated-paginator {
-    display: flex !important;
-    gap: 10px !important;
-    justify-content: center !important;
-    align-items: center !important;
+/* General bullets / page links */
+.servicios-page .swiper-pagination-bullet,
+.servicios-page .swiper-container .swiper-pagination-bullet,
+.servicios-page .animated-paginator .page-link,
+.servicios-page .pagination-wrapper .page-link {
+    background: #000 !important;
+    color: #fff !important;
+    opacity: 0.35 !important;
+    width: 12px !important;
+    height: 12px !important;
+    border-radius: 50% !important;
+    border: none !important;
+    box-shadow: none !important;
+    transition: transform .22s ease, opacity .22s ease !important;
 }
 
-.animated-paginator .page-link {
-    width: 44px !important;
-    height: 44px !important;
-    border-radius: 50% !important;
-    display: inline-flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    font-weight: 700 !important;
-    font-size: 1.15rem !important;
-    padding: 0 !important;
-    color: #222 !important;
-    background: white !important;
-    border: none !important;
-    transition: transform .22s cubic-bezier(.2, .9, .3, 1), box-shadow .2s ease !important;
-    box-shadow: 0 6px 14px rgba(0,0,0,.16) !important;
+/* Active state */
+.servicios-page .swiper-pagination-bullet-active,
+.servicios-page .animated-paginator .page-item.active .page-link,
+.servicios-page .pagination-wrapper .page-item.active .page-link {
+    background: #000 !important;
+    opacity: 1 !important;
+    transform: scale(1.28) !important;
+    box-shadow: 0 10px 26px rgba(0,0,0,0.14) !important;
+    color: #fff !important;
 }
 
 /* Hover */
-.animated-paginator .page-link:hover {
-    transform: translateY(-6px) !important;
-    box-shadow: 0 16px 30px rgba(0,0,0,.22) !important;
+.servicios-page .swiper-pagination-bullet:hover,
+.servicios-page .animated-paginator .page-link:hover {
+    opacity: 0.9 !important;
+    transform: translateY(-4px) scale(1.04) !important;
+    box-shadow: 0 12px 28px rgba(0,0,0,0.16) !important;
 }
 
-/* Activa */
-.animated-paginator .page-item.active .page-link {
-    background: var(--servicios-accent) !important;
-    color: white !important;
-    transform: scale(1.06);
-    box-shadow: 0 20px 40px rgba(255, 64, 129, .14) !important;
+/* If plugin draws before/after */
+.servicios-page .swiper-pagination-bullet::before,
+.servicios-page .swiper-pagination-bullet::after {
+    background: #000 !important;
+    opacity: 1 !important;
 }
 
-/* Pulse al hacer click */
-.animated-paginator .page-link.pulse {
-    animation: paginator-pulse .38s cubic-bezier(.2, .9, .3, 1) !important;
+/* If plugin used white circle backgrounds, replace them */
+.servicios-page .animated-paginator .page-link,
+.servicios-page .pagination-wrapper .page-link {
+    background: #fff !important;
+    border: 1px solid var(--gris-borde) !important;
+    color: var(--negro) !important;
 }
 
-@keyframes paginator-pulse {
-    0% { transform: scale(1); }
-    40% { transform: scale(1.18); }
-    100% { transform: scale(1); }
+/* Active page-link style when using page-links */
+.servicios-page .animated-paginator .page-item.active .page-link {
+    background: var(--accent) !important;
+    color: var(--blanco) !important;
+    transform: scale(1.06) !important;
+    box-shadow: 0 18px 36px rgba(0,0,0,0.12) !important;
 }
 
-/* Fade al cargar nuevas páginas */
-body.pag-navigating .servicios-page {
-    opacity: 0;
-    transition: opacity .28s ease;
-}
-
-/* -----------------------------
-   SECCIONES INFORMATIVAS
------------------------------ */
-.objetivo-section {
-    padding: 22px 18px;
-    margin: 0 auto 18px;
-    max-width: 1100px;
-    text-align: center;
-}
-
-.servicios-section-title {
-    color: var(--servicios-title) !important;
-    font-size: 1.6rem;
-    letter-spacing: 1px;
-    margin-bottom: 8px;
-    font-weight: 700;
-    text-transform: uppercase;
-    text-shadow: 0 2px 6px rgba(0,0,0,.28);
-}
-
-.objetivo-section .servicios-subtitle {
-    font-size: 1.25rem;
-    line-height: 1.5;
-    max-width: 920px;
-    margin: 0 auto;
-    color: var(--servicios-sub);
-    font-weight: 500;
+/* Accessibility focus */
+.servicios-page .swiper-pagination-bullet:focus,
+.servicios-page .animated-paginator .page-link:focus {
+    outline: 3px solid rgba(0,0,0,0.08) !important;
+    outline-offset: 3px !important;
 }
 
 /* -----------------------------
-   LISTAS (info-list)
+   INFO-LIST / elementos info
 ----------------------------- */
 .info-list {
     display: flex;
@@ -189,18 +228,17 @@ body.pag-navigating .servicios-page {
     justify-content: center;
     padding: 10px 6px;
     margin-bottom: 16px;
-    overflow-x: auto;
 }
 
 .info-item {
     display: flex;
     gap: 12px;
-    padding: 10px 12px;
+    padding: 12px 14px;
     max-width: 520px;
     flex: 0 0 auto;
-    color: white;
-    background: linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.06));
-    border: 1px solid rgba(255,255,255,.03);
+    color: var(--negro-2);
+    background: linear-gradient(180deg, rgba(0,0,0,.02), rgba(0,0,0,.01));
+    border: 1px solid rgba(0,0,0,.04);
     border-radius: 10px;
 }
 
@@ -209,35 +247,24 @@ body.pag-navigating .servicios-page {
     height: 56px;
     border-radius: 999px;
     object-fit: cover;
-    border: 2px solid rgba(255, 64, 129, 0.14);
-    flex-shrink: 0;
+    border: 2px solid rgba(0,0,0,.06);
 }
 
-.info-title {
-    font-size: 1.02rem;
-    font-weight: 700;
-    margin: 0;
-    color: white;
-}
-
-.info-desc {
-    color: rgba(255,255,255,.92);
-    font-size: .98rem;
-    line-height: 1.3;
-}
+.info-title { font-size: 1.02rem; font-weight: 700; color: var(--negro); }
+.info-desc { color: var(--muted); font-size: .98rem; line-height: 1.35; }
 
 /* -----------------------------
-   WRAPPERS Y DECORACIÓN
+   SECTION WRAPPERS Y DECORACIÓN
 ----------------------------- */
 .section-wrapper {
     position: relative;
-    padding: 20px;
+    padding: 22px;
     margin: 18px auto;
     border-radius: 14px;
     max-width: 1200px;
-    background: rgba(0,0,0,.10);
-    border: 1px solid rgba(255,255,255,.03);
-    box-shadow: 0 8px 30px rgba(0,0,0,.45);
+    background: linear-gradient(180deg, rgba(0,0,0,.02), rgba(0,0,0,.01));
+    border: 1px solid rgba(0,0,0,.04);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.06);
 }
 
 .section-divider {
@@ -245,58 +272,43 @@ body.pag-navigating .servicios-page {
     width: 100%;
     border-radius: 3px;
     margin: 10px 0 18px;
-    background: linear-gradient(90deg,
-        rgba(255,255,255,.04),
-        rgba(255,64,129,.12),
-        rgba(255,255,255,.04)
-    );
+    background: linear-gradient(90deg, rgba(0,0,0,.02), rgba(0,0,0,.06), rgba(0,0,0,.02));
 }
 
 /* -----------------------------
-   CARDS dentro de un wrapper
+   GRID / LISTS: tarjetas y layout
 ----------------------------- */
-.cards .card-gn {
-    margin: 10px;
-    z-index: 3;
-    box-shadow: 0 10px 24px rgba(0,0,0,.28);
-}
+.cards { display:flex; flex-wrap:wrap; gap:18px; justify-content:center; align-items:stretch; }
+.cards .card-gn { margin: 8px; flex: 0 1 320px; }
 
 /* -----------------------------
    RESPONSIVE
 ----------------------------- */
 @media (max-width: 991px) {
-    .section-wrapper {
-        padding: 14px;
-        margin: 12px;
-        border-radius: 10px;
-    }
-    .cards .card-gn {
-        max-width: 96%;
-    }
-    .servicios-page {
-        padding: 30px 12px;
-    }
-    .servicios-page .servicios-title {
-        font-size: 2.1em;
-    }
+    .servicios-page { padding: 28px 12px; }
+    .servicios-page .servicios-title { font-size: 1.9rem; }
+    .cards .card-gn { max-width: 96%; }
+    .info-item { padding: 10px; }
 }
 
-@media (max-width: 768px) {
-    .info-list {
-        flex-direction: column;
-        gap: 12px;
-        align-items: center;
-    }
-    .info-item {
-        max-width: 95%;
-        width: 95%;
-    }
+@media (max-width: 600px) {
+    .servicios-page { padding: 18px 10px; }
+    .section-wrapper { padding: 12px; margin: 10px; border-radius: 10px; }
+    .info-item { width: 95%; }
 }
 
-/* Forzar fuentes del proyecto (definidas en base.css) */
-body {
-  font-family: var(--fuente-textos) !important;
+/* -----------------------------
+   OVERRIDES FUERTES (por si hay reglas de librerías)
+   Pega al final si la página aún carga CSS de terceros después de este archivo
+----------------------------- */
+.servicios-page *[style*="color: #fff"],
+.servicios-page *[style*="color:#fff"],
+.servicios-page *[style*='color: white'] { color: var(--negro) !important; }
+
+.servicios-page .swiper-pagination-bullet,
+.servicios-page .swiper-pagination-bullet-active {
+    background: #000 !important;
+    opacity: 1 !important;
 }
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--fuente-titulos) !important;
-}
+
+/* Fin de archivo */

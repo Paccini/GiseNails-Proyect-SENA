@@ -1,257 +1,279 @@
 {% extends 'home.html' %}
 
 {% block title %}
-  Gise Nails
+Gise Nails
 {% endblock %}
 
 {% block content %}
-  {% load static %}
-  <link rel="stylesheet" href="{% static 'css/nosotros.css' %}" />
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/nosotros.css' %}" />
 
-  <style>
-    .scroll-fade {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-      will-change: opacity, transform;
-    }
-    .scroll-fade.visible {
-      opacity: 1;
-      transform: none;
-    }
-    .map-section {
-      margin-top: 48px;
-      margin-bottom: 32px;
-      text-align: center;
-    }
-    .map-section h2 {
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 18px;
-    }
-    .map-container {
-      width: 100%;
-      max-width: 680px;
-      margin: 0 auto;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 2px 18px rgba(0, 0, 0, 0.13);
-    }
-    .map-container iframe {
-      width: 100%;
-      height: 340px;
-      border: 0;
-      display: block;
-    }
-  </style>
+<style>
+  .scroll-fade {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    will-change: opacity, transform;
+  }
 
-  <main class="container-fluid">
-    <div class="scroll-fade" data-delay="0.02">
-      <!-- Presentación y valores -->
-      <section class="presentacion">
-        <header class="row justify-content-center mb-3">
-          <div class="col-12 col-lg-8 text-center">
-            <img src="{% static 'img/Expertos.png' %}" alt="Expertos" class="img-fluid" />
-          </div>
-        </header>
+  .scroll-fade.visible {
+    opacity: 1;
+    transform: none;
+  }
 
-        <ul class="row list-unstyled justify-content-center nosotros-list" style="font-size: 1.1rem;">
-          <li class="col-12 col-md-10 mb-2 scroll-fade" data-delay="0.12">
-            <i class="bi bi-heart-fill me-2"></i>
-            Desarrollamos un modelo de negocio para mujeres actuales que a través de la belleza buscan mayor seguridad, confianza, bienestar y estar a la moda.
-          </li>
+  .map-section {
+    margin-top: 48px;
+    margin-bottom: 32px;
+    text-align: center;
+  }
 
-          <li class="col-12 col-md-10 mb-2 scroll-fade" data-delay="0.14">
-            <i class="bi bi-heart-fill me-2"></i>
-            Somos un referente de buenas prácticas en el sector, con protocolos rigurosos de bioseguridad, procedimientos estandarizados, insumos de excelente calidad, equipo altamente capacitado y un servicio al cliente diferencial.
-          </li>
+  .map-section h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 18px;
+  }
 
-          <li class="col-12 col-md-10 scroll-fade" data-delay="0.16">
-            <i class="bi bi-heart-fill me-2"></i>
-            Nos expandimos a través del modelo de franquicias y patrimonios autónomos a nivel nacional.
-          </li>
-        </ul>
-      </section>
+  .map-container {
+    width: 100%;
+    max-width: 680px;
+    margin: 0 auto;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 18px rgba(0, 0, 0, 0.13);
+  }
 
-      <!-- Qué somos, cómo lo hacemos, por qué lo hacemos -->
-      <section class="py-5 scroll-fade section-que-nosotros" data-delay="0.1">
-        <div class="row justify-content-center align-items-center">
-          <article class="col-12 col-lg-8 text-center mb-4 scroll-fade" data-delay="0.12">
-            <figure>
-              <img src="{% static 'img/que-hacemos.png' %}" alt="Qué hacemos" class="img-fluid" />
-              <figcaption class="mt-2">Somos un Spa de Uñas que busca potencializar la belleza, estilo y confianza de nuestros clientes.</figcaption>
-            </figure>
-          </article>
+  .map-container iframe {
+    width: 100%;
+    height: 340px;
+    border: 0;
+    display: block;
+  }
+</style>
 
-          <article class="col-12 col-lg-8 text-center mb-4 scroll-fade" data-delay="0.14">
-            <figure>
-              <img src="{% static 'img/como-lo-hacemos.png' %}" alt="Cómo lo hacemos" class="img-fluid" />
-              <figcaption class="mt-2">Lo hacemos con pasión, calidad, disciplina, innovación, conocimiento y trabajo en equipo.</figcaption>
-            </figure>
-          </article>
+<main class="container-fluid">
 
-          <article class="col-12 col-lg-8 text-center scroll-fade" data-delay="0.16">
-            <figure>
-              <img src="{% static 'img/por-que-lo-hacemos.png' %}" alt="Por qué lo hacemos" class="img-fluid" />
-              <figcaption class="mt-2">"Creemos en honrar a la mujer por su energía creadora sin límites, su resiliencia, humildad y capacidad de trabajo para perseguir sus sueños!!!"</figcaption>
-            </figure>
-          </article>
+  <!-- Presentación -->
+  <section class="presentacion section-bg-1 scroll-fade" data-delay="0.02">
+    <div class="container py-5">
+      <header class="row justify-content-center mb-3">
+        <div class="col-12 col-lg-8 text-center">
+          <img src="{% static 'img/Expertos.png' %}" alt="Expertos" class="img-fluid" />
         </div>
-      </section>
+      </header>
 
-      <!-- Valores corporativos (tal cual como estaba) -->
-      <section id="valores">
-        <div class="container">
-          <header class="row">
-            <div class="col-12 text-center">
-              <h2>Valores corporativos</h2>
-              <br />
+      <ul class="row list-unstyled justify-content-center nosotros-list" style="font-size: 1.1rem;">
+        <li class="col-12 col-md-10 mb-2 scroll-fade" data-delay="0.12">
+          <i class="bi bi-heart-fill me-2"></i> Desarrollamos un modelo de negocio para mujeres actuales que a través de la belleza buscan mayor seguridad, confianza, bienestar y estar a la moda.
+        </li>
+        <li class="col-12 col-md-10 mb-2 scroll-fade" data-delay="0.14">
+          <i class="bi bi-heart-fill me-2"></i> Somos un referente de buenas prácticas en el sector, con protocolos rigurosos de bioseguridad, procedimientos estandarizados, insumos de excelente calidad, equipo altamente capacitado y un servicio al cliente diferencial.
+        </li>
+        <li class="col-12 col-md-10 scroll-fade" data-delay="0.16">
+          <i class="bi bi-heart-fill me-2"></i> Nos expandimos a través del modelo de franquicias y patrimonios autónomos a nivel nacional.
+        </li>
+      </ul>
+    </div>
+  </section>
+
+
+  <!-- Qué somos, cómo lo hacemos, por qué -->
+  <section class="section-bg-2 py-5 scroll-fade section-que-nosotros" data-delay="0.1">
+    <div class="container py-4">
+      <div class="row justify-content-center align-items-center">
+        <article class="col-12 col-lg-8 text-center mb-4 scroll-fade" data-delay="0.12">
+          <figure>
+            <img src="{% static 'img/que-hacemos.png' %}" alt="Qué hacemos" class="img-fluid" />
+            <figcaption class="mt-2">Somos un Spa de Uñas que busca potencializar la belleza, estilo y confianza de nuestros clientes.</figcaption>
+          </figure>
+        </article>
+
+        <article class="col-12 col-lg-8 text-center mb-4 scroll-fade" data-delay="0.14">
+          <figure>
+            <img src="{% static 'img/como-lo-hacemos.png' %}" alt="Cómo" class="img-fluid" />
+            <figcaption class="mt-2">Lo hacemos con pasión, calidad, disciplina, innovación, conocimiento y trabajo en equipo.</figcaption>
+          </figure>
+        </article>
+
+        <article class="col-12 col-lg-8 text-center scroll-fade" data-delay="0.16">
+          <figure>
+            <img src="{% static 'img/por-que-lo-hacemos.png' %}" alt="Por qué" class="img-fluid" />
+            <figcaption class="mt-2">Creemos en honrar a la mujer por su energía creadora sin límites, su resiliencia, humildad y capacidad de trabajo para perseguir sus sueños!!!</figcaption>
+          </figure>
+        </article>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Valores corporativos -->
+  <section id="valores" class="section-bg-3">
+    <div class="container py-5">
+      <header class="row">
+        <div class="col-12 text-center">
+          <h2>Valores corporativos</h2>
+          <br />
+        </div>
+      </header>
+
+      <div class="row g-4 corpo">
+        <div class="col-lg-6">
+          <div class="d-flex align-items-start mb-3 scroll-fade" data-delay="0.2">
+            <div class="corazon">
+              <span>1</span>
             </div>
-          </header>
+            <p>
+              <strong class="rosa">EL CONOCIMIENTO:</strong> es poder: un equipo altamente capacitado siempre será más
+              poderoso.
+            </p>
+          </div>
 
-          <div class="row g-4 corpo">
-            <div class="col-lg-6">
-              <div class="d-flex align-items-start mb-3 scroll-fade" data-delay="0.2">
-                <div class="corazon">
-                  <span>1</span>
-                </div>
-                <p>
-                  <strong class="rosa">EL CONOCIMIENTO:</strong> es poder: un equipo altamente capacitado siempre será más poderoso.
-                </p>
-              </div>
-
-              <div class="d-flex align-items-start mb-3 scroll-fade" data-delay="0.21">
-                <div class="corazon">
-                  <span>2</span>
-                </div>
-                <p>
-                  <strong class="rosa">COMPROMISO:</strong> actitud 100%. Siempre estamos dispuestos a dar lo mejor de nosotros.
-                </p>
-              </div>
-
-              <div class="d-flex align-items-start mb-3 scroll-fade" data-delay="0.22">
-                <div class="corazon">
-                  <span>3</span>
-                </div>
-                <p>
-                  <strong class="rosa">EMPATÍA:</strong> conectar con los demás entendiendo sus necesidades con respeto y amabilidad.
-                </p>
-              </div>
-
-              <div class="d-flex align-items-start mb-3 scroll-fade" data-delay="0.23">
-                <div class="corazon">
-                  <span>4</span>
-                </div>
-                <p>
-                  <strong class="rosa">HUMILDAD:</strong> aprendemos de nuestros errores constantemente.
-                </p>
-              </div>
-
-              <div class="d-flex align-items-start mb-3 scroll-fade" data-delay="0.24">
-                <div class="corazon">
-                  <span>5</span>
-                </div>
-                <p>
-                  <strong class="rosa">PASIÓN:</strong> el sentimiento que impulsa nuestros sueños.
-                </p>
-              </div>
-
-              <div class="d-flex align-items-start mb-3 scroll-fade" data-delay="0.25">
-                <div class="corazon">
-                  <span>6</span>
-                </div>
-                <p>
-                  <strong class="rosa">EXCELENCIA:</strong> todo lo hacemos con calidad y atención a los detalles.
-                </p>
-              </div>
+          <div class="d-flex align-items-start mb-3 scroll-fade" data-delay="0.21">
+            <div class="corazon">
+              <span>2</span>
             </div>
+            <p>
+              <strong class="rosa">COMPROMISO:</strong> actitud 100%. Siempre estamos dispuestos a dar lo mejor de
+              nosotros.
+            </p>
+          </div>
 
-            <div class="col-lg-6">
-              <div class="d-flex align-items-start mb-3 scroll-fade" data-delay="0.2">
-                <div class="corazon">
-                  <span>7</span>
-                </div>
-                <p>
-                  <strong class="rosa">INNOVACIÓN:</strong> siempre buscamos reinventarnos y ser pioneros en nuevas tendencias.
-                </p>
-              </div>
-
-              <div class="d-flex align-items-start mb-3 scroll-fade" data-delay="0.21">
-                <div class="corazon">
-                  <span>8</span>
-                </div>
-                <p>
-                  <strong class="rosa">HONESTIDAD:</strong> nos gusta hablar siempre con la verdad.
-                </p>
-              </div>
-
-              <div class="d-flex align-items-start mb-3 scroll-fade" data-delay="0.22">
-                <div class="corazon">
-                  <span>9</span>
-                </div>
-                <p>
-                  <strong class="rosa">RESPETO:</strong> la base de nuestra comunicación y del reconocimiento del valor de las personas.
-                </p>
-              </div>
-
-              <div class="d-flex align-items-start mb-3 scroll-fade" data-delay="0.23">
-                <div class="corazon">
-                  <span>10</span>
-                </div>
-                <p>
-                  <strong class="rosa">AUTÉNTICOS:</strong> desarrollamos nuestra identidad y sello personal para inspirar a otros.
-                </p>
-              </div>
-
-              <div class="d-flex align-items-start mb-3 scroll-fade" data-delay="0.24">
-                <div class="corazon">
-                  <span>11</span>
-                </div>
-                <p>
-                  <strong class="rosa">DISCIPLINA:</strong> nos hace invencibles. Trabajamos cada día para ser mejores.
-                </p>
-              </div>
+          <div class="d-flex align-items-start mb-3 scroll-fade" data-delay="0.22">
+            <div class="corazon">
+              <span>3</span>
             </div>
+            <p>
+              <strong class="rosa">EMPATÍA:</strong> conectar con los demás entendiendo sus necesidades con respeto y
+              amabilidad.
+            </p>
+          </div>
+
+          <div class="d-flex align-items-start mb-3 scroll-fade" data-delay="0.23">
+            <div class="corazon">
+              <span>4</span>
+            </div>
+            <p>
+              <strong class="rosa">HUMILDAD:</strong> aprendemos de nuestros errores constantemente.
+            </p>
+          </div>
+
+          <div class="d-flex align-items-start mb-3 scroll-fade" data-delay="0.24">
+            <div class="corazon">
+              <span>5</span>
+            </div>
+            <p>
+              <strong class="rosa">PASIÓN:</strong> el sentimiento que impulsa nuestros sueños.
+            </p>
+          </div>
+
+          <div class="d-flex align-items-start mb-3 scroll-fade" data-delay="0.25">
+            <div class="corazon">
+              <span>6</span>
+            </div>
+            <p>
+              <strong class="rosa">EXCELENCIA:</strong> todo lo hacemos con calidad y atención a los detalles.
+            </p>
           </div>
         </div>
-        <hr>
-      </section>
 
-      <!-- SECCIÓN DE ENCUÉNTRANOS CON MAPA -->
-      <section class="map-section scroll-fade" data-delay="0.18">
-        <h2>Encuéntranos</h2>
-        <p>Visítanos en nuestra sede principal. ¡Te esperamos!</p>
-        <div class="map-container">
-          <!-- Reemplaza la URL del iframe por la de tu ubicación real en Google Maps -->
-          <iframe src="https://www.google.com/maps/embed?pb=!4v1764019634894!6m8!1m7!1shyESHh0sTRXWkz3lY3kH2Q!2m2!1d4.439561764370698!2d-75.20956067952594!3f157.54238825106995!4f-5.063065498468262!5f0.7820865974627469" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Ubicación Gise Nails"></iframe>
+        <div class="col-lg-6">
+          <div class="d-flex align-items-start mb-3 scroll-fade" data-delay="0.2">
+            <div class="corazon">
+              <span>7</span>
+            </div>
+            <p>
+              <strong class="rosa">INNOVACIÓN:</strong> siempre buscamos reinventarnos y ser pioneros en nuevas
+              tendencias.
+            </p>
+          </div>
+
+          <div class="d-flex align-items-start mb-3 scroll-fade" data-delay="0.21">
+            <div class="corazon">
+              <span>8</span>
+            </div>
+            <p>
+              <strong class="rosa">HONESTIDAD:</strong> nos gusta hablar siempre con la verdad.
+            </p>
+          </div>
+
+          <div class="d-flex align-items-start mb-3 scroll-fade" data-delay="0.22">
+            <div class="corazon">
+              <span>9</span>
+            </div>
+            <p>
+              <strong class="rosa">RESPETO:</strong> la base de nuestra comunicación y del reconocimiento del valor de
+              las
+              personas.
+            </p>
+          </div>
+
+          <div class="d-flex align-items-start mb-3 scroll-fade" data-delay="0.23">
+            <div class="corazon">
+              <span>10</span>
+            </div>
+            <p>
+              <strong class="rosa">AUTÉNTICOS:</strong> desarrollamos nuestra identidad y sello personal para inspirar
+              a
+              otros.
+            </p>
+          </div>
+
+          <div class="d-flex align-items-start mb-3 scroll-fade" data-delay="0.24">
+            <div class="corazon">
+              <span>11</span>
+            </div>
+            <p>
+              <strong class="rosa">DISCIPLINA:</strong> nos hace invencibles. Trabajamos cada día para ser mejores.
+            </p>
+          </div>
         </div>
-      </section>
-      <!-- FIN SECCIÓN MAPA -->
+      </div>
     </div>
     <hr>
-  </main>
+  </section>
+  </div>
+  </div>
+  </section>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const observer = new IntersectionObserver(
-        (entries, obs) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              const el = entry.target
-              const delay = parseFloat(el.getAttribute('data-delay') || 0)
-              if (delay > 0) {
-                setTimeout(() => el.classList.add('visible'), Math.round(delay * 1000))
-              } else {
-                el.classList.add('visible')
-              }
-              obs.unobserve(el)
+
+  <!-- Mapa -->
+  <section class="map-section section-bg-4 scroll-fade" data-delay="0.18">
+    <div class="container text-center py-5">
+      <h2>Encuéntranos</h2>
+      <p>Visítanos en nuestra sede principal. ¡Te esperamos!</p>
+
+      <div class="map-container">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!4v1764019634894!6m8!1m7!1shyESHh0sTRXWkz3lY3kH2Q!2m2!1d4.439561764370698!2d-75.20956067952594!3f157.54238825106995!4f-5.063065498468262!5f0.7820865974627469"
+          width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade" allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade" title="Ubicación Gise Nails"></iframe>
+      </div>
+  </section>
+
+</main>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const el = entry.target
+            const delay = parseFloat(el.getAttribute('data-delay') || 0)
+            if (delay > 0) {
+              setTimeout(() => el.classList.add('visible'), Math.round(delay * 1000))
+            } else {
+              el.classList.add('visible')
             }
-          })
-        },
-        { threshold: 0.15 }
-      )
-    
-      document.querySelectorAll('.scroll-fade').forEach((el) => observer.observe(el))
-    })
-  </script>
+            obs.unobserve(el)
+          }
+        })
+      },
+      { threshold: 0.15 }
+    )
+
+    document.querySelectorAll('.scroll-fade').forEach((el) => observer.observe(el))
+  })
+</script>
 {% endblock %}
