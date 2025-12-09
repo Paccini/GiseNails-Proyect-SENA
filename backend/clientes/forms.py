@@ -85,6 +85,12 @@ class RegistroClienteForm(forms.ModelForm):
                 required=True
             )
 
+    def clean_password(self):
+        password = self.cleaned_data.get('password')
+        if password and len(password) < 6:
+            raise forms.ValidationError("La contraseña debe tener al menos 6 caracteres.")
+        return password
+
     def save(self, commit=True):
         cliente = super().save(commit=False)
         # Solo crear el usuario si es registro (no edición)
